@@ -28,10 +28,11 @@ import kotlin.math.abs
 
 
 /**
- * Draws the text of [TextNode]s with a [SlugTextDrawer]
+ * Draws the text of [TextNode]s with a [SlugTextDrawer] with the boundary drawer of the program, Windfoil by default,
+ * from the glyph map that user interfaces share
  */
 internal object CompositionText {
-    // the slug drawer keeps its glyphs in textures, it is created once it is needed
+    // the text drawer is created once it is needed, when there is a program
     private val slugTextDrawer by lazy { SlugTextDrawer() }
 
     // text is drawn in a single color, gradients and other paints are drawn in the color that stands in for them

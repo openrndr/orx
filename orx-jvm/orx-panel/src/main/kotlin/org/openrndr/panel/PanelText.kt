@@ -9,6 +9,7 @@ import org.openrndr.draw.boundary.BoundaryDrawer
 import org.openrndr.draw.boundary.BoundaryGlyphMap
 import org.openrndr.draw.font.Face
 import org.openrndr.extra.textwriter.FontFaces
+import org.openrndr.extra.textwriter.GlyphMaps
 import org.openrndr.extra.textwriter.TextSpan
 import org.openrndr.extra.textwriter.TextStyle
 import org.openrndr.extra.textwriter.TypesetGlyph
@@ -50,7 +51,8 @@ class ShapedText internal constructor(
  *   face per font and weight and its glyphs are scaled to the size of the text
  * - text is shaped once per face and string, kept for the most recently used [maxShapedTexts] strings; the shaped
  *   text gives both the measures that layout uses and the glyphs that are drawn, so they agree
- * - the outline of every glyph is uploaded to the GPU once, for all sizes, in a single glyph map shared by all elements
+ * - the outline of every glyph is uploaded to the GPU once, for all sizes, in the glyph map of the boundary drawer
+ *   that all elements, compositions and other text drawers share, see [GlyphMaps]
  * - the draw commands of every text an element draws are prepared once in a buffer of their own, in the coordinates
  *   of the element; drawing them again, also when the element moved because it scrolled, only draws the buffer.
  *   Buffers that were not drawn in a redraw are released after it, see [releaseUnused]
@@ -163,7 +165,8 @@ class PanelText internal constructor(private val fontManager: FontManager) {
 
     private fun map(drawer: Drawer): Pair<BoundaryDrawer, BoundaryGlyphMap> {
         val d = boundaryDrawer ?: drawer.boundaryDrawer.also { boundaryDrawer = it }
-        val m = glyphMap ?: BoundaryGlyphMap(d.createMap()).also { glyphMap = it }
+        // the glyph map is shared with compositions and everything else that draws with the boundary drawer
+        val m = glyphMap ?: GlyphMaps.of(d).also { glyphMap = it }
         return d to m
     }
 

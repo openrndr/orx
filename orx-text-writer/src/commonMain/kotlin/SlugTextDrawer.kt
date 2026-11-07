@@ -6,7 +6,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.boundary.BoundaryCommand
 import org.openrndr.draw.boundary.BoundaryDrawer
-import org.openrndr.draw.boundary.BoundaryGlyphMap
 import org.openrndr.draw.font.Face
 import org.openrndr.draw.font.internal.Direction
 import org.openrndr.draw.font.internal.ShapeFeature
@@ -107,7 +106,8 @@ data class TextSpan(val text: String, val style: TextStyle?)
 
 
 /**
- * Draws text with a [BoundaryDrawer], which draws glyphs from their outlines.
+ * Draws text with a [BoundaryDrawer], which draws glyphs from their outlines: by default that of the program, a
+ * Windfoil drawer, a [org.openrndr.draw.slug.SlugDrawer] when one is given.
  *
  * @param boundaryDrawer the boundary drawer that draws the text, for example a [org.openrndr.draw.slug.SlugDrawer],
  * or null for the boundary drawer of the drawer of the active program. The boundary drawer is used from the first
@@ -123,7 +123,8 @@ class SlugTextDrawer(boundaryDrawer: BoundaryDrawer? = null) : TextDrawer {
         ?: error("no boundary drawer given and there is no active program")
     }
 
-    private val glyphMap by lazy { BoundaryGlyphMap(this.boundaryDrawer.createMap()) }
+    // the glyphs are shared with everything else that draws text with the same boundary drawer
+    private val glyphMap by lazy { GlyphMaps.of(this.boundaryDrawer) }
 
     val commands = mutableListOf<BoundaryCommand>()
 

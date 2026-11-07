@@ -6,6 +6,8 @@ import org.openrndr.extra.textwriter.TextWriter
 import org.openrndr.panel.elements.div
 import org.openrndr.panel.style.StyleSheet
 import org.openrndr.extra.textwriter.FontFaces
+import org.openrndr.extra.textwriter.GlyphMaps
+import org.openrndr.extra.textwriter.SlugTextDrawer
 import org.openrndr.extra.textwriter.Fonts
 import org.openrndr.panel.style.fontFamily
 import org.openrndr.panel.style.fontSize
@@ -17,6 +19,22 @@ import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class PanelTextTest : PanelTestFixture() {
+    @Test
+    fun `glyphs are shared with other text drawers`() {
+        val cm = panel { layout { div { } } }
+        val style = StyleSheet().apply { fontSize = 16.px }
+        program.drawer.isolated {
+            cm.text.drawLine(program.drawer, Any(), "label", style, "shared", 10.0, 20.0, ColorRGBa.WHITE)
+        }
+        val map = GlyphMaps.of(program.drawer.boundaryDrawer)
+        val count = map.glyphs.size
+        assertTrue(count > 0)
+        // a text drawer, like that of compositions, draws the same glyphs from the same map
+        val drawer = SlugTextDrawer()
+        drawer.addGlyphs(cm.text.line(style, "shared").glyphs)
+        assertEquals(count, map.glyphs.size)
+    }
+
     @Test
     fun `fonts are resolved by family, weight and style, and faces are shared`() {
         val cm = panel { layout { div { } } }
