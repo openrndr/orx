@@ -6,7 +6,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":orx-text-writer"))
+            api(project(":orx-text-writer"))
             api(project(":orx-shade-styles"))
             implementation(openrndr.application.core)
             implementation(openrndr.draw)

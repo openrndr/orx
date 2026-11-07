@@ -8,7 +8,7 @@ import org.openrndr.draw.boundary.BoundaryDrawCommand
 import org.openrndr.draw.boundary.BoundaryDrawer
 import org.openrndr.draw.boundary.BoundaryGlyphMap
 import org.openrndr.draw.font.Face
-import org.openrndr.draw.font.loadFace
+import org.openrndr.extra.textwriter.FontFaces
 import org.openrndr.extra.textwriter.TextSpan
 import org.openrndr.extra.textwriter.TextStyle
 import org.openrndr.extra.textwriter.TypesetGlyph
@@ -18,7 +18,7 @@ import org.openrndr.math.Vector2
 import org.openrndr.math.transforms.transform
 import org.openrndr.panel.style.LinearDimension
 import org.openrndr.panel.style.StyleSheet
-import org.openrndr.panel.style.fontFamily
+import org.openrndr.panel.style.fontWeight
 import org.openrndr.panel.style.fontSize
 import org.openrndr.shape.Rectangle
 import kotlin.math.ceil
@@ -46,8 +46,8 @@ class ShapedText internal constructor(
  * Text drawn from the outlines of its glyphs with the boundary drawer of the program, Windfoil by default, instead of
  * from textures of glyphs. Text is crisp at any scale and in any transform. The work is cached at every step:
  *
- * - faces are loaded once per font and size; text is shaped in one face per font and its glyphs are scaled to the size
- *   of the text
+ * - faces are loaded once per font, weight and size, by [FontFaces], shared with compositions; text is shaped in one
+ *   face per font and weight and its glyphs are scaled to the size of the text
  * - text is shaped once per face and string, kept for the most recently used [maxShapedTexts] strings; the shaped
  *   text gives both the measures that layout uses and the glyphs that are drawn, so they agree
  * - the outline of every glyph is uploaded to the GPU once, for all sizes, in a single glyph map shared by all elements
@@ -59,21 +59,16 @@ class PanelText internal constructor(private val fontManager: FontManager) {
     /** the most strings whose shaping is kept */
     var maxShapedTexts = 2000
 
-    private val faces = HashMap<Pair<String, Double>, Face>()
-
     /** the size of the faces that text is shaped in, glyphs are scaled to the size of the text */
     private val referenceSize = 16.0
 
-    /** the faces that text is shaped in, one per font, so that every glyph is in the glyph map once for all sizes */
-    private val referenceFaces = HashMap<String, Face>()
+    /** the font file and weight of every face, for its reference face */
+    private val fonts = java.util.IdentityHashMap<Face, Pair<String, Int>>()
 
-    /** the font of every face */
-    private val fonts = java.util.IdentityHashMap<Face, String>()
-
-    /** the face that [face] is shaped in, and the size of [face] in its em */
+    /** the face that [face] is shaped in, one per font and weight, and the size of [face] in its em */
     private fun reference(face: Face): Pair<Face, Double> {
-        val font = fonts[face] ?: return face to 1.0
-        val reference = referenceFaces.getOrPut(font) { loadFace(font).withSize(referenceSize) }
+        val (font, weight) = fonts[face] ?: return face to 1.0
+        val reference = FontFaces.face(font, referenceSize, weight, opticalSize = null)
         return reference to face.sizeInPoints / referenceSize
     }
 
@@ -90,11 +85,12 @@ class PanelText internal constructor(private val fontManager: FontManager) {
 
     private val prepared = HashMap<Any, HashMap<String, Prepared>>()
 
-    /** the face of [style]: its font family and size */
+    /** the face of [style]: its font family, weight, style and size */
     fun face(style: StyleSheet): Face {
-        val url = fontManager.resolve(style.fontFamily) ?: fontManager.resolve("default") ?: "cp:fonts/Roboto-Regular.ttf"
+        val url = fontManager.resolve(style) ?: "cp:fonts/Roboto-Regular.ttf"
         val size = (style.fontSize as? LinearDimension.PX)?.value ?: 16.0
-        return faces.getOrPut(url to size) { loadFace(url).withSize(size).also { fonts[it] = url } }
+        // the optical size of a variable font follows the reference size, so that glyphs are shaped once for all sizes
+        return FontFaces.face(url, size, style.fontWeight, opticalSize = null).also { fonts[it] = url to style.fontWeight }
     }
 
     /** [text] shaped as a single line in the face of [style] */

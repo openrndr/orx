@@ -1,16 +1,15 @@
 package org.openrndr.extra.composition
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.font.Face
-import org.openrndr.draw.font.loadFace
 import org.openrndr.draw.font.internal.BidiTextDriver
 import org.openrndr.draw.font.internal.Direction
 import org.openrndr.draw.font.internal.Script
 import org.openrndr.draw.font.internal.ShapeFeature
 import org.openrndr.draw.font.internal.TextShapingDriver
 import org.openrndr.extra.textwriter.ContourBaseline
+import org.openrndr.extra.textwriter.FontFaces
 import org.openrndr.extra.textwriter.ContourOverflow
 import org.openrndr.extra.textwriter.ContourTextLayout
 import org.openrndr.extra.textwriter.GlyphPivot
@@ -27,7 +26,6 @@ import org.openrndr.shape.Rectangle
 import org.openrndr.shape.bounds
 import kotlin.math.abs
 
-private val logger = KotlinLogging.logger {}
 
 /**
  * Draws the text of [TextNode]s with a [SlugTextDrawer]
@@ -35,8 +33,6 @@ private val logger = KotlinLogging.logger {}
 internal object CompositionText {
     // the slug drawer keeps its glyphs in textures, it is created once it is needed
     private val slugTextDrawer by lazy { SlugTextDrawer() }
-
-    private val failedFonts = mutableSetOf<String>()
 
     // text is drawn in a single color, gradients and other paints are drawn in the color that stands in for them
     private fun Paint.color(opacity: Double, style: Style): ColorRGBa? = when (this) {
@@ -51,45 +47,16 @@ internal object CompositionText {
 
     /**
      * The face of the font of [style] for [node], null when there is no font or it cannot be loaded. The font faces of
-     * the groups the node is in are used before the registered fonts, the first source that loads is used.
+     * the groups the node is in are used before the registered fonts, the first source that loads is used. A variable
+     * font is set to the font-variation-settings, its weight follows font-weight and its optical size the font size,
+     * as in browsers.
      */
     private fun face(style: Style, node: CompositionNode): Face? {
         val fontSize = (style.fontSize as? Length.Pixels)?.value ?: 16.0
         val faces = generateSequence(node) { it.parent }.filterIsInstance<GroupNode>().flatMap { it.fontFaces }.toList()
         val candidates = CompositionFonts.candidates(style.fontFamily.value, style.fontWeight.value, style.fontStyle.value, faces)
-        for (file in candidates) {
-            if (file in failedFonts) continue
-            try {
-                return variations(loadFace(file).withSize(fontSize), style)
-            } catch (e: Throwable) {
-                failedFonts.add(file)
-                logger.warn { "could not load font '${file.take(80)}': ${e.message}" }
-            }
-        }
-        return null
+        return FontFaces.first(candidates, fontSize, style.fontWeight.value, fontSize(style), style.fontVariationSettings.value)
     }
-
-    /**
-     * [face] with the axes of [style] when it is a variable font: its font-variation-settings, and its weight on the
-     * weight axis when the settings do not give it, as browsers do
-     */
-    private fun variations(face: Face, style: Style): Face {
-        if (!face.isVariable) return face
-        val master = face.master.copy()
-        // the axes of faces are named by their names, registered axes are given by their tags in CSS
-        fun axis(tag: String) = registeredAxes[tag]?.takeIf { it in master } ?: tag.takeIf { it in master }
-        val settings = style.fontVariationSettings.value.mapNotNull { (tag, value) -> axis(tag)?.let { it to value } }.toMap()
-        for ((name, value) in settings) master[name] = value
-        // the weight follows font-weight and the optical size follows the font size, as in browsers
-        axis("wght")?.takeIf { it !in settings }?.let { master[it] = style.fontWeight.value.toDouble() }
-        axis("opsz")?.takeIf { it !in settings }?.let { master[it] = fontSize(style) }
-        return if (master == face.master) face else face.withMaster(master)
-    }
-
-    /** the names of the registered axes of variable fonts by their tags */
-    private val registeredAxes = mapOf(
-        "wght" to "Weight", "wdth" to "Width", "opsz" to "OpticalSize", "ital" to "Italic", "slnt" to "Slant"
-    )
 
     /**
      * How the text of [node] is adjusted to the textLength of the text element or tspan it is in: [spacing] is added

@@ -513,7 +513,19 @@ val StyleSheet.computedTextHorizontalAlign: Double
 
 
 var StyleSheet.fontSize by PropertyHandler<LinearDimension>("font-size", INHERIT, 14.px)
+/**
+ * The font families, separated by commas, the first that is registered is used: in the font manager of the control
+ * manager, then in [org.openrndr.extra.textwriter.Fonts], the fonts of all programs
+ */
 var StyleSheet.fontFamily by PropertyHandler("font-family", INHERIT, "default")
+
+/** the weight of the font, from 100 to 900, 400 is regular and 700 bold */
+var StyleSheet.fontWeight by PropertyHandler("font-weight", INHERIT, 400)
+
+/** the style of the font: upright or italic */
+enum class FontStyle { NORMAL, ITALIC }
+
+var StyleSheet.fontStyle by PropertyHandler("font-style", INHERIT, FontStyle.NORMAL)
 var StyleSheet.overflow by PropertyHandler<Overflow>("overflow", RESET, Overflow.Visible)
 
 /** how the content overflows horizontally, as [overflow] when it is not set */

@@ -48,6 +48,7 @@ class ControlManager : Extension {
 
     init {
         fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))
+        fontManager.register("default", resourceUrl("/fonts/Roboto-Medium.ttf"), weight = 500)
 //        layouter.styleSheets.addAll(defaultStyles().flatMap { it.flatten() })
     }
 
@@ -952,6 +953,7 @@ fun Program.controlManager(
     val cm = ControlManager()
     cm.program = this
     cm.fontManager.register("default", resourceUrl("/fonts/Roboto-Regular.ttf"))
+    cm.fontManager.register("default", resourceUrl("/fonts/Roboto-Medium.ttf"), weight = 500)
     val document = Document()
     document.styleSheets.addAll(defaultStyles)
     cm.document = document
