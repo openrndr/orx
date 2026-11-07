@@ -180,7 +180,11 @@ private fun Any.listParameters(path: MutableList<Any>): List<Parameter> {
             pathExtensions = pathExtensions,
             pathIsDirectory = pathIsDirectory,
             order = order,
-
+            description = annotations.firstNotNullOfOrNull { annotation ->
+                // every parameter annotation has a description
+                (annotation.annotationClass.java.methods.firstOrNull { it.name == "description" }?.invoke(annotation) as? String)
+                    ?.takeIf { it.isNotEmpty() }
+            }
         )
     } + this::class.declaredMemberFunctions.filter {
         it.findAnnotation<ActionParameter>() != null
@@ -206,7 +210,8 @@ private fun Any.listParameters(path: MutableList<Any>): List<Parameter> {
             pathContext = null,
             pathExtensions = null,
             pathIsDirectory = null,
-            order = order
+            order = order,
+            description = annotation.description.takeIf { it.isNotEmpty() }
         )
     } + nested).sortedBy { it.order }
 }

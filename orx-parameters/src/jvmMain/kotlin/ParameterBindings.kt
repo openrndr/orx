@@ -34,6 +34,10 @@ private val lenientParameterJson = Json {
     allowSpecialFloatingPointValues = true
 }
 
+/** true when [this] and [other] are the same value, as they are saved */
+internal fun ParameterValue.sameAs(other: ParameterValue): Boolean =
+    parameterJson.encodeToString(ParameterValue.serializer(), this) == parameterJson.encodeToString(ParameterValue.serializer(), other)
+
 private val parameterValuesSerializer =
     MapSerializer(String.serializer(), MapSerializer(String.serializer(), ParameterValue.serializer()))
 
@@ -178,6 +182,22 @@ class ParameterBindings {
     }
 
     /** binds [parameters] of [obj], and the objects nested in it */
+    /** the values of the parameters when their objects were bound, by binding */
+    private val defaults = java.util.WeakHashMap<Binding, Map<Parameter, ParameterValue>>()
+
+    /** the value of [parameter] of [binding] when its object was bound, null when it has no value */
+    fun defaultValue(binding: Binding, parameter: Parameter): ParameterValue? = defaults[binding]?.get(parameter)
+
+    /** sets [parameter] of [binding] to the value it had when its object was bound */
+    fun reset(binding: Binding, parameter: Parameter) {
+        defaultValue(binding, parameter)?.let { setParameterValue(binding, parameter, it) }
+    }
+
+    /** sets all parameters of all objects to the values they had when their objects were bound */
+    fun resetAll() {
+        for (binding in all()) for (parameter in binding.valueParameters) reset(binding, parameter)
+    }
+
     private fun bind(label: String, obj: Any, parameters: List<Parameter>): Binding {
         val nested = parameters.filter { it.parameterType == ParameterType.Nested }.associateWith { parameter ->
             NestedBinding("$label/${parameter.label}", obj, parameter).apply {
@@ -185,7 +205,9 @@ class ParameterBindings {
                 binding = this.obj?.let { bind(this.label, it, parameter.nestedParameters ?: emptyList()) }
             }
         }
-        return Binding(label, obj, parameters, nested)
+        return Binding(label, obj, parameters, nested).also { binding ->
+            defaults[binding] = binding.valueParameters.filter { it.property != null }.associateWith { parameterValue(binding, it) }
+        }
     }
 
     /**
@@ -319,12 +341,12 @@ class ParameterBindings {
     fun toObject(): Map<String, Map<String, ParameterValue>> {
         rebindNested()
         return all().associate { binding ->
-            binding.label to binding.valueParameters.associate { parameter -> parameter.name to valueOf(binding, parameter) }
+            binding.label to binding.valueParameters.associate { parameter -> parameter.name to parameterValue(binding, parameter) }
         }
     }
 
-    /** the [ParameterValue] of [parameter] of [binding] */
-    private fun valueOf(binding: Binding, parameter: Parameter): ParameterValue {
+    /** the value of [parameter] of [binding] as it is saved, a copy that does not change with the parameter */
+    fun parameterValue(binding: Binding, parameter: Parameter): ParameterValue {
         val value = binding.get(parameter)
         @Suppress("UNCHECKED_CAST")
         return when (parameter.parameterType) {
@@ -400,7 +422,7 @@ class ParameterBindings {
             for ((name, value) in values) {
                 val parameter = binding.parameter(name) ?: continue
                 try {
-                    apply(binding, parameter, value)
+                    setParameterValue(binding, parameter, value)
                 } catch (e: Exception) {
                     logger.warn { "could not set '$name' of '$label': ${e.message}" }
                 }
@@ -409,8 +431,8 @@ class ParameterBindings {
         loaded.trigger(this)
     }
 
-    /** sets [parameter] of [binding] to [value] */
-    private fun apply(binding: Binding, parameter: Parameter, value: ParameterValue) {
+    /** sets [parameter] of [binding] to [value], a value as it is saved */
+    fun setParameterValue(binding: Binding, parameter: Parameter, value: ParameterValue) {
         val v: Any = when (parameter.parameterType) {
             ParameterType.Double -> value.doubleValue
             ParameterType.Int -> value.intValue

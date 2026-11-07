@@ -27,7 +27,7 @@ annotation class Description(val title: String, val description: String = "")
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class OptionParameter(val label: String, val order: Int = Int.MAX_VALUE)
+annotation class OptionParameter(val label: String, val order: Int = Int.MAX_VALUE, val description: String = "")
 
 /**
  * ListParameter annotation for a `SelectableList`
@@ -38,7 +38,7 @@ annotation class OptionParameter(val label: String, val order: Int = Int.MAX_VAL
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ListParameter(val label: String, val order: Int = Int.MAX_VALUE)
+annotation class ListParameter(val label: String, val order: Int = Int.MAX_VALUE, val description: String = "")
 
 
 /**
@@ -50,7 +50,7 @@ annotation class ListParameter(val label: String, val order: Int = Int.MAX_VALUE
 
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class MutableListParameter(val label: String, val order: Int = Int.MAX_VALUE)
+annotation class MutableListParameter(val label: String, val order: Int = Int.MAX_VALUE, val description: String = "")
 
 /**
  * DoubleParameter annotation for a double precision parameter
@@ -62,7 +62,7 @@ annotation class MutableListParameter(val label: String, val order: Int = Int.MA
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class DoubleParameter(val label: String, val low: Double, val high: Double, val precision: Int = 3, val order: Int = Int.MAX_VALUE)
+annotation class DoubleParameter(val label: String, val low: Double, val high: Double, val precision: Int = 3, val order: Int = Int.MAX_VALUE, val description: String = "")
 
 /**
  * DoubleListParameter annotation for a double precision parameter
@@ -83,7 +83,8 @@ annotation class DoubleListParameter(
         val minimumListLength: Int = 1,
         val maximumListLength: Int = 16,
         val precision: Int = 3,
-        val order: Int = Int.MAX_VALUE
+        val order: Int = Int.MAX_VALUE,
+        val description: String = ""
 )
 
 /**
@@ -95,7 +96,7 @@ annotation class DoubleListParameter(
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class IntParameter(val label: String, val low: Int, val high: Int, val order: Int = Int.MAX_VALUE)
+annotation class IntParameter(val label: String, val low: Int, val high: Int, val order: Int = Int.MAX_VALUE, val description: String = "")
 
 /**
  * BooleanParameter annotation for a boolean parameter
@@ -104,7 +105,7 @@ annotation class IntParameter(val label: String, val low: Int, val high: Int, va
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class BooleanParameter(val label: String, val order: Int = Int.MAX_VALUE)
+annotation class BooleanParameter(val label: String, val order: Int = Int.MAX_VALUE, val description: String = "")
 
 /**
  * TextParameter annotation for a text parameter
@@ -113,7 +114,7 @@ annotation class BooleanParameter(val label: String, val order: Int = Int.MAX_VA
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class TextParameter(val label: String, val order: Int = Int.MAX_VALUE)
+annotation class TextParameter(val label: String, val order: Int = Int.MAX_VALUE, val description: String = "")
 
 /**
  * ColorParameter annotation for a ColorRGBa parameter
@@ -122,7 +123,7 @@ annotation class TextParameter(val label: String, val order: Int = Int.MAX_VALUE
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ColorParameter(val label: String, val order: Int = Int.MAX_VALUE)
+annotation class ColorParameter(val label: String, val order: Int = Int.MAX_VALUE, val description: String = "")
 
 
 /**
@@ -141,7 +142,8 @@ annotation class XYParameter(
         val precision: Int = 2,
         val showVector: Boolean = false,
         val invertY: Boolean = true,
-        val order: Int = Int.MAX_VALUE
+        val order: Int = Int.MAX_VALUE,
+        val description: String = ""
 )
 
 @Target(AnnotationTarget.PROPERTY)
@@ -151,7 +153,8 @@ annotation class Vector2Parameter(
         val min: Double = -1.0,
         val max: Double = 1.0,
         val precision: Int = 2,
-        val order: Int = Int.MAX_VALUE
+        val order: Int = Int.MAX_VALUE,
+        val description: String = ""
 )
 
 @Target(AnnotationTarget.PROPERTY)
@@ -161,7 +164,8 @@ annotation class Vector3Parameter(
         val min: Double = -1.0,
         val max: Double = 1.0,
         val precision: Int = 2,
-        val order: Int = Int.MAX_VALUE
+        val order: Int = Int.MAX_VALUE,
+        val description: String = ""
 )
 
 @Target(AnnotationTarget.PROPERTY)
@@ -171,7 +175,8 @@ annotation class Vector4Parameter(
         val min: Double = -1.0,
         val max: Double = 1.0,
         val precision: Int = 2,
-        val order: Int = Int.MAX_VALUE
+        val order: Int = Int.MAX_VALUE,
+        val description: String = ""
 )
 
 /**
@@ -181,7 +186,7 @@ annotation class Vector4Parameter(
  */
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class ActionParameter(val label: String, val order: Int = Int.MAX_VALUE)
+annotation class ActionParameter(val label: String, val order: Int = Int.MAX_VALUE, val description: String = "")
 
 
 /**
@@ -202,7 +207,8 @@ annotation class PathParameter(
     val context: String = "null",
     val extensions: Array<String> = [],
     val directory: Boolean = false,
-    val order: Int = Int.MAX_VALUE
+    val order: Int = Int.MAX_VALUE,
+    val description: String = ""
 )
 
 /**
@@ -269,6 +275,7 @@ enum class ParameterType(val annotationClass: KClass<out Annotation>) {
  * @property nestedProperty the property that holds the nested object in case [NestedParameter] is used
  * @property nestedParameters the parameters of the nested object in case [NestedParameter] is used, empty when the
  * property holds null
+ * @property description a description of the parameter, the `description` of its annotation, null when it is empty
  */
 class Parameter(
         val parameterType: ParameterType,
@@ -290,6 +297,7 @@ class Parameter(
         val order: Int,
         val nestedProperty: KProperty1<out Any, Any?>? = null,
         val nestedParameters: List<Parameter>? = null,
+        val description: String? = null,
         )
 //</editor-fold>
 //<editor-fold desc="4. Add handling annotation code to listParameters" defaultstate="collapsed">
