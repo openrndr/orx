@@ -44,9 +44,9 @@ open class PropertyValue
 
 /**
  * The value of [declaration], which uses var(): it is substituted with the custom properties of the element and parsed
- * when its style is computed
+ * when its style is computed. For a shorthand, like `margin: var(--space) 4px`, the value of its [longhand].
  */
-class VariableValue(val declaration: CssDeclaration) {
+class VariableValue(val declaration: CssDeclaration, val longhand: String = declaration.name.trim().lowercase()) {
     override fun toString() = "VariableValue(${declaration.name}: ${declaration.value})"
 }
 
@@ -411,7 +411,11 @@ class StyleSheet(val selector: CompoundSelector = CompoundSelector.DUMMY) {
                 continue
             }
             if ("var(" in declaration.value) {
-                setProperty(declaration.name.trim().lowercase(), VariableValue(declaration), important)
+                // a shorthand sets its longhands, which are substituted and parsed with the shorthand
+                val name = declaration.name.trim().lowercase()
+                for (longhand in panelProperties().longhands(name) ?: listOf(name)) {
+                    setProperty(longhand, VariableValue(declaration, longhand), important)
+                }
                 continue
             }
             val values = panelProperties().values(declaration)

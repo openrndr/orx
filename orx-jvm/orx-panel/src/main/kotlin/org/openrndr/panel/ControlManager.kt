@@ -406,8 +406,8 @@ class ControlManager : Extension {
             mousePosition = event.position
             hoverScrollbar(event.position)
             tooltips.moved(body?.let { root -> elementAt(root, event.position) { it.tooltip != null } }, event.position)
-            // a tooltip that shows follows the pointer
-            if (tooltips.showing || tooltipArea != null) tooltipPending = true
+            // a tooltip that shows follows the pointer, as does the inspector
+            if (tooltips.showing || tooltipArea != null || inspector.enabled) tooltipPending = true
             cursorPending = true
             val hover = ElementPseudoClass("hover")
             val toRemove = insideElements.filter { (event.position !in it.screenArea) }
@@ -483,6 +483,22 @@ class ControlManager : Extension {
     /** true when the tooltip can have moved, shown or hidden since the last frame */
     private var tooltipPending = false
 
+    /** the inspector, F12 shows it, see [Inspector] */
+    val inspector = Inspector(this)
+
+    /** the CSS files of the document, see [cssFile] */
+    private val cssFiles = mutableListOf<CssFile>()
+
+    /**
+     * Adds the style sheets of the CSS file [path] to the document, after its style sheets; when [watch] is set, they
+     * are read again when the file changes, a few times per second while frames are drawn, and the elements are styled
+     * again. Rules that are not valid are left out, with a warning.
+     */
+    fun cssFile(path: String, watch: Boolean = true): CssFile {
+        val document = document ?: Document().also { document = it }
+        return CssFile(java.io.File(path), watch, document).also { cssFiles.add(it) }
+    }
+
     /** true when the styles of elements have to be computed again, see [Element.invalidateStyle] */
     var stylesPending = true
 
@@ -539,7 +555,19 @@ class ControlManager : Extension {
         program.mouse.dragged.listen { mouseInput.drag(it) }
         program.mouse.buttonDown.listen { mouseInput.press(it) }
 
-        program.keyboard.keyDown.listen { keyboardInput.press(it) }
+        program.keyboard.keyDown.listen {
+            // F12 shows the inspector, shift-F12 pins the inspected element
+            if (it.name == KEYNAME_F12) {
+                if (KeyModifier.SHIFT in it.modifiers) {
+                    inspector.pinned = if (inspector.pinned == null) inspector.inspected else null
+                } else {
+                    if (inspector.enabled) inspector.hide() else inspector.show()
+                }
+                window.requestDraw()
+                return@listen
+            }
+            keyboardInput.press(it)
+        }
         program.keyboard.keyUp.listen { keyboardInput.release(it) }
         program.keyboard.keyRepeat.listen { keyboardInput.repeat(it) }
         program.keyboard.character.listen { keyboardInput.character(it) }
@@ -715,6 +743,12 @@ class ControlManager : Extension {
             fadingBefore.forEach { it.draw.dirty = true }
             fadingBefore = fading
 
+            // CSS files that changed are read again
+            if (cssFiles.isNotEmpty()) {
+                val now = System.nanoTime() / 1E9
+                for (file in cssFiles) file.check(now)
+            }
+
             // the styles that can have changed are computed, the layout when it can have changed; in every frame,
             // inline styles change without notice, finding nothing changed is a walk over the elements
             stylesPending = false
@@ -813,6 +847,9 @@ class ControlManager : Extension {
             drawer.ortho(RenderTarget.active)
             program.drawer.image(renderTarget!!.colorBuffer(0), 0.0, 0.0)
 
+            // the inspector over everything
+            inspector.draw(drawer, text, document?.layouter, screen)
+
             drawCount++
 
             // the next frame continues the fading also when frames are only drawn on request
@@ -907,6 +944,12 @@ class ControlManagerBuilder(val controlManager: ControlManager) {
         val document = controlManager.existingOrNewDocumentWithDefaultStyleSheets()
         controlManager.document = document
         document.styleSheets.addAll(styleSheets)
+    }
+
+    /** adds the style sheets of the CSS file [path], read again when it changes when [watch] is set, see [ControlManager.cssFile] */
+    fun cssFile(path: String, watch: Boolean = true): CssFile {
+        controlManager.document = controlManager.existingOrNewDocumentWithDefaultStyleSheets()
+        return controlManager.cssFile(path, watch)
     }
 
     /** adds the style sheets of the CSS [css], see [org.openrndr.panel.style.styleSheets] */

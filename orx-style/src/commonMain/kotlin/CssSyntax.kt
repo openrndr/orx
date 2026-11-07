@@ -207,6 +207,9 @@ open class CssProperties {
         shorthands[name] = Shorthand(longhands, expand)
     }
 
+    /** the longhands of the shorthand [name], null when it is not a shorthand */
+    fun longhands(name: String): List<String>? = shorthands[name.trim().lowercase()]?.longhands
+
     /** the property [name], null when it is not known */
     operator fun get(name: String): CssProperty<*>? = properties[name]
 

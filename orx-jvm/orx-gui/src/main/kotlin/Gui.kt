@@ -176,6 +176,17 @@ open class GUI(
      */
     var styles: List<StyleSheet> = guiStyles(appearance)
 
+    private val cssFiles = mutableListOf<Pair<String, Boolean>>()
+
+    /**
+     * Adds the style sheets of the CSS file [path], after [styles], like a theme: `:root { --gui-base: #223 }`. When
+     * [watch] is set they are read again when the file changes, while the program runs. Must be called before the GUI
+     * is installed with `extend()`.
+     */
+    fun cssFile(path: String, watch: Boolean = true) {
+        cssFiles.add(path to watch)
+    }
+
     /**
      * The layout that builds the GUI's element tree, see [GUILayout]. Must be set before the GUI is installed with
      * `extend()`.
@@ -329,6 +340,7 @@ open class GUI(
         compartments.clear()
         panel = program.controlManager(defaultStyles = defaultStyles) {
             styleSheets(styles)
+            for ((path, watch) in cssFiles) cssFile(path, watch)
             layout {
                 GUILayoutScope(this@GUI, this).layout()
             }

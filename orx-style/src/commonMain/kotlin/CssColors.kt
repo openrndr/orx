@@ -33,6 +33,13 @@ fun parseCssColor(text: String): ColorRGBa? {
     }
 }
 
+/** [this] as a CSS color, rgb() of its sRGB values; [parseCssColor] reads it back */
+fun ColorRGBa.toCssColor(): String {
+    val c = toSRGB()
+    fun channel(v: Double) = (v * 255.0).toString().removeSuffix(".0")
+    return "rgb(${channel(c.r)} ${channel(c.g)} ${channel(c.b)}${if (c.alpha < 1.0) " / ${c.alpha}" else ""})"
+}
+
 /** true when [name] is a named color of CSS */
 fun isCssColorName(name: String): Boolean = name.trim().lowercase() in cssColorNames
 

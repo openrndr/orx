@@ -186,4 +186,60 @@ class CssStyleTest {
         assertEquals(30.0, px(other.computedStyle.width))
         assertSame(LinearDimension.Auto, other.computedStyle.height)
     }
+
+    @Test
+    fun `the default styles take their colors and sizes from the theme`() {
+        lateinit var button: Button
+        val body = Body(null).apply { button = button { label = "b" } }
+        val sheets = defaultStyles() + styleSheets(":root { --control-background: red; --control-font-size: 28px }")
+        Layouter().apply { styleSheets.addAll(sheets.flatMap { it.flatten() }) }.computeStyles(body)
+        assertEquals(1.0, rgb(button.computedStyle.background).r)
+        // sizes derive from the font size
+        assertEquals(28.0, px(button.computedStyle.fontSize))
+        assertEquals(64.0, px(button.computedStyle.height))
+        assertEquals(10.0, px(button.computedStyle.marginTop))
+    }
+
+    @Test
+    fun `shorthands with var() take part in the cascade like their longhands`() {
+        lateinit var item: Div
+        val body = Body(null).apply { div("list") { item = div("item") { } } }
+        val sheets = styleSheets("""
+            :root { --space: 4px }
+            .list .item { margin-left: 20px }
+            .item { margin: var(--space) }
+        """)
+        Layouter().apply { styleSheets.addAll(sheets.flatMap { it.flatten() }) }.computeStyles(body)
+        // the more specific longhand wins over the shorthand with var(), the other sides take its value
+        assertEquals(20.0, px(item.computedStyle.marginLeft))
+        assertEquals(4.0, px(item.computedStyle.marginTop))
+    }
+
+    @Test
+    fun `css files are read again when they change, in their place`() {
+        val file = java.io.File.createTempFile("panel", ".css").apply { deleteOnExit() }
+        file.writeText(".a { width: 10px }")
+        val document = org.openrndr.panel.document.Document()
+        val first = styleSheet(".a") { height = 1.px }
+        document.styleSheets.add(first)
+        val css = org.openrndr.panel.CssFile(file, true, document)
+        val last = styleSheet(".a") { height = 2.px }
+        document.styleSheets.add(last)
+        assertEquals(1, css.styleSheets.size)
+        assertEquals(10.0, px(css.styleSheets[0].width))
+        // not changed, not read again
+        assertTrue(!css.reload())
+        file.writeText(".a { width: 20px } .b { width: 30px }")
+        file.setLastModified(file.lastModified() + 2000)
+        assertTrue(css.reload())
+        assertEquals(2, css.reads)
+        // the new style sheets are where the old ones were, between the style sheets around them
+        val sheets = document.styleSheets
+        assertSame(first, sheets.first())
+        assertSame(last, sheets.last())
+        assertEquals(listOf(20.0, 30.0), css.styleSheets.map { px(it.width) })
+        assertEquals(css.styleSheets, sheets.subList(sheets.size - 3, sheets.size - 1))
+        css.remove()
+        assertEquals(listOf(first, last), document.styleSheets.toList())
+    }
 }

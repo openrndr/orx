@@ -28,6 +28,15 @@ CSS values and shorthands, `!important`, the keywords `inherit`, `initial` and `
 `var()`. Inline styles take CSS too: `style = StyleSheet().apply { css("width: 50%; margin: 4px") }`. In CSS, grid
 lines are counted from 1; the Kotlin builder counts grid tracks from 0.
 
+The default styles take their colors and sizes from custom properties, a theme: override them in a later style sheet,
+like `:root { --control-background: #3a4150; --control-font-size: 16px }`, see `panelThemeCss`. Style sheets can be read
+from CSS files with `cssFile("ui.css")`, which are read again when they change while the program runs.
+
+F12 shows the inspector: the element under the pointer is highlighted with its margin, border, padding and content, and
+a window of its own shows its path, the rules that select it in the order of the cascade, with the declarations that
+are overridden struck through, and its computed style. Shift-F12 pins the element, F12 again or closing the window
+hides the inspector. With `inspector.inWindow = false` the inspector is drawn over the window instead.
+
 <!-- __demos__ -->
 ## Demos
 ### DemoBinding01

@@ -1,0 +1,22 @@
+/*
+ * A theme for the GUI of DemoCssFile01: edit and save this file while the demo runs, the GUI follows.
+ */
+:root {
+    --gui-base: #20242c;
+    /* the shades follow the base */
+    --gui-base-dark: color-mix(in srgb, var(--gui-base), black 25%);
+    --gui-base-light: color-mix(in srgb, var(--gui-base), white 12%);
+    --gui-base-opaque: var(--gui-base);
+    --bar-width: 240px;
+
+    --control-background: #3a4150;
+    --control-hover-background: color-mix(in srgb, var(--control-background), white 12%);
+    --control-sunken-background: color-mix(in srgb, var(--control-background), black 25%);
+    --control-text: #c9d1e0;
+    --control-active: #7fd1b9;
+    --focus-color: #7fd1b9;
+}
+
+.compartment-header { color: var(--control-active) }
+
+slider:hover { color: #ffffff }

@@ -1009,6 +1009,10 @@ class Layouter {
         return result
     }
 
+    /** the style sheets that select [element], in the order of the cascade: the last wins, important declarations aside */
+    fun matchingStyleSheets(element: Element): List<StyleSheet> =
+        styleSheets.filter { it.cssSelector.matches(element) }.sortedBy { it.specificity }
+
     /** computes the style of [element] from the style sheets, its inline style and the style of its parent */
     private fun computeStyle(element: Element) {
         if (element is TextNode) {
@@ -1048,14 +1052,10 @@ class Layouter {
             // computed-value time are in CSS
             for ((name, declared) in cs.properties.toList()) {
                 val unresolved = declared.value as? VariableValue ?: continue
-                cs.properties.remove(name)
-                val values = substituteCssVariables(unresolved.declaration.value, ::variable)
-                    ?.let { properties.values(CssDeclaration(name, it)) }
-                if (values != null) {
-                    for ((longhand, value) in values) cs.properties[longhand] = Property(longhand, value, declared.important)
-                } else if (properties[name] != null) {
-                    cs.properties[name] = Property(name, CssKeyword.UNSET, declared.important)
-                }
+                val value = substituteCssVariables(unresolved.declaration.value, ::variable)
+                    ?.let { properties.values(unresolved.declaration.copy(value = it)) }
+                    ?.firstOrNull { it.first == unresolved.longhand }?.second
+                cs.properties[name] = Property(name, value ?: CssKeyword.UNSET, declared.important)
             }
             // the keywords: inherit takes the value of the parent, initial the initial value, unset the value of the
             // parent for properties that are inherited and the initial value for others

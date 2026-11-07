@@ -1,9 +1,7 @@
 package org.openrndr.extra.gui
 
-import org.openrndr.color.ColorRGBa
 import org.openrndr.panel.elements.div
 import org.openrndr.panel.style.*
-import org.openrndr.panel.style.Display
 
 /**
  * A compact version of [GUI] that shows a single horizontal bar at the bottom of the screen. A dropdown on the left
@@ -46,123 +44,57 @@ val miniGUILayout: GUILayout = {
 }
 
 /**
- * The style sheets for [miniGUILayout]. The compartments are laid out as rows of controls of [controlWidth] pixels.
+ * The styles of [miniGUILayout], as CSS. The compartments are laid out as rows of controls of `--mini-control-width`;
+ * the colors are those of the theme of the GUI, see [guiThemeCss].
+ */
+val miniGUIStylesCss = """
+    .mini-fullscreen { width: 100%; height: 100%; display: flex; flex-direction: column }
+
+    .mini-spacer { width: 100%; height: 0; flex-grow: 1 }
+
+    /* no horizontal padding, it would add to the 100% width; the outer children have margins instead. the controls
+       keep the vertical margins of the default styles, these are equal for all single-line controls, which keeps them
+       aligned */
+    .mini-bar {
+        width: 100%; height: auto; display: flex; flex-direction: row; column-gap: 10px;
+        padding-top: 3px; padding-bottom: 3px; background-color: var(--gui-base);
+    }
+
+    .compartment-selector { width: var(--mini-control-width); margin-left: 10px; flex-shrink: 0 }
+
+    /* holds the compartments, takes up the space between the compartment selector and the toolbar; it scrolls
+       horizontally when the controls do not fit, with scrollbars that show while scrolling, and room for the scrollbar
+       below the controls */
+    .sidebar {
+        width: 0; height: auto; flex-grow: 1; overflow: scroll; scrollbar-visibility: auto; padding-bottom: 5px;
+    }
+
+    .compartment { display: flex; flex-direction: row; column-gap: 10px; height: auto }
+    .compartment :is(colorpicker-button, slider, button, textfield, toggle, dropdown-button) {
+        width: var(--mini-control-width); flex-shrink: 0;
+    }
+    .compartment xy-pad { width: 80px; height: 80px; flex-shrink: 0 }
+    .compartment :is(sequence-editor, sliders-vector2, sliders-vector3, sliders-vector4) {
+        width: var(--mini-control-width); height: 80px; flex-shrink: 0;
+    }
+
+    /* only the compartments give way when the bar is too narrow */
+    .toolbar { height: auto; display: flex; flex-direction: row; column-gap: 5px; margin-right: 10px; flex-shrink: 0 }
+    .toolbar > button { margin-left: 0; margin-right: 0; flex-shrink: 0 }
+
+    .collapsed { display: none }
+
+    .randomize-strong { color: pink }
+    .randomize-strong:hover { color: black; background-color: pink }
+""".trimIndent()
+
+/**
+ * The style sheets for [miniGUILayout]: the theme of [appearance], see [guiThemeCss], with controls of [controlWidth]
+ * pixels, and the style sheets of [miniGUIStylesCss].
  *
  * @param appearance the base color of the bar
  * @param controlWidth the width of every control in pixels
  */
-fun miniGUIStyles(appearance: GUIAppearance = GUIAppearance(), controlWidth: Int = 150): List<StyleSheet> = listOf(
-    styleSheet(has class_ "mini-fullscreen") {
-        this.width = length { 100.percent }
-        this.height = length { 100.percent }
-        this.display = Display.FLEX
-        this.flexDirection = FlexDirection.Column
-    },
-
-    styleSheet(has class_ "mini-spacer") {
-        this.width = length { 100.percent }
-        this.height = length { 0 }
-        this.flexGrow = flex { 1 }
-    },
-
-    styleSheet(has class_ "mini-bar") {
-        this.width = length { 100.percent }
-        this.height = LinearDimension.Auto
-        this.display = Display.FLEX
-        this.flexDirection = FlexDirection.Row
-        this.columnGap = length { 10 }
-        // no horizontal padding, it would add to the 100% width; the outer children have margins instead.
-        // the controls keep the vertical margins of the default styles, these are equal for all single-line
-        // controls, which keeps them aligned
-        this.paddingTop = length { 3 }
-        this.paddingBottom = length { 3 }
-        this.background = color { appearance.baseColor }
-    },
-
-    styleSheet(has class_ "compartment-selector") {
-        this.width = length { controlWidth }
-        this.marginLeft = length { 10 }
-        this.flexShrink = flex { 0 }
-    },
-
-    // holds the compartments, takes up the space between the compartment selector and the toolbar; it scrolls
-    // horizontally when the controls do not fit, with scrollbars that show while scrolling
-    styleSheet(has class_ "sidebar") {
-        this.width = length { 0 }
-        this.height = LinearDimension.Auto
-        this.flexGrow = flex { 1 }
-        this.overflow = Overflow.Scroll
-        this.scrollbarVisibility = ScrollbarVisibility.Auto
-        // room for the scrollbar below the controls
-        this.paddingBottom = length { 5 }
-    },
-
-    styleSheet(has class_ "compartment") {
-        this.display = Display.FLEX
-        this.flexDirection = FlexDirection.Row
-        this.columnGap = length { 10 }
-        this.height = LinearDimension.Auto
-
-        descendant(
-            has type listOf(
-                "colorpicker-button",
-                "slider",
-                "button",
-                "textfield",
-                "toggle",
-                "dropdown-button"
-            )
-        ) {
-            this.width = length { controlWidth }
-            this.flexShrink = flex { 0 }
-        }
-
-        descendant(has type "xy-pad") {
-            this.width = length { 80 }
-            this.height = length { 80 }
-            this.flexShrink = flex { 0 }
-        }
-
-        descendant(
-            has type listOf(
-                "sequence-editor",
-                "sliders-vector2",
-                "sliders-vector3",
-                "sliders-vector4"
-            )
-        ) {
-            this.width = length { controlWidth }
-            this.height = length { 80 }
-            this.flexShrink = flex { 0 }
-        }
-    },
-
-    styleSheet(has class_ "toolbar") {
-        this.height = LinearDimension.Auto
-        this.display = Display.FLEX
-        this.flexDirection = FlexDirection.Row
-        this.columnGap = length { 5 }
-        this.marginRight = length { 10 }
-        // only the compartments give way when the bar is too narrow
-        this.flexShrink = flex { 0 }
-
-        child(has type "button") {
-            marginLeft = length { 0 }
-            marginRight = length { 0 }
-            flexShrink = flex { 0 }
-        }
-    },
-
-    styleSheet(has class_ "collapsed") {
-        this.display = Display.NONE
-    },
-
-    styleSheet(has class_ "randomize-strong") {
-        color = color { ColorRGBa.PINK }
-
-        and(has state "hover") {
-            color = color { ColorRGBa.BLACK }
-            background = color { ColorRGBa.PINK }
-        }
-    }
-)
+fun miniGUIStyles(appearance: GUIAppearance = GUIAppearance(), controlWidth: Int = 150): List<StyleSheet> =
+    listOf(styleSheet(":root") { css(guiThemeCss(appearance) + "\n--mini-control-width: ${controlWidth}px;") }) +
+            styleSheets(miniGUIStylesCss)
