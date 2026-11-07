@@ -43,11 +43,18 @@ internal class StyleTransitions(private val clock: () -> Double = { System.nanoT
         else -> to
     }
 
-    /** applies the transitions to [root] and its descendants */
+    /** applies the transitions to the styles of [root] and its descendants that were computed again */
     fun apply(root: Element) {
         val now = clock()
         val result = mutableListOf<Element>()
         fun visit(element: Element) {
+            // computed styles that were not computed again keep the values of their transitions, elements with
+            // transitions that run are computed again in every frame
+            if (!element.styleFresh) {
+                element.children.forEach(::visit)
+                return
+            }
+            element.styleFresh = false
             val cs = element.computedStyle
             val duration = cs.transitionDuration
             val state = states[element] ?: if (duration > 0.0) State().also { states[element] = it } else null

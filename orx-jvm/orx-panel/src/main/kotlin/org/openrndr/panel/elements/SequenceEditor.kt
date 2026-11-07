@@ -216,6 +216,18 @@ open class SequenceEditorBase(type: String = "sequence-editor-base") : Element(E
         }
     }
 
+    /** with the tooltip of the value */
+    override val paintArea: Rectangle
+        get() {
+            val area = super.paintArea
+            val tip = valueTooltip?.area ?: return area
+            val x0 = minOf(area.x, layout.screenX + tip.x)
+            val y0 = minOf(area.y, layout.screenY + tip.y)
+            val x1 = maxOf(area.x + area.width, layout.screenX + tip.x + tip.width + 2.0)
+            val y1 = maxOf(area.y + area.height, layout.screenY + tip.y + tip.height + 2.0)
+            return Rectangle(x0, y0, x1 - x0, y1 - y0)
+        }
+
     override fun draw(drawer: Drawer) {
         val controlArea = Rectangle(0.0, 0.0, layout.screenWidth, layout.screenHeight - footerHeight)
 

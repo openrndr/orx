@@ -50,23 +50,34 @@ internal class Tooltips(private val clock: () -> Double = { System.nanoTime() / 
     /** draws the tooltip below and right of the pointer, inside [bounds] */
     private val style = StyleSheet().apply { fontSize = 13.px }
 
-    fun draw(drawer: Drawer, text: PanelText, bounds: Rectangle) {
-        if (!showing) return
-        val tip = element?.tooltip ?: return
-        val panel = text
-        val face = panel.face(style)
+    /** the area the tooltip covers when it is drawn inside [bounds], null when none shows */
+    fun area(text: PanelText, bounds: Rectangle): Rectangle? {
+        if (!showing) return null
+        val tip = element?.tooltip ?: return null
+        val face = text.face(style)
         val lines = tip.lines()
-        val width = lines.maxOf { panel.width(style, it) } + 16.0
+        val width = lines.maxOf { text.width(style, it) } + 16.0
         val lineHeight = (face.ascent - face.descent) * 1.3
         val height = lines.size * lineHeight + 10.0
         // below and right of the pointer, moved into the bounds where it does not fit
         val x = (position.x + 12.0).coerceAtMost(bounds.x + bounds.width - width - 4.0).coerceAtLeast(bounds.x + 4.0)
         val y = (position.y + 18.0).let { if (it + height > bounds.y + bounds.height - 4.0) position.y - height - 8.0 else it }
+        return Rectangle(x, y, width, height)
+    }
+
+    fun draw(drawer: Drawer, text: PanelText, bounds: Rectangle) {
+        val area = area(text, bounds) ?: return
+        val tip = element?.tooltip ?: return
+        val panel = text
+        val face = panel.face(style)
+        val lines = tip.lines()
+        val lineHeight = (face.ascent - face.descent) * 1.3
+        val (x, y) = area.x to area.y
         drawer.isolated {
             drawer.fill = ColorRGBa.fromHex("#1f1f1f").opacify(0.95)
             drawer.stroke = ColorRGBa.WHITE.opacify(0.25)
             drawer.strokeWeight = 1.0
-            drawer.box(Rectangle(x, y, width, height), 4.0)
+            drawer.box(area, 4.0)
             for ((i, line) in lines.withIndex()) {
                 panel.drawLine(drawer, this@Tooltips, "line $i", style, line, x + 8.0,
                     y + 5.0 + face.ascent + i * lineHeight, ColorRGBa.WHITE.shade(0.9))

@@ -353,7 +353,12 @@ class StyleSheet(val selector: CompoundSelector = CompoundSelector.DUMMY) {
 
     fun getProperty(name: String) = properties.get(name)
 
+    /** counts the changes to the properties, so that changes made in place are noticed */
+    var version = 0
+        private set
+
     fun setProperty(name: String, value: Any?) {
+        version++
         properties[name] = Property(name, value)
     }
 
@@ -596,4 +601,49 @@ fun styleSheet(selector: CompoundSelector = CompoundSelector.DUMMY, init: StyleS
     return StyleSheet(selector).apply {
         init()
     }
+}
+
+/** true when [a] and [b] are the same value of a property, also when they are different objects */
+internal fun sameValue(a: Any?, b: Any?): Boolean {
+    if (a === b || a == b) return true
+    if (a == null || b == null || a::class != b::class) return false
+    return when (a) {
+        is Color.RGBa -> a.color == (b as Color.RGBa).color && a.important == b.important
+        is LinearDimension.PX -> a.value == (b as LinearDimension.PX).value
+        is LinearDimension.Percent -> a.value == (b as LinearDimension.Percent).value
+        is LinearDimension.Fraction -> a.value == (b as LinearDimension.Fraction).value
+        is LinearDimension.MinMax -> sameValue(a.min, (b as LinearDimension.MinMax).min) && sameValue(a.max, b.max)
+        is ZIndex.Value -> a.value == (b as ZIndex.Value).value
+        is FlexGrow.Ratio -> a.value == (b as FlexGrow.Ratio).value
+        is TextAlign.Value -> a.value == (b as TextAlign.Value).value
+        is GridPopulation.Position -> a.value == (b as GridPopulation.Position).value
+        is GridPopulation.Length -> a.value == (b as GridPopulation.Length).value
+        is GridPopulation.Span -> a.value == (b as GridPopulation.Span).value
+        is GridTemplate.LengthList -> (b as GridTemplate.LengthList).value.size == a.value.size &&
+                a.value.indices.all { sameValue(a.value[it], b.value[it]) }
+        // values that are not known are taken as changed
+        else -> false
+    }
+}
+
+/** the properties that only change how an element is painted, not its size or position */
+internal val paintProperties = setOf(
+    "background-color", "color", "border-color", "border-radius", "outline-width", "outline-color", "outline-offset",
+    "opacity", "cursor", "transition-duration", "scrollbar-color", "scrollbar-track-color", "scrollbar-cursor",
+    "scrollbar-visibility", "scroll-behavior"
+)
+
+/**
+ * How [new] differs from [old], styles of the same element: 0 when it does not, 1 when only properties that paint
+ * changed, 2 when properties that lay out changed
+ */
+internal fun styleDifference(old: StyleSheet, new: StyleSheet): Int {
+    var result = 0
+    for (name in old.properties.keys + new.properties.keys) {
+        if (!sameValue(old.getProperty(name)?.value, new.getProperty(name)?.value)) {
+            if (name !in paintProperties) return 2
+            result = 1
+        }
+    }
+    return result
 }

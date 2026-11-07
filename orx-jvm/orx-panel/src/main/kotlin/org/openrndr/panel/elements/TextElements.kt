@@ -12,7 +12,16 @@ import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
 import kotlin.reflect.KMutableProperty0
 
-class TextNode(var text: String) : Element(ElementType("text")) {
+class TextNode(text: String) : Element(ElementType("text")) {
+    /** the text, a change lays out and draws again */
+    var text: String = text
+        set(value) {
+            if (value != field) {
+                field = value
+                requestRedraw()
+                requestLayout()
+            }
+        }
 
     override fun draw(drawer: Drawer) {
         val color = (computedStyle.color as? Color.RGBa)?.color ?: ColorRGBa.WHITE

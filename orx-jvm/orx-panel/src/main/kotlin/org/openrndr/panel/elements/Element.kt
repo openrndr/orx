@@ -8,6 +8,9 @@ import org.openrndr.panel.collections.ObservableCopyOnWriteArrayList
 import org.openrndr.panel.collections.ObservableHashSet
 import org.openrndr.panel.style.CompoundSelector
 import org.openrndr.panel.style.Display
+import org.openrndr.panel.style.LinearDimension
+import org.openrndr.panel.style.outlineOffset
+import org.openrndr.panel.style.outlineWidth
 import org.openrndr.panel.style.ScrollBehavior
 import org.openrndr.panel.style.StyleSheet
 import org.openrndr.panel.style.clipsContent
@@ -46,6 +49,12 @@ open class Element(val type: ElementType) : AutoCloseable {
         private set
 
     var scrollTop = 0.0
+        set(value) {
+            if (value != field) {
+                field = value
+                requestLayout()
+            }
+        }
 
     /**
      * The largest [scrollTop]: how far the content of the element extends beyond its bottom, as found by the last
@@ -56,6 +65,36 @@ open class Element(val type: ElementType) : AutoCloseable {
 
     /** how far the content of an element that scrolls is scrolled to the left, in pixels */
     var scrollLeft = 0.0
+        set(value) {
+            if (value != field) {
+                field = value
+                requestLayout()
+            }
+        }
+
+    /** true when the computed style of this element has to be computed again */
+    internal var styleDirty = true
+
+    /** true when the computed styles of this element and its descendants have to be computed again */
+    internal var subtreeStyleDirty = true
+
+    /** the inline style and its version when the computed style was computed */
+    internal var computedFromStyle: StyleSheet? = null
+    internal var computedFromVersion = -1
+
+    /** true when the computed style was computed since the transitions were applied */
+    internal var styleFresh = false
+
+    /** the styles of this element and its descendants are computed again before the next redraw */
+    fun invalidateStyle() {
+        subtreeStyleDirty = true
+        (root() as? Body)?.controlManager?.stylesPending = true
+    }
+
+    /** the layout is computed again before the next redraw */
+    fun requestLayout() {
+        (root() as? Body)?.controlManager?.document?.layoutDirty = true
+    }
 
     /** the text of the control manager of the element, null when it is not in one */
     val panelText: org.openrndr.panel.PanelText?
@@ -171,6 +210,27 @@ open class Element(val type: ElementType) : AutoCloseable {
         get() {
             return null
         }
+
+    /** the size hints at the last layout; an element drawn again whose hints changed is laid out again */
+    internal var laidOutHints: Pair<Double?, Double?>? = null
+
+    /**
+     * The area the element draws in, on the screen: its box and what is drawn around it, like knobs, focus rings and
+     * outlines. Only the areas of the elements that changed are drawn again, a control that draws further than this
+     * gives a larger area.
+     */
+    open val paintArea: Rectangle
+        get() {
+            val cs = computedStyle
+            val outline = ((cs.outlineWidth as? LinearDimension.PX)?.value ?: 0.0) +
+                    ((cs.outlineOffset as? LinearDimension.PX)?.value ?: 0.0).coerceAtLeast(0.0)
+            val grow = 12.0 + outline
+            val area = screenArea
+            return Rectangle(area.x - grow, area.y - grow, area.width + 2.0 * grow, area.height + 2.0 * grow)
+        }
+
+    /** the paint area of the element when it was last drawn, null when it was not */
+    internal var drawnArea: Rectangle? = null
 
     class MouseObservables : AutoCloseable {
         val clicked = Event<MouseEvent>("element-mouse-clicked")
@@ -311,6 +371,12 @@ open class Element(val type: ElementType) : AutoCloseable {
 
 
     var id: String? = null
+        set(value) {
+            if (value != field) {
+                field = value
+                invalidateStyle()
+            }
+        }
     val classes: ObservableHashSet<ElementClass> = ObservableHashSet()
     val pseudoClasses: ObservableHashSet<ElementPseudoClass> = ObservableHashSet()
 
@@ -322,11 +388,13 @@ open class Element(val type: ElementType) : AutoCloseable {
     var style: StyleSheet? = null
 
     init {
+        // states and classes change the styles of the element and its descendants, the element is drawn again when
+        // its computed style changes
         pseudoClasses.changed.listen {
-            draw.dirty = true
+            invalidateStyle()
         }
         classes.changed.listen {
-            draw.dirty = true
+            invalidateStyle()
             it.added.forEach {
                 classEvents.classAdded.trigger(ClassEvent(this, it))
             }
@@ -338,6 +406,10 @@ open class Element(val type: ElementType) : AutoCloseable {
 
         children.changed.listen {
             draw.dirty = true
+            // selectors of siblings match again
+            for (child in children) child.subtreeStyleDirty = true
+            invalidateStyle()
+            requestLayout()
         }
     }
 
@@ -574,6 +646,11 @@ open class Element(val type: ElementType) : AutoCloseable {
 
 }
 
+/**
+ * Draws the element again, what it shows changed. The layout is computed again when the size hints of the element
+ * changed; changes to the children, the classes, states and styles of elements and to scrolling lay out again by
+ * themselves, other changes that move or size elements call [Element.requestLayout].
+ */
 fun Element.requestRedraw() {
     draw.dirty = true
 }

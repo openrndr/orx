@@ -406,7 +406,8 @@ class ControlManager : Extension {
             hoverScrollbar(event.position)
             tooltips.moved(body?.let { root -> elementAt(root, event.position) { it.tooltip != null } }, event.position)
             // a tooltip that shows follows the pointer
-            if (tooltips.showing || tooltipShown) body?.draw?.dirty = true
+            if (tooltips.showing || tooltipArea != null) tooltipPending = true
+            cursorPending = true
             val hover = ElementPseudoClass("hover")
             val toRemove = insideElements.filter { (event.position !in it.screenArea) }
 
@@ -449,7 +450,7 @@ class ControlManager : Extension {
 
     fun checkForManualRedraw() {
         if (window.presentationMode == PresentationMode.MANUAL) {
-            val redraw = body?.any {
+            val redraw = stylesPending || document?.layoutDirty == true || tooltipPending || body?.any {
                 it.draw.dirty
             } ?: false
             if (redraw) {
@@ -474,7 +475,39 @@ class ControlManager : Extension {
 
     /** the tooltips of the elements under the pointer */
     internal val tooltips = Tooltips()
-    private var tooltipShown = false
+
+    /** the area of the tooltip when it was drawn last, null when none showed */
+    private var tooltipArea: Rectangle? = null
+
+    /** true when the tooltip can have moved, shown or hidden since the last frame */
+    private var tooltipPending = false
+
+    /** true when the styles of elements have to be computed again, see [Element.invalidateStyle] */
+    var stylesPending = true
+
+    /**
+     * Draws only the areas of the elements that changed, when the layout did not change; false draws all elements in
+     * every redraw.
+     */
+    var partialRedraw = true
+
+    /** true when everything is drawn in the next redraw */
+    private var fullRedrawPending = true
+
+    /** the size the body was given */
+    private var bodySize: Pair<Int, Int>? = null
+
+    /** true when the cursor is set again in the next frame */
+    private var cursorPending = true
+
+    /** the number of redraws of all elements and of the areas of some, for tests and measurements */
+    internal var fullRedraws = 0
+        private set
+    internal var partialRedraws = 0
+        private set
+
+    /** the area that is drawn again, null when everything is */
+    private var damage: Rectangle? = null
 
     /** the context menu that is open */
     private var openMenu: ContextMenu? = null
@@ -512,7 +545,19 @@ class ControlManager : Extension {
 
         program.window.drop.listen { dropInput.drop(it) }
 
-        body?.draw?.dirty = true
+        fullRedrawPending = true
+    }
+
+    /**
+     * True when [element] is drawn in this redraw: always when everything is drawn, else when what it draws is in
+     * the area that is drawn again. Records the area it draws in.
+     */
+    private fun paints(element: Element): Boolean {
+        val area = element.paintArea
+        val damage = damage
+        if (damage != null && intersection(area, damage) == null) return false
+        element.drawnArea = area
+        return true
     }
 
     private fun drawElement(element: Element, drawer: Drawer, zIndex: Int, zComp: Int) {
@@ -560,10 +605,7 @@ class ControlManager : Extension {
                 drawer.isolated {
                     drawer.drawStyle.textSetting = TextSettingMode.PIXEL
                     drawer.translate(element.screenPosition)
-                    if (newZComp == zIndex) {
-                        if (mousePosition in element.screenArea) {
-                            program.application.cursorType = element.computedStyle.cursor.cursorType
-                        }
+                    if (newZComp == zIndex && paints(element)) {
                         // controls can leave the drawer moved, the outline is drawn where the element is
                         drawer.isolated { element.draw(drawer) }
                         drawOutline(drawer, element)
@@ -586,7 +628,7 @@ class ControlManager : Extension {
 
                 drawer.isolated {
                     drawer.translate(element.screenPosition)
-                    if (newZComp == zIndex) {
+                    if (newZComp == zIndex && paints(element)) {
                         // controls can leave the drawer moved, the outline is drawn where the element is
                         drawer.isolated { element.draw(drawer) }
                         drawOutline(drawer, element)
@@ -612,7 +654,7 @@ class ControlManager : Extension {
                     }
                     if (radius > 0.0) roundedClips.pop()
                 }
-                if (newZComp == zIndex) {
+                if (newZComp == zIndex && paints(element)) {
                     val active = mouseInput.scrollbarDrag?.element === element || mouseInput.scrollbarHover?.element === element
                     drawScrollbars(drawer, element, mouseInput.scrollbarDrag, mouseInput.scrollbarHover,
                         scrollbarFades.opacity(element, active))
@@ -626,7 +668,7 @@ class ControlManager : Extension {
     override fun afterDraw(drawer: Drawer, program: Program) {
         if (program.width > 0 && program.height > 0) {
             if (program.width != renderTarget?.width || program.height != renderTarget?.height) {
-                body?.draw?.dirty = true
+                fullRedrawPending = true
 
                 renderTarget?.close()
                 renderTarget = null
@@ -643,16 +685,24 @@ class ControlManager : Extension {
                     program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
                 }
             }
+            val body = body ?: return
 
-            // a tooltip shows or hides
-            val tooltipShows = tooltips.showing
-            if (tooltipShows != tooltipShown) {
-                body?.draw?.dirty = true
-                tooltipShown = tooltipShows
+            // the body covers the window
+            val size = program.width to program.height
+            if (size != bodySize) {
+                bodySize = size
+                body.style {
+                    width = program.width.px
+                    height = program.height.px
+                }
             }
 
-            // elements whose styles transition are drawn again
-            styleTransitions.animating.forEach { it.draw.dirty = true }
+            // the styles of elements whose styles transition are computed again, they are drawn again
+            for (element in styleTransitions.animating) {
+                element.styleDirty = true
+                element.draw.dirty = true
+                stylesPending = true
+            }
 
             // elements that scroll smoothly move on
             val smooth = smoothScrolling.scrolling
@@ -664,50 +714,98 @@ class ControlManager : Extension {
             fadingBefore.forEach { it.draw.dirty = true }
             fadingBefore = fading
 
-            val redraw = body?.any {
-                it.draw.dirty
-            } ?: false
+            // the styles that can have changed are computed, the layout when it can have changed; in every frame,
+            // inline styles change without notice, finding nothing changed is a walk over the elements
+            stylesPending = false
+            // an element that changed its size hints, like the label of a button, is laid out again
+            body.visit {
+                if (draw.dirty && laidOutHints != null && laidOutHints != (widthHint to heightHint)) {
+                    document?.layoutDirty = true
+                }
+            }
+            if (fullRedrawPending) document?.layoutDirty = true
+            val laidOut = document?.layout() ?: false
+            if (laidOut) {
+                body.visit { laidOutHints = widthHint to heightHint }
+            }
+            styleTransitions.apply(body)
+
+            // the tooltip that shows, hides or moves
+            val screen = Rectangle(0.0, 0.0, program.width.toDouble(), program.height.toDouble())
+            tooltipPending = false
+            val tooltip = tooltips.area(text, screen)
+            val tooltipChanged = tooltip != tooltipArea
+
+            // filter() does not descend into elements that do not match
+            val dirty = ArrayList<Element>()
+            body.visit { if (draw.dirty) dirty.add(this) }
+            val redraw = fullRedrawPending || laidOut || tooltipChanged || dirty.isNotEmpty()
 
             if (redraw) {
+                // the area to draw again: what the elements that changed draw now and drew before, and the tooltip
+                damage = if (!partialRedraw || fullRedrawPending || laidOut || body.draw.dirty) null else {
+                    val areas = dirty.flatMap { listOfNotNull(it.paintArea, it.drawnArea) } +
+                            listOfNotNull(tooltip, tooltipArea).map { Rectangle(it.x - 2.0, it.y - 2.0, it.width + 4.0, it.height + 4.0) }
+                    val union = areas.reduceOrNull { a, b ->
+                        val x0 = minOf(a.x, b.x)
+                        val y0 = minOf(a.y, b.y)
+                        Rectangle(x0, y0, maxOf(a.x + a.width, b.x + b.width) - x0, maxOf(a.y + a.height, b.y + b.height) - y0)
+                    }?.let { intersection(it, screen) }
+                    // whole pixels, around the areas
+                    union?.let {
+                        val x0 = kotlin.math.floor(it.x)
+                        val y0 = kotlin.math.floor(it.y)
+                        Rectangle(x0, y0, kotlin.math.ceil(it.x + it.width) - x0, kotlin.math.ceil(it.y + it.height) - y0)
+                    }?.takeIf { it.width * it.height < 0.5 * screen.width * screen.height }
+                }
+                val damage = damage
+                if (damage == null) fullRedraws++ else partialRedraws++
+                tooltipArea = tooltip
+
                 drawer.ortho()
                 drawer.view = Matrix44.IDENTITY
                 drawer.defaults()
 
-                if (body == null) {
-                    return
-                }
-
                 drawer.isolatedWithTarget(renderTarget!!) {
                     drawer.ortho(renderTarget!!)
-                    body?.style {
-                        width = program.width.px
-                        height = program.height.px
+                    if (damage == null) {
+                        drawer.clear(ColorRGBa.BLACK.opacify(0.0))
+                    } else {
+                        // clearing ignores the scissor, the area is cleared by drawing over it
+                        drawer.drawStyle.clip = damage
+                        drawer.isolated {
+                            drawer.drawStyle.blendMode = BlendMode.REPLACE
+                            drawer.fill = ColorRGBa.TRANSPARENT
+                            drawer.stroke = null
+                            drawer.rectangle(damage)
+                        }
                     }
-
-                    body?.let {
-                        program.drawer.clear(ColorRGBa.BLACK.opacify(0.0))
-                        document?.layout()
-                        styleTransitions.apply(it)
-                        drawElement(it, program.drawer, 0, 0)
-                        drawElement(it, program.drawer, 1, 0)
-                        drawElement(it, program.drawer, 1000, 0)
-                        // over everything
-                        tooltips.draw(program.drawer, text, Rectangle(0.0, 0.0, program.width.toDouble(), program.height.toDouble()))
-                    }
-                    // over a scrollbar, and while dragging one, the cursor is that of the scrollbar
-                    (mouseInput.scrollbarDrag ?: mouseInput.scrollbarHover)?.let { bar ->
-                        program.application.cursorType = bar.element.computedStyle.scrollbarCursor.cursorType
-                    }
+                    drawElement(body, drawer, 0, 0)
+                    drawElement(body, drawer, 1, 0)
+                    drawElement(body, drawer, 1000, 0)
+                    // over everything
+                    tooltips.draw(drawer, text, screen)
+                    drawer.drawStyle.clip = null
                 }
+                this.damage = null
+
+                // the draw commands of texts that were not drawn are released, after everything was drawn
+                if (damage == null) text.releaseUnused()
+                fullRedrawPending = false
+                cursorPending = true
             }
 
-            if (redraw) {
-                // the draw commands of texts that were not drawn are released
-                text.releaseUnused()
-            }
-
-            body?.visit {
+            body.visit {
                 draw.dirty = false
+            }
+
+            // the cursor of the element under the pointer, over a scrollbar and while dragging one that of the scrollbar
+            if (cursorPending) {
+                cursorPending = false
+                val bar = mouseInput.scrollbarDrag ?: mouseInput.scrollbarHover
+                program.application.cursorType = bar?.element?.computedStyle?.scrollbarCursor?.cursorType
+                    ?: elementAt(body, mousePosition) { true }?.computedStyle?.cursor?.cursorType
+                            ?: CursorType.ARROW_CURSOR
             }
 
             drawer.defaults()

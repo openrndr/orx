@@ -35,15 +35,30 @@ class Document : AutoCloseable {
     }
     private var dirtySheets = true
 
-    fun layout() {
+    /** true when the layout has to be computed again, because elements changed in ways that move or size them */
+    var layoutDirty = true
+
+    /**
+     * Computes the styles that can have changed, and the layout when it can have changed
+     * @return true when the layout was computed
+     */
+    fun layout(): Boolean {
+        val sheetsChanged = dirtySheets
         if (dirtySheets) {
             layouter.styleSheets.clear()
             layouter.styleSheets.addAll(styleSheets.flatMap { it.flatten() })
             dirtySheets = false
         }
 
-        layouter.computeStyles(body)
-        layouter.layout(body)
+        val difference = layouter.updateStyles(body, forced = sheetsChanged)
+        if (sheetsChanged || difference > 1 || layoutDirty) {
+            // layout can mark the layout dirty again, scrolling is limited to the content
+            layoutDirty = false
+            layouter.layout(body)
+            layoutDirty = false
+            return true
+        }
+        return false
     }
 
     override fun close() {

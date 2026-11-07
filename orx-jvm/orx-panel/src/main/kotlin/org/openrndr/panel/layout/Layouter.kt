@@ -955,7 +955,62 @@ class Layouter {
         return style
     }
 
+    /** computes the styles of [element] and its descendants, all of them */
     fun computeStyles(element: Element) {
+        updateStyles(element, forced = true)
+    }
+
+    /**
+     * Computes the styles of [element] and of the descendants whose styles can have changed: of elements whose
+     * classes, states, id or inline style changed, of their descendants, and of the children of elements whose
+     * styles changed. Elements whose computed styles changed are drawn again.
+     * @param forced true to compute the styles of all elements
+     * @return how the styles changed: 0 not, 1 only properties that paint, 2 properties that lay out
+     */
+    fun updateStyles(element: Element, forced: Boolean = false): Int {
+        if (forced || siblingSelectors == null) {
+            siblingSelectors = styleSheets.any { sheet ->
+                generateSequence(sheet.selector.previous) { it.second.previous }
+                    .any { it.first == Combinator.NEXT_SIBLING || it.first == Combinator.LATER_SIBLING }
+            }
+        }
+        return updateStyles(element, forced, false)
+    }
+
+    /** true when the style sheets select elements by their earlier siblings, null when not known yet */
+    private var siblingSelectors: Boolean? = null
+
+    private fun updateStyles(element: Element, forced: Boolean, parentChanged: Boolean): Int {
+        val inline = element.style
+        val needed = forced || parentChanged || element.styleDirty || element.subtreeStyleDirty ||
+                inline !== element.computedFromStyle || (inline?.version ?: -1) != element.computedFromVersion
+        var difference = 0
+        if (needed) {
+            val old = element.computedStyle
+            computeStyle(element)
+            difference = styleDifference(old, element.computedStyle)
+            if (difference > 0) element.draw.dirty = true
+            element.styleFresh = true
+            element.computedFromStyle = inline
+            element.computedFromVersion = inline?.version ?: -1
+        }
+        val subtree = forced || element.subtreeStyleDirty
+        element.styleDirty = false
+        element.subtreeStyleDirty = false
+        var result = difference
+        // when elements are selected by their earlier siblings, the later siblings of an element that changed are
+        // computed again
+        var siblingChanged = false
+        for (child in element.children) {
+            val changed = child.styleDirty || child.subtreeStyleDirty
+            result = maxOf(result, updateStyles(child, subtree || siblingChanged, difference > 0))
+            if (changed && siblingSelectors == true) siblingChanged = true
+        }
+        return result
+    }
+
+    /** computes the style of [element] from the style sheets, its inline style and the style of its parent */
+    private fun computeStyle(element: Element) {
         val matcher = Matcher()
 
         if (element is TextNode) {
@@ -1000,8 +1055,6 @@ class Layouter {
                 }
             }
         }
-
-        element.children.forEach { computeStyles(it) }
     }
 
 }
