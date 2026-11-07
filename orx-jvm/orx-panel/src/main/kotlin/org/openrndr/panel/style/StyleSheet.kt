@@ -78,6 +78,12 @@ sealed class Cursor : PropertyValue() {
     object Pointer : Cursor()
     object Text : Cursor()
     object Crosshair : Cursor()
+
+    /** resizes horizontally, like a splitter between columns */
+    object ColResize : Cursor()
+
+    /** resizes vertically, like a splitter between rows */
+    object RowResize : Cursor()
     companion object {
         val default = Default
         val pointer = Pointer

@@ -54,6 +54,52 @@ val defaultStylesCss = """
     /* a long list that builds the rows in view, see VirtualList */
     virtual-list { display: block; overflow: scroll; overflow-x: hidden }
 
+    /* trees and tables */
+    tree-view { display: block; height: 100% }
+    tree-view > virtual-list { height: 100% }
+    tree-row { width: 100%; height: 100%; color: var(--control-text); font-size: var(--control-font-size) }
+    tree-row:hover { background-color: rgb(255 255 255 / 0.06) }
+    tree-row:selected { background-color: var(--control-background); color: var(--control-selected-text) }
+    data-table { display: flex; flex-direction: column; align-items: stretch; height: 100% }
+    data-header { display: flex; flex-direction: row; flex-shrink: 0; height: 28px; background-color: var(--control-sunken-background) }
+    data-header-cell { height: 100%; flex-shrink: 0; color: var(--control-text); font-size: var(--control-font-size) }
+    data-header-cell:hover { background-color: var(--control-sunken-hover-background) }
+    data-table > virtual-list { flex: 1; flex-basis: 0 }
+    data-row { width: 100%; height: 100%; color: var(--control-text); font-size: var(--control-font-size) }
+    .virtual-row:nth-child(even) > data-row { background-color: rgb(255 255 255 / 0.03) }
+    data-row:hover { background-color: rgb(255 255 255 / 0.06) }
+    data-row:selected { background-color: var(--control-background); color: var(--control-selected-text) }
+
+    /* split panes, dialogs and toasts */
+    split-pane { display: flex; flex-direction: row; align-items: stretch; width: 100%; height: 100% }
+    split-pane[data-vertical] { flex-direction: column }
+    .split-first { flex-grow: 0; flex-shrink: 0; overflow: hidden }
+    .split-second { flex-grow: 1; flex-shrink: 1; flex-basis: 0; overflow: hidden }
+    .splitter { width: 6px; flex-shrink: 0; background-color: rgb(255 255 255 / 0.08); cursor: col-resize }
+    split-pane[data-vertical] > .splitter { width: auto; height: 6px; cursor: row-resize }
+    .splitter:hover { background-color: var(--focus-color) }
+    .dialog-backdrop {
+        position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: row;
+        justify-content: center; align-items: center; background-color: rgb(0 0 0 / 0.45);
+    }
+    .dialog {
+        min-width: 240px; max-width: 480px; padding: 16px; border-radius: 10px; background-color: #26292f; color: var(--control-text);
+        box-shadow: 0 12px 40px rgb(0 0 0 / 0.5); animation: dialog-in 150ms ease-out;
+    }
+    @keyframes dialog-in { from { opacity: 0; transform: scale(0.96) } to { opacity: 1; transform: scale(1) } }
+    .toasts {
+        position: fixed; right: 16px; bottom: 16px; z-index: 1001; display: flex; flex-direction: column;
+        align-items: end; row-gap: 8px;
+    }
+    .toast > * { width: auto; white-space: nowrap }
+    .toast {
+        padding: 10px 14px; border-radius: 8px; background-color: #26292f; color: var(--control-text);
+        box-shadow: 0 6px 18px rgb(0 0 0 / 0.4); animation: toast-in 200ms ease-out;
+    }
+    .toast.leaving { animation: toast-out 300ms ease-in forwards }
+    @keyframes toast-in { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } }
+    @keyframes toast-out { to { opacity: 0; transform: translateY(16px) } }
+
     /* controls change their colors smoothly when they are hovered and pressed */
     :is(button, dropdown-button, colorpicker-button, envelope-button, xy-pad, item) { transition-duration: var(--transition) }
 

@@ -138,7 +138,8 @@ internal fun parseTextAlign(text: String): TextAlign? = when (val v = text.trim(
 
 internal val parseCursor = keywords(
     "default" to Cursor.Default, "auto" to Cursor.Default, "pointer" to Cursor.Pointer, "text" to Cursor.Text,
-    "crosshair" to Cursor.Crosshair
+    "crosshair" to Cursor.Crosshair, "col-resize" to Cursor.ColResize, "ew-resize" to Cursor.ColResize,
+    "row-resize" to Cursor.RowResize, "ns-resize" to Cursor.RowResize
 )
 
 internal val parseOverflow = keywords(

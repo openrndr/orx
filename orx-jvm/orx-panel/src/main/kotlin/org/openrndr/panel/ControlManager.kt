@@ -93,6 +93,13 @@ class ControlManager : Extension {
             }
 
         fun press(event: KeyEvent) {
+            // escape closes the dialog that is open
+            if (event.key == KEY_ESCAPE && dialogs.isNotEmpty() && openMenu?.parent == null) {
+                dialogs.last().close()
+                event.cancelPropagation()
+                checkForManualRedraw()
+                return
+            }
             // escape closes the open context menu
             if (event.key == KEY_ESCAPE && openMenu?.parent != null) {
                 openMenu?.dismiss()
@@ -117,7 +124,9 @@ class ControlManager : Extension {
 
             if (!event.propagationCancelled) {
                 if (event.key == KEY_TAB) {
-                    val focusableControls = body?.findAllVisible { it.handlesKeyboardFocus } ?: emptyList()
+                    // the keyboard focus stays in the dialog that is open
+                    val scope = dialogs.lastOrNull()?.box ?: body
+                    val focusableControls = scope?.findAllVisible { it.handlesKeyboardFocus } ?: emptyList()
 
                     val index = target?.let { focusableControls.indexOf(it) }
                         ?: lastTarget?.let { focusableControls.indexOf(it) } ?: -1
@@ -227,7 +236,7 @@ class ControlManager : Extension {
                 }
                 if (!event.propagationCancelled) {
                     if (element.containsScreenPoint(event.position) && element.computedStyle.display != Display.NONE) {
-                        element.mouse.scrolled.trigger(event)
+                        element.sendMouse(element.mouse.scrolled, event)
                         if (event.propagationCancelled) {
                             keyboardInput.target = element
                         }
@@ -262,17 +271,17 @@ class ControlManager : Extension {
                 if (it.handlesDoubleClick) {
                     if (ct - lastClick > 500) {
                         logger.debug { "normal click on $clickTarget" }
-                        it.mouse.clicked.trigger(event)
+                        it.sendMouse(it.mouse.clicked, event)
                     } else {
                         if (clickTarget != null) {
                             logger.debug { "double-click on $clickTarget" }
-                            it.mouse.doubleClicked.trigger(event)
+                            it.sendMouse(it.mouse.doubleClicked, event)
                         }
                     }
                     lastClick = ct
                 } else {
                     logger.debug { "normal click on $clickTarget" }
-                    it.mouse.clicked.trigger(event)
+                    it.sendMouse(it.mouse.clicked, event)
                 }
             }
             checkForManualRedraw()
@@ -353,7 +362,7 @@ class ControlManager : Extension {
             candidates.sortWith(compareBy({ -it.first.layout.zIndex }, { -it.second }))
             for (c in candidates) {
                 if (!event.propagationCancelled) {
-                    c.first.mouse.pressed.trigger(event)
+                    c.first.sendMouse(c.first.mouse.pressed, event)
                     if (event.propagationCancelled) {
                         logger.debug { "propagation cancelled by ${c.first}" }
                         dragTarget = c.first
@@ -395,7 +404,7 @@ class ControlManager : Extension {
                     return
                 }
                 event.cancelPropagation()
-                it.mouse.dragged.trigger(event)
+                it.sendMouse(it.mouse.dragged, event)
             }
 
             if (event.propagationCancelled) {
@@ -418,7 +427,7 @@ class ControlManager : Extension {
             val toRemove = insideElements.filter { (!it.containsScreenPoint(event.position)) }
 
             toRemove.forEach {
-                it.mouse.exited.trigger(
+                it.sendMouse(it.mouse.exited, 
                     MouseEvent(
                         event.position,
                         Vector2.ZERO,
@@ -435,13 +444,13 @@ class ControlManager : Extension {
             fun traverse(element: Element) {
                 if (element.containsScreenPoint(event.position)) {
                     if (element !in insideElements) {
-                        element.mouse.entered.trigger(event)
+                        element.sendMouse(element.mouse.entered, event)
                     }
                     insideElements.add(element)
                     if (hover !in element.pseudoClasses) {
                         element.pseudoClasses.add(hover)
                     }
-                    element.mouse.moved.trigger(event)
+                    element.sendMouse(element.mouse.moved, event)
                 } else {
                     if (hover in element.pseudoClasses) {
                         element.pseudoClasses.remove(hover)
@@ -493,6 +502,49 @@ class ControlManager : Extension {
      * what `(min-width: 600px)` sees
      */
     var colorScheme = "dark"
+
+    /** the dialogs that are open, the last on top, see [dialog] */
+    private val dialogs = mutableListOf<Dialog>()
+
+    internal fun openDialog(dialog: Dialog) {
+        dialogs.add(dialog)
+        // the keyboard focus moves into the dialog
+        keyboardInput.target = dialog.box.findAllVisible { it.handlesKeyboardFocus }.firstOrNull()
+        checkForManualRedraw()
+    }
+
+    internal fun closeDialog(dialog: Dialog) {
+        dialogs.remove(dialog)
+        if (keyboardInput.target?.let { t -> generateSequence(t) { it.parent }.any { it === dialog.backdrop } } == true) {
+            keyboardInput.target = null
+        }
+        checkForManualRedraw()
+    }
+
+    /** the toasts that show, with the time they go away and whether they are leaving */
+    private class Toast(val element: Element, val until: Double, var leaving: Boolean = false)
+
+    private val toasts = mutableListOf<Toast>()
+
+    internal fun scheduleToast(element: Element, duration: Double) {
+        toasts.add(Toast(element, System.nanoTime() / 1E9 + duration))
+        checkForManualRedraw()
+    }
+
+    /** toasts whose time is up leave, with the animation of `.toast.leaving`, and are removed after it */
+    private fun updateToasts(now: Double) {
+        for (toast in toasts.toList()) {
+            if (!toast.leaving && now >= toast.until) {
+                toast.leaving = true
+                toast.element.classes.add(ElementClass("leaving"))
+            } else if (toast.leaving && now >= toast.until + 0.3) {
+                toasts.remove(toast)
+                toast.element.parent?.remove(toast.element)
+                toast.element.close()
+            }
+        }
+        if (toasts.isNotEmpty() && window.presentationMode == PresentationMode.MANUAL) window.requestDraw()
+    }
 
     /** the inspector, F12 shows it, see [Inspector] */
     val inspector = Inspector(this)
@@ -783,6 +835,9 @@ class ControlManager : Extension {
             // the media queries see the size of the window and the color scheme
             document?.media = org.openrndr.extra.style.CssMediaEnvironment(program.width.toDouble(), program.height.toDouble(), colorScheme)
 
+            // toasts leave when their time is up
+            if (toasts.isNotEmpty()) updateToasts(System.nanoTime() / 1E9)
+
             // elements change their children for what is in view
             body.visit { prepare() }
 
@@ -798,14 +853,16 @@ class ControlManager : Extension {
             // an element that changed its size hints, like the label of a button, is laid out again
             body.visit {
                 if (draw.dirty && laidOutHints != null && laidOutHints != (widthHint to heightHint)) {
-                    document?.layoutDirty = true
+                    requestLayout()
                 }
             }
             if (fullRedrawPending) document?.layoutDirty = true
             // transitions and animations change the computed styles before the layout
             val laidOut = document?.layout { styleTransitions.apply(body) } ?: false
+            // the subtrees that were laid out, null when everything was
+            val laidOutSubtrees = if (laidOut) document?.laidOut else null
             if (laidOut) {
-                body.visit { laidOutHints = widthHint to heightHint }
+                for (root in laidOutSubtrees ?: listOf(body)) root.visit { laidOutHints = widthHint to heightHint }
             }
 
             // the tooltip that shows, hides or moves
@@ -821,8 +878,14 @@ class ControlManager : Extension {
 
             if (redraw) {
                 // the area to draw again: what the elements that changed draw now and drew before, and the tooltip
-                damage = if (!partialRedraw || fullRedrawPending || laidOut || body.draw.dirty) null else {
-                    val areas = dirty.flatMap { listOfNotNull(it.paintArea, it.drawnArea) } +
+                damage = if (!partialRedraw || fullRedrawPending || (laidOut && laidOutSubtrees == null) || body.draw.dirty) null else {
+                    // the elements of the subtrees that were laid out moved, where they are and where they were
+                    val moved = laidOutSubtrees?.flatMap { root ->
+                        val all = mutableListOf<Element>()
+                        root.visit { all.add(this) }
+                        all.flatMap { listOfNotNull(it.paintArea, it.drawnArea) }
+                    } ?: emptyList()
+                    val areas = moved + dirty.flatMap { listOfNotNull(it.paintArea, it.drawnArea) } +
                             listOfNotNull(tooltip, tooltipArea).map { Rectangle(it.x - 2.0, it.y - 2.0, it.width + 4.0, it.height + 4.0) }
                     val union = areas.reduceOrNull { a, b ->
                         val x0 = minOf(a.x, b.x)
@@ -858,9 +921,10 @@ class ControlManager : Extension {
                             drawer.rectangle(damage)
                         }
                     }
-                    drawElement(body, drawer, 0, 0)
-                    drawElement(body, drawer, 1, 0)
-                    drawElement(body, drawer, 1000, 0)
+                    // a pass for every layer, from the bottom up
+                    val layers = sortedSetOf(0, 1, 1000)
+                    body.visit { (computedStyle.zIndex as? ZIndex.Value)?.let { layers.add(it.value) } }
+                    for (layer in layers) drawElement(body, drawer, layer, 0)
                     // over everything
                     tooltips.draw(drawer, text, screen)
                     drawer.drawStyle.clip = null
@@ -912,6 +976,8 @@ private val Cursor.cursorType: CursorType
         Cursor.Pointer -> CursorType.HAND_CURSOR
         Cursor.Text -> CursorType.IBEAM_CURSOR
         Cursor.Crosshair -> CursorType.CROSSHAIR_CURSOR
+        Cursor.ColResize -> CursorType.HRESIZE_CURSOR
+        Cursor.RowResize -> CursorType.VRESIZE_CURSOR
         else -> CursorType.ARROW_CURSOR
     }
 
@@ -1079,4 +1145,20 @@ private fun Element.anyVisible(function: (Element) -> Boolean): Boolean {
         }
     }
     return false
+}
+
+/**
+ * Triggers [event] of [this] with [e] in the coordinates of the element before its transforms, the coordinates of its
+ * layout, so that controls in transformed elements find what is under the pointer; a cancelled propagation is passed on
+ */
+internal fun Element.sendMouse(event: org.openrndr.events.Event<MouseEvent>, e: MouseEvent) {
+    val t = screenTransform
+    if (t == null) {
+        event.trigger(e)
+        return
+    }
+    val inverse = t.inversed
+    val local = e.copy(position = (inverse * e.position.xy01).xy, dragDisplacement = (inverse * e.dragDisplacement.xy00).xy)
+    event.trigger(local)
+    if (local.propagationCancelled) e.cancelPropagation()
 }

@@ -94,9 +94,12 @@ open class Element(val type: ElementType) : AutoCloseable {
         (root() as? Body)?.controlManager?.stylesPending = true
     }
 
-    /** the layout is computed again before the next redraw */
+    /**
+     * The layout is computed again before the next redraw, of the element and its descendants, and of the elements
+     * around it as far as its size can change theirs, see [org.openrndr.panel.document.Document.layoutRequests]
+     */
     fun requestLayout() {
-        (root() as? Body)?.controlManager?.document?.layoutDirty = true
+        (root() as? Body)?.controlManager?.document?.layoutRequests?.add(this)
     }
 
     /** the text of the control manager of the element, null when it is not in one */
@@ -227,6 +230,12 @@ open class Element(val type: ElementType) : AutoCloseable {
         get() {
             return null
         }
+
+    /** the height of the content of the element when it is [width] wide, for content that wraps; null when it has none */
+    open fun heightForWidth(width: Double): Double? = null
+
+    /** false for elements that place their children themselves, like the spans of [RichText] */
+    open val laysOutChildren: Boolean get() = true
 
     /** the size hints at the last layout; an element drawn again whose hints changed is laid out again */
     internal var laidOutHints: Pair<Double?, Double?>? = null

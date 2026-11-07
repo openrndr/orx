@@ -1,0 +1,161 @@
+package org.openrndr.panel.test
+
+import org.openrndr.KEY_ARROW_DOWN
+import org.openrndr.KEY_ARROW_LEFT
+import org.openrndr.KEY_ARROW_RIGHT
+import org.openrndr.KEY_ESCAPE
+import org.openrndr.KEY_TAB
+import org.openrndr.math.Vector2
+import org.openrndr.panel.ControlManager
+import org.openrndr.panel.elements.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
+
+class ComponentsTest : PanelTestFixture() {
+    private fun ControlManager.frames(n: Int = 2) = repeat(n) { afterDraw(program.drawer, program) }
+
+    private class Node(val name: String, val children: List<Node> = emptyList())
+
+    @Test
+    fun `rich text wraps its spans together and finds the span under the pointer`() {
+        lateinit var rich: RichText
+        lateinit var link: Span
+        val cm = panel {
+            css("""
+                rich-text { width: 200px; font-size: 16px }
+                span.big { font-size: 28px }
+                span.link { color: #5ab0ff; text-decoration: underline }
+            """)
+            layout {
+                rich = richText {
+                    span { "Some text with " }
+                    span("big") { "large" }
+                    span { " words and " }
+                    link = span("link") { "a link" }
+                    span { " that wraps over several lines in the box." }
+                }
+            }
+        }
+        cm.frames()
+        // several lines, as tall as their line height
+        assertTrue(rich.layout.screenHeight > 60.0, "${rich.layout.screenHeight}")
+        var clicks = 0
+        link.mouse.clicked.listen { clicks++ }
+        // the glyphs of the link
+        val text = cm.text
+        val shaped = text.richParagraph(rich.spans.map { org.openrndr.panel.PanelText.Run(it.text, it.computedStyle) }, rich.layout.contentBounds.width)
+        val i = shaped.runOfGlyph.indexOfFirst { it == 3 }
+        val glyph = shaped.shaped.glyphs[i]
+        val p = Vector2(rich.layout.contentBounds.x + glyph.position.x + 2.0, rich.layout.contentBounds.y + shaped.shaped.ascent + glyph.position.y - 4.0)
+        assertSame(link, rich.spanAt(p))
+        cm.move(p)
+        cm.press(p)
+        cm.release(p)
+        assertEquals(1, clicks)
+    }
+
+    @Test
+    fun `a tree expands and collapses by keyboard and pointer`() {
+        val leaf = Node("leaf")
+        val branch = Node("branch", listOf(leaf, Node("other")))
+        val root = Node("root", listOf(branch))
+        lateinit var tree: TreeView<Node>
+        val cm = panel {
+            css("tree-view { height: 200px; width: 200px }")
+            layout { tree = treeView(listOf(root), { it.children }, { it.name }) }
+        }
+        cm.frames()
+        val selected = mutableListOf<String>()
+        tree.events.selected.listen { selected.add(it.name) }
+        cm.keyboardInput.target = tree
+        tree.selection = root
+        cm.key(KEY_ARROW_RIGHT)
+        assertTrue(root in tree.expanded)
+        cm.key(KEY_ARROW_RIGHT)
+        assertSame(branch, tree.selection)
+        cm.key(KEY_ARROW_RIGHT)
+        cm.key(KEY_ARROW_DOWN)
+        assertSame(leaf, tree.selection)
+        cm.key(KEY_ARROW_LEFT)
+        assertSame(branch, tree.selection)
+        cm.key(KEY_ARROW_LEFT)
+        assertFalse(branch in tree.expanded)
+        assertEquals(listOf("root", "branch", "leaf", "branch"), selected)
+        cm.frames()
+        // the rows in view
+        val rows = tree.children.first().children.flatMap { it.children }.filterIsInstance<TreeRow<Node>>()
+        assertEquals(listOf("root", "branch"), rows.map { it.item.name })
+        assertEquals("1", rows[1].attribute("data-depth"))
+    }
+
+    @Test
+    fun `a table sorts by its columns and resizes them`() {
+        data class Item(val name: String, val size: Int)
+        val items = listOf(Item("b", 2), Item("a", 3), Item("c", 1))
+        val size = Column<Item>("size", 80.0, { it.size })
+        lateinit var table: DataTable<Item>
+        val cm = panel {
+            css("data-table { width: 300px; height: 200px }")
+            layout { table = dataTable(items, listOf(Column("name", 100.0, { it.name }), size)) }
+        }
+        cm.frames()
+        table.cycleSort(size)
+        assertEquals(listOf(1, 2, 3), table.shown.map { it.size })
+        table.cycleSort(size)
+        assertEquals(listOf(3, 2, 1), table.shown.map { it.size })
+        table.cycleSort(size)
+        assertEquals(items, table.shown)
+        table.resize(size, 120.0)
+        cm.frames()
+        val cells = table.children.first().children.filterIsInstance<DataHeaderCell<Item>>()
+        assertEquals(120.0, cells[1].layout.screenWidth, 1E-9)
+        // a click on a row selects it
+        val row = table.children[1].children.flatMap { it.children }.filterIsInstance<DataRow<Item>>().first()
+        val p = row.screenArea.center
+        cm.move(p); cm.press(p); cm.release(p)
+        assertSame(items[0], table.selection)
+    }
+
+    @Test
+    fun `a split pane, a dialog that keeps the focus and toasts that go away`() {
+        lateinit var split: SplitPane
+        lateinit var outside: Button
+        val cm = panel {
+            layout {
+                outside = button { label = "outside" }
+                split = splitPane { first { button { label = "a" } }; second { button { label = "b" } } }
+            }
+        }
+        cm.frames()
+        split.position = 150.0
+        cm.frames()
+        assertEquals(150.0, split.first.layout.screenWidth, 1E-9)
+
+        lateinit var ok: Button
+        lateinit var cancel: Button
+        val dialog = cm.dialog { ok = button { label = "OK" }; cancel = button { label = "Cancel" } }
+        cm.frames()
+        assertSame(ok, cm.keyboardInput.target)
+        cm.key(KEY_TAB)
+        assertSame(cancel, cm.keyboardInput.target)
+        cm.key(KEY_TAB)
+        assertSame(ok, cm.keyboardInput.target)
+        var closed = 0
+        dialog.closed.listen { closed++ }
+        cm.key(KEY_ESCAPE)
+        assertFalse(dialog.open)
+        assertEquals(1, closed)
+        assertNull(dialog.backdrop.parent)
+
+        val toast = cm.toast("saved", duration = 0.1)
+        cm.frames()
+        assertTrue(toast.parent != null)
+        Thread.sleep(500)
+        cm.frames(3)
+        assertNull(toast.parent)
+    }
+}

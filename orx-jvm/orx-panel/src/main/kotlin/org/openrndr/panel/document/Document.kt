@@ -1,5 +1,8 @@
 package org.openrndr.panel.document
 
+import org.openrndr.panel.style.display
+import org.openrndr.panel.style.height
+import org.openrndr.panel.style.width
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.collections.ObservableArrayList
 import org.openrndr.panel.elements.Body
@@ -65,8 +68,35 @@ class Document : AutoCloseable {
                 body.filterAll { e -> e.style?.properties?.values?.any { relative(it.value) } == true }
     }
 
-    /** true when the layout has to be computed again, because elements changed in ways that move or size them */
+    /** true when the whole layout has to be computed again, like when the window is resized */
     var layoutDirty = true
+
+    /** the elements that asked for their layout to be computed again, see [Element.requestLayout] */
+    val layoutRequests = LinkedHashSet<org.openrndr.panel.elements.Element>()
+
+    /**
+     * The elements that were laid out again in the last layout, with their descendants, when not everything was laid
+     * out; null when everything was
+     */
+    var laidOut: List<org.openrndr.panel.elements.Element>? = null
+        private set
+
+    /**
+     * The element whose subtree has to be laid out again for a change of [element]: the nearest of the element and
+     * its ancestors with a width and a height that do not depend on its content, the body at the latest. What changes
+     * inside it can not change its size, nor the layout of what is around it.
+     */
+    private fun boundary(element: org.openrndr.panel.elements.Element): org.openrndr.panel.elements.Element {
+        fun definite(d: org.openrndr.panel.style.LinearDimension) = d is org.openrndr.panel.style.LinearDimension.PX ||
+                d is org.openrndr.panel.style.LinearDimension.Percent || d is org.openrndr.panel.style.LinearDimension.Calc
+        var e = element
+        while (true) {
+            val parent = e.parent ?: return e
+            val cs = e.computedStyle
+            if (cs.display != org.openrndr.panel.style.Display.NONE && definite(cs.width) && definite(cs.height)) return e
+            e = parent
+        }
+    }
 
     /**
      * Computes the styles that can have changed, and the layout when it can have changed. [adjustStyles] changes the
@@ -84,14 +114,32 @@ class Document : AutoCloseable {
 
         val difference = layouter.updateStyles(body, forced = sheetsChanged)
         val adjusted = adjustStyles()
-        if (sheetsChanged || difference > 1 || layoutDirty || adjusted) {
-            // layout can mark the layout dirty again, scrolling is limited to the content
+        // the elements whose changes can change the layout: those that asked, and the parents of those whose styles
+        // changed their sizes or places
+        val starts = layoutRequests.toList() + layouter.layoutChanges.map { it.parent ?: it }
+        layoutRequests.clear()
+        if (sheetsChanged || layoutDirty || adjusted) {
+            // layout can ask for layout again, scrolling is limited to the content
             layoutDirty = false
             layouter.layout(body)
             layoutDirty = false
+            layoutRequests.clear()
+            laidOut = null
             return true
         }
-        return false
+        if (starts.isEmpty()) return false
+        // the subtrees that the changes are in, those inside others are laid out with them
+        val boundaries = starts.filter { it.root() === body }.map(::boundary).distinct()
+        val outer = boundaries.filter { b -> boundaries.none { o -> o !== b && generateSequence(b.parent) { it.parent }.any { it === o } } }
+        if (outer.any { it === body }) {
+            layouter.layout(body)
+            laidOut = null
+        } else {
+            for (b in outer) layouter.layout(b)
+            laidOut = outer
+        }
+        layoutRequests.clear()
+        return true
     }
 
     override fun close() {

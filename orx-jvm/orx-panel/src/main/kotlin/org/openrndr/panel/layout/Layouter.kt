@@ -111,7 +111,7 @@ class Layouter {
      * The children of [element] that take part in its flow layout: displayed as block, flex or grid, and not
      * positioned manually.
      */
-    private fun inFlowChildren(element: Element): List<Element> = element.children.filter {
+    private fun inFlowChildren(element: Element): List<Element> = if (!element.laysOutChildren) emptyList() else element.children.filter {
         it.computedStyle.display in blockLike && it.computedStyle.position !in manualPosition
     }
 
@@ -253,8 +253,8 @@ class Layouter {
 
                     is LinearDimension.Auto -> {
                         val available = containerHeight - verticalMargins(element, containerWidth) - frame.height
-                        (element.heightHint ?: naturalContentHeight(element, width - frame.width, available)) +
-                                frame.height
+                        (element.heightForWidth(width - frame.width) ?: element.heightHint
+                            ?: naturalContentHeight(element, width - frame.width, available)) + frame.height
                     }
 
                     is LinearDimension.Calculate -> height.function(CalculateContext(width, null))
@@ -1013,12 +1013,16 @@ class Layouter {
      * @return how the styles changed: 0 not, 1 only properties that paint, 2 properties that lay out
      */
     fun updateStyles(element: Element, forced: Boolean = false): Int {
+        layoutChanges.clear()
         if (forced || siblingSelectors == null) {
             siblingSelectors = styleSheets.any { it.cssSelector.usesSiblings }
         }
         if (forced || index == null || index?.size != styleSheets.size) index = RuleIndex(styleSheets)
         return updateStyles(element, forced, false)
     }
+
+    /** the elements whose styles changed properties that lay out, since [updateStyles] was last called */
+    val layoutChanges = mutableListOf<Element>()
 
     /** true when the style sheets select elements by their earlier siblings, null when not known yet */
     private var siblingSelectors: Boolean? = null
@@ -1064,6 +1068,8 @@ class Layouter {
             computeStyle(element)
             difference = styleDifference(old, element.computedStyle)
             if (difference > 0) element.draw.dirty = true
+            // an element whose style changes its size or place changes the layout of its parent
+            if (difference > 1) layoutChanges.add(element)
             element.styleFresh = true
             element.computedFromStyle = inline
             element.computedFromVersion = inline?.version ?: -1

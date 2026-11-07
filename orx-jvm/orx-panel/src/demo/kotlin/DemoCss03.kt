@@ -39,7 +39,8 @@ fun main() = application {
                     width: 260px; height: 120px; overflow: scroll; transform: rotate(6deg);
                     background: linear-gradient(to bottom, #3a4150, #20242c);
                 }
-                .stripe { width: 100%; height: 30px; margin: 6px; background-color: var(--accent); opacity: 0.6 }
+                .stripe { width: 100%; height: 30px; margin: 6px; background-color: var(--accent) }
+                .stripe p { white-space: nowrap; color: white; font-size: 16px }
 
                 virtual-list { height: 220px; background-color: var(--surface); border-radius: 8px }
                 .virtual-row { padding-left: 10px; color: var(--text) }
@@ -60,7 +61,7 @@ fun main() = application {
                     }
                     div("column") {
                         div("card", "rotated") {
-                            for (i in 0 until 8) div("stripe") { }
+                            for (i in 0 until 8) div("stripe") { p { "Stripe $i, with text that is clipped by the rotated box" } }
                         }
                         virtualList((1..10_000).toList(), 24.0) { item, _ ->
                             p { "Row $item" }

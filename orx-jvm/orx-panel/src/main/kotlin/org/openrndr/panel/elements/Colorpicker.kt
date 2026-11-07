@@ -150,7 +150,6 @@ class Colorpicker : Element {
         drawer.imageFit(colorMap!!, layout.contentBoundsAtOrigin)
         drawer.fill = color
         drawer.stroke = null
-        drawer.shadeStyle = null
 
         drawer.stroke =  ColorRGBa.WHITE.mix(ColorRGBa.BLACK, smoothstep(0.45, 0.55, color.luminance))
         drawer.strokeWeight = 2.0

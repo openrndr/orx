@@ -37,8 +37,7 @@ repeating variants, and boxes take shadows, `box-shadow: 0 8px 24px rgb(0 0 0 / 
 `translateY(-4px) scale(1.05)`, transforms an element and its descendants around `transform-origin`, without changing
 the layout. `@keyframes` rules animate elements with `animation: pulse 1.2s ease-in-out infinite` and the
 `animation-*` properties. An element's own background color is drawn over its gradient: `background: <gradient>` makes
-the color transparent. Text drawn from glyph outlines is clipped by the rectangles of the window, also in transformed
-elements that clip their content.
+the color transparent.
 
 `@media` rules apply by the size of the window and the color scheme of the control manager, `colorScheme`:
 `@media (max-width: 700px)`, `(orientation: portrait)`, `(prefers-color-scheme: light)`. Lengths take `em`, `rem`,
@@ -48,6 +47,21 @@ elements that clip their content.
 can be paused with `animation-play-state`; transitions move colors, numbers, lengths, transforms and shadows, and
 `box-shadow` can be `inset`. Transformed elements are hovered and clicked where they are drawn, and clip their content
 by their shape. `virtualList(items, rowHeight) { item, index -> … }` scrolls long lists, it builds only the rows in view.
+
+## Components
+
+- `richText { span { "plain " }; span("strong") { "bold" }; span("link") { "a link" } }`: a paragraph of spans in
+  their own styles that wrap together; clicks on a span trigger its mouse events.
+- `treeView(roots, childrenOf, label)`: a tree that expands and collapses with the pointer and the keyboard, with
+  `events.selected`, `events.activated` and `events.toggled`.
+- `dataTable(rows, columns)`: a table with a header that sorts by its columns and resizes them, and rows that select.
+- `splitPane { first { … }; second { … } }`: two panes with a splitter between them, `vertical = true` above each
+  other.
+- `controlManager.dialog { … }`: a modal dialog that keeps the keyboard focus, closed by escape, a click outside it, or
+  `close()`; `controlManager.toast("Saved")`: a notification that goes away by itself.
+
+Trees and tables build only the rows in view, like `virtualList`. Controls in transformed elements get the positions
+under the pointer in their own coordinates, and changes inside elements of fixed sizes lay out only those elements.
 
 The default styles take their colors and sizes from custom properties, a theme: override them in a later style sheet,
 like `:root { --control-background: #3a4150; --control-font-size: 16px }`, see `panelThemeCss`. Style sheets can be read

@@ -199,6 +199,57 @@ class PanelText internal constructor(private val fontManager: FontManager) {
         }
     }
 
+    /** a run of rich text: [text] in the face and color of [style] */
+    class Run(val text: String, val style: StyleSheet)
+
+    /** rich text shaped in lines: [shaped], and the run of every glyph */
+    class RichShaped(val shaped: ShapedText, val runOfGlyph: IntArray)
+
+    private data class RichKey(val runs: List<Triple<String, Face, Double>>, val width: Double, val align: Double)
+
+    private val rich = object : LinkedHashMap<RichKey, RichShaped>(64, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<RichKey, RichShaped>?) = size > maxShapedTexts / 4
+    }
+
+    /**
+     * [runs] of text in their own faces broken into lines at most [width] wide, as one paragraph; the first baseline
+     * is at y = 0. The lines are as far apart as the line height of the largest face.
+     */
+    fun richParagraph(runs: List<Run>, width: Double, horizontalAlign: Double = 0.0): RichShaped {
+        val faces = runs.map { face(it.style) }
+        val w = ceil(width)
+        return rich.getOrPut(RichKey(runs.mapIndexed { i, r -> Triple(r.text, faces[i], spacing(r.style)) }, w, horizontalAlign)) {
+            if (runs.isEmpty() || runs.all { it.text.isEmpty() }) {
+                return@getOrPut RichShaped(ShapedText("", faces.firstOrNull() ?: face(StyleSheet()), emptyList(), 0.0, 0.0, 1), IntArray(0))
+            }
+            // every run has a fill of its own, its alpha tells the glyphs of the run apart
+            val spans = runs.mapIndexed { i, run ->
+                val (reference, sizeInEm) = reference(faces[i])
+                TextSpan(run.text, TextStyle(face = reference, sizeInEm = sizeInEm, fill = ColorRGBa(0.0, 0.0, 0.0, 1.0 - (i + 1) * 1E-6)))
+            }
+            val largest = faces.indices.maxBy { faces[it].sizeInPoints }
+            val (reference, sizeInEm) = reference(faces[largest])
+            val lineHeight = (faces[largest].ascent - faces[largest].descent + faces[largest].lineGap)
+            val lines = typesetText(
+                spans,
+                listOf(Rectangle(0.0, 0.0, w.coerceAtLeast(1.0), (runs.sumOf { it.text.length } + 2) * lineHeight)),
+                TextStyle.Defaults.copy(face = reference, sizeInEm = sizeInEm, lineHeightInEm = sizeInEm, hyphenate = false, horizontalAlign = horizontalAlign)
+            )
+            val glyphs = lines.flatMap { it.glyphs }
+            val first = glyphs.firstOrNull()?.position?.y ?: 0.0
+            val moved = glyphs.map { TypesetGlyph(it.face, it.glyphIndex, it.position - Vector2(0.0, first), it.style, it.advance, it.offset) }
+            val runOfGlyph = IntArray(moved.size) { g ->
+                val alpha = moved[g].style.fill?.alpha ?: 1.0
+                kotlin.math.round((1.0 - alpha) / 1E-6).toInt().minus(1).coerceIn(0, runs.size - 1)
+            }
+            val last = moved.maxOfOrNull { it.position.y } ?: 0.0
+            val textWidth = moved.maxOfOrNull { it.penEnd?.x ?: it.position.x } ?: 0.0
+            val face = faces[largest]
+            RichShaped(ShapedText(runs.joinToString("") { it.text }, face, moved, textWidth, last + face.ascent - face.descent,
+                moved.map { it.position.y }.distinct().size.coerceAtLeast(1)), runOfGlyph)
+        }
+    }
+
     private fun map(drawer: Drawer): Pair<BoundaryDrawer, BoundaryGlyphMap> {
         val d = boundaryDrawer ?: drawer.boundaryDrawer.also { boundaryDrawer = it }
         // the glyph map is shared with compositions and everything else that draws with the boundary drawer
@@ -212,14 +263,14 @@ class PanelText internal constructor(private val fontManager: FontManager) {
      */
     fun draw(
         drawer: Drawer, owner: Any, slot: String, shaped: ShapedText, position: Vector2, color: ColorRGBa,
-        decoration: TextDecoration = TextDecoration.NONE
+        decoration: TextDecoration = TextDecoration.NONE, glyphColors: List<ColorRGBa>? = null
     ) {
-        if (shaped.glyphs.isEmpty() || color.alpha <= 0.0) return
+        if (shaped.glyphs.isEmpty() || (color.alpha <= 0.0 && glyphColors == null)) return
         if (!decoration.isNone) drawDecoration(drawer, shaped, Vector2(position.x, round(position.y)), color, decoration)
         val (boundaryDrawer, glyphMap) = map(drawer)
         // the baseline on a whole pixel, for even edges
         val origin = Vector2(position.x, round(position.y))
-        val signature = Triple(shaped, origin, color)
+        val signature = Triple(shaped, origin, glyphColors ?: color)
         val slots = prepared.getOrPut(owner) { HashMap() }
         var entry = slots[slot]
         if (entry == null || entry.signature != signature) {
@@ -230,7 +281,7 @@ class PanelText internal constructor(private val fontManager: FontManager) {
                 glyphMap.endBatch()
             }
             val commands = shaped.glyphs.mapIndexed { i, glyph ->
-                BoundaryCommand(indices[i], transform { translate(origin.x, origin.y, 0.0) } * glyph.transform(), color, null, 0.0)
+                BoundaryCommand(indices[i], transform { translate(origin.x, origin.y, 0.0) } * glyph.transform(), glyphColors?.get(i) ?: color, null, 0.0)
             }
             val buffer = entry?.buffer?.takeIf { it.vertexCount >= commands.size }
                 ?: run {
@@ -245,14 +296,21 @@ class PanelText internal constructor(private val fontManager: FontManager) {
         boundaryDrawer.draw(drawer, glyphMap.map, entry.command)
     }
 
-    /** draws the lines of [decoration] of the lines of [shaped] at [origin], the origin of its first baseline */
-    private fun drawDecoration(drawer: Drawer, shaped: ShapedText, origin: Vector2, color: ColorRGBa, decoration: TextDecoration) {
+    /**
+     * Draws the lines of [decoration] of the lines of [shaped] at [origin], the origin of its first baseline; only
+     * under, over and through [only] of its glyphs when it is given
+     */
+    internal fun drawDecoration(
+        drawer: Drawer, shaped: ShapedText, origin: Vector2, color: ColorRGBa, decoration: TextDecoration,
+        only: Set<Int>? = null
+    ) {
         val size = shaped.face.sizeInPoints
         val thickness = maxOf(1.0, round(size / 14.0))
         drawer.isolated {
             drawer.fill = color
             drawer.stroke = null
-            for ((y, glyphs) in shaped.glyphs.groupBy { it.position.y }) {
+            val selected = if (only == null) shaped.glyphs else shaped.glyphs.filterIndexed { i, _ -> i in only }
+            for ((y, glyphs) in selected.groupBy { it.position.y }) {
                 val x0 = glyphs.minOf { it.position.x }
                 val x1 = glyphs.maxOf { it.penEnd?.x ?: it.position.x }
                 fun line(offset: Double) = drawer.rectangle(origin.x + x0, origin.y + y + offset - thickness / 2.0, x1 - x0, thickness)
