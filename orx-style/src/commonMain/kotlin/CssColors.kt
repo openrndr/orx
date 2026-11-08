@@ -27,7 +27,7 @@ fun parseCssColor(text: String): ColorRGBa? {
         col == "transparent" -> ColorRGBa(0.0, 0.0, 0.0, 0.0, linearity = Linearity.SRGB)
         col.startsWith("#") -> hexColor(col.drop(1))
         Regex("^(rgba?|hsla?)\\((.*)\\)$").matchEntire(col) != null -> functionalColor(col)
-        Regex("^([a-z-]+)\\((.*)\\)$", RegexOption.DOT_MATCHES_ALL).matchEntire(col) != null ->
+        Regex("^([a-z-]+)\\(([\\s\\S]*)\\)$").matchEntire(col) != null ->
             CssColorFunctions.function(col.substringBefore("("), col.substringAfter("(").substringBeforeLast(")"), ::parseCssColor)
         else -> cssColorNames[col]?.let { ColorRGBa.fromHex(it) }
     }

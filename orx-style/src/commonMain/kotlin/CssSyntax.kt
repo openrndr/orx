@@ -73,7 +73,7 @@ fun splitCssWords(text: String): List<String> {
 
 /** the declarations of a block or a style attribute, with !important removed from their values */
 fun parseCssDeclarations(block: String): List<CssDeclaration> =
-    splitCss(block.replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), ""), ';').mapNotNull { declaration ->
+    splitCss(block.replace(Regex("/\\*[\\s\\S]*?\\*/"), ""), ';').mapNotNull { declaration ->
         val parts = splitCss(declaration, ':', 2)
         if (parts.size < 2) return@mapNotNull null
         val name = parts[0].trim()
@@ -89,7 +89,7 @@ fun parseCssDeclarations(block: String): List<CssDeclaration> =
  */
 fun parseCssRules(css: String): List<CssRule> {
     val rules = mutableListOf<CssRule>()
-    collectRules(css.replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), ""), null, rules)
+    collectRules(css.replace(Regex("/\\*[\\s\\S]*?\\*/"), ""), null, rules)
     return rules
 }
 
@@ -313,7 +313,7 @@ data class CssKeyframe(val offset: Double, val declarations: List<CssDeclaration
 
 /** the @keyframes rules of [css], by name, with their keyframes in the order of their offsets */
 fun parseCssKeyframes(css: String): Map<String, List<CssKeyframe>> {
-    val text = css.replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), "")
+    val text = css.replace(Regex("/\\*[\\s\\S]*?\\*/"), "")
     val result = mutableMapOf<String, List<CssKeyframe>>()
     for (match in Regex("@(?:-webkit-)?keyframes\\s+([^\\s{]+)\\s*\\{").findAll(text)) {
         var depth = 1
