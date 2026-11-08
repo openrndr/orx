@@ -59,7 +59,8 @@ import java.util.concurrent.ConcurrentLinkedQueue
  *   `ALT`, `SUPER`.
  * - `POST /keyboard/type?text=<text>` -- type [text], or the body of the request when there is no `text`: a
  *   character event for every character, like typing on a keyboard does, which is what text inputs take. A line
- *   break is a press of enter, a tab a press of tab.
+ *   break is a press of enter, a tab a press of tab. A key that follows typed characters, also one of a later
+ *   request, waits for the next frame, since the program delivers the keys of a frame before its characters.
  * - `POST /mouse/move?x=<x>&y=<y>` -- move the mouse to an absolute window position; while a button is down
  *   (pressed with `/mouse/button/down`) the move is a drag.
  * - `POST /mouse/button/down?x=<x>&y=<y>&button=<LEFT|RIGHT|CENTER>`,
@@ -98,8 +99,18 @@ class RemoteControl : Extension {
 
     private var server: EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>? = null
 
+    /**
+     * what an action does: the program delivers the key events of a frame before its character events, so a key
+     * after characters waits for the next frame, to arrive after them
+     */
+    private enum class ActionKind { CHARACTERS, KEY, OTHER }
+
+    private class Action(val kind: ActionKind, val run: () -> Unit)
+
     /** pending keyboard/mouse actions, applied (on the program's thread) in [beforeDraw] */
-    private val actionQueue = ConcurrentLinkedQueue<() -> Unit>()
+    private val actionQueue = ConcurrentLinkedQueue<Action>()
+
+    private fun ConcurrentLinkedQueue<Action>.add(run: () -> Unit) = add(Action(ActionKind.OTHER, run))
 
     /** pending screenshot requests; one is serviced per frame */
     private val screenshotQueue = ConcurrentLinkedQueue<CompletableDeferred<ByteArray>>()
@@ -120,21 +131,33 @@ class RemoteControl : Extension {
 
                 post("/keyboard/type") {
                     val text = call.request.queryParameters["text"] ?: call.receiveText()
-                    actionQueue.add {
-                        for (c in text) {
-                            val key = when (c) {
-                                '\n' -> KEY_ENTER to "enter"
-                                '\t' -> KEY_TAB to "tab"
-                                else -> null
-                            }
-                            if (key != null) {
+                    // runs of characters, and enter and tab as keys, in the order they are typed
+                    val run = StringBuilder()
+                    fun flush() {
+                        if (run.isEmpty()) return
+                        val chars = run.toString()
+                        run.clear()
+                        actionQueue.add(Action(ActionKind.CHARACTERS) {
+                            for (c in chars) program.keyboard.character.trigger(CharacterEvent(c, emptySet()))
+                        })
+                    }
+                    for (c in text) {
+                        val key = when (c) {
+                            '\n' -> KEY_ENTER to "enter"
+                            '\t' -> KEY_TAB to "tab"
+                            else -> null
+                        }
+                        if (key != null) {
+                            flush()
+                            actionQueue.add(Action(ActionKind.KEY) {
                                 program.keyboard.keyDown.trigger(KeyEvent(KeyEventType.KEY_DOWN, key.first, key.second, emptySet()))
                                 program.keyboard.keyUp.trigger(KeyEvent(KeyEventType.KEY_UP, key.first, key.second, emptySet()))
-                            } else if (c != '\r') {
-                                program.keyboard.character.trigger(CharacterEvent(c, emptySet()))
-                            }
+                            })
+                        } else if (c != '\r') {
+                            run.append(c)
                         }
                     }
+                    flush()
                     program.window.requestDraw()
                     call.respond(HttpStatusCode.OK)
                 }
@@ -156,14 +179,14 @@ class RemoteControl : Extension {
                             return@post
                         }
                     }
-                    actionQueue.add {
+                    actionQueue.add(Action(ActionKind.KEY) {
                         val event = KeyEvent(type, keyId, name, modifiers)
                         when (type) {
                             KeyEventType.KEY_DOWN -> program.keyboard.keyDown.trigger(event)
                             KeyEventType.KEY_UP -> program.keyboard.keyUp.trigger(event)
                             KeyEventType.KEY_REPEAT -> program.keyboard.keyRepeat.trigger(event)
                         }
-                    }
+                    })
                     program.window.requestDraw()
                     call.respond(HttpStatusCode.OK)
                 }
@@ -288,9 +311,17 @@ class RemoteControl : Extension {
     }
 
     override fun beforeDraw(drawer: Drawer, program: Program) {
+        var last: ActionKind? = null
         while (true) {
-            val action = actionQueue.poll() ?: break
-            action()
+            val next = actionQueue.peek() ?: break
+            // a key after characters goes in the next frame, the program delivers keys before characters
+            if (last == ActionKind.CHARACTERS && next.kind == ActionKind.KEY) {
+                program.window.requestDraw()
+                break
+            }
+            actionQueue.poll()
+            next.run()
+            last = next.kind
         }
 
         if (activeScreenshot == null) {
