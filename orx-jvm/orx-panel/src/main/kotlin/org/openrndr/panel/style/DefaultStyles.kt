@@ -31,6 +31,7 @@ fun panelThemeCss(
     --control-active: ${controlActiveColor.toCssColor()};
     --focus-color: ${focusColor.toCssColor()};
     --menu-background: ${menuBackground.toCssColor()};
+    --menu-background-solid: ${menuBackground.copy(alpha = 1.0).toCssColor()};
     --menu-border: ${menuBorder.toCssColor()};
     --pad-background: ${padBackground.toCssColor()};
     --pad-hover-background: ${padHoverBackground.toCssColor()};
@@ -146,6 +147,18 @@ val defaultStylesCss = """
         width: auto; min-width: 180px; padding: 4px;
         background-color: var(--menu-background); border-width: 1px; border-color: var(--menu-border);
         border-radius: 6px;
+    }
+
+    console { display: flex; flex-direction: column; width: 100%; height: 100% }
+    console > console-log { flex-grow: 1; flex-basis: 0; width: 100%; padding: 4px 6px; font-size: var(--control-font-size); color: var(--control-text) }
+    console > text-input {
+        width: 100%; height: 28px; flex-shrink: 0; padding-left: 8px; font-size: var(--control-font-size);
+        background-color: rgb(0 0 0 / 0.25); color: var(--control-selected-text)
+    }
+
+    completion-list {
+        width: auto; height: auto; font-size: var(--control-font-size); color: var(--control-text);
+        background-color: var(--menu-background-solid); border-width: 1px; border-color: var(--menu-border); border-radius: 6px;
     }
 
     menu-item {
