@@ -322,6 +322,53 @@ class PanelText internal constructor(private val fontManager: FontManager) {
         boundaryDrawer.draw(drawer, glyphMap.map, entry.command)
     }
 
+    /** a text of [drawBatch]: [shaped] at [position], the origin of its first baseline, in [color] */
+    data class Placed(val shaped: ShapedText, val position: Vector2, val color: ColorRGBa)
+
+    /** [text] as a single line in the face of [style], at [horizontalAlign] and [verticalAlign] in [box], see [drawInBox] */
+    fun placeInBox(style: StyleSheet, text: String, box: Rectangle, horizontalAlign: Double, verticalAlign: Double, color: ColorRGBa): Placed {
+        val shaped = line(style, text)
+        return Placed(shaped, Vector2(box.x + (box.width - shaped.width) * horizontalAlign, box.y + (box.height - shaped.height) * verticalAlign + shaped.ascent), color)
+    }
+
+    /**
+     * Draws [texts] with a single draw call, without decorations, for many small texts like the labels of a graph.
+     * The draw commands are kept for [owner] under [slot] and drawn again as long as the texts, their positions and
+     * their colors stay the same, so texts that change often are best batched apart from those that do not.
+     */
+    fun drawBatch(drawer: Drawer, owner: Any, slot: String, texts: List<Placed>) {
+        val shown = texts.filter { it.shaped.glyphs.isNotEmpty() && it.color.alpha > 0.0 }
+        if (shown.isEmpty()) return
+        val (boundaryDrawer, glyphMap) = map(drawer)
+        // the baselines on whole pixels, for even edges
+        val placed = shown.map { it.copy(position = Vector2(it.position.x, round(it.position.y))) }
+        val slots = prepared.getOrPut(owner) { HashMap() }
+        var entry = slots[slot]
+        if (entry == null || entry.signature != placed) {
+            glyphMap.startBatch()
+            val indices = try {
+                placed.map { p -> p.shaped.glyphs.map { glyphMap.getBoundaryForGlyphIndex(it.face, it.glyphIndex) } }
+            } finally {
+                glyphMap.endBatch()
+            }
+            val commands = placed.flatMapIndexed { j, p ->
+                val origin = transform { translate(p.position.x, p.position.y, 0.0) }
+                p.shaped.glyphs.mapIndexed { i, glyph -> BoundaryCommand(indices[j][i], origin * glyph.transform(), p.color, null, 0.0) }
+            }
+            val buffer = entry?.buffer?.takeIf { it.vertexCount >= commands.size }
+                ?: run {
+                    entry?.buffer?.close()
+                    // room to grow, for texts that change
+                    boundaryDrawer.createInstanceBuffer((commands.size * 3 / 2).coerceAtLeast(16))
+                }
+            val command = boundaryDrawer.prepare(glyphMap.map, commands, buffer)
+            entry = Prepared(buffer, command, placed, true)
+            slots[slot] = entry
+        }
+        entry.used = true
+        boundaryDrawer.draw(drawer, glyphMap.map, entry.command)
+    }
+
     /**
      * Draws the lines of [decoration] of the lines of [shaped] at [origin], the origin of its first baseline; only
      * under, over and through [only] of its glyphs when it is given

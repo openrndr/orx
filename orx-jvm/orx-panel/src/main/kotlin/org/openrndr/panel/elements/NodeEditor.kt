@@ -4,23 +4,33 @@ import org.openrndr.KEY_BACKSPACE
 import org.openrndr.KEY_DELETE
 import org.openrndr.KeyModifier
 import org.openrndr.MouseButton
+import org.openrndr.MouseEvent
+import org.openrndr.MouseEventType
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.LineCap
 import org.openrndr.draw.isolated
 import org.openrndr.draw.shadeStyle
+import kotlinx.serialization.Serializable
 import org.openrndr.events.Event
 import org.openrndr.math.Vector2
 import org.openrndr.panel.Edit
+import org.openrndr.panel.PanelText
 import org.openrndr.panel.editHistory
 import org.openrndr.panel.style.*
 import org.openrndr.shape.Rectangle
-import org.openrndr.shape.contour
+import org.openrndr.shape.Segment2D
 
-/** a port of a [GraphNode], an input or an output, of [type], which only connects to ports of the same type, or any */
-class Port(val name: String, val type: String? = null)
+/**
+ * a port of a [GraphNode], an input or an output, of [type], which only connects to ports of the same type, or any;
+ * drawn in [color], and the wires from an output in its color, see [NodeEditor.portColor]
+ */
+class Port(val name: String, val type: String? = null, val color: ColorRGBa? = null)
 
-/** a node of a [NodeEditor]: its [title], its [inputs] at the left and [outputs] at the right, at [position] */
+/**
+ * a node of a [NodeEditor]: its [title], its [inputs] at the left and [outputs] at the right, at [position]; under
+ * the ports the [body] that the host draws, and under that the [status]
+ */
 class GraphNode(
     val title: String,
     val inputs: List<Port> = emptyList(),
@@ -29,20 +39,149 @@ class GraphNode(
     /** whatever the node stands for */
     val data: Any? = null
 ) {
+    /** the editor the node is in */
+    internal var editor: NodeEditor? = null
+
     /** the width of the node in the coordinates of the graph */
     var width = 150.0
+        set(value) { field = value; editor?.requestRedraw() }
 
-    val height: Double get() = NodeEditor.TITLE_HEIGHT + maxOf(inputs.size, outputs.size) * NodeEditor.PORT_SPACING + 8.0
+    /** a line of text under the node, like an error or a value, in [statusColor] */
+    var status: String? = null
+        set(value) { if (value != field) { field = value; editor?.requestRedraw() } }
+
+    /** the color of the [status], which also tints the title bar, like red for an error; none draws neither */
+    var statusColor: ColorRGBa? = null
+        set(value) { if (value != field) { field = value; editor?.requestRedraw() } }
+
+    /**
+     * draws the body of the node, in the box of [bodyHeight] under the ports, in the coordinates of the graph; call
+     * [NodeEditor.requestRedraw] when what it draws changes
+     */
+    var body: ((drawer: Drawer, box: Rectangle) -> Unit)? = null
+        set(value) { field = value; editor?.requestRedraw() }
+
+    /** the height of the [body] in the coordinates of the graph */
+    var bodyHeight = 0.0
+        set(value) { field = value; editor?.requestRedraw() }
+
+    /**
+     * handles the pointer in the [body], like for a toggle or a slider drawn there: called with a press in the body,
+     * true takes the press, after which the drags and the release go here too, and the node is neither selected nor
+     * moved; false lets the press select and move the node. The editor redraws after every call. Changes made here
+     * can be undone by recording them in [org.openrndr.panel.editHistory] of the editor.
+     */
+    var bodyPointer: ((NodeBodyEvent) -> Boolean)? = null
+
+    /**
+     * true when the node is drawn compact: the title and the rows of the ports that are connected only, without its
+     * body and its status, whose color still tints the title; null follows [NodeEditor.compactNodes]. A compact node
+     * shows all its ports while a wire is dragged over it. See [NodeEditor.setCompact] for a change that can be undone
+     */
+    var compact: Boolean? = null
+        set(value) {
+            if (value != field) {
+                val before = isCompact
+                field = value
+                if (isCompact != before) editor?.compactChanged(listOf(this))
+            }
+        }
+
+    /** true when the node is drawn compact now, see [compact] */
+    val isCompact: Boolean get() = (compact ?: editor?.compactNodes ?: false) && editor?.expanded !== this
+
+    /** the row of the input or output [i], -1 when it is hidden because the node is compact and it is not connected */
+    private fun row(i: Int, isOutput: Boolean): Int {
+        val e = editor
+        if (!isCompact || e == null) return i
+        if (!e.isConnected(this, i, isOutput)) return -1
+        return (0 until i).count { e.isConnected(this, it, isOutput) }
+    }
+
+    /** the number of rows of the inputs or the outputs that are shown */
+    internal fun shownPorts(isOutput: Boolean): Int {
+        val size = if (isOutput) outputs.size else inputs.size
+        val e = editor
+        if (!isCompact || e == null) return size
+        return (0 until size).count { e.isConnected(this, it, isOutput) }
+    }
+
+    /** true when the input [i] is shown, false when the node is compact and the input is not connected */
+    fun isInputShown(i: Int) = row(i, false) >= 0
+
+    /** true when the output [i] is shown, false when the node is compact and the output is not connected */
+    fun isOutputShown(i: Int) = row(i, true) >= 0
+
+    private val portsHeight: Double
+        get() {
+            val rows = maxOf(shownPorts(false), shownPorts(true))
+            return if (rows == 0 && isCompact) 0.0 else rows * NodeEditor.PORT_SPACING + 8.0
+        }
+
+    /** true when the body is drawn: there is one and the node is not compact */
+    internal val hasBody: Boolean get() = body != null && !isCompact
+
+    /** true when the status is drawn: there is one and the node is not compact */
+    internal val hasStatus: Boolean get() = status != null && !isCompact
+
+    val height: Double get() = NodeEditor.TITLE_HEIGHT + portsHeight + (if (hasBody) bodyHeight else 0.0) +
+            (if (hasStatus) NodeEditor.STATUS_HEIGHT else 0.0)
     val bounds: Rectangle get() = Rectangle(position, width, height)
 
-    /** the position of the input [i] in the coordinates of the graph */
-    fun inputPosition(i: Int) = position + Vector2(0.0, NodeEditor.TITLE_HEIGHT + (i + 0.5) * NodeEditor.PORT_SPACING + 4.0)
-    /** the position of the output [i] in the coordinates of the graph */
-    fun outputPosition(i: Int) = position + Vector2(width, NodeEditor.TITLE_HEIGHT + (i + 0.5) * NodeEditor.PORT_SPACING + 4.0)
+    /** the box of the [body] in the coordinates of the graph, without height when it is not drawn */
+    val bodyBounds: Rectangle get() = Rectangle(position.x, position.y + NodeEditor.TITLE_HEIGHT + portsHeight, width, if (hasBody) bodyHeight else 0.0)
+
+    /** the y of the row [r], the middle of the title bar for a hidden port */
+    private fun rowY(r: Int) = if (r < 0) NodeEditor.TITLE_HEIGHT / 2.0 else NodeEditor.TITLE_HEIGHT + (r + 0.5) * NodeEditor.PORT_SPACING + 4.0
+
+    /** the position of the input [i] in the coordinates of the graph, at the left of the title bar when it is hidden */
+    fun inputPosition(i: Int) = position + Vector2(0.0, rowY(row(i, false)))
+    /** the position of the output [i] in the coordinates of the graph, at the right of the title bar when it is hidden */
+    fun outputPosition(i: Int) = position + Vector2(width, rowY(row(i, true)))
+}
+
+/**
+ * a pointer event in the body of [node], see [GraphNode.bodyPointer]: a press, a drag or a release, at [position] in
+ * the coordinates of the graph, like [box], the box of the body; [fraction] is where it is in the box, from 0 to 1
+ */
+class NodeBodyEvent(
+    val node: GraphNode,
+    val type: MouseEventType,
+    val position: Vector2,
+    val box: Rectangle,
+    val button: MouseButton,
+    val modifiers: Set<KeyModifier>
+) {
+    val fraction: Vector2 get() = Vector2((position.x - box.x) / box.width, (position.y - box.y) / box.height)
 }
 
 /** a wire from the output [output] of [from] to the input [input] of [to] */
 data class Wire(val from: GraphNode, val output: Int, val to: GraphNode, val input: Int)
+
+/** a saved [NodeEditor], see [NodeEditor.graph] and [NodeEditor.restore]; the wires refer to the nodes by index */
+@Serializable
+data class NodeGraphModel(val nodes: List<NodeModel> = emptyList(), val wires: List<WireModel> = emptyList())
+
+/** a saved [GraphNode], with the [id] of what it stands for */
+@Serializable
+data class NodeModel(
+    val title: String,
+    val x: Double,
+    val y: Double,
+    val width: Double = 150.0,
+    val inputs: List<PortModel> = emptyList(),
+    val outputs: List<PortModel> = emptyList(),
+    val id: String? = null,
+    val compact: Boolean? = null
+)
+
+/** a saved [Port] */
+@Serializable
+data class PortModel(val name: String, val type: String? = null, val color: ColorRGBa? = null)
+
+/** a saved [Wire], from the output [output] of the node [from] to the input [input] of the node [to] */
+@Serializable
+data class WireModel(val from: Int, val output: Int, val to: Int, val input: Int)
 
 /**
  * A graph of [nodes] with ports, connected by [wires]. Dragging a node moves it with the other selected nodes, dragging
@@ -50,7 +189,11 @@ data class Wire(val from: GraphNode, val output: Int, val to: GraphNode, val inp
  * an input has one wire at most. A click selects a node, with shift more; dragging on the background selects the nodes
  * in the box, and delete removes the selected nodes. The wheel zooms around the pointer, dragging with the middle
  * button or with alt pans. The changes can be undone, see [org.openrndr.panel.History]. Nodes are drawn in the colors
- * of the style of the editor, the selected ones and wires in that of [accent].
+ * of the style of the editor, the selected ones and wires in that of [accent], ports and their wires in [portColor].
+ *
+ * Every change of [nodes] and [wires] fires an event, also those of undo and redo and those of the host: [Events.added]
+ * and [Events.removed] for nodes, [Events.connected] and [Events.disconnected] for wires, [Events.moved] for moves, so
+ * a model can follow the editor by its events alone.
  */
 class NodeEditor : Element(ElementType("node-editor")) {
     override val handlesKeyboardFocus = true
@@ -59,6 +202,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
     companion object {
         const val TITLE_HEIGHT = 26.0
         const val PORT_SPACING = 22.0
+        const val STATUS_HEIGHT = 20.0
 
         /** the distance between the dots of the grid, in the coordinates of the graph */
         const val GRID_SPACING = 24.0
@@ -87,8 +231,20 @@ class NodeEditor : Element(ElementType("node-editor")) {
         /** a wire was disconnected */
         val disconnected = Event<Wire>("node-editor-disconnected")
 
-        /** nodes were removed */
+        /** nodes were added, by [add] or by undoing their removal; fired before the [connected] of their wires */
+        val added = Event<List<GraphNode>>("node-editor-added")
+
+        /** nodes were removed, by [remove] or by undoing their addition; fired after the [disconnected] of their wires */
         val removed = Event<List<GraphNode>>("node-editor-removed")
+
+        /** nodes were moved, at the end of a drag, or by its undo or redo */
+        val moved = Event<List<GraphNode>>("node-editor-moved")
+
+        /**
+         * nodes became compact or were expanded, see [GraphNode.compact], which changes their heights and the positions
+         * of their ports; also by undo and redo, and by [compactNodes]
+         */
+        val compactChanged = Event<List<GraphNode>>("node-editor-compact-changed")
 
         /** the selected nodes changed */
         val selected = Event<Set<GraphNode>>("node-editor-selected")
@@ -97,14 +253,20 @@ class NodeEditor : Element(ElementType("node-editor")) {
         val requested = Event<Vector2>("node-editor-requested")
 
         override fun close() {
-            connected.close(); disconnected.close(); removed.close(); selected.close(); requested.close()
+            connected.close(); disconnected.close(); added.close(); removed.close(); moved.close(); compactChanged.close(); selected.close(); requested.close()
         }
     }
 
     val events = Events()
 
-    val nodes = mutableListOf<GraphNode>()
-    val wires = mutableListOf<Wire>()
+    private val nodeList = mutableListOf<GraphNode>()
+    private val wireList = mutableListOf<Wire>()
+
+    /** the nodes, the last drawn on top; changed by [add] and [remove] */
+    val nodes: List<GraphNode> get() = nodeList
+
+    /** the wires; changed by [connect] and [disconnect] */
+    val wires: List<Wire> get() = wireList
 
     /** the nodes that are selected */
     var selection: Set<GraphNode> = emptySet()
@@ -136,29 +298,112 @@ class NodeEditor : Element(ElementType("node-editor")) {
     /** true when a wire can go from [output] to [input], by default when their types are the same or either has none */
     var canConnect: (output: Port, input: Port) -> Boolean = { o, i -> o.type == null || i.type == null || o.type == i.type }
 
+    /** the color of a port and of the wires from it, by default its own; none draws it in [accent] */
+    var portColor: (Port) -> ColorRGBa? = { it.color }
+        set(value) { field = value; requestRedraw() }
+
+    /**
+     * a text drawn after the name of a port, like its current value, or none; call [requestRedraw] when the texts
+     * change
+     */
+    var portLabel: (node: GraphNode, port: Port, isOutput: Boolean) -> String? = { _, _, _ -> null }
+        set(value) { field = value; requestRedraw() }
+
+    /**
+     * the points, in the coordinates of the graph, that a wire goes through on its way from its output to its input,
+     * like to go around nodes, or none for the direct way; drawn as one smooth curve that leaves the output and enters
+     * the input horizontally. Call [requestRedraw] when the routes change
+     */
+    var wireRoute: (Wire) -> List<Vector2>? = { null }
+        set(value) { field = value; requestRedraw() }
+
+    /** true when the nodes whose [GraphNode.compact] is null are drawn compact */
+    var compactNodes = false
+        set(value) {
+            if (value != field) {
+                val following = nodeList.filter { it.compact == null && it !== expanded }
+                field = value
+                compactChanged(following)
+            }
+        }
+
+    /** the compact node that shows all its ports, because a wire is dragged over it */
+    internal var expanded: GraphNode? = null
+        set(value) {
+            if (value !== field) {
+                field = value
+                requestRedraw()
+            }
+        }
+
+    internal fun compactChanged(changed: List<GraphNode>) {
+        requestRedraw()
+        if (changed.isNotEmpty()) events.compactChanged.trigger(changed)
+    }
+
+    /**
+     * makes [changed] compact when [compact] is true, expands them when it is false, or lets them follow [compactNodes]
+     * when it is null; the change can be undone
+     */
+    fun setCompact(changed: Collection<GraphNode>, compact: Boolean?) {
+        val before = changed.associateWith { it.compact }
+        if (before.values.all { it == compact }) return
+        for (n in changed) n.compact = compact
+        editHistory?.record(Edit(if (compact == false) "Expand nodes" else "Compact nodes", null,
+            { for ((n, c) in before) n.compact = c },
+            { for (n in changed) n.compact = compact }))
+    }
+
+    /** the inputs and outputs that are connected, as of [wiresVersion] */
+    private var wiresVersion = 0
+    private var connectedVersion = -1
+    private val connectedIn = HashSet<Pair<GraphNode, Int>>()
+    private val connectedOut = HashSet<Pair<GraphNode, Int>>()
+
+    internal fun isConnected(n: GraphNode, i: Int, isOutput: Boolean): Boolean {
+        if (connectedVersion != wiresVersion) {
+            connectedIn.clear(); connectedOut.clear()
+            for (w in wireList) { connectedIn.add(w.to to w.input); connectedOut.add(w.from to w.output) }
+            connectedVersion = wiresVersion
+        }
+        return (n to i) in (if (isOutput) connectedOut else connectedIn)
+    }
+
     /** adds [node] at [position] in the coordinates of the graph */
     fun add(node: GraphNode, position: Vector2 = node.position): GraphNode {
+        if (node in nodeList) return node
         node.position = position
-        nodes.add(node)
+        node.editor = this
+        nodeList.add(node)
         requestRedraw()
+        events.added.trigger(listOf(node))
         return node
     }
 
     /** connects the output [output] of [from] to the input [input] of [to], replacing the wire at that input */
     fun connect(from: GraphNode, output: Int, to: GraphNode, input: Int): Wire? {
         if (from === to || !canConnect(from.outputs[output], to.inputs[input])) return null
+        if (from !in nodeList || to !in nodeList) return null
         val wire = Wire(from, output, to, input)
-        if (wire in wires) return wire
-        wires.filter { it.to === to && it.input == input }.forEach { disconnect(it) }
-        wires.add(wire)
+        if (wire in wireList) return wire
+        attach(wire)
+        return wire
+    }
+
+    /** adds [wire] whether it can connect or not, like when an edit is undone, replacing the wire at its input */
+    private fun attach(wire: Wire) {
+        if (wire in wireList || wire.from !in nodeList || wire.to !in nodeList) return
+        wireList.filter { it.to === wire.to && it.input == wire.input }.forEach { disconnect(it) }
+        wireList.add(wire)
+        wiresVersion++
         requestRedraw()
         events.connected.trigger(wire)
-        return wire
     }
 
     /** removes [wire] */
     fun disconnect(wire: Wire) {
-        if (wires.remove(wire)) {
+        if (wireList.remove(wire)) {
+            wiresVersion++
             requestRedraw()
             events.disconnected.trigger(wire)
         }
@@ -166,13 +411,66 @@ class NodeEditor : Element(ElementType("node-editor")) {
 
     /** removes [removed] and their wires */
     fun remove(removed: Collection<GraphNode>) {
-        val set = removed.toSet()
-        wires.filter { it.from in set || it.to in set }.forEach { disconnect(it) }
-        nodes.removeAll(set)
+        val set = removed.filter { it in nodeList }.toSet()
+        if (set.isEmpty()) return
+        wireList.filter { it.from in set || it.to in set }.forEach { disconnect(it) }
+        nodeList.removeAll(set)
+        for (n in set) n.editor = null
         selection = selection - set
         requestRedraw()
         events.removed.trigger(set.toList())
     }
+
+    /** puts [restored] back at the places they had in [order], with [lost], their wires, like when a removal is undone */
+    private fun reinsert(restored: Collection<GraphNode>, order: List<GraphNode>, lost: List<Wire>) {
+        val back = restored.filter { it !in nodeList }
+        if (back.isEmpty()) return
+        val before = order.withIndex().associate { (i, n) -> n to i }
+        for (n in back.sortedBy { before[it] ?: Int.MAX_VALUE }) {
+            // after the last node that was before it
+            val i = before[n] ?: nodeList.size
+            val at = nodeList.indexOfLast { (before[it] ?: Int.MAX_VALUE) < i } + 1
+            n.editor = this
+            nodeList.add(at, n)
+        }
+        requestRedraw()
+        events.added.trigger(back)
+        for (w in lost) attach(w)
+    }
+
+    //<editor-fold desc="saving and restoring">
+    /** the nodes and wires as they are now, [id] gives the [NodeModel.id] of a node, by default its data as a string */
+    fun graph(id: (GraphNode) -> String? = { it.data?.toString() }): NodeGraphModel {
+        val index = nodeList.withIndex().associate { (i, n) -> n to i }
+        fun port(p: Port) = PortModel(p.name, p.type, p.color)
+        return NodeGraphModel(
+            nodeList.map { n -> NodeModel(n.title, n.position.x, n.position.y, n.width, n.inputs.map(::port), n.outputs.map(::port), id(n), n.compact) },
+            wireList.map { w -> WireModel(index.getValue(w.from), w.output, index.getValue(w.to), w.input) }
+        )
+    }
+
+    /**
+     * Replaces the nodes and wires by those of [model], firing the events of the removals and the additions; [create]
+     * makes the node of a [NodeModel], by default with its ports and with its id as data, or none to leave it out.
+     * Wires that do not fit their nodes, or that [canConnect] refuses, are left out. Not recorded in the history.
+     * @return the nodes, by the index of their models
+     */
+    fun restore(
+        model: NodeGraphModel,
+        create: (NodeModel) -> GraphNode? = { m ->
+            GraphNode(m.title, m.inputs.map { Port(it.name, it.type, it.color) }, m.outputs.map { Port(it.name, it.type, it.color) }, data = m.id)
+        }
+    ): List<GraphNode?> {
+        remove(nodeList.toList())
+        val created = model.nodes.map { m -> create(m)?.also { it.width = m.width; it.compact = m.compact; add(it, Vector2(m.x, m.y)) } }
+        for (w in model.wires) {
+            val from = created.getOrNull(w.from) ?: continue
+            val to = created.getOrNull(w.to) ?: continue
+            if (w.output in from.outputs.indices && w.input in to.inputs.indices) connect(from, w.output, to, w.input)
+        }
+        return created
+    }
+    //</editor-fold>
 
     //<editor-fold desc="coordinates">
     /** [p], a point of the window, in the coordinates of the graph */
@@ -182,12 +480,22 @@ class NodeEditor : Element(ElementType("node-editor")) {
 
     private fun nodeAt(g: Vector2) = nodes.lastOrNull { g in it.bounds }
 
+    /** the node whose body, that handles the pointer, is at [g], when no other node is over it */
+    private fun bodyAt(g: Vector2) = nodeAt(g)?.takeIf { it.hasBody && it.bodyPointer != null && g in it.bodyBounds }
+
+    /** passes [e], of [type], to the body of [n] */
+    private fun toBody(n: GraphNode, type: MouseEventType, g: Vector2, e: MouseEvent, button: MouseButton = e.button): Boolean {
+        val handled = n.bodyPointer?.invoke(NodeBodyEvent(n, type, g, n.bodyBounds, button, e.modifiers)) == true
+        requestRedraw()
+        return handled
+    }
+
     private fun outputAt(g: Vector2): Pair<GraphNode, Int>? = nodes.asReversed().firstNotNullOfOrNull { n ->
-        n.outputs.indices.firstOrNull { n.outputPosition(it).distanceTo(g) < 9.0 }?.let { n to it }
+        n.outputs.indices.firstOrNull { n.isOutputShown(it) && n.outputPosition(it).distanceTo(g) < 9.0 }?.let { n to it }
     }
 
     private fun inputAt(g: Vector2): Pair<GraphNode, Int>? = nodes.asReversed().firstNotNullOfOrNull { n ->
-        n.inputs.indices.firstOrNull { n.inputPosition(it).distanceTo(g) < 9.0 }?.let { n to it }
+        n.inputs.indices.firstOrNull { n.isInputShown(it) && n.inputPosition(it).distanceTo(g) < 9.0 }?.let { n to it }
     }
     //</editor-fold>
 
@@ -197,6 +505,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
         class Connect(val from: GraphNode, val output: Int, var end: Vector2, val detached: Wire?) : Gesture()
         class Select(val start: Vector2, var end: Vector2, val before: Set<GraphNode>) : Gesture()
         class Pan(val start: Vector2, val from: Vector2) : Gesture()
+        class Body(val node: GraphNode, val button: MouseButton) : Gesture()
     }
 
     private var gesture: Gesture? = null
@@ -211,10 +520,13 @@ class NodeEditor : Element(ElementType("node-editor")) {
             gesture = when {
                 it.button == MouseButton.CENTER || KeyModifier.ALT in it.modifiers -> Gesture.Pan(it.position, pan)
                 outputAt(g) != null -> outputAt(g)!!.let { (n, o) -> Gesture.Connect(n, o, g, null) }
+                bodyAt(g)?.let { n -> toBody(n, MouseEventType.BUTTON_DOWN, g, it) } == true -> Gesture.Body(bodyAt(g)!!, it.button)
                 inputAt(g)?.let { (n, i) -> wires.firstOrNull { w -> w.to === n && w.input == i } } != null -> {
                     // the wire is taken off the input and follows the pointer
                     val (n, i) = inputAt(g)!!
                     val wire = wires.first { w -> w.to === n && w.input == i }
+                    // a compact node keeps showing the input while the wire is over it
+                    if (n.isCompact) expanded = n
                     disconnect(wire)
                     Gesture.Connect(wire.from, wire.output, g, wire)
                 }
@@ -226,7 +538,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
                         else -> setOf(node)
                     }
                     // the node is drawn over the others
-                    nodes.remove(node); nodes.add(node)
+                    nodeList.remove(node); nodeList.add(node)
                     Gesture.Move(g, selection.associateWith { n -> n.position })
                 }
                 else -> {
@@ -245,7 +557,13 @@ class NodeEditor : Element(ElementType("node-editor")) {
                     for ((n, p) in current.from) n.position = p + d
                     requestRedraw()
                 }
-                is Gesture.Connect -> { current.end = g; requestRedraw() }
+                is Gesture.Connect -> {
+                    current.end = g
+                    // a compact node under the wire shows all its ports, to connect to one that is hidden
+                    expanded = nodeAt(g)?.takeIf { n -> n === expanded || n.isCompact }
+                    requestRedraw()
+                }
+                is Gesture.Body -> toBody(current.node, MouseEventType.DRAGGED, g, it, current.button)
                 is Gesture.Select -> {
                     current.end = g
                     val box = Rectangle.fromCenter((current.start + g) / 2.0, kotlin.math.abs(g.x - current.start.x), kotlin.math.abs(g.y - current.start.y))
@@ -256,7 +574,11 @@ class NodeEditor : Element(ElementType("node-editor")) {
             it.cancelPropagation()
         }
         mouse.clicked.listen { it.cancelPropagation() }
-        mouse.released.listen { finish(graphPosition(it.position)) }
+        mouse.released.listen {
+            val g = graphPosition(it.position)
+            (gesture as? Gesture.Body)?.let { b -> toBody(b.node, MouseEventType.BUTTON_UP, g, it, b.button) }
+            finish(g)
+        }
         mouse.doubleClicked.listen {
             val g = graphPosition(it.position)
             if (nodeAt(g) == null) events.requested.trigger(g)
@@ -282,9 +604,11 @@ class NodeEditor : Element(ElementType("node-editor")) {
             is Gesture.Move -> {
                 val to = current.from.keys.associateWith { it.position }
                 if (to.any { (n, p) -> p != current.from[n] }) {
+                    val moved = to.keys.toList()
+                    events.moved.trigger(moved)
                     editHistory?.record(Edit("Move nodes", null,
-                        { for ((n, p) in current.from) n.position = p; requestRedraw() },
-                        { for ((n, p) in to) n.position = p; requestRedraw() }))
+                        { for ((n, p) in current.from) n.position = p; requestRedraw(); events.moved.trigger(moved) },
+                        { for ((n, p) in to) n.position = p; requestRedraw(); events.moved.trigger(moved) }))
                 }
             }
             is Gesture.Connect -> {
@@ -295,12 +619,12 @@ class NodeEditor : Element(ElementType("node-editor")) {
                 if (wire != detached) {
                     editHistory?.record(Edit(if (wire != null) "Connect" else "Disconnect", null, {
                         wire?.let { disconnect(it) }
-                        replaced?.let { wires.add(it); events.connected.trigger(it) }
-                        detached?.let { wires.add(it); events.connected.trigger(it) }
+                        replaced?.let { attach(it) }
+                        detached?.let { attach(it) }
                         requestRedraw()
                     }, {
                         detached?.let { disconnect(it) }
-                        wire?.let { connect(it.from, it.output, it.to, it.input) }
+                        wire?.let { attach(it) }
                     }))
                 }
                 requestRedraw()
@@ -308,17 +632,16 @@ class NodeEditor : Element(ElementType("node-editor")) {
             else -> {}
         }
         gesture = null
+        expanded = null
     }
 
     private fun removeWithUndo(removed: Set<GraphNode>) {
-        val lostWires = wires.filter { it.from in removed || it.to in removed }
-        val order = nodes.toList()
+        val lostWires = wireList.filter { it.from in removed || it.to in removed }
+        val order = nodeList.toList()
         remove(removed)
         editHistory?.record(Edit("Remove nodes", null, {
-            nodes.clear(); nodes.addAll(order)
-            for (w in lostWires) { wires.add(w); events.connected.trigger(w) }
+            reinsert(removed, order, lostWires)
             selection = removed
-            requestRedraw()
         }, { remove(removed) }))
     }
     //</editor-fold>
@@ -341,44 +664,124 @@ class NodeEditor : Element(ElementType("node-editor")) {
             }
             drawer.translate(pan)
             drawer.scale(zoom)
-            // the wires under the nodes
+            // the wires under the nodes, a line strip per wire in a single draw per color
             drawer.fill = null
             drawer.lineCap = LineCap.ROUND
             drawer.strokeWeight = 2.0
-            fun wire(a: Vector2, b: Vector2, c: ColorRGBa) {
-                val d = maxOf(40.0, kotlin.math.abs(b.x - a.x) * 0.5)
-                drawer.stroke = c
-                drawer.contour(contour { moveTo(a); curveTo(a + Vector2(d, 0.0), b - Vector2(d, 0.0), b) })
-            }
-            for (w in wires) wire(w.from.outputPosition(w.output), w.to.inputPosition(w.input), accent.opacify(0.8))
-            dragging?.let { wire(it.from.outputPosition(it.output), inputAt(it.end)?.let { (n, i) -> n.inputPosition(i) } ?: it.end, accent) }
-            // the nodes
-            for (n in nodes) {
-                val selected = n in selection
-                drawer.stroke = if (selected) accent else color.opacify(0.25)
-                drawer.strokeWeight = if (selected) 2.0 else 1.0
-                drawer.fill = ColorRGBa.fromHex("#2a2e36")
-                drawer.rectangle(n.bounds)
-                drawer.stroke = null
-                drawer.fill = color.opacify(0.08)
-                drawer.rectangle(n.position.x, n.position.y, n.width, TITLE_HEIGHT)
-                text.drawInBox(drawer, this@NodeEditor, "title ${n.title}", computedStyle, text.ellipsized(computedStyle, n.title, n.width - 16.0),
-                    Rectangle(n.position.x + 8.0, n.position.y, n.width - 16.0, TITLE_HEIGHT), 0.0, 0.5, color)
-                for ((i, port) in n.inputs.withIndex()) {
-                    val p = n.inputPosition(i)
-                    val connected = wires.any { it.to === n && it.input == i }
-                    drawer.fill = if (connected) accent else color.opacify(0.35)
-                    drawer.circle(p, 5.0)
-                    text.drawInBox(drawer, this@NodeEditor, "in ${port.name}", computedStyle, port.name,
-                        Rectangle(p.x + 10.0, p.y - PORT_SPACING / 2.0, n.width / 2.0, PORT_SPACING), 0.0, 0.5, color.opacify(0.75))
+            val tolerance = 0.25 / zoom
+            fun wire(a: Vector2, b: Vector2, route: List<Vector2>? = null): List<Vector2> {
+                val points = listOf(a) + route.orEmpty() + listOf(b)
+                // horizontal at the ports, through the waypoints in the direction from the point before to the one after
+                val tangents = points.indices.map { i ->
+                    if (i == 0 || i == points.lastIndex) Vector2.UNIT_X
+                    else (points[i + 1] - points[i - 1]).let { d -> if (d.length < 1E-9) Vector2.UNIT_X else d.normalized }
                 }
-                for ((i, port) in n.outputs.withIndex()) {
-                    val p = n.outputPosition(i)
-                    val connected = wires.any { it.from === n && it.output == i }
-                    drawer.fill = if (connected) accent else color.opacify(0.35)
-                    drawer.circle(p, 5.0)
-                    text.drawInBox(drawer, this@NodeEditor, "out ${port.name}", computedStyle, port.name,
-                        Rectangle(p.x - 10.0 - n.width / 2.0, p.y - PORT_SPACING / 2.0, n.width / 2.0, PORT_SPACING), 1.0, 0.5, color.opacify(0.75))
+                val out = mutableListOf<Vector2>()
+                for (i in 0 until points.lastIndex) {
+                    val p = points[i]
+                    val q = points[i + 1]
+                    // the reach of the handles: half the width of a direct wire, at least 40, and a third of the
+                    // distance between the points of a route, at least 20 at the ports
+                    val (dp, dq) = if (points.size == 2) maxOf(40.0, kotlin.math.abs(q.x - p.x) * 0.5).let { it to it } else {
+                        val span = q.distanceTo(p) / 3.0
+                        (if (i == 0) maxOf(span, 20.0) else span) to (if (i + 1 == points.lastIndex) maxOf(span, 20.0) else span)
+                    }
+                    val positions = Segment2D(p, p + tangents[i] * dp, q - tangents[i + 1] * dq, q).adaptivePositions(tolerance)
+                    out.addAll(if (i == 0) positions else positions.drop(1))
+                }
+                return out
+            }
+            fun wireColor(from: GraphNode, output: Int) = portColor(from.outputs[output]) ?: accent
+            val strips = wires.groupBy { wireColor(it.from, it.output).opacify(0.8) }.mapValues { (_, ws) ->
+                ws.map { w -> wire(w.from.outputPosition(w.output), w.to.inputPosition(w.input), wireRoute(w)) }
+            }.toMutableMap()
+            dragging?.let {
+                val c = wireColor(it.from, it.output)
+                strips[c] = strips[c].orEmpty() + listOf(wire(it.from.outputPosition(it.output), inputAt(it.end)?.let { (n, i) -> n.inputPosition(i) } ?: it.end))
+            }
+            for ((c, s) in strips) {
+                drawer.stroke = c
+                drawer.lineStrips(s)
+            }
+            // the nodes, in layers of nodes that do not overlap, each layer in a few draws: the boxes, the dots of the
+            // ports, the texts that stay and the labels of the ports, then the bodies
+            val portText = color.opacify(0.75)
+            val labelText = color.opacify(0.45)
+            val connectedInputs = wires.mapTo(HashSet()) { it.to to it.input }
+            val connectedOutputs = wires.mapTo(HashSet()) { it.from to it.output }
+            val layers = mutableListOf<MutableList<GraphNode>>()
+            val layerOf = HashMap<GraphNode, Int>()
+            for ((j, n) in nodes.withIndex()) {
+                // the ports and the stroke of the selection reach over the bounds
+                val reach = n.bounds.offsetEdges(8.0)
+                var layer = 0
+                for (i in 0 until j) {
+                    val m = nodes[i]
+                    if (layerOf.getValue(m) >= layer && m.bounds.offsetEdges(8.0).intersects(reach)) layer = layerOf.getValue(m) + 1
+                }
+                layerOf[n] = layer
+                if (layer == layers.size) layers.add(mutableListOf())
+                layers[layer].add(n)
+            }
+            val nodeFill = ColorRGBa.fromHex("#2a2e36")
+            for ((l, layer) in layers.withIndex()) {
+                drawer.rectangles {
+                    for (n in layer) {
+                        val selected = n in selection
+                        stroke = if (selected) accent else color.opacify(0.25)
+                        strokeWeight = if (selected) 2.0 else 1.0
+                        fill = nodeFill
+                        rectangle(n.bounds)
+                        // the title bar, tinted by the status
+                        stroke = null
+                        fill = n.statusColor?.opacify(0.35) ?: color.opacify(0.08)
+                        rectangle(n.position.x, n.position.y, n.width, TITLE_HEIGHT)
+                    }
+                }
+                val texts = mutableListOf<PanelText.Placed>()
+                val labels = mutableListOf<PanelText.Placed>()
+                drawer.circles {
+                    stroke = null
+                    for (n in layer) {
+                        texts += text.placeInBox(computedStyle, text.ellipsized(computedStyle, n.title, n.width - 16.0),
+                            Rectangle(n.position.x + 8.0, n.position.y, n.width - 16.0, TITLE_HEIGHT), 0.0, 0.5, color)
+                        fun port(port: Port, index: Int, p: Vector2, connected: Boolean, isOutput: Boolean) {
+                            val c = portColor(port)
+                            fill = if (connected) c ?: accent else c?.opacify(0.45) ?: color.opacify(0.35)
+                            circle(p, 5.0)
+                            // the whole row when there is no port at the other side of it
+                            val row = (0 until index).count { if (isOutput) n.isOutputShown(it) else n.isInputShown(it) }
+                            val alone = row >= n.shownPorts(!isOutput)
+                            val half = if (alone) n.width - 20.0 else n.width / 2.0 - 12.0
+                            val box = if (isOutput) Rectangle(p.x - 10.0 - half, p.y - PORT_SPACING / 2.0, half, PORT_SPACING)
+                            else Rectangle(p.x + 10.0, p.y - PORT_SPACING / 2.0, half, PORT_SPACING)
+                            val name = text.ellipsized(computedStyle, port.name, half)
+                            texts += text.placeInBox(computedStyle, name, box, if (isOutput) 1.0 else 0.0, 0.5, portText)
+                            // the label after the name, which gives way to the name
+                            val label = portLabel(n, port, isOutput) ?: return
+                            val nameWidth = text.width(computedStyle, name)
+                            val rest = half - nameWidth - 6.0
+                            val shown = if (rest > 8.0) text.ellipsized(computedStyle, label, rest) else return
+                            val shownWidth = text.width(computedStyle, shown)
+                            val x = if (isOutput) box.x + box.width - nameWidth - 6.0 - shownWidth else box.x + nameWidth + 6.0
+                            labels += text.placeInBox(computedStyle, shown, Rectangle(x, box.y, shownWidth + 1.0, box.height), 0.0, 0.5, labelText)
+                        }
+                        for ((i, p) in n.inputs.withIndex()) if (n.isInputShown(i)) port(p, i, n.inputPosition(i), (n to i) in connectedInputs, false)
+                        for ((i, p) in n.outputs.withIndex()) if (n.isOutputShown(i)) port(p, i, n.outputPosition(i), (n to i) in connectedOutputs, true)
+                        // the status under it all
+                        n.status?.takeIf { n.hasStatus }?.let { status ->
+                            val box = Rectangle(n.position.x + 8.0, n.position.y + n.height - STATUS_HEIGHT, n.width - 16.0, STATUS_HEIGHT - 2.0)
+                            texts += text.placeInBox(computedStyle, text.ellipsized(computedStyle, status, box.width), box, 0.0, 0.5,
+                                n.statusColor ?: color.opacify(0.6))
+                        }
+                    }
+                }
+                text.drawBatch(drawer, this@NodeEditor, "texts $l", texts)
+                text.drawBatch(drawer, this@NodeEditor, "labels $l", labels)
+                // the bodies that the host draws
+                for (n in layer) n.body?.takeIf { n.hasBody }?.let { body ->
+                    val box = n.bodyBounds
+                    if (box.height > 0.0) drawer.isolated { body(drawer, box) }
                 }
             }
             // the box that selects

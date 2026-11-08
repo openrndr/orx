@@ -143,7 +143,7 @@ val defaultStylesCss = """
     tab-page { padding: 5px }
 
     context-menu {
-        width: 180px; padding: 4px;
+        width: auto; min-width: 180px; padding: 4px;
         background-color: var(--menu-background); border-width: 1px; border-color: var(--menu-border);
         border-radius: 6px;
     }

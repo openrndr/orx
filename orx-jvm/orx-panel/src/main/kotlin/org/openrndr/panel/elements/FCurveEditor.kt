@@ -200,9 +200,39 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
         requestRedraw()
     }
 
+    /** the times and values that [showRange] and [showValueRange] are to show once the editor has a size */
+    private var pendingRange: ClosedFloatingPointRange<Double>? = null
+    private var pendingValueRange: ClosedFloatingPointRange<Double>? = null
+
+    /** shows the times from [t0] to [t1] over the width of the editor, instead of framing the curve */
+    fun showRange(t0: Double, t1: Double) {
+        require(t1 > t0) { "the range must not be empty" }
+        framed = true
+        if (plot.width <= 0.0) { pendingRange = t0..t1; return }
+        pendingRange = null
+        zoomX = plot.width / (t1 - t0)
+        viewX = t0
+        requestRedraw()
+    }
+
+    /** shows the values from [v0] to [v1] over the height of the editor */
+    fun showValueRange(v0: Double, v1: Double) {
+        require(v1 > v0) { "the range must not be empty" }
+        framed = true
+        if (plot.height <= 0.0) { pendingValueRange = v0..v1; return }
+        pendingValueRange = null
+        zoomY = plot.height / (v1 - v0)
+        viewY = (v0 + v1) / 2.0
+        requestRedraw()
+    }
+
     private var framed = false
 
     override fun prepare() {
+        if (layout.screenWidth > rulerWidth && layout.screenHeight > rulerHeight) {
+            pendingRange?.let { showRange(it.start, it.endInclusive) }
+            pendingValueRange?.let { showValueRange(it.start, it.endInclusive) }
+        }
         // the curve is framed once the editor has a size
         if (!framed && layout.screenWidth > 0.0 && segments.isNotEmpty()) {
             framed = true

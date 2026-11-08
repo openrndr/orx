@@ -21,6 +21,7 @@ import org.openrndr.panel.elements.*
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertSame
@@ -385,6 +386,33 @@ class ToolsTest : PanelTestFixture() {
     private val isMac = System.getProperty("os.name").lowercase().contains("mac")
 
     @Test
+    fun `menus are as wide as their labels and shortcuts`() {
+        val cm = panel {
+            layout {
+                menuBar {
+                    menu("Layout") {
+                        item("Arrange selection with a long label", "shift+mod+l") { }
+                        item("Short") { }
+                    }
+                    menu("Edit") { item("Copy") { } }
+                }
+            }
+        }
+        cm.frames()
+        cm.keyboardInput.press(KeyEvent(KeyEventType.KEY_DOWN, 0, "f10", emptySet()))
+        cm.frames()
+        val menu = cm.currentMenu!!
+        val item = menu.highlighted!!
+        val needed = item.panelText!!.width(item.computedStyle, item.label) + 24.0 +
+                item.panelText!!.width(item.computedStyle, org.openrndr.panel.Shortcut.parse("shift+mod+l").toString())
+        assertTrue(item.layout.screenWidth >= needed, "${item.layout.screenWidth} < $needed")
+        // a menu of short items keeps its smallest width
+        cm.keyboardInput.press(KeyEvent(KeyEventType.KEY_DOWN, KEY_ARROW_RIGHT, "", emptySet()))
+        cm.frames()
+        assertEquals(180.0, cm.currentMenu!!.layout.screenWidth, 0.5)
+    }
+
+    @Test
     fun `menus are used with the keyboard`() {
         val called = mutableListOf<String>()
         val cm = panel {
@@ -492,6 +520,188 @@ class ToolsTest : PanelTestFixture() {
         assertTrue(editor.zoom > 1.0)
         assertEquals(before.x, editor.graphPosition(p).x, 1E-6)
         assertEquals(before.y, editor.graphPosition(p).y, 1E-6)
+    }
+
+    @Test
+    fun `every change of the nodes and wires fires an event, also undo and redo`() {
+        lateinit var editor: NodeEditor
+        lateinit var a: GraphNode
+        lateinit var b: GraphNode
+        val log = mutableListOf<String>()
+        val cm = panel {
+            css("node-editor { width: 600px; height: 400px }")
+            layout {
+                editor = nodeEditor {
+                    events.added.listen { log += "added ${it.map { n -> n.title }}" }
+                    events.removed.listen { log += "removed ${it.map { n -> n.title }}" }
+                    events.moved.listen { log += "moved ${it.map { n -> n.title }}" }
+                    events.connected.listen { log += "connected ${it.from.title}-${it.to.title}" }
+                    events.disconnected.listen { log += "disconnected ${it.from.title}-${it.to.title}" }
+                    a = add(GraphNode("a", outputs = listOf(Port("out", "image"))), Vector2(20.0, 20.0))
+                    b = add(GraphNode("b", listOf(Port("in", "image"))), Vector2(250.0, 20.0))
+                    connect(a, 0, b, 0)
+                }
+            }
+        }
+        cm.frames()
+        assertEquals(listOf("added [a]", "added [b]", "connected a-b"), log)
+        val o = Vector2(editor.layout.screenX, editor.layout.screenY)
+        fun drag(from: Vector2, to: Vector2) {
+            cm.move(o + from); cm.press(o + from)
+            cm.drag(o + (from + to) / 2.0); cm.drag(o + to)
+            cm.release(o + to)
+        }
+        log.clear()
+        drag(b.position + Vector2(40.0, 10.0), b.position + Vector2(60.0, 110.0))
+        cm.history.undo()
+        cm.history.redo()
+        assertEquals(listOf("moved [b]", "moved [b]", "moved [b]"), log)
+        log.clear()
+        cm.keyboardInput.target = editor
+        cm.key(KEY_DELETE)
+        assertEquals(listOf("disconnected a-b", "removed [b]"), log)
+        // a node the host adds after the removal stays when the removal is undone
+        val c = editor.add(GraphNode("c"), Vector2(20.0, 300.0))
+        log.clear()
+        cm.history.undo()
+        assertEquals(listOf("added [b]", "connected a-b"), log)
+        assertEquals(listOf(a, b, c), editor.nodes)
+        log.clear()
+        cm.history.redo()
+        assertEquals(listOf("disconnected a-b", "removed [b]"), log)
+        assertEquals(listOf(a, c), editor.nodes)
+    }
+
+    @Test
+    fun `the graph of a node editor is saved and restored`() {
+        lateinit var editor: NodeEditor
+        val cm = panel {
+            layout {
+                editor = nodeEditor {
+                    val a = add(GraphNode("a", outputs = listOf(Port("out", "image", ColorRGBa.RED)), data = "1"), Vector2(20.0, 20.0))
+                    val b = add(GraphNode("b", listOf(Port("in", "image")), data = "2"), Vector2(250.0, 20.0))
+                    b.width = 200.0
+                    connect(a, 0, b, 0)
+                }
+            }
+        }
+        cm.frames()
+        val model = editor.graph()
+        val text = kotlinx.serialization.json.Json.encodeToString(NodeGraphModel.serializer(), model)
+        val back = kotlinx.serialization.json.Json.decodeFromString(NodeGraphModel.serializer(), text)
+        assertEquals(model, back)
+        val removed = mutableListOf<GraphNode>()
+        editor.events.removed.listen { removed += it }
+        val nodes = editor.restore(back)
+        assertEquals(2, removed.size)
+        assertEquals(listOf("a", "b"), editor.nodes.map { it.title })
+        assertEquals(listOf("1", "2"), nodes.map { it?.data })
+        assertEquals(200.0, nodes[1]!!.width)
+        assertEquals(ColorRGBa.RED, nodes[0]!!.outputs[0].color)
+        assertEquals(listOf(Wire(nodes[0]!!, 0, nodes[1]!!, 0)), editor.wires)
+    }
+
+    @Test
+    fun `the body of a node takes the pointer when it handles it`() {
+        lateinit var editor: NodeEditor
+        lateinit var n: GraphNode
+        val events = mutableListOf<org.openrndr.MouseEventType>()
+        var value = 0.0
+        val cm = panel {
+            css("node-editor { width: 600px; height: 400px }")
+            layout {
+                editor = nodeEditor {
+                    n = add(GraphNode("slider", listOf(Port("in"))), Vector2(20.0, 20.0))
+                    n.bodyHeight = 30.0
+                    n.body = { _, _ -> }
+                    n.bodyPointer = { e -> events += e.type; value = e.fraction.x; true }
+                }
+            }
+        }
+        cm.frames()
+        val o = Vector2(editor.layout.screenX, editor.layout.screenY)
+        val box = n.bodyBounds
+        val from = Vector2(box.x + box.width * 0.25, box.center.y)
+        val to = Vector2(box.x + box.width * 0.75, box.center.y)
+        cm.move(o + from); cm.press(o + from); cm.drag(o + to); cm.release(o + to)
+        assertEquals(listOf(org.openrndr.MouseEventType.BUTTON_DOWN, org.openrndr.MouseEventType.DRAGGED, org.openrndr.MouseEventType.BUTTON_UP), events)
+        assertEquals(0.75, value, 1E-9)
+        // the node did not move and was not selected
+        assertEquals(Vector2(20.0, 20.0), n.position)
+        assertTrue(editor.selection.isEmpty())
+        // a body that does not take the press lets the node move
+        n.bodyPointer = { false }
+        cm.move(o + from); cm.press(o + from); cm.drag(o + to); cm.release(o + to)
+        assertEquals(Vector2(20.0 + box.width * 0.5, 20.0), n.position)
+    }
+
+    @Test
+    fun `compact nodes show their connected ports only and expand under a dragged wire`() {
+        lateinit var editor: NodeEditor
+        lateinit var a: GraphNode
+        lateinit var b: GraphNode
+        val changed = mutableListOf<List<GraphNode>>()
+        val cm = panel {
+            css("node-editor { width: 600px; height: 400px }")
+            layout {
+                editor = nodeEditor {
+                    a = add(GraphNode("a", outputs = listOf(Port("x"), Port("y"))), Vector2(20.0, 20.0))
+                    b = add(GraphNode("b", listOf(Port("p"), Port("q"), Port("r"))), Vector2(300.0, 20.0))
+                    b.body = { _, _ -> }
+                    b.bodyHeight = 40.0
+                    b.status = "ok"
+                    connect(a, 1, b, 2)
+                    events.compactChanged.listen { changed += it }
+                }
+            }
+        }
+        cm.frames()
+        val full = b.height
+        editor.setCompact(listOf(b), true)
+        assertEquals(listOf(listOf(b)), changed)
+        // one row, for the connected input r, without body and status
+        assertEquals(NodeEditor.TITLE_HEIGHT + NodeEditor.PORT_SPACING + 8.0, b.height)
+        assertTrue(b.isInputShown(2) && !b.isInputShown(0) && !b.isInputShown(1))
+        assertEquals(b.position.y + NodeEditor.TITLE_HEIGHT + 0.5 * NodeEditor.PORT_SPACING + 4.0, b.inputPosition(2).y)
+        assertEquals(b.position.y + NodeEditor.TITLE_HEIGHT / 2.0, b.inputPosition(0).y)
+        assertEquals(0.0, b.bodyBounds.height)
+        // undo expands it again
+        cm.history.undo()
+        assertEquals(full, b.height)
+        cm.history.redo()
+        assertTrue(b.isCompact)
+
+        // a wire dragged over b shows all its inputs, and connects to one that was hidden
+        val o = Vector2(editor.layout.screenX, editor.layout.screenY)
+        val from = a.outputPosition(0)
+        cm.move(o + from); cm.press(o + from)
+        cm.drag(o + b.position + Vector2(40.0, 10.0))
+        assertFalse(b.isCompact)
+        val target = b.inputPosition(0)
+        cm.drag(o + target)
+        cm.release(o + target)
+        assertTrue(b.isCompact)
+        assertTrue(Wire(a, 0, b, 0) in editor.wires)
+        assertTrue(b.isInputShown(0) && !b.isInputShown(1))
+
+        // the editor wide default, for nodes that follow it
+        changed.clear()
+        a.compact = null
+        editor.compactNodes = true
+        assertEquals(listOf(listOf(a)), changed)
+        assertTrue(a.isCompact)
+    }
+
+    @Test
+    fun `the body and the status of a node are under its ports`() {
+        val n = GraphNode("n", listOf(Port("a"), Port("b")))
+        val plain = n.height
+        n.body = { _, _ -> }
+        n.bodyHeight = 40.0
+        assertEquals(plain + 40.0, n.height)
+        assertEquals(NodeEditor.TITLE_HEIGHT + 2 * NodeEditor.PORT_SPACING + 8.0, n.bodyBounds.y)
+        n.status = "division by zero"
+        assertEquals(plain + 40.0 + NodeEditor.STATUS_HEIGHT, n.height)
     }
 
     @Test

@@ -68,6 +68,18 @@ class MenuItem internal constructor(
         }
     }
 
+    /** the width the item needs: its label, then its shortcut or the arrow of its submenu, and its padding */
+    internal fun naturalWidth(): Double {
+        val text = panelText ?: return 0.0
+        val padding = listOf(computedStyle.paddingLeft, computedStyle.paddingRight).sumOf { (it as? LinearDimension.PX)?.value ?: 0.0 }
+        val right = when {
+            submenu != null -> 24.0
+            shortcut != null -> 24.0 + text.width(computedStyle, Shortcut.parse(shortcut)?.toString() ?: shortcut)
+            else -> 0.0
+        }
+        return kotlin.math.ceil(text.width(computedStyle, label) + right + padding) + 1.0
+    }
+
     override fun draw(drawer: Drawer) {
         super.draw(drawer)
         val color = computedStyle.effectiveColor ?: ColorRGBa.WHITE
@@ -123,6 +135,10 @@ class ContextMenu internal constructor(position: Vector2, builder: ContextMenuBu
         }
         mouse.pressed.listen { it.cancelPropagation() }
     }
+
+    /** as wide as the widest item, with its shortcut, so that labels and shortcuts do not overlap */
+    override val widthHint: Double
+        get() = children.filterIsInstance<MenuItem>().maxOfOrNull { it.naturalWidth() } ?: 0.0
 
     /** opens the submenu of [item] next to it */
     internal fun openSubmenu(item: MenuItem) {
