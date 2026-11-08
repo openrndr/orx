@@ -85,7 +85,7 @@ class Dock : Div(ElementType("dock")) {
     private val returning = java.util.concurrent.ConcurrentLinkedQueue<DockPanel>()
 
     /** all panels, docked or in windows of their own */
-    val panels: List<DockPanel> get() = (root?.groups()?.flatMap { it.panels } ?: emptyList()) + floating
+    val panels: List<DockPanel> get() = (root?.groups()?.flatMap { it.panels } ?: emptyList()) + floating + pendingFloats.map { it.first }
 
     /** adds a panel with [title], built by [init], in [zone] of the group [next] to, the last group when null */
     fun panel(title: String, zone: DockZone = DockZone.CENTER, next: DockPanel? = null, init: Div.() -> Unit): DockPanel {
@@ -187,7 +187,11 @@ class Dock : Div(ElementType("dock")) {
                 windowManager.document = document {
                     styleSheets.addAll(styles + styleSheets(floatingCss))
                     body {
-                        div("dock-window") { append(panel.content) }
+                        // the title of the window drags the panel back into the dock
+                        div("dock-window") {
+                            append(DockWindowTitle(this@Dock, panel))
+                            append(panel.content)
+                        }
                     }
                 }
                 panel.content.invalidateStyle()
@@ -231,9 +235,59 @@ class Dock : Div(ElementType("dock")) {
     var windowBackground: ColorRGBa = ColorRGBa.fromHex("#1d1f23")
 
     private val floatingCss = """
-        .dock-window { width: 100%; height: 100% }
-        .dock-window > dock-content { width: 100%; height: 100% }
+        .dock-window { width: 100%; height: 100%; display: flex; flex-direction: column }
+        .dock-window > dock-window-title {
+            width: 100%; height: auto; flex-shrink: 0; padding: 4px 8px; font-size: var(--control-font-size);
+            color: var(--control-text); background-color: var(--control-sunken-background)
+        }
+        .dock-window > dock-window-title:hover { color: var(--control-selected-text) }
+        .dock-window > dock-content { width: 100%; height: auto; flex-grow: 1; flex-basis: 0 }
     """
+
+    //<editor-fold desc="dragging windows back">
+    /** the group that a panel dragged by the title of its window is over, which shows the zone it would go in */
+    private var windowTarget: DockGroup? = null
+
+    /** the panels that go back into the dock in the next frame, from their windows, into a zone of a group */
+    private val docking = java.util.concurrent.ConcurrentLinkedQueue<Triple<DockPanel, DockNode.Group?, DockZone>>()
+
+    /** the group of this dock at [screen], a point on the screen, and the zone of it there */
+    private fun targetAt(screen: Vector2): Pair<DockGroup, DockZone>? {
+        val cm = (root() as? Body)?.controlManager ?: return null
+        val p = screen - cm.program.window.position
+        var found: DockGroup? = null
+        fun visit(e: Element) {
+            if (found != null) return
+            if (e is DockGroup && e.dock === this && e.containsScreenPoint(p)) found = e
+            else e.children.forEach(::visit)
+        }
+        visit(this)
+        return found?.let { it to it.zoneAt(p) }
+    }
+
+    /** [panel] is dragged by the title of its window with the pointer at [screen]: the zone under it shows */
+    internal fun windowDragged(panel: DockPanel, screen: Vector2) {
+        val target = targetAt(screen)
+        if (windowTarget !== target?.first) windowTarget?.zone = null
+        windowTarget = target?.first
+        target?.let { (group, zone) -> group.zone = zone }
+        (root() as? Body)?.controlManager?.program?.window?.requestDraw()
+    }
+
+    /** [panel] was released with the pointer at [screen]: over a group it goes back into the dock there */
+    internal fun windowReleased(panel: DockPanel, screen: Vector2) {
+        val target = targetAt(screen)
+        windowTarget?.zone = null
+        windowTarget = null
+        if (target != null) dockFromWindow(panel, target.first.group, target.second)
+    }
+
+    /** puts [panel] back into [zone] of [group] from its window in the next frame of the dock, the last group when null */
+    fun dockFromWindow(panel: DockPanel, group: DockNode.Group? = null, zone: DockZone = DockZone.CENTER) {
+        docking.add(Triple(panel, group, zone))
+        (root() as? Body)?.controlManager?.program?.window?.requestDraw()
+    }
+    //</editor-fold>
     //</editor-fold>
 
     //<editor-fold desc="saving and restoring the layout">
@@ -245,14 +299,16 @@ class Dock : Div(ElementType("dock")) {
                 n.vertical, splitPanes[n]?.position?.takeIf { n.position >= 0.0 } ?: n.position, node(n.first), node(n.second)
             )
         }
+        // the panels that wait for their windows are where their windows will be
         return DockLayout(root?.let(::node), floating.mapNotNull { panel ->
             panel.window?.let { w ->
                 FloatingPanel(panel.title, w.windowPosition.x, w.windowPosition.y, w.windowSize.x, w.windowSize.y)
             }
-        })
+        } + pendingFloats.map { it.second })
     }
 
-    private var pendingFloats: List<FloatingPanel> = emptyList()
+    /** the panels that the restored layout has in windows of their own, until they are taken out into them */
+    private var pendingFloats: List<Pair<DockPanel, FloatingPanel>> = emptyList()
 
     /**
      * Arranges the panels as [layout] has them, found by their titles; panels that it does not have are added to the
@@ -285,7 +341,7 @@ class Dock : Div(ElementType("dock")) {
             val last = root?.groups()?.lastOrNull()
             if (last == null) root = DockNode.Group(mutableListOf(panel)) else last.panels.add(panel)
         }
-        pendingFloats = floats.filter { f -> byTitle[f.title]?.window == null }
+        pendingFloats = floats.mapNotNull { f -> byTitle[f.title]?.takeIf { it.window == null }?.let { it to f } }
         rebuild()
     }
 
@@ -335,6 +391,16 @@ class Dock : Div(ElementType("dock")) {
             floating.remove(panel)
             place(panel, null, DockZone.CENTER)
         }
+        // the panels that were dragged back by the titles of their windows, whose windows close
+        while (true) {
+            val (panel, group, zone) = docking.poll() ?: break
+            val w = panel.window ?: continue
+            panel.window = null
+            panel.content.parent?.remove(panel.content)
+            floating.remove(panel)
+            place(panel, group?.takeIf { g -> root?.groups()?.any { it === g } == true }, zone)
+            w.close()
+        }
         // splits without a position start at half of their size, the outer ones first, since the sizes of the
         // inner ones are known once those are placed
         fun place(node: DockNode?) {
@@ -357,9 +423,8 @@ class Dock : Div(ElementType("dock")) {
         if (pendingFloats.isNotEmpty() && (root() as? Body)?.controlManager != null) {
             val floats = pendingFloats
             pendingFloats = emptyList()
-            for (f in floats) panels.firstOrNull { it.title == f.title && it.window == null }?.let { panel ->
-                float(panel, IntVector2(f.x.toInt(), f.y.toInt()), Vector2(f.width, f.height))
-            }
+            // a panel whose window can not be made is docked, see float
+            for ((panel, f) in floats) if (panel.window == null) float(panel, IntVector2(f.x.toInt(), f.y.toInt()), Vector2(f.width, f.height))
         }
         saveIfChanged()
     }
@@ -432,7 +497,7 @@ class Dock : Div(ElementType("dock")) {
 class DockGroup internal constructor(val dock: Dock, val group: DockNode.Group) : Div(ElementType("dock-group")) {
     /** the zone that a dragged panel is over, null when none is */
     var zone: DockZone? = null
-        private set(value) {
+        internal set(value) {
             if (value != field) {
                 field = value
                 showZone(value)
@@ -548,3 +613,43 @@ sealed class DockLayoutNode {
 data class FloatingPanel(val title: String, val x: Double, val y: Double, val width: Double, val height: Double)
 
 private val dockLayoutJson = Json { prettyPrint = true; ignoreUnknownKeys = true }
+
+/**
+ * the title of the window of a panel that was taken out of its [dock]: dragging it moves the window, and releasing
+ * it over a group of the dock puts the panel back there, in the zone that shows; a double click puts it back in the
+ * last group
+ */
+class DockWindowTitle internal constructor(val dock: Dock, val panel: DockPanel) : TextElement(ElementType("dock-window-title")) {
+    override val handlesDoubleClick = true
+
+    /** where the title was pressed, in the window */
+    private var grab: Vector2? = null
+
+    /** the point of the screen under the pointer at [p], a point of the window */
+    private fun screen(p: Vector2) = (panel.window?.windowPosition ?: Vector2.ZERO) + p
+
+    init {
+        text(panel.title)
+        mouse.pressed.listen {
+            grab = it.position
+            it.cancelPropagation()
+        }
+        mouse.dragged.listen {
+            val g = grab ?: return@listen
+            val w = panel.window ?: return@listen
+            // the window moves with the pointer
+            w.windowPosition = w.windowPosition + (it.position - g)
+            dock.windowDragged(panel, screen(g))
+            it.cancelPropagation()
+        }
+        mouse.released.listen {
+            val g = grab ?: return@listen
+            grab = null
+            dock.windowReleased(panel, screen(g))
+        }
+        mouse.doubleClicked.listen {
+            dock.dockFromWindow(panel)
+            it.cancelPropagation()
+        }
+    }
+}

@@ -292,6 +292,83 @@ class ToolsTest : PanelTestFixture() {
         file.delete()
     }
 
+    @Test
+    fun `a panel that a restored layout has in a window of its own is not lost`() {
+        lateinit var dock: Dock
+        val saved = DockLayout(DockLayoutNode.Group(listOf("A", "C")), listOf(FloatingPanel("B", 900.0, 120.0, 320.0, 240.0)))
+        val cm = panel {
+            css("dock { width: 600px; height: 400px }")
+            layout {
+                dock = dock {
+                    panel("A") { p { "a" } }
+                    panel("B") { p { "b" } }
+                    panel("C") { p { "c" } }
+                    // restored before the dock is in a control manager, like by persist
+                    restore(saved)
+                }
+            }
+        }
+        // until its window is made it is a panel of the dock, and a layout that is saved keeps it in its window
+        assertTrue(dock.panels.any { it.title == "B" })
+        assertEquals(listOf(saved.floating.single()), dock.layout().floating)
+        cm.frames(3)
+        // then it is in a window of its own, or docked when the window can not be made
+        val b = dock.panels.single { it.title == "B" }
+        val layout = dock.layout()
+        if (b.window != null) {
+            assertEquals(listOf("B"), layout.floating.map { it.title })
+            dock.redock(b)
+        } else {
+            assertTrue("B" in (layout.root as DockLayoutNode.Group).panels)
+        }
+    }
+
+    @Test
+    fun `a panel in a window of its own is dragged back into a zone of the dock`() {
+        lateinit var dock: Dock
+        val cm = panel {
+            css("dock { width: 600px; height: 400px }")
+            layout {
+                dock = dock {
+                    panel("A") { p { "a" } }
+                    panel("B") { p { "b" } }
+                    panel("C", DockZone.RIGHT) { p { "c" } }
+                }
+            }
+        }
+        cm.frames(3)
+        val b = dock.panels.single { it.title == "B" }
+        dock.float(b)
+        cm.frames(2)
+        // without windows in this environment there is nothing to drag back
+        if (b.window == null) return
+        // over the right part of the group of C the zone shows, releasing docks B to the right of C
+        val c = dock.panels.single { it.title == "C" }
+        fun groupElement(e: Element): DockGroup? = if (e is DockGroup && c in e.group.panels) e else e.children.firstNotNullOfOrNull(::groupElement)
+        val group = groupElement(dock)!!
+        val point = program.window.position + Vector2(group.layout.screenX + group.layout.screenWidth * 0.95, group.layout.screenY + group.layout.screenHeight / 2.0)
+        dock.windowDragged(b, point)
+        assertEquals(DockZone.RIGHT, group.zone)
+        dock.windowReleased(b, point)
+        assertNull(group.zone)
+        cm.frames(3)
+        assertNull(b.window)
+        val root = dock.layout().root as DockLayoutNode.Split
+        val right = root.second as DockLayoutNode.Split
+        assertEquals(listOf("C", "B"), listOf(right.first, right.second).map { (it as DockLayoutNode.Group).panels.single() })
+
+        // released outside the dock it stays in its window, a double click on the title puts it back in the last group
+        dock.float(b)
+        cm.frames(2)
+        dock.windowReleased(b, program.window.position + Vector2(-500.0, -500.0))
+        cm.frames(2)
+        assertNotNull(b.window)
+        dock.dockFromWindow(b)
+        cm.frames(2)
+        assertNull(b.window)
+        assertTrue(dock.groupOf(b) != null)
+    }
+
     class State {
         var radius = 3.0
         var time = 0.0
