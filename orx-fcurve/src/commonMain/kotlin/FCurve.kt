@@ -662,3 +662,33 @@ fun fcurve(d: String): FCurve {
     }
     return evaluateFCurveCommands(fCurveCommands(d))
 }
+
+/**
+ * The commands that [fcurve] parses back into this curve: an absolute `H` to where the curve starts when that is not
+ * at 0, then per segment an `M` where it jumps, and an `L`, `Q` or `C` with times relative to the start of the
+ * segment and absolute values. A gap in time between segments is written as a hold. Function shaped segments, which
+ * the segments of an fcurve normally are, come back as they are, up to rounding of the times.
+ */
+fun FCurve.toFCurveString(): String {
+    if (segments.isEmpty()) return ""
+    val parts = mutableListOf<String>()
+    val first = segments.first()
+    if (first.start.x != 0.0) parts += "H${first.start.x}"
+    parts += "M${first.start.y}"
+    var cursor = first.start
+    for (s in segments) {
+        if (s.start.x > cursor.x) {
+            parts += "h${s.start.x - cursor.x}"
+            cursor = Vector2(s.start.x, cursor.y)
+        }
+        if (s.start.y != cursor.y) parts += "M${s.start.y}"
+        val x0 = s.start.x
+        parts += when (s.control.size) {
+            0 -> "L${s.end.x - x0},${s.end.y}"
+            1 -> "Q${s.control[0].x - x0},${s.control[0].y},${s.end.x - x0},${s.end.y}"
+            else -> "C${s.control[0].x - x0},${s.control[0].y},${s.control[1].x - x0},${s.control[1].y},${s.end.x - x0},${s.end.y}"
+        }
+        cursor = s.end
+    }
+    return parts.joinToString(" ")
+}
