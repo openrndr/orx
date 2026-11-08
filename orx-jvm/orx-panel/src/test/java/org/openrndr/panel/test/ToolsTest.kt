@@ -770,6 +770,51 @@ class ToolsTest : PanelTestFixture() {
     }
 
     @Test
+    fun `hovering over a port highlights its upstream or downstream`() {
+        lateinit var editor: NodeEditor
+        lateinit var a: GraphNode
+        lateinit var b: GraphNode
+        lateinit var c: GraphNode
+        lateinit var d: GraphNode
+        lateinit var e: GraphNode
+        val cm = panel {
+            css("node-editor { width: 900px; height: 400px }")
+            layout {
+                editor = nodeEditor {
+                    // a and d go into b, b into c and e
+                    a = add(GraphNode("a", outputs = listOf(Port("o"))), Vector2(20.0, 20.0))
+                    d = add(GraphNode("d", outputs = listOf(Port("o"))), Vector2(20.0, 200.0))
+                    b = add(GraphNode("b", listOf(Port("x"), Port("y")), listOf(Port("o"))), Vector2(250.0, 20.0))
+                    c = add(GraphNode("c", listOf(Port("i"))), Vector2(480.0, 20.0))
+                    e = add(GraphNode("e", listOf(Port("i"))), Vector2(480.0, 200.0))
+                    connect(a, 0, b, 0); connect(d, 0, b, 1); connect(b, 0, c, 0); connect(b, 0, e, 0)
+                }
+            }
+        }
+        cm.frames()
+        val o = Vector2(editor.layout.screenX, editor.layout.screenY)
+        // off by default
+        cm.move(o + c.inputPosition(0))
+        assertTrue(editor.highlightedNodes.isEmpty())
+        editor.highlightUpstream = true
+        editor.highlightDownstream = true
+        // the input of c: b, and through all inputs of b, a and d
+        cm.move(o + c.inputPosition(0) + Vector2(1.0, 0.0))
+        assertEquals(setOf(b, a, d), editor.highlightedNodes)
+        assertEquals(3, editor.highlightedWires.size)
+        // the second input of b: d only
+        cm.move(o + b.inputPosition(1))
+        assertEquals(setOf(d), editor.highlightedNodes)
+        // the output of a: b, and through b, c and e
+        cm.move(o + a.outputPosition(0))
+        assertEquals(setOf(b, c, e), editor.highlightedNodes)
+        assertEquals(setOf(Wire(a, 0, b, 0), Wire(b, 0, c, 0), Wire(b, 0, e, 0)), editor.highlightedWires)
+        // away from the ports nothing is highlighted
+        cm.move(o + Vector2(700.0, 380.0))
+        assertTrue(editor.highlightedNodes.isEmpty() && editor.highlightedWires.isEmpty())
+    }
+
+    @Test
     fun `the body and the status of a node are under its ports`() {
         val n = GraphNode("n", listOf(Port("a"), Port("b")))
         val plain = n.height

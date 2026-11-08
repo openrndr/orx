@@ -10,7 +10,8 @@ import kotlin.math.sin
  * Demonstrates more tools of panels, in a dock: a node editor of a small graph, with ports colored by their types,
  * a live value on a port, a node with a body that draws a wave, a slider in the body of the mix node, and a status that
  * tells the output has no input; Graph > Compact nodes shows only the connected ports, and the wire from the time to
- * the radius of the blur goes around the nodes through waypoints. A text area with the code of a shader
+ * the radius of the blur goes around the nodes through waypoints. Hovering over a port highlights what leads to it or
+ * what it leads to. A text area with the code of a shader
  * in highlighted GLSL, a color editor with a wheel in OKLCH, swatches and a pipette that picks colors from the window,
  * and live plots of the frame time and of values, a histogram and a scope. The edits are undone with mod+z, and the
  * menus are used with the keyboard: F10, then the arrow keys.
@@ -53,6 +54,9 @@ fun main() = application {
                             graphEditor = nodeEditor {
                                 val types = mapOf("image" to ColorRGBa.fromHex("#5ab0ff"), "number" to ColorRGBa.fromHex("#f0b44c"))
                                 portColor = { types[it.type] }
+                                // hovering over an input shows what leads to it, over an output what it leads to
+                                highlightUpstream = true
+                                highlightDownstream = true
                                 val noise = add(GraphNode("noise", outputs = listOf(Port("image", "image"))), Vector2(40.0, 60.0))
                                 val gradient = add(GraphNode("gradient", outputs = listOf(Port("image", "image"))), Vector2(40.0, 200.0))
                                 val blur = add(GraphNode("blur", listOf(Port("image", "image"), Port("radius", "number")), listOf(Port("image", "image"))), Vector2(260.0, 60.0))

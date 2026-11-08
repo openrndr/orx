@@ -295,6 +295,52 @@ class NodeEditor : Element(ElementType("node-editor")) {
     /** the color of selections and wires */
     var accent: ColorRGBa = ColorRGBa.fromHex("#5ab0ff")
 
+    /** true when hovering over an input highlights its upstream: the wires and nodes that lead to it, through all inputs */
+    var highlightUpstream = false
+        set(value) { field = value; updateHighlight() }
+
+    /** true when hovering over an output highlights its downstream: the wires and nodes it leads to, through all outputs */
+    var highlightDownstream = false
+        set(value) { field = value; updateHighlight() }
+
+    /** the color of the outlines of the nodes that are highlighted, see [highlightUpstream] and [highlightDownstream] */
+    var highlightColor: ColorRGBa = ColorRGBa.fromHex("#ffd166")
+
+    /** the nodes and wires that are highlighted now, empty when nothing is */
+    var highlightedNodes: Set<GraphNode> = emptySet()
+        private set
+    var highlightedWires: Set<Wire> = emptySet()
+        private set
+
+    /** the port that the pointer is over, with true for an output */
+    private var hovered: Triple<GraphNode, Int, Boolean>? = null
+
+    /** the wires and nodes upstream of the input [input] of [node], or downstream of its output [output] */
+    private fun stream(node: GraphNode, port: Int, isOutput: Boolean): Pair<Set<GraphNode>, Set<Wire>> {
+        val nodes = LinkedHashSet<GraphNode>()
+        val found = LinkedHashSet<Wire>()
+        val queue = ArrayDeque<Wire>()
+        queue.addAll(wireList.filter { if (isOutput) it.from === node && it.output == port else it.to === node && it.input == port })
+        while (queue.isNotEmpty()) {
+            val w = queue.removeFirst()
+            if (!found.add(w)) continue
+            val next = if (isOutput) w.to else w.from
+            // a node that was reached goes on through all of its outputs, or all of its inputs
+            if (nodes.add(next)) queue.addAll(wireList.filter { if (isOutput) it.from === next else it.to === next })
+        }
+        return nodes to found
+    }
+
+    private fun updateHighlight() {
+        val h = hovered?.takeIf { (_, _, isOutput) -> gesture == null && (if (isOutput) highlightDownstream else highlightUpstream) }
+        val (nodes, wires) = h?.let { (n, p, o) -> stream(n, p, o) } ?: (emptySet<GraphNode>() to emptySet())
+        if (nodes != highlightedNodes || wires != highlightedWires) {
+            highlightedNodes = nodes
+            highlightedWires = wires
+            requestRedraw()
+        }
+    }
+
     /** true when a wire can go from [output] to [input], by default when their types are the same or either has none */
     var canConnect: (output: Port, input: Port) -> Boolean = { o, i -> o.type == null || i.type == null || o.type == i.type }
 
@@ -396,6 +442,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
         wireList.filter { it.to === wire.to && it.input == wire.input }.forEach { disconnect(it) }
         wireList.add(wire)
         wiresVersion++
+        updateHighlight()
         requestRedraw()
         events.connected.trigger(wire)
     }
@@ -404,6 +451,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
     fun disconnect(wire: Wire) {
         if (wireList.remove(wire)) {
             wiresVersion++
+            updateHighlight()
             requestRedraw()
             events.disconnected.trigger(wire)
         }
@@ -546,6 +594,8 @@ class NodeEditor : Element(ElementType("node-editor")) {
                     Gesture.Select(g, g, selection)
                 }
             }
+            // no highlighting during a gesture
+            updateHighlight()
             it.cancelPropagation()
         }
         mouse.dragged.listen {
@@ -568,6 +618,8 @@ class NodeEditor : Element(ElementType("node-editor")) {
                     current.end = g
                     val box = Rectangle.fromCenter((current.start + g) / 2.0, kotlin.math.abs(g.x - current.start.x), kotlin.math.abs(g.y - current.start.y))
                     selection = current.before + nodes.filter { n -> n.bounds.intersects(box) }
+                    // the box follows the pointer also when the selection stays the same
+                    requestRedraw()
                 }
                 null -> {}
             }
@@ -583,6 +635,16 @@ class NodeEditor : Element(ElementType("node-editor")) {
             val g = graphPosition(it.position)
             if (nodeAt(g) == null) events.requested.trigger(g)
             it.cancelPropagation()
+        }
+        // the port under the pointer, for highlighting its upstream or downstream
+        mouse.moved.listen {
+            val g = graphPosition(it.position)
+            hovered = outputAt(g)?.let { (n, o) -> Triple(n, o, true) } ?: inputAt(g)?.let { (n, i) -> Triple(n, i, false) }
+            updateHighlight()
+        }
+        mouse.exited.listen {
+            hovered = null
+            updateHighlight()
         }
         mouse.scrolled.listen {
             // the point under the pointer stays where it is
@@ -633,6 +695,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
         }
         gesture = null
         expanded = null
+        updateHighlight()
     }
 
     private fun removeWithUndo(removed: Set<GraphNode>) {
@@ -692,15 +755,26 @@ class NodeEditor : Element(ElementType("node-editor")) {
                 return out
             }
             fun wireColor(from: GraphNode, output: Int) = portColor(from.outputs[output]) ?: accent
-            val strips = wires.groupBy { wireColor(it.from, it.output).opacify(0.8) }.mapValues { (_, ws) ->
+            // while a stream is highlighted its wires are full and thicker, the others faint
+            val highlighting = highlightedWires.isNotEmpty()
+            fun wireStyle(w: Wire): Pair<ColorRGBa, Double> {
+                val c = wireColor(w.from, w.output)
+                return when {
+                    !highlighting -> c.opacify(0.8) to 2.0
+                    w in highlightedWires -> c to 3.0
+                    else -> c.opacify(0.2) to 2.0
+                }
+            }
+            val strips = wires.groupBy(::wireStyle).mapValues { (_, ws) ->
                 ws.map { w -> wire(w.from.outputPosition(w.output), w.to.inputPosition(w.input), wireRoute(w)) }
             }.toMutableMap()
             dragging?.let {
-                val c = wireColor(it.from, it.output)
-                strips[c] = strips[c].orEmpty() + listOf(wire(it.from.outputPosition(it.output), inputAt(it.end)?.let { (n, i) -> n.inputPosition(i) } ?: it.end))
+                val style = wireColor(it.from, it.output) to 2.0
+                strips[style] = strips[style].orEmpty() + listOf(wire(it.from.outputPosition(it.output), inputAt(it.end)?.let { (n, i) -> n.inputPosition(i) } ?: it.end))
             }
-            for ((c, s) in strips) {
-                drawer.stroke = c
+            for ((style, s) in strips) {
+                drawer.stroke = style.first
+                drawer.strokeWeight = style.second
                 drawer.lineStrips(s)
             }
             // the nodes, in layers of nodes that do not overlap, each layer in a few draws: the boxes, the dots of the
@@ -728,8 +802,13 @@ class NodeEditor : Element(ElementType("node-editor")) {
                 drawer.rectangles {
                     for (n in layer) {
                         val selected = n in selection
-                        stroke = if (selected) accent else color.opacify(0.25)
-                        strokeWeight = if (selected) 2.0 else 1.0
+                        val highlighted = n in highlightedNodes
+                        stroke = when {
+                            selected -> accent
+                            highlighted -> highlightColor
+                            else -> color.opacify(0.25)
+                        }
+                        strokeWeight = if (selected || highlighted) 2.0 else 1.0
                         fill = nodeFill
                         rectangle(n.bounds)
                         // the title bar, tinted by the status
