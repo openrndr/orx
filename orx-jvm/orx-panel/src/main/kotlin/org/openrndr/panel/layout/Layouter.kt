@@ -936,15 +936,21 @@ class Layouter {
 
     /**
      * Lays out [element] and its descendants. The element is sized relative to its parent, keeping its position
-     * unless it is fixed or absolute.
+     * unless it is fixed or absolute. An element in a flex or grid container keeps the size that the container gave
+     * it, which its own style alone does not give, like a flex item that grows into the space of its parent.
      */
     fun layout(element: Element) {
         clearCaches()
         if (element.computedStyle.position !in manualPosition) {
             applyFrame(element, element.containerWidth)
-            element.layout.screenWidth = measureWidth(element, element.containerWidth)
-            element.layout.screenHeight =
-                measureHeight(element, element.layout.screenWidth, element.containerWidth, element.containerHeight)
+            val display = element.parent?.computedStyle?.display
+            val sizedByParent = element.parent != null && (display == Display.FLEX || display == Display.GRID) &&
+                    element.layout.screenWidth > 0.0 && element.layout.screenHeight > 0.0
+            if (!sizedByParent) {
+                element.layout.screenWidth = measureWidth(element, element.containerWidth)
+                element.layout.screenHeight =
+                    measureHeight(element, element.layout.screenWidth, element.containerWidth, element.containerHeight)
+            }
         }
         arrange(element)
     }

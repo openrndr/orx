@@ -205,4 +205,55 @@ class ConsoleTest : PanelTestFixture() {
         cm.key(0, org.openrndr.KeyModifier.SUPER, name = "v")
         assertEquals("layout side", console.input.value)
     }
+
+    @Test
+    fun `a console in a dock fits its panel after switching tabs`() {
+        lateinit var dock: Dock
+        lateinit var console: Console
+        val cm = panel {
+            css("""
+                .page { display: flex; flex-direction: column; align-items: stretch; width: 100%; height: 100% }
+                .page > dock { flex: 1; flex-basis: 0 }
+                .bar { height: 30px; flex-shrink: 0 }
+                dock-content.flush { padding: 0; overflow: hidden }
+                .curves { display: flex; flex-direction: column; width: 100%; height: 100% }
+                .curves > .tools { height: auto; flex-shrink: 0 }
+                .curves > .editor { flex: 1; flex-basis: 0; width: 100% }
+            """)
+            layout {
+                div("page") {
+                    div("bar") { }
+                    dock = dock {
+                        val patch = panel("Patch") { classes.add(ElementClass("flush")); p { "patch" } }
+                        val curves = panel("Curves", DockZone.BOTTOM, patch) {
+                            classes.add(ElementClass("flush"))
+                            div("curves") { div("tools") { p { "tools" } }; div("editor") { } }
+                        }
+                        panel("Console", DockZone.RIGHT, curves) {
+                            classes.add(ElementClass("flush"))
+                            console = console { }
+                        }
+                    }
+                    div("bar") { }
+                }
+            }
+        }
+        fun bottom(e: Element) = e.layout.screenY + e.layout.screenHeight
+        val curves = dock.panels.single { it.title == "Curves" }
+        val panel = dock.panels.single { it.title == "Console" }
+        cm.frames(3)
+        // the console goes into the group of the curves, after the first layout
+        dock.dock(panel, dock.groupOf(curves), DockZone.CENTER)
+        cm.frames(3)
+        assertTrue(bottom(dock) <= bottom(dock.parent!!) - 30.0 + 0.5, "the dock reaches over the bar under it: ${bottom(dock)}")
+        cm.frames(3)
+        val first = bottom(console.input)
+        assertTrue(first <= bottom(panel.content) + 0.5, "${bottom(console.input)} > ${bottom(panel.content)}")
+        dock.select(curves)
+        cm.frames(3)
+        dock.select(panel)
+        cm.frames(3)
+        assertEquals(first, bottom(console.input), 0.5)
+        assertTrue(bottom(console.input) <= bottom(panel.content) + 0.5, "${bottom(console.input)} > ${bottom(panel.content)}")
+    }
 }
