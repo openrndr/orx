@@ -6,6 +6,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.boundary.BoundaryCommand
 import org.openrndr.draw.boundary.BoundaryDrawer
+import org.openrndr.draw.boundary.BoundaryGlyphMap
 import org.openrndr.draw.font.Face
 import org.openrndr.draw.font.internal.Direction
 import org.openrndr.draw.font.internal.ShapeFeature
@@ -126,7 +127,17 @@ class SlugTextDrawer(boundaryDrawer: BoundaryDrawer? = null) : TextDrawer {
     // the glyphs are shared with everything else that draws text with the same boundary drawer
     private val glyphMap by lazy { GlyphMaps.of(this.boundaryDrawer) }
 
+    // the glyphs of faces whose outlines keep changing, which are cleared now and then, see GlyphMaps
+    private val transientMap by lazy { GlyphMaps.transientOf(this.boundaryDrawer) }
+
+    /** the commands of the glyphs, in the order they were added; those of transient glyphs index the transient map */
     val commands = mutableListOf<BoundaryCommand>()
+
+    /** the face and the glyph of every command of a transient glyph, by its place in [commands], to find it again */
+    private val transientGlyphs = mutableMapOf<Int, Pair<org.openrndr.draw.font.Face, Int>>()
+
+    /** the generation of the transient map that the indices of the transient glyphs are of */
+    private var transientGeneration = -1
 
     override var style = TextStyle.Defaults
 
@@ -154,23 +165,48 @@ class SlugTextDrawer(boundaryDrawer: BoundaryDrawer? = null) : TextDrawer {
         addCommands(layout.glyphs.map { it.glyph to it.transform })
     }
 
-    private fun addCommands(glyphs: List<Pair<TypesetGlyph, Matrix44>>) {
-        // Make sure all glyphs are in the glyph map before boundary indices are used, new glyphs are added in a single
-        // batch so the map is written once
-        glyphMap.startBatch()
+    /** adds the glyphs [glyphs] of [map] in a single batch, so that the map is written once, before indices are used */
+    private fun BoundaryGlyphMap.addAll(glyphs: Collection<Pair<org.openrndr.draw.font.Face, Int>>) {
+        startBatch()
         try {
-            for ((glyph, _) in glyphs) {
-                glyphMap.getBoundaryForGlyphIndex(glyph.face, glyph.glyphIndex)
-            }
+            for ((face, index) in glyphs) getBoundaryForGlyphIndex(face, index)
         } finally {
-            glyphMap.endBatch()
+            endBatch()
         }
+    }
+
+    /** finds the transient glyphs in the transient map again when it was cleared since their indices were taken */
+    private fun refreshTransient() {
+        if (transientGlyphs.isEmpty()) return
+        GlyphMaps.trimTransient(boundaryDrawer)
+        if (transientMap.generation == transientGeneration) return
+        transientMap.addAll(transientGlyphs.values.toSet())
+        for ((i, glyph) in transientGlyphs) {
+            commands[i] = commands[i].copy(boundaryIndex = transientMap.getBoundaryForGlyphIndex(glyph.first, glyph.second))
+        }
+        transientGeneration = transientMap.generation
+    }
+
+    private fun addCommands(glyphs: List<Pair<TypesetGlyph, Matrix44>>) {
+        // the glyphs of faces whose masters keep changing go into the transient map, the others into the shared map
+        val transient = glyphs.map { it.first.face }.distinct().associateWith { GlyphMaps.use(it) }
+        if (transient.values.any { it }) {
+            // the transient map is cleared before glyphs are added when it grew too large, the transient glyphs
+            // added earlier are found again
+            GlyphMaps.trimTransient(boundaryDrawer)
+            refreshTransient()
+            transientMap.addAll(glyphs.filter { transient.getValue(it.first.face) }.map { it.first.face to it.first.glyphIndex }.toSet())
+            transientGeneration = transientMap.generation
+        }
+        glyphMap.addAll(glyphs.filter { !transient.getValue(it.first.face) }.map { it.first.face to it.first.glyphIndex }.toSet())
 
         for ((glyph, transform) in glyphs) {
             val glyphStyle = glyph.style
+            val isTransient = transient.getValue(glyph.face)
+            if (isTransient) transientGlyphs[commands.size] = glyph.face to glyph.glyphIndex
             commands.add(
                 BoundaryCommand(
-                    glyphMap.getBoundaryForGlyphIndex(glyph.face, glyph.glyphIndex),
+                    (if (isTransient) transientMap else glyphMap).getBoundaryForGlyphIndex(glyph.face, glyph.glyphIndex),
                     transform,
                     glyphStyle.fill,
                     glyphStyle.stroke,
@@ -187,13 +223,28 @@ class SlugTextDrawer(boundaryDrawer: BoundaryDrawer? = null) : TextDrawer {
 
     override fun clear() {
         commands.clear()
+        transientGlyphs.clear()
     }
 
+    /**
+     * Draws the glyphs: those of the shared map, then those of the transient map, which are drawn over them since
+     * every map is drawn on its own
+     */
     override fun draw(drawer: Drawer) {
-        if (commands.isNotEmpty()) {
+        if (commands.isEmpty()) return
+        if (transientGlyphs.isEmpty()) {
             boundaryDrawer.prepare(glyphMap.map, commands)
             boundaryDrawer.draw(drawer, glyphMap.map)
+            return
         }
+        refreshTransient()
+        val stable = commands.filterIndexed { i, _ -> i !in transientGlyphs }
+        if (stable.isNotEmpty()) {
+            boundaryDrawer.prepare(glyphMap.map, stable)
+            boundaryDrawer.draw(drawer, glyphMap.map)
+        }
+        boundaryDrawer.prepare(transientMap.map, transientGlyphs.keys.sorted().map { commands[it] })
+        boundaryDrawer.draw(drawer, transientMap.map)
     }
 
 }
