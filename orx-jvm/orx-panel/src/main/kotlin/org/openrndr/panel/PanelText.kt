@@ -199,9 +199,10 @@ class PanelText internal constructor(private val fontManager: FontManager) {
         val lineHeight = lineHeight(style)
         return shaped.getOrPut(Key(face, text, w + horizontalAlign * 1E-6, spacing, lineHeight)) {
             val (reference, sizeInEm) = reference(face)
-            // the line height of the font, or that of the style
+            // the line height of the font, or that of the style; typesetting scales the line height of the
+            // reference face by the size in em itself
             val faceLineHeight = face.ascent - face.descent + face.lineGap
-            val lineHeightInEm = if (lineHeight == null) sizeInEm else sizeInEm * lineHeight / faceLineHeight
+            val lineHeightInEm = if (lineHeight == null) 1.0 else lineHeight / faceLineHeight
             val lines = if (text.isEmpty()) emptyList() else typesetText(
                 listOf(TextSpan(text, null)),
                 // tall enough for a line per character, typesetting prepares for every line that fits
@@ -259,7 +260,10 @@ class PanelText internal constructor(private val fontManager: FontManager) {
             val lines = typesetText(
                 spans,
                 listOf(Rectangle(0.0, 0.0, w.coerceAtLeast(1.0), (runs.sumOf { it.text.length } + 2) * lineHeight)),
-                TextStyle.Defaults.copy(face = reference, sizeInEm = sizeInEm, lineHeightInEm = sizeInEm, hyphenate = false, horizontalAlign = horizontalAlign)
+                // typesetting takes the line height of the first run at its size, the lines are as high as those of
+                // the largest run
+                TextStyle.Defaults.copy(face = reference, sizeInEm = sizeInEm, lineHeightInEm = sizeInEm / reference(faces[0]).second,
+                    hyphenate = false, horizontalAlign = horizontalAlign)
             )
             val glyphs = lines.flatMap { it.glyphs }
             val first = glyphs.firstOrNull()?.position?.y ?: 0.0

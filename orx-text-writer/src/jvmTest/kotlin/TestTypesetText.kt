@@ -52,6 +52,22 @@ class TestTypesetText {
     }
 
     @Test
+    fun sizeInEmPlacesLinesLikeTheFaceAtThatSize() {
+        val base = loadFace("../demo-data/fonts/IBMPlexMono-Regular.ttf")
+        val box = Rectangle(0.0, 50.0, 2000.0, 800.0)
+        fun lines(style: TextStyle) = typesetText(listOf(TextSpan("simplex\nsimplex", null)), listOf(box), TextStyle.Defaults.copy(face = style.face, sizeInEm = style.sizeInEm))
+        val big = lines(TextStyle.Defaults.copy(face = base.withSize(72.0), sizeInEm = 1.0))
+        val scaled = lines(TextStyle.Defaults.copy(face = base.withSize(16.0), sizeInEm = 4.5))
+        assertEquals(2, scaled.size)
+        // the first baseline and the distance between the lines, within the rounding of the metrics of the sizes
+        assertEquals(big[0].glyphs.first().position.y, scaled[0].glyphs.first().position.y, 1.0)
+        assertEquals(big[1].glyphs.first().position.y - big[0].glyphs.first().position.y,
+            scaled[1].glyphs.first().position.y - scaled[0].glyphs.first().position.y, 2.0)
+        // and the same advances, within the precision of the advances at the smaller size
+        for ((a, b) in big[0].glyphs.zip(scaled[0].glyphs)) assertEquals(a.position.x, b.position.x, 0.5)
+    }
+
+    @Test
     fun newlineForcesABreak() {
         val lines = typesetText(listOf(TextSpan("a\nb", null)), listOf(Rectangle(0.0, 0.0, 300.0, 300.0)),
             TextStyle.Defaults.copy(face = face()))

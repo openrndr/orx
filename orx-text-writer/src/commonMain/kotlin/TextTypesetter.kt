@@ -81,7 +81,9 @@ fun typesetText(
     baseStyle.justify ?: error("justify not set")
 
     val baseFace = baseStyle.face ?: error("face not set")
-    val lineHeight = (baseFace.ascent - baseFace.descent + baseFace.lineGap) * baseStyle.lineHeightInEm
+    // the metrics of the face at the size of the first span
+    val metrics = LineMetrics(baseFace, baseStyle.sizeInEm ?: 1.0)
+    val lineHeight = (metrics.ascent - metrics.descent + metrics.lineGap) * baseStyle.lineHeightInEm
 
     // Build items list from all spans (Box, Glue, Penalty per Knuth-Plass)
     val paragraph = shapeParagraph(spans, style, baseStyle.direction, shaper = shaper)
@@ -89,7 +91,7 @@ fun typesetText(
 
     // Compute the maximum number of lines that fit in each box
     val boxLineCapacities = boxes.map { box ->
-        val maxLines = ((box.height - baseFace.ascent + baseFace.descent) / lineHeight + 1).toInt()
+        val maxLines = ((box.height - metrics.ascent + metrics.descent) / lineHeight + 1).toInt()
         maxOf(maxLines, 1)
     }
 
@@ -136,9 +138,9 @@ fun typesetText(
         val box = boxes[currentBoxIndex]
         val totalLinesInBox = linesPerBox[currentBoxIndex]
 
-        val totalTextHeightInBox = baseFace.ascent + (totalLinesInBox - 1).coerceAtLeast(0) * lineHeight - baseFace.descent
+        val totalTextHeightInBox = metrics.ascent + (totalLinesInBox - 1).coerceAtLeast(0) * lineHeight - metrics.descent
         val verticalOffset = (box.height - totalTextHeightInBox) * baseStyle.verticalAlign
-        val y = box.y + baseFace.ascent + verticalOffset + lineIndexInBox[lineIdx] * lineHeight
+        val y = box.y + metrics.ascent + verticalOffset + lineIndexInBox[lineIdx] * lineHeight
 
         placeLine(paragraph, line, baseStyle, box.x, box.width, y, currentBoxIndex)
     }
@@ -182,13 +184,15 @@ fun typesetText(
     baseStyle.justify ?: error("justify not set")
 
     val baseFace = baseStyle.face ?: error("face not set")
-    val lineHeight = (baseFace.ascent - baseFace.descent + baseFace.lineGap) * baseStyle.lineHeightInEm
+    // the metrics of the face at the size of the first span
+    val metrics = LineMetrics(baseFace, baseStyle.sizeInEm ?: 1.0)
+    val lineHeight = (metrics.ascent - metrics.descent + metrics.lineGap) * baseStyle.lineHeightInEm
 
     val paragraph = shapeParagraph(spans, style, baseStyle.direction, shaper = shaper)
     val rightToLeft = (paragraph.bidi.paragraphs.firstOrNull()?.level ?: 0) % 2 == 1
 
     fun layout(offsets: DoubleArray): Pair<List<LineSlot>, List<BrokenLine>> {
-        val slots = lineSlots(shapes, offsets, baseFace.ascent, baseFace.descent, lineHeight, rightToLeft)
+        val slots = lineSlots(shapes, offsets, metrics.ascent, metrics.descent, lineHeight, rightToLeft)
         if (slots.isEmpty()) return slots to emptyList()
         return slots to breakLines(paragraph.items) { lineIndex -> slots[minOf(lineIndex, slots.lastIndex)].width }
     }
@@ -460,4 +464,11 @@ fun typesetLine(
     val glyphs = mutableListOf<TypesetGlyph>()
     placeItems(paragraph.items, paragraph.visualOrder(0, paragraph.items.size), position, { it.width }, glyphs)
     return glyphs
+}
+
+/** the ascent, descent and line gap of [face] at [sizeInEm] times its size */
+private class LineMetrics(face: Face, sizeInEm: Double) {
+    val ascent = face.ascent * sizeInEm
+    val descent = face.descent * sizeInEm
+    val lineGap = face.lineGap * sizeInEm
 }
