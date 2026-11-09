@@ -177,4 +177,36 @@ class TestHobbyCurve {
         assertEquals(1, curve.segments.size)
         assertTrue(curve.segments[0].position(0.5).distanceTo(Vector2(50.0, 0.0)) < 1E-9)
     }
+
+    /** the number of joints of [segments] where the direction of the curve jumps */
+    private fun corners(segments: List<org.openrndr.shape.Segment3D>) = segments.zipWithNext().count { (a, b) ->
+        (a.end - a.control.last()).normalized.dot((b.control.first() - b.start).normalized) < 0.9998
+    }
+
+    @Test
+    fun rightAnglesInChangingPlanesAreSmooth() {
+        // every turn is a right angle, in another plane than the one before it
+        val zigzag = listOf(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 1.0, 0.0), Vector3(0.0, 1.0, 1.0), Vector3(1.0, 1.0, 1.0), Vector3(1.0, 0.0, 1.0))
+        assertEquals(0, corners(hobbyCurve(zigzag, closed = false, curl = 0.0).segments))
+        assertEquals(0, corners(hobbyCurve(zigzag, closed = true, curl = 0.0).segments))
+        // a grid of 3 by 3 by 3 points in the order of a path along its rows, layers alternating
+        val grid = mutableListOf<Vector3>()
+        for (z in 0..2) for (y in 0..2) for (x in 0..2) {
+            val xx = if ((y + z) % 2 == 0) x else 2 - x
+            val yy = if (z % 2 == 0) y else 2 - y
+            grid.add(Vector3(xx.toDouble(), yy.toDouble(), z.toDouble()))
+        }
+        val segments = hobbyCurve(grid, closed = false, curl = 0.0).segments
+        assertEquals(0, corners(segments))
+        // no segment is a straight line where the curve turns
+        assertTrue(segments.all { s -> s.control.all { c -> c.x.isFinite() && c.y.isFinite() && c.z.isFinite() } })
+    }
+
+    @Test
+    fun pointsInLineInThreeDimensions() {
+        val points = listOf(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 0.0, 0.0), Vector3(2.0, 0.0, 0.0), Vector3(2.0, 1.0, 1.0))
+        val segments = hobbyCurve(points, closed = false, curl = 0.0).segments
+        assertTrue(segments.all { s -> s.control.all { c -> c.x.isFinite() && c.y.isFinite() && c.z.isFinite() } })
+        assertEquals(0, corners(segments))
+    }
 }

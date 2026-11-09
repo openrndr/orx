@@ -247,12 +247,31 @@ private fun hobbyCurve3D(
     if (!closed && m == 2) return Path3D.fromPoints(points, false)
 
     val gamma = DoubleArray(m)
-    for (i in (if (closed) 0 else 1) until n) {
+    val joints = (if (closed) 0 else 1) until n
+    // the normal of the plane of the chords at every joint, zero where the chords are in line
+    val raw = Array(m) { Vector3.ZERO }
+    for (i in joints) raw[i] = chords[i].normalized.cross(-chords[(i - 1).mod(m)].normalized)
+    // a joint where the chords are in line turns in the plane of the nearest joint that turns, or around z
+    val turning = joints.filter { raw[it].length > 1E-9 }
+    for (i in joints) if (raw[i].length <= 1E-9) {
+        raw[i] = turning.minByOrNull { minOf((it - i).mod(m), (i - it).mod(m)) }?.let { raw[it] } ?: Vector3.UNIT_Z
+    }
+    // the normals are oriented alike from joint to joint: the first towards +z, so that curves in the xy plane turn
+    // around z as in 2D, every next one on the side of the one before it. A normal that is perpendicular to the one
+    // before it, where the curve turns in another plane, keeps its own orientation
+    var previous: Vector3? = null
+    for (i in joints) {
+        val normal = raw[i].normalized
+        val s = when {
+            previous == null -> if (normal.z < 0.0) -1.0 else 1.0
+            normal.dot(previous) < -1E-9 -> -1.0
+            else -> 1.0
+        }
         val zc = chords[i].normalized
         val zp = chords[(i - 1).mod(m)].normalized
-        val normal = zc.cross(-zp)
-        gamma[i] = zp.atan22(zc) * sign(normal.z)
-        normals[i] = normal * sign(normal.z)
+        gamma[i] = zp.atan22(zc) * s
+        normals[i] = normal * s
+        previous = normals[i]
     }
     if (!closed) {
         gamma[n] = 0.0
