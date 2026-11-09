@@ -100,15 +100,15 @@ fun Segment2D.scaleTangents(axis: Vector2 = Vector2.UNIT_X): Segment2D {
 data class FCurve(val segments: List<Segment2D>) {
 
     /**
-     * Reverse the fcurve
+     * Reverse the fcurve in time: it runs from [end] back to [start] over the same time span, the last segment first
      */
     fun reverse(): FCurve {
-        val d = duration
+        // mirrored around the middle of the curve, so that it keeps its start and end
         val t = buildTransform {
-            translate(d, 0.0)
+            translate(start + end, 0.0)
             scale(-1.0, 1.0)
         }
-        return FCurve(segments.map { it.reverse.transform(t) })
+        return FCurve(segments.asReversed().map { it.reverse.transform(t) })
     }
 
     val bounds by lazy {
@@ -141,13 +141,13 @@ data class FCurve(val segments: List<Segment2D>) {
         }
 
     /**
-     * Change the duration of the Fcurve
+     * Change the duration of the Fcurve: times are divided by the size of [speed], a negative speed also reverses it
      */
     fun changeSpeed(speed: Double): FCurve {
         val c = if (speed < 0.0) reverse() else this
-        return if (speed == 1.0) c else {
+        return if (kotlin.math.abs(speed) == 1.0) c else {
             val t = buildTransform {
-                scale(1.0 / speed, 1.0)
+                scale(1.0 / kotlin.math.abs(speed), 1.0)
             }
             FCurve(c.segments.map { it.transform(t) })
         }

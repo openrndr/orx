@@ -45,4 +45,42 @@ class TestFCurveString {
             for ((p, q) in a.control.zip(b.control)) assertTrue(p.distanceTo(q) < 1E-9)
         }
     }
+
+    @Test
+    fun reverseKeepsTheKeysInOrderAndTheTimeSpan() {
+        val curve = fcurve("M0 L1,100 L2,20 L1,60")
+        val r = curve.reverse()
+        // the keys, at 0: 60, 1: 20, 3: 100 and 4: 0
+        assertEquals(listOf(0.0 to 60.0, 1.0 to 20.0, 3.0 to 100.0, 4.0 to 0.0),
+            listOf(r.segments.first().start.let { it.x to it.y }) + r.segments.map { it.end.x to it.end.y })
+        assertEquals(curve.start, r.start)
+        assertEquals(curve.end, r.end)
+        for (i in 0..40) {
+            val t = i * 0.1
+            assertEquals(curve.value(curve.end - t), r.value(curve.start + t), 1E-9)
+        }
+        // a curve that does not start at 0 stays where it is
+        val late = fcurve("H2 M0 L1,10 C0.3,10,0.6,-5,1,-5")
+        val rl = late.reverse()
+        assertEquals(2.0, rl.start, 1E-12)
+        assertEquals(4.0, rl.end, 1E-12)
+        for (i in 0..20) {
+            val t = i * 0.1
+            assertEquals(late.value(late.end - t), rl.value(late.start + t), 1E-9)
+        }
+        assertTrue(rl.segments.zipWithNext().all { (a, b) -> a.end.x <= b.start.x + 1E-12 })
+    }
+
+    @Test
+    fun negativeSpeedReversesAndScales() {
+        val curve = fcurve("M0 L1,100 L2,20 L1,60")
+        val c = curve.changeSpeed(-2.0)
+        assertEquals(0.0, c.start, 1E-12)
+        assertEquals(2.0, c.end, 1E-12)
+        for (i in 0..20) {
+            val t = i * 0.1
+            assertEquals(curve.value(curve.end - t * 2.0), c.value(t), 1E-9)
+        }
+        assertEquals(curve.reverse(), curve.changeSpeed(-1.0))
+    }
 }
