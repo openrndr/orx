@@ -707,6 +707,15 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
         requestRedraw()
     }
 
+    /**
+     * Records an edit of this element, named [name], in the history so that it can be undone and redone, by default
+     * in [org.openrndr.panel.editHistory]. A program can take this over, like to wrap [undo] and [redo] so that they
+     * leave alone what others changed since, or to keep the edits in a history of its own.
+     */
+    var recordEdit: (name: String, undo: () -> Unit, redo: () -> Unit) -> Unit = { name, undo, redo ->
+        editHistory?.record(Edit(name, null, undo, redo))
+    }
+
     /** the edit from [before] to the segments as they are, which can be undone */
     private fun record(name: String) {
         val from = before
@@ -714,9 +723,9 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
         val to = segments.toList()
         val toLone = lone
         if (from == to && fromLone == toLone) return
-        editHistory?.record(Edit(name, null,
+        recordEdit(name,
             { segments = from.toMutableList(); lone = fromLone; selection = emptySet(); changed(false) },
-            { segments = to.toMutableList(); lone = toLone; selection = emptySet(); changed(false) }))
+            { segments = to.toMutableList(); lone = toLone; selection = emptySet(); changed(false) })
         before = to
         beforeLone = toLone
     }

@@ -295,6 +295,15 @@ class NodeEditor : Element(ElementType("node-editor")) {
     /** the color of selections and wires */
     var accent: ColorRGBa = ColorRGBa.fromHex("#5ab0ff")
 
+    /**
+     * Records an edit of this element, named [name], in the history so that it can be undone and redone, by default
+     * in [org.openrndr.panel.editHistory]. A program can take this over, like to wrap [undo] and [redo] so that they
+     * leave alone what others changed since, or to keep the edits in a history of its own.
+     */
+    var recordEdit: (name: String, undo: () -> Unit, redo: () -> Unit) -> Unit = { name, undo, redo ->
+        editHistory?.record(Edit(name, null, undo, redo))
+    }
+
     /** true when hovering over an input highlights its upstream: the wires and nodes that lead to it, through all inputs */
     var highlightUpstream = false
         set(value) { field = value; updateHighlight() }
@@ -395,9 +404,9 @@ class NodeEditor : Element(ElementType("node-editor")) {
         val before = changed.associateWith { it.compact }
         if (before.values.all { it == compact }) return
         for (n in changed) n.compact = compact
-        editHistory?.record(Edit(if (compact == false) "Expand nodes" else "Compact nodes", null,
+        recordEdit(if (compact == false) "Expand nodes" else "Compact nodes",
             { for ((n, c) in before) n.compact = c },
-            { for (n in changed) n.compact = compact }))
+            { for (n in changed) n.compact = compact })
     }
 
     /** the inputs and outputs that are connected, as of [wiresVersion] */
@@ -561,6 +570,77 @@ class NodeEditor : Element(ElementType("node-editor")) {
     /** the wire that is drawn while it is dragged, in the coordinates of the graph */
     private val dragging get() = gesture as? Gesture.Connect
 
+    /** true when dragging nodes, a wire or a selection box near or past the edges of the editor pans the view */
+    var edgePan = true
+
+    /** the distance from the edges, in pixels, within which a drag pans the view */
+    var edgePanMargin = 24.0
+
+    /** how fast the view pans, in pixels per second, with the pointer at an edge; it pans faster further past it */
+    var edgePanSpeed = 600.0
+
+    /** the last drag event, which is applied again while the view pans under a pointer that stands still */
+    private var lastDrag: MouseEvent? = null
+    private var lastPanTime = 0L
+
+    /** follows a drag to [e]: the nodes, the end of the wire or the box go where the pointer is */
+    private fun dragTo(e: MouseEvent) {
+        lastDrag = e
+        val g = graphPosition(e.position)
+        when (val current = gesture) {
+            is Gesture.Pan -> pan = current.from + (e.position - current.start)
+            is Gesture.Move -> {
+                val d = g - current.start
+                for ((n, p) in current.from) n.position = p + d
+                requestRedraw()
+            }
+            is Gesture.Connect -> {
+                current.end = g
+                // a compact node under the wire shows all its ports, to connect to one that is hidden
+                expanded = nodeAt(g)?.takeIf { n -> n === expanded || n.isCompact }
+                requestRedraw()
+            }
+            is Gesture.Body -> toBody(current.node, MouseEventType.DRAGGED, g, e, current.button)
+            is Gesture.Select -> {
+                current.end = g
+                val box = Rectangle.fromCenter((current.start + g) / 2.0, kotlin.math.abs(g.x - current.start.x), kotlin.math.abs(g.y - current.start.y))
+                selection = current.before + nodes.filter { n -> n.bounds.intersects(box) }
+                // the box follows the pointer also when the selection stays the same
+                requestRedraw()
+            }
+            null -> {}
+        }
+    }
+
+    /**
+     * pans the view while nodes, a wire or a box are dragged near or past the edges, by the time since the last frame,
+     * and applies the drag again so that what is dragged stays under the pointer
+     */
+    private fun edgePanStep() {
+        val now = System.nanoTime()
+        val dt = ((now - lastPanTime) / 1E9).coerceIn(0.0, 0.05)
+        lastPanTime = now
+        val e = lastDrag ?: return
+        if (!edgePan || (gesture !is Gesture.Move && gesture !is Gesture.Connect && gesture !is Gesture.Select)) return
+        val local = e.position - Vector2(layout.screenX, layout.screenY)
+        val m = edgePanMargin.coerceAtLeast(1.0)
+        // 0 at the inner side of the margin, 1 at the edge, more past it, up to 4
+        fun depth(near: Double, far: Double) = when {
+            near < m -> ((m - near) / m).coerceAtMost(4.0)
+            far < m -> -((m - far) / m).coerceAtMost(4.0)
+            else -> 0.0
+        }
+        val v = Vector2(depth(local.x, layout.screenWidth - local.x), depth(local.y, layout.screenHeight - local.y))
+        if (v == Vector2.ZERO) return
+        // the view moves towards the edge: the graph moves the other way
+        pan += v * edgePanSpeed * dt
+        dragTo(e)
+    }
+
+    override fun prepare() {
+        edgePanStep()
+    }
+
     init {
         mouse.pressed.listen {
             val g = graphPosition(it.position)
@@ -599,30 +679,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
             it.cancelPropagation()
         }
         mouse.dragged.listen {
-            val g = graphPosition(it.position)
-            when (val current = gesture) {
-                is Gesture.Pan -> pan = current.from + (it.position - current.start)
-                is Gesture.Move -> {
-                    val d = g - current.start
-                    for ((n, p) in current.from) n.position = p + d
-                    requestRedraw()
-                }
-                is Gesture.Connect -> {
-                    current.end = g
-                    // a compact node under the wire shows all its ports, to connect to one that is hidden
-                    expanded = nodeAt(g)?.takeIf { n -> n === expanded || n.isCompact }
-                    requestRedraw()
-                }
-                is Gesture.Body -> toBody(current.node, MouseEventType.DRAGGED, g, it, current.button)
-                is Gesture.Select -> {
-                    current.end = g
-                    val box = Rectangle.fromCenter((current.start + g) / 2.0, kotlin.math.abs(g.x - current.start.x), kotlin.math.abs(g.y - current.start.y))
-                    selection = current.before + nodes.filter { n -> n.bounds.intersects(box) }
-                    // the box follows the pointer also when the selection stays the same
-                    requestRedraw()
-                }
-                null -> {}
-            }
+            dragTo(it)
             it.cancelPropagation()
         }
         mouse.clicked.listen { it.cancelPropagation() }
@@ -662,15 +719,16 @@ class NodeEditor : Element(ElementType("node-editor")) {
     }
 
     private fun finish(g: Vector2) {
+        lastDrag = null
         when (val current = gesture) {
             is Gesture.Move -> {
                 val to = current.from.keys.associateWith { it.position }
                 if (to.any { (n, p) -> p != current.from[n] }) {
                     val moved = to.keys.toList()
                     events.moved.trigger(moved)
-                    editHistory?.record(Edit("Move nodes", null,
+                    recordEdit("Move nodes",
                         { for ((n, p) in current.from) n.position = p; requestRedraw(); events.moved.trigger(moved) },
-                        { for ((n, p) in to) n.position = p; requestRedraw(); events.moved.trigger(moved) }))
+                        { for ((n, p) in to) n.position = p; requestRedraw(); events.moved.trigger(moved) })
                 }
             }
             is Gesture.Connect -> {
@@ -679,7 +737,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
                 val wire = target?.let { (n, i) -> connect(current.from, current.output, n, i) }
                 val detached = current.detached
                 if (wire != detached) {
-                    editHistory?.record(Edit(if (wire != null) "Connect" else "Disconnect", null, {
+                    recordEdit(if (wire != null) "Connect" else "Disconnect", {
                         wire?.let { disconnect(it) }
                         replaced?.let { attach(it) }
                         detached?.let { attach(it) }
@@ -687,7 +745,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
                     }, {
                         detached?.let { disconnect(it) }
                         wire?.let { attach(it) }
-                    }))
+                    })
                 }
                 requestRedraw()
             }
@@ -702,10 +760,10 @@ class NodeEditor : Element(ElementType("node-editor")) {
         val lostWires = wireList.filter { it.from in removed || it.to in removed }
         val order = nodeList.toList()
         remove(removed)
-        editHistory?.record(Edit("Remove nodes", null, {
+        recordEdit("Remove nodes", {
             reinsert(removed, order, lostWires)
             selection = removed
-        }, { remove(removed) }))
+        }, { remove(removed) })
     }
     //</editor-fold>
 

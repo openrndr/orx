@@ -815,6 +815,91 @@ class ToolsTest : PanelTestFixture() {
     }
 
     @Test
+    fun `dragging past the edges of the node editor pans the view`() {
+        lateinit var editor: NodeEditor
+        lateinit var a: GraphNode
+        val cm = panel {
+            css("node-editor { width: 600px; height: 400px }")
+            layout { editor = nodeEditor { a = add(GraphNode("a", listOf(Port("in"))), Vector2(200.0, 150.0)) } }
+        }
+        cm.frames()
+        val o = Vector2(editor.layout.screenX, editor.layout.screenY)
+        val grab = Vector2(240.0, 160.0)
+        // the node is dragged past the right edge and held there
+        val past = Vector2(620.0, 160.0)
+        cm.move(o + grab); cm.press(o + grab); cm.drag(o + Vector2(400.0, 160.0)); cm.drag(o + past)
+        val panBefore = editor.pan
+        repeat(10) { Thread.sleep(20); cm.frames(1) }
+        assertTrue(editor.pan.x < panBefore.x - 20.0, "${editor.pan}")
+        assertEquals(panBefore.y, editor.pan.y, 1E-9)
+        // the node stays under the pointer
+        assertEquals(o.x + past.x - (grab.x - 200.0), o.x + editor.pan.x + a.position.x * editor.zoom, 1E-6)
+        cm.release(o + past)
+        // it stops on release, one edit moves the node back
+        val pan = editor.pan
+        repeat(3) { Thread.sleep(20); cm.frames(1) }
+        assertEquals(pan, editor.pan)
+        assertEquals("Move nodes", cm.history.undoName)
+        cm.history.undo()
+        assertEquals(Vector2(200.0, 150.0), a.position)
+
+        // a box dragged over the top edge pans up and grows with it, without edgePan the view stays
+        val p0 = Vector2(500.0, 300.0)
+        cm.move(o + p0); cm.press(o + p0); cm.drag(o + Vector2(500.0, 100.0)); cm.drag(o + Vector2(500.0, 4.0))
+        val y = editor.pan.y
+        repeat(5) { Thread.sleep(20); cm.frames(1) }
+        assertTrue(editor.pan.y > y, "${editor.pan}")
+        cm.release(o + Vector2(500.0, 4.0))
+        editor.edgePan = false
+        cm.move(o + grab); cm.press(o + grab); cm.drag(o + Vector2(400.0, 160.0)); cm.drag(o + past)
+        val still = editor.pan
+        repeat(5) { Thread.sleep(20); cm.frames(1) }
+        assertEquals(still, editor.pan)
+        cm.release(o + past)
+    }
+
+    @Test
+    fun `a program records the edits of the node and fcurve editors itself`() {
+        lateinit var editor: NodeEditor
+        lateinit var curves: FCurveEditor
+        lateinit var a: GraphNode
+        val recorded = mutableListOf<Triple<String, () -> Unit, () -> Unit>>()
+        val cm = panel {
+            css("node-editor { width: 600px; height: 300px } fcurve-editor { width: 600px; height: 300px }")
+            layout {
+                editor = nodeEditor { a = add(GraphNode("a"), Vector2(20.0, 20.0)) }
+                curves = fcurveEditor { value = org.openrndr.extra.fcurve.fcurve("M0 L1,1 L1,0") }
+            }
+        }
+        editor.recordEdit = { name, undo, redo -> recorded += Triple(name, undo, redo) }
+        curves.recordEdit = { name, undo, redo -> recorded += Triple(name, undo, redo) }
+        cm.frames()
+        val o = Vector2(editor.layout.screenX, editor.layout.screenY)
+        val from = o + Vector2(40.0, 30.0)
+        cm.move(from); cm.press(from); cm.drag(from + Vector2(20.0, 20.0)); cm.drag(from + Vector2(50.0, 60.0)); cm.release(from + Vector2(50.0, 60.0))
+        assertEquals(listOf("Move nodes"), recorded.map { it.first })
+        // nothing went into the history of the control manager
+        assertFalse(cm.history.canUndo)
+        // the program undoes and redoes it
+        val moved = a.position
+        recorded.last().second()
+        assertEquals(Vector2(20.0, 20.0), a.position)
+        recorded.last().third()
+        assertEquals(moved, a.position)
+
+        // a key of the curve dragged up
+        val key = curves.screenPosition(Vector2(1.0, 1.0))
+        cm.move(key); cm.press(key); cm.drag(key - Vector2(0.0, 20.0)); cm.drag(key - Vector2(0.0, 40.0)); cm.release(key - Vector2(0.0, 40.0))
+        assertEquals("Move keys", recorded.last().first)
+        val edited = curves.value
+        recorded.last().second()
+        assertEquals(1.0, curves.value.segments[0].end.y, 1E-9)
+        recorded.last().third()
+        assertEquals(edited, curves.value)
+        assertFalse(cm.history.canUndo)
+    }
+
+    @Test
     fun `the body and the status of a node are under its ports`() {
         val n = GraphNode("n", listOf(Port("a"), Port("b")))
         val plain = n.height
