@@ -5,6 +5,7 @@ import org.openrndr.math.map
 import org.openrndr.shape.Box
 import org.openrndr.shape.bounds
 import kotlin.math.max
+import kotlin.math.pow
 
 enum class Axis3DPermutation {
     XYZ,
@@ -23,12 +24,14 @@ fun List<Vector3>.mortonOrder(
     val bounds = this.bounds
     val md = max(max(bounds.width, bounds.height), bounds.depth) * scale
     val rbounds = Box(bounds.corner.x, bounds.corner.y, bounds.corner.z, md, md, md)
+    // the coordinates the encoders take, from 0 to 2^bits - 1
+    val extend = 2.0.pow(bits.toDouble()) - 1.0
     val inputPoints = map {
         it.map(
             rbounds.position(0.0, 0.0, 0.0),
             rbounds.position(1.0, 1.0, 1.0),
             Vector3(0.0, 0.0, 0.0),
-            Vector3(1023.0, 1023.0, 1023.0)
+            Vector3(extend, extend, extend)
         )
     }
     val mortonCodes = when (bits) {
@@ -56,17 +59,19 @@ fun List<Vector3>.mortonOrder(
 fun List<Vector3>.hilbertOrder(
     scale: Double = 1.0,
     permutation: Axis3DPermutation = Axis3DPermutation.XYZ,
-    bits: Int
+    bits: Int = 10
 ): List<Vector3> {
     val bounds = this.bounds
     val md = max(max(bounds.width, bounds.height), bounds.depth) * scale
     val rbounds = Box(bounds.corner.x, bounds.corner.y, bounds.corner.z, md, md, md)
+    // the coordinates the encoders take, from 0 to 2^bits - 1
+    val extend = 2.0.pow(bits.toDouble()) - 1.0
     val inputPoints = map {
         it.map(
             rbounds.position(0.0, 0.0, 0.0),
             rbounds.position(1.0, 1.0, 1.0),
             Vector3(0.0, 0.0, 0.0),
-            Vector3(1023.0, 1023.0, 1023.0)
+            Vector3(extend, extend, extend)
         )
     }
     val hilbertCodes = when(bits) {
