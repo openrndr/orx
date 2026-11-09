@@ -186,6 +186,7 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
 
     /** shows the whole curve */
     fun frame() {
+        viewAnimation = null
         if (segments.isEmpty() || plot.width <= 0.0) return
         val c = value
         val w = c.duration.takeIf { it > 0.0 } ?: 1.0
@@ -209,6 +210,7 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
         require(t1 > t0) { "the range must not be empty" }
         framed = true
         if (plot.width <= 0.0) { pendingRange = t0..t1; return }
+        viewAnimation = null
         pendingRange = null
         zoomX = plot.width / (t1 - t0)
         viewX = t0
@@ -220,6 +222,7 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
         require(v1 > v0) { "the range must not be empty" }
         framed = true
         if (plot.height <= 0.0) { pendingValueRange = v0..v1; return }
+        viewAnimation = null
         pendingValueRange = null
         zoomY = plot.height / (v1 - v0)
         viewY = (v0 + v1) / 2.0
@@ -228,7 +231,60 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
 
     private var framed = false
 
+    /** true when the view widens to show the keys and handles that a drag left outside it, once the drag ends */
+    var followEdits = true
+
+    /** the margin around the points that [followEdits] keeps in view, in pixels */
+    var followMargin = 24.0
+
+    /** the view that the editor moves to, from the view it started at, over a short time */
+    private class ViewAnimation(val start: Double, val from: DoubleArray, val to: DoubleArray)
+    private var viewAnimation: ViewAnimation? = null
+
+    /** widens the view, if needed, so that [points] of the curve are in it, [followMargin] from its edges */
+    private fun reveal(points: List<Vector2>) {
+        if (points.isEmpty() || plot.width <= 0.0 || plot.height <= 0.0) return
+        val mx = followMargin / zoomX
+        val my = followMargin / zoomY
+        val x0 = viewX
+        val x1 = viewX + plot.width / zoomX
+        val y0 = viewY - plot.height / 2.0 / zoomY
+        val y1 = viewY + plot.height / 2.0 / zoomY
+        val inside = points.all { it.x in (x0 + mx)..(x1 - mx) && it.y in (y0 + my)..(y1 - my) }
+        if (inside) return
+        // the view and the points with their margins, whose margins grow with the zoom that shrinks
+        val nx0 = minOf(x0, points.minOf { it.x } - mx)
+        val nx1 = maxOf(x1, points.maxOf { it.x } + mx)
+        val ny0 = minOf(y0, points.minOf { it.y } - my)
+        val ny1 = maxOf(y1, points.maxOf { it.y } + my)
+        val zx = plot.width / (nx1 - nx0)
+        val zy = plot.height / (ny1 - ny0)
+        // the margins at the new zoom, around the points that are outside
+        val ax0 = minOf(x0, points.minOf { it.x } - followMargin / zx)
+        val ax1 = maxOf(x1, points.maxOf { it.x } + followMargin / zx)
+        val ay0 = minOf(y0, points.minOf { it.y } - followMargin / zy)
+        val ay1 = maxOf(y1, points.maxOf { it.y } + followMargin / zy)
+        val to = doubleArrayOf(ax0, (ay0 + ay1) / 2.0, plot.width / (ax1 - ax0), plot.height / (ay1 - ay0))
+        viewAnimation = ViewAnimation(System.nanoTime() / 1E9, doubleArrayOf(viewX, viewY, zoomX, zoomY), to)
+        requestRedraw()
+    }
+
+    /** the next step of the animation of the view */
+    private fun animateView() {
+        val a = viewAnimation ?: return
+        val t = ((System.nanoTime() / 1E9 - a.start) / 0.25).coerceIn(0.0, 1.0)
+        val e = 1.0 - (1.0 - t) * (1.0 - t) * (1.0 - t)
+        // the zoom changes geometrically, the edges of the view move evenly with it
+        zoomX = a.from[2] * Math.pow(a.to[2] / a.from[2], e)
+        zoomY = a.from[3] * Math.pow(a.to[3] / a.from[3], e)
+        viewX = a.from[0] + (a.to[0] - a.from[0]) * e
+        viewY = a.from[1] + (a.to[1] - a.from[1]) * e
+        if (t >= 1.0) viewAnimation = null
+        requestRedraw()
+    }
+
     override fun prepare() {
+        animateView()
         if (layout.screenWidth > rulerWidth && layout.screenHeight > rulerHeight) {
             pendingRange?.let { showRange(it.start, it.endInclusive) }
             pendingValueRange?.let { showValueRange(it.start, it.endInclusive) }
@@ -241,6 +297,7 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
     }
 
     private fun zoomAround(p: Vector2, fx: Double, fy: Double) {
+        viewAnimation = null
         val before = fromScreen(p)
         zoomX *= fx
         zoomY *= fy
@@ -419,6 +476,8 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
         mouse.pressed.listen { press(it.position, it.button, it.modifiers); it.cancelPropagation() }
         mouse.dragged.listen { drag(it.position, it.modifiers); it.cancelPropagation() }
         mouse.released.listen { release() }
+        // the view that the user moves stops the animation of the view
+        mouse.pressed.listen { viewAnimation = null }
         mouse.clicked.listen { it.cancelPropagation() }
         mouse.doubleClicked.listen {
             // a double click adds a key on the curve
@@ -618,7 +677,20 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
         }
     }
 
+    /** the points that [g] moved: the keys with both their sides, or the handle */
+    private fun movedPoints(g: Gesture?): List<Vector2> = when (g) {
+        is Gesture.Move -> g.keys.flatMap { listOfNotNull(leftPoint(it), rightPoint(it)) }
+        is Gesture.Tear -> listOfNotNull(leftPoint(g.key), rightPoint(g.key))
+        is Gesture.Pen -> listOfNotNull(leftPoint(g.key), rightPoint(g.key), segments.getOrNull(g.key - 1)?.cubic?.control?.get(1), segments.getOrNull(g.key)?.cubic?.control?.get(0))
+        is Gesture.Handle -> listOfNotNull(
+            if (g.part == Part.HANDLE_OUT) segments.getOrNull(g.key)?.cubic?.control?.get(0) else segments.getOrNull(g.key - 1)?.cubic?.control?.get(1)
+        )
+        else -> emptyList()
+    }
+
     private fun release() {
+        // the points that were dragged out of the view come into it again
+        if (followEdits) reveal(movedPoints(gesture))
         (gesture as? Gesture.Draw)?.let { finishStroke(it) }
         when (gesture) {
             is Gesture.Pan, is Gesture.Box, is Gesture.Draw, null -> {}

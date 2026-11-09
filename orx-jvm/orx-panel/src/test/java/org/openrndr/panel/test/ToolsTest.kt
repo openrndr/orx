@@ -1059,6 +1059,38 @@ class ToolsTest : PanelTestFixture() {
     }
 
     @Test
+    fun `the view of the fcurve editor widens to keys that were dragged out of it`() {
+        lateinit var editor: FCurveEditor
+        val cm = panel {
+            css("fcurve-editor { width: 800px; height: 400px }")
+            layout { editor = fcurveEditor { value = org.openrndr.extra.fcurve.fcurve("M0 L1,0 L1,1 L1,0") } }
+        }
+        cm.frames()
+        val area = org.openrndr.shape.Rectangle(editor.layout.screenX, editor.layout.screenY, editor.layout.screenWidth, editor.layout.screenHeight)
+        fun inView(p: Vector2) = editor.screenPosition(p).let { s -> s.x > area.x && s.x < area.x + area.width && s.y > area.y && s.y < area.y + area.height }
+        // the key at 2 goes far over the top of the editor
+        val from = editor.screenPosition(Vector2(2.0, 1.0))
+        val to = from - Vector2(0.0, 700.0)
+        cm.move(from); cm.press(from); cm.drag(from - Vector2(0.0, 300.0)); cm.drag(to); cm.release(to)
+        val moved = editor.value.segments[1].end
+        assertTrue(moved.y > 2.0, "$moved")
+        assertFalse(inView(moved))
+        // after a short animation it is in view again, as are the keys that were
+        Thread.sleep(300)
+        cm.frames(2)
+        assertTrue(inView(moved), "${editor.screenPosition(moved)} $area")
+        assertTrue(inView(Vector2(0.0, 0.0)) && inView(Vector2(3.0, 0.0)))
+        // without followEdits the view stays
+        editor.followEdits = false
+        val zoom = editor.zoomY
+        val from2 = editor.screenPosition(moved)
+        cm.move(from2); cm.press(from2); cm.drag(from2 + Vector2(0.0, 300.0)); cm.drag(from2 + Vector2(0.0, 900.0)); cm.release(from2 + Vector2(0.0, 900.0))
+        Thread.sleep(300)
+        cm.frames(2)
+        assertEquals(zoom, editor.zoomY)
+    }
+
+    @Test
     fun `fcurves are built from nothing with the pen and by drawing, and removed again`() {
         lateinit var editor: FCurveEditor
         val cm = panel {
