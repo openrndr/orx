@@ -132,6 +132,33 @@ open class BezierPatch3DBase<C>(
     }
 
     /**
+     * The frame of the patch at [u], [v]: its origin at [position], its z axis the [normal], its x axis along [du] in
+     * the plane across the normal, and its y axis z × x, which follows [dv]; orthonormal and right-handed, x × y = z.
+     * Something drawn in the plane of x and y around the origin lies on the patch there, as the envelope of a path on
+     * a patch places it, see [org.openrndr.extra.shapes.distort.envelope]. Where [du] vanishes, like at an edge of the
+     * patch that is collapsed to a point, x follows [du] a little inside the patch, or [dv] turned around the normal,
+     * so the frame never has NaNs.
+     */
+    fun frame(u: Double, v: Double): Matrix44 {
+        val z = normal(u, v)
+        val e = 1E-4
+        // the direction of x: du, du a little inside the patch, dv turned a quarter around the normal, or any
+        val candidates = sequence {
+            yield(du(u, v))
+            yield(du(u.coerceIn(e, 1.0 - e), v.coerceIn(e, 1.0 - e)))
+            yield(dv(u, v).cross(z))
+            yield(if (kotlin.math.abs(z.x) < 0.9) Vector3.UNIT_X else Vector3.UNIT_Y)
+        }
+        val x = candidates.map { it - z * it.dot(z) }.first { it.length > 1E-12 }.normalized
+        val y = z.cross(x)
+        val o = position(u, v)
+        return Matrix44.fromColumnVectors(x.xyz0, y.xyz0, z.xyz0, o.xyz1)
+    }
+
+    /** the [frame]s of the patch at the u, v of [uvs] */
+    fun frames(uvs: List<org.openrndr.math.Vector2>): List<Matrix44> = uvs.map { frame(it.x, it.y) }
+
+    /**
      * Return a gradient vector on the patch by using its u,v parameterization
      * @param u a value between 0 and 1
      * @param v a value between 0 and 1
