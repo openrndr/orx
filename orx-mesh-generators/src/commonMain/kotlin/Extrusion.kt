@@ -443,8 +443,10 @@ fun extrudeShape(
     val rectified = path.rectified(pathDistanceTolerance, 1.0)
     val pose = rectified.pose(up0)
 
-    val frames = rectified.points.map { pose.pose(it.second) }
-    val dframes = rectified.points.map { pose.poseDerivative((it.second)) }
+    // the poses at the points, which are at equal steps of the rectified parameter
+    val rts = rectified.points.indices.map { it / (rectified.points.size - 1.0) }
+    val frames = rts.map { pose.pose(it) }
+    val dframes = rts.map { pose.poseDerivative(it) }
 
     // First add caps
     extrudeCaps(linearShape, path, startCap, endCap, frames, writer)

@@ -1,6 +1,10 @@
 package org.openrndr.extra.shapes.pose
 
-import org.openrndr.extra.shapes.frames.computeClosedRMF
+import org.openrndr.extra.shapes.frames.applyTwist
+import org.openrndr.extra.shapes.frames.computeClosureError
+import org.openrndr.extra.shapes.frames.computeOpenRMF
+import org.openrndr.extra.shapes.frames.initialFrameWithUp
+import org.openrndr.extra.shapes.frames.parallelTransport
 import org.openrndr.extra.shapes.rectify.RectifiedPath3D
 import org.openrndr.math.*
 
@@ -11,84 +15,166 @@ import kotlin.math.*
 
 
 /**
- * Represents a 3D pose path defined along a rectified path. The class provides interpolation
- * and orientation adjustments along the defined path.
+ * Represents a 3D pose path defined along a rectified path: a frame at every point of the path whose z axis is the
+ * direction of the path, which turns as little as possible from point to point.
+ *
+ * The first frame has its y axis along [up], as far as the direction of the path at its start allows. An open path
+ * carries that frame along as it is; on a closed path the twist that the frame gathers in a lap is spread evenly
+ * over the lap, so that the frames meet at the start.
  *
  * @property path The rectified 3D path for which the pose is calculated.
- * @constructor Initializes a `PosePath3D` instance with an optional upward direction vector.
- * @param path The rectified 3D path along which the poses will be calculated.
- * @param up The default upward direction vector, which is used to establish orientation; defaults to `Vector3.UNIT_Y`.
+ * @param up The upward direction of the first frame; defaults to `Vector3.UNIT_Y`.
+ * @param samples the number of frames that are computed at equal steps along the path, at least 256, and 64 for every
+ * segment of the path; more frames are added where the path turns more than [maxTurn] between them
+ * @param maxTurn the largest angle, in radians, by which the direction of the path turns between neighbouring frames,
+ * as far as halving the steps between them up to 16 times allows; defaults to 1 degree
  */
-class PosePath3D(val path: RectifiedPath3D, up: Vector3 = Vector3.UNIT_Y) {
-    val frames = computeClosedRMF(
-        path.points.map { it.first },
-        path.points.map { path.direction(it.second).normalized },
-        null,
+class PosePath3D(
+    val path: RectifiedPath3D,
+    up: Vector3 = Vector3.UNIT_Y,
+    samples: Int = maxOf(256, 64 * path.path.segments.size),
+    maxTurn: Double = PI / 180.0
+) {
+    /** the rectified parameters of the frames, ascending from 0 to 1 */
+    private val ts: DoubleArray
 
-    )
+    /** the directions of the path at the frames */
+    private val tangents: Array<Vector3>
 
+    init {
+        val count = samples.coerceAtLeast(2)
+        val cosMaxTurn = cos(maxTurn)
+        val tl = ArrayList<Double>(count)
+        val dl = ArrayList<Vector3>(count)
+        // the steps from t0 to t1, halved until the direction turns at most maxTurn in each
+        fun add(t0: Double, d0: Vector3, t1: Double, d1: Vector3, depth: Int) {
+            if (depth < MAX_DEPTH && (d0 dot d1) < cosMaxTurn) {
+                val tm = (t0 + t1) / 2
+                val dm = tangentAt(tm)
+                add(t0, d0, tm, dm, depth + 1)
+                add(tm, dm, t1, d1, depth + 1)
+            } else {
+                tl.add(t1); dl.add(d1)
+            }
+        }
+        tl.add(0.0); dl.add(tangentAt(0.0))
+        for (i in 1 until count) {
+            val t1 = i.toDouble() / (count - 1)
+            add(tl.last(), dl.last(), t1, tangentAt(t1), 0)
+        }
+        ts = tl.toDoubleArray()
+        tangents = dl.toTypedArray()
+    }
+
+    /**
+     * the direction of the path at the rectified [t]: that of its segment, or from nearby positions where the segment
+     * has none, like at a cusp
+     */
+    private fun tangentAt(t: Double): Vector3 = tangentAtParameter(t, path.rectify(path.safe(t)))
+
+    /** the direction of the path at the rectified [t] and the parameter [u] of the path there */
+    private fun tangentAtParameter(t: Double, u: Double): Vector3 {
+        val d = path.path.direction(u)
+        if (d.squaredLength > 1E-20 && d.x.isFinite()) return d.normalized
+        val h = 1E-5
+        val ahead = path.position((t + h).let { if (path.path.closed) it else it.coerceAtMost(1.0) }) -
+                path.position((t - h).let { if (path.path.closed) it else it.coerceAtLeast(0.0) })
+        return ahead.normalized
+    }
+
+    /**
+     * the frames at the rectified parameters at which they are computed: at equal steps, with more where the path
+     * turns quickly
+     */
+    val frames: List<Matrix33> = run {
+        val open = computeOpenRMF(tangents.asList(), initialFrameWithUp(tangents[0], up))
+        if (path.path.closed && ts.size >= 3) {
+            // the twist gathered in a lap, spread over the lap by the rectified parameter
+            val closureError = computeClosureError(open[0], open.last(), tangents[0])
+            open.mapIndexed { i, frame -> applyTwist(frame, tangents[i], -closureError * ts[i]) }
+        } else {
+            open
+        }
+    }
+
+    /** the index of the frame at or before the rectified [t], from 0 to the second to last */
+    private fun frameBefore(t: Double): Int {
+        var lo = 0
+        var hi = ts.size - 1
+        while (hi - lo > 1) {
+            val mid = (lo + hi) ushr 1
+            if (ts[mid] <= t) lo = mid else hi = mid
+        }
+        return lo
+    }
+
+    /** the frame at the rectified [st], with [direction] its z axis, and the twist about it from frame to frame */
+    private fun frameAt(st: Double, direction: Vector3): Pair<Matrix33, Double> {
+        // the frames before and after t, both turned to the direction at t, between which it twists
+        val i0 = frameBefore(st)
+        val f = ((st - ts[i0]) / (ts[i0 + 1] - ts[i0])).coerceIn(0.0, 1.0)
+        val a = parallelTransport(frames[i0], tangents[i0], direction)
+        val b = parallelTransport(frames[i0 + 1], tangents[i0 + 1], direction)
+        val twist = computeClosureError(a, b, direction)
+        return applyTwist(a, direction, twist * f) to twist / (ts[i0 + 1] - ts[i0])
+    }
 
     /**
      * Calculates the pose (transformation matrix) at a specified position on the path.
      * The pose includes translation and orientation, where orientation is interpolated
      * between frames based on the position parameter `t`.
      *
-     * @param t A value between 0.0 and 1.0, representing the normalized position along the path.
-     *          `t = 0.0` corresponds to the start of the path, and `t = 1.0` corresponds to the end.
+     * @param t A value between 0.0 and 1.0, representing the normalized position along the path, as for
+     *          [RectifiedPath3D.position]. `t = 0.0` corresponds to the start of the path, and `t = 1.0` to the end;
+     *          a closed path repeats.
      * @return A `Matrix44` representing the transformation at the specified position,
      *         including both translation and orientation.
      */
     fun pose(t: Double): Matrix44 {
-        val rt = path.inverseRectify(t)
-        val direction = path.direction(t).normalized
-        val position = path.position(t)
-        if (t < 0) {
-            return Matrix44.fromColumnVectors(
-                frames[0][0].xyz0,
-                frames[0][1].xyz0,
-                frames[0][2].xyz0,
-                position.xyz1
-            )
-        } else
-            if (t >= 1.0) {
-                val li = frames.lastIndex
-                return Matrix44.fromColumnVectors(
-                    frames[li][0].xyz0,
-                    frames[li][1].xyz0,
-                    frames[li][2].xyz0,
-                    position.xyz1
-                )
-            } else {
-                val t0 = (rt * (frames.size - 1.0))
-                val i0 = t0.toInt().coerceIn(frames.indices)
-                val i1 = (i0 + 1).coerceIn(frames.indices)
-                val f = t0 - i0
-
-                val m0 = frames[i0]
-                val m1 = frames[i1]
-
-                val mi = rotationMinimizingFrame(m0, m1, f, direction)
-                val pi = Matrix44.fromColumnVectors(mi[0].xyz0, mi[1].xyz0, mi[2].xyz0, position.xyz1)
-                return pi
-            }
+        if (path.path.empty) return Matrix44.IDENTITY
+        val st = path.safe(t)
+        val u = path.rectify(st)
+        val position = path.path.position(u)
+        val direction = tangentAtParameter(st, u)
+        val m = frameAt(st, direction).first
+        return Matrix44.fromColumnVectors(m[0].normalized.xyz0, m[1].normalized.xyz0, direction.xyz0, position.xyz1)
     }
 
     /**
-     * Computes the numerical derivative of the pose (transformation matrix) at a specified position
-     * on the path, using central difference approximation.
+     * Computes the derivative of the pose (transformation matrix) by the rectified parameter at a specified position
+     * on the path: the translation moves along the direction of the path at the speed of its length, and the frame
+     * turns with the direction of the path and twists about it as the frames do.
      *
      * @param t The normalized position along the path, where 0.0 corresponds to the start
      *          and 1.0 corresponds to the end.
-     * @param eps The small value used for central difference approximation, representing the step size.
-     *            Defaults to 1E-6.
+     * @param eps The step by which the change of the direction of the path is measured, in the rectified parameter;
+     *            one-sided at the ends of an open path. Defaults to 1E-6.
      * @return A `Matrix44` representing the derivative of the transformation matrix at the specified position.
      */
-    fun poseDerivative(t: Double, eps: Double = 1E-2): Matrix44 {
-        return (pose(t + eps) - pose(t - eps)) / (2.0 * eps)
+    fun poseDerivative(t: Double, eps: Double = 1E-6): Matrix44 {
+        if (path.path.empty) return Matrix44.ZERO
+        val st = path.safe(t)
+        val u = path.rectify(st)
+        val direction = tangentAtParameter(st, u)
+        val (frame, twistRate) = frameAt(st, direction)
+        // the change of the direction by the rectified parameter
+        val closed = path.path.closed
+        val t0 = if (closed) st - eps else (st - eps).coerceAtLeast(0.0)
+        val t1 = if (closed) st + eps else (st + eps).coerceAtMost(1.0)
+        val dDirection = (tangentAt(t1) - tangentAt(t0)) / (t1 - t0)
+        // the angular velocity of the frame: the turn of the direction, without a spin about it, and the twist
+        val omega = (direction cross dDirection) + direction * twistRate
+        val x = frame[0].normalized
+        val y = frame[1].normalized
+        val velocity = direction * path.path.length
+        return Matrix44.fromColumnVectors(
+            (omega cross x).xyz0, (omega cross y).xyz0, (omega cross direction).xyz0, velocity.xyz0
+        )
     }
-
-
 }
+
+/** the most times the steps between the frames of a [PosePath3D] are halved */
+private const val MAX_DEPTH = 16
 
 /**
  * Generates a 3D pose path along the current rectified path. The resulting `PosePath3D`

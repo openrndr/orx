@@ -134,6 +134,33 @@ internal fun computeClosedRMF(points: List<Vector3>, tangents: List<Vector3>, in
 }
 
 /**
+ * Generates rotation minimizing frames for an open curve: the first frame carried along the curve by parallel
+ * transport, without the twist that [computeClosedRMF] spreads to make the ends of a closed curve meet.
+ *
+ * @param tangents the directions of the curve at its sampled points
+ * @param initialFrame the frame at the first point, generated from the first tangent when null
+ */
+internal fun computeOpenRMF(tangents: List<Vector3>, initialFrame: Matrix33? = null): List<Matrix33> {
+    require(tangents.isNotEmpty()) { "Need at least 1 tangent" }
+    val frames = mutableListOf(initialFrame ?: generateInitialFrame(tangents[0]))
+    for (i in 1 until tangents.size) frames.add(parallelTransport(frames[i - 1], tangents[i - 1], tangents[i]))
+    return frames
+}
+
+/**
+ * The frame at a point with the direction [tangent] whose y axis is [up] in the plane across the tangent, x pointing
+ * right; a frame from [generateInitialFrame] when [up] is along the tangent
+ */
+internal fun initialFrameWithUp(tangent: Vector3, up: Vector3): Matrix33 {
+    val z = tangent.normalized
+    val across = up - z * (up dot z)
+    if (across.length < 1E-9) return generateInitialFrame(z)
+    val y = across.normalized
+    val x = y cross z
+    return Matrix33.fromColumnVectors(x, y, z)
+}
+
+/**
  * Generate an initial orthonormal frame given a tangent vector
  */
 internal fun generateInitialFrame(tangent: Vector3): Matrix33 {
