@@ -2,7 +2,6 @@ package org.openrndr.extra.shapes.distort
 
 import org.openrndr.extra.shapes.bezierpatches.BezierPatch3D
 import org.openrndr.extra.shapes.bezierpatches.BezierVolume
-import org.openrndr.math.Vector3
 import org.openrndr.shape.Box
 import org.openrndr.shape.Path3D
 import org.openrndr.shape.Rectangle
@@ -23,10 +22,7 @@ fun Path3D.envelope(
     errorTolerance: Double = 0.5,
     maxDepth: Int = 6,
     samplesPerPiece: Int = 24
-): Path3D = distort(errorTolerance, maxDepth, samplesPerPiece) { p ->
-    val uvw = (p - basis.corner) / Vector3(basis.width, basis.height, basis.depth)
-    target.position(uvw.x, uvw.y, uvw.z)
-}
+): Path3D = distort(errorTolerance, maxDepth, samplesPerPiece) { p -> target.deform(basis, p) }
 
 /**
  * Distorts this [Path3D] by laying it onto a [target] Bezier patch: the x and y of a point in the [basis] rectangle
