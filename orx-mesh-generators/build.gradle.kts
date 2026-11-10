@@ -7,7 +7,8 @@ kotlin {
         commonMain.dependencies {
             api(openrndr.application.core)
             api(openrndr.math)
-            implementation(project(":orx-shapes"))
+            // TriangleMeshBuilder.loft takes a Loft of orx-shapes
+            api(project(":orx-shapes"))
             api(project(":orx-mesh"))
         }
 
