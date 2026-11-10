@@ -36,6 +36,24 @@ enum class GlyphPivot {
 }
 
 /**
+ * A line that [layoutTextOnContour] places text along: a [pose] at every distance along it, from 0 to [length].
+ * Implemented by [ContourBaseline] for 2D contours, and by baselines along 3D paths.
+ */
+interface TextBaseline {
+    /** the length of the baseline */
+    val length: Double
+
+    /** true when the baseline comes round to its start, so that text can wrap around it */
+    val closed: Boolean
+
+    /**
+     * The frame at [distance] along the baseline that places the outline of a glyph: its x-axis follows the baseline,
+     * its y-axis points away from the ascenders, like the y-axis of the glyph positions of [typesetText]
+     */
+    fun pose(distance: Double): Matrix44
+}
+
+/**
  * The baseline for text on a [contour]: the curve at distance [offset] from the contour, positive distances move the
  * baseline towards the ascenders of the text. Distances along the baseline map to positions on the contour.
  *
@@ -49,7 +67,7 @@ class ContourBaseline(
     val offset: Double = 0.0,
     measureOnBaseline: Boolean = true,
     samplesPerSegment: Int = 64
-) {
+) : TextBaseline {
     private val sampleCount = (contour.segments.size * samplesPerSegment).coerceAtLeast(1)
 
     // the distance along the baseline of every sample, samples are taken at equal contour t steps
@@ -66,9 +84,9 @@ class ContourBaseline(
     }
 
     /** the length of the baseline */
-    val length: Double get() = distances[sampleCount]
+    override val length: Double get() = distances[sampleCount]
 
-    val closed: Boolean get() = contour.closed
+    override val closed: Boolean get() = contour.closed
 
     // the direction of the ascenders of upright text is to the left of the direction of the contour
     private fun ascender(t: Double): Vector2 = contour.direction(t).let { Vector2(it.y, -it.x) }
@@ -95,7 +113,7 @@ class ContourBaseline(
      * The frame at [distance] along the baseline: the x-axis follows the contour, the y-axis points away from the
      * ascenders, like the y-axis of the glyph positions of [typesetText].
      */
-    fun pose(distance: Double): Matrix44 {
+    override fun pose(distance: Double): Matrix44 {
         val t = t(distance)
         val direction = contour.direction(t)
         return transform {
@@ -143,7 +161,7 @@ class ContourTextLayout(val glyphs: List<ContourGlyph>, val start: Double, val a
  */
 fun layoutTextOnContour(
     spans: List<TextSpan>,
-    baseline: ContourBaseline,
+    baseline: TextBaseline,
     style: TextStyle = TextStyle.Defaults,
     startDistance: Double = 0.0,
     anchor: Double = 0.0,
