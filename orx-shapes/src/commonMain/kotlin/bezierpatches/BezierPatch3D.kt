@@ -94,6 +94,43 @@ open class BezierPatch3DBase<C>(
         return result
     }
 
+    /** the derivatives of the cubic Bernstein polynomials at [t] */
+    private fun dcoeffs3(t: Double): DoubleArray {
+        val it = 1.0 - t
+        return doubleArrayOf(-3 * it * it, 3 * it * it - 6 * it * t, 6 * it * t - 3 * t * t, 3 * t * t)
+    }
+
+    /** the derivative of the patch along u at [u], [v] */
+    fun du(u: Double, v: Double): Vector3 {
+        val dsu = dcoeffs3(u)
+        val csv = coeffs3(v)
+        var result = Vector3.ZERO
+        for (j in 0 until 4) for (i in 0 until 4) result += points[j][i] * dsu[i] * csv[j]
+        return result
+    }
+
+    /** the derivative of the patch along v at [u], [v] */
+    fun dv(u: Double, v: Double): Vector3 {
+        val csu = coeffs3(u)
+        val dsv = dcoeffs3(v)
+        var result = Vector3.ZERO
+        for (j in 0 until 4) for (i in 0 until 4) result += points[j][i] * csu[i] * dsv[j]
+        return result
+    }
+
+    /**
+     * the normal of the patch at [u], [v]: the cross product of [du] and [dv], of unit length; where one of them
+     * vanishes, like at a corner where control points meet, from the derivatives a little inside the patch
+     */
+    fun normal(u: Double, v: Double): Vector3 {
+        val n = du(u, v).cross(dv(u, v))
+        if (n.length > 1E-12) return n.normalized
+        val e = 1E-4
+        val uu = u.coerceIn(e, 1.0 - e)
+        val vv = v.coerceIn(e, 1.0 - e)
+        return du(uu, vv).cross(dv(uu, vv)).normalized
+    }
+
     /**
      * Return a gradient vector on the patch by using its u,v parameterization
      * @param u a value between 0 and 1
