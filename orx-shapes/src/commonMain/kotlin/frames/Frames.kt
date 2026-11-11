@@ -3,8 +3,6 @@ package org.openrndr.extra.shapes.frames
 import org.openrndr.math.Matrix33
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector3
-import org.openrndr.math.Vector4
-import org.openrndr.math.transforms.buildTransform
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -13,129 +11,164 @@ import kotlin.math.min
 import kotlin.math.sin
 
 /**
- * Calculate frames (pose matrices) using parallel transport
- * @param up0 initial up vector, should not be collinear with `this[1] - this[0]`
+ * Calculates rotation minimizing frames (pose matrices) at these positions, see [frames].
+ * @param up0 the up of the first frame, as far as the direction of the path at its start allows
+ * @param closed true when the positions go round a closed path, see [frames]
  */
-
-fun List<Vector3>.frames(up0: Vector3): List<Matrix44> = frames(this, up0 = up0)
+fun List<Vector3>.frames(up0: Vector3, closed: Boolean = false): List<Matrix44> =
+    frames(this, up0 = up0, closed = closed)
 
 /**
- * Calculates a list of frame transformation matrices using parallel transport along a series of positions.
+ * Calculates rotation minimizing frames along a series of positions: one frame for every position, at that position,
+ * whose z axis is the direction of the path there and which turns as little as possible about it from frame to frame.
+ * The frames are carried from position to position by double reflection (Wang et al. 2008), which follows the frames
+ * of the curve through the positions to the fourth order of the steps between them.
+ *
+ * The first frame has its y axis along [up0], as far as the direction of the path at its start allows, and its x axis
+ * to the right: y cross z.
  *
  * @param positions a list of 3D positions defining the path.
- * @param directions an optional list of direction vectors at each position for guiding forward orientation;
- *                   if empty, directions are estimated from the positions.
+ * @param directions the directions of the path at the positions; where one is missing, empty or not finite, the
+ * direction is that of a parabola through the position and its neighbours.
  * @param up0 the initial up vector, must not have zero or NaN length.
+ * @param closed true when the positions go round a closed path: the path goes on from the last position to the first,
+ * or the last position is the first again; the twist that the frames gather in a lap is then spread over the lap, by
+ * the lengths between the positions, so that the frames meet at the start.
  * @return a list of 4x4 frame matrices corresponding to the input positions.
  */
-fun frames(positions: List<Vector3>, directions: List<Vector3> = emptyList(), up0: Vector3): List<Matrix44> {
-
+fun frames(
+    positions: List<Vector3>,
+    directions: List<Vector3> = emptyList(),
+    up0: Vector3,
+    closed: Boolean = false
+): List<Matrix44> {
     require(up0.squaredLength > 0.0) {
         "up0 ($up0) has 0 or NaN length"
     }
+    if (positions.isEmpty()) return emptyList()
+    val n = positions.size
+    // a closed path whose last position is its first again
+    val repeats = closed && n > 2 && positions.last().squaredDistanceTo(positions.first()) < 1E-24
 
-    val result = mutableListOf<Matrix44>()
-
-    if (positions.isEmpty()) {
-        return emptyList()
+    val tangents = List(n) { i ->
+        directions.getOrNull(i)?.takeIf { it.squaredLength > 1E-24 && it.x.isFinite() && it.y.isFinite() && it.z.isFinite() }
+            ?.normalized ?: estimateTangent(positions, i, closed, repeats)
     }
 
-    if (positions.size == 1) {
-        return listOf(Matrix44.IDENTITY)
-    }
+    // the up of every frame, carried from position to position
+    val ups = ArrayList<Vector3>(n)
+    ups.add(initialFrameWithUp(tangents[0], up0)[1])
+    for (i in 1 until n) ups.add(reflect(ups[i - 1], positions[i - 1], tangents[i - 1], positions[i], tangents[i], up0))
 
-    var up = up0.normalized
-    run {
-        val current = positions[0]
-        val next = positions[1]
-        val forward = (directions.getOrNull(0) ?: (next - current)).normalized
-        var right = (up cross forward).normalized
-        up = ((forward cross right)).normalized
-        right = (up cross forward).normalized
-        val frame = Matrix44.fromColumnVectors(right.xyz0, up.xyz0, forward.xyz0, current.xyz1)
-        require(frame.determinant in 0.99..1.01) {
-            "Initial frame determinant (${frame.determinant}) != 1.0"
+    if (closed && n > 2) {
+        // the up carried on round to the start, against the first up: the twist of a lap
+        val end = if (repeats) ups.last()
+        else reflect(ups.last(), positions.last(), tangents.last(), positions[0], tangents[0], up0)
+        val z = tangents[0]
+        val a = ups[0]
+        val twist = atan2((end cross a) dot z, (end dot a).coerceIn(-1.0, 1.0))
+        // spread by the lengths from the start
+        val lengths = DoubleArray(n)
+        for (i in 1 until n) lengths[i] = lengths[i - 1] + positions[i].distanceTo(positions[i - 1])
+        val lap = if (repeats) lengths.last() else lengths.last() + positions.last().distanceTo(positions[0])
+        if (lap > 0.0) {
+            for (i in 0 until n) {
+                val angle = twist * lengths[i] / lap
+                val t = tangents[i]
+                ups[i] = ups[i] * cos(angle) + (t cross ups[i]) * sin(angle)
+            }
         }
-
-        result.add(frame)
     }
 
-    for (i in 1 until positions.size - 1) {
-        val prev = positions[i - 1]
-        val current = positions[i]
-        val next = positions[i + 1]
-        val f1 = (next - current).normalized
-        val f0 = (current - prev).normalized
-
-        val forward = (directions.getOrNull(i) ?: (f0 + f1)).normalized
-        require(forward.length > 0.0) { "`forward.length` is zero or NaN in .frames()" }
-        var right = (up cross forward).normalized
-        up = ((forward cross right)).normalized
-        right = (up cross forward).normalized
-
-        require(up.length > 0.0) { "`up.length` is zero or NaN in .frames()" }
-        require(right.length > 0.0) { "`right.length` is zero or NaN in .frames()" }
-
-        val orientation = Matrix44.fromColumnVectors(right.xyz0, up.xyz0, forward.xyz0, Vector4.UNIT_W)
-        require(orientation.determinant in 0.99..1.01) {
-            "Orientation determinant ${orientation.determinant} != 1.0"
-        }
-
-        val m = buildTransform {
-            translate(current)
-            multiply(orientation)
-        }
-
-        result.add(m)
+    return List(n) { i ->
+        val z = tangents[i]
+        val y = ups[i]
+        val x = (y cross z).normalized
+        Matrix44.fromColumnVectors(x.xyz0, y.xyz0, z.xyz0, positions[i].xyz1)
     }
-    return result
 }
 
 /**
- * Generates rotation minimizing frames for a closed curve.
- *
- * @param points Sampled points on the closed curve where points[0] ≈ points[N-1]
- * @param tangents
- * @param initialFrame Optional initial frame at points[0]. If null, generates one.
- * @return List of orthonormal frames (Matrix33) for each point
+ * The up [up] of a frame at [p0] with direction [t0] carried to [p1] with direction [t1] by double reflection: across
+ * the plane between the positions, then across the plane between the reflected direction and [t1]
  */
-internal fun computeClosedRMF(points: List<Vector3>, tangents: List<Vector3>, initialFrame: Matrix33? = null): List<Matrix33> {
-    val n = points.size
-    require(n >= 3) { "Need at least 3 points" }
+private fun reflect(up: Vector3, p0: Vector3, t0: Vector3, p1: Vector3, t1: Vector3, up0: Vector3): Vector3 {
+    var r = up
+    var t = t0
+    val v1 = p1 - p0
+    val c1 = v1 dot v1
+    if (c1 > 1E-24) {
+        r -= v1 * (2.0 / c1 * (v1 dot r))
+        t -= v1 * (2.0 / c1 * (v1 dot t))
+    }
+    val v2 = t1 - t
+    val c2 = v2 dot v2
+    if (c2 > 1E-24) {
+        r -= v2 * (2.0 / c2 * (v2 dot r))
+    }
+    // across the new direction, of unit length
+    val across = r - t1 * (r dot t1)
+    return if (across.squaredLength > 1E-24) across.normalized else initialFrameWithUp(t1, up0)[1]
+}
 
-    // Step 2: Generate initial frame at point 0 if not provided
-    val frame0 = initialFrame ?: generateInitialFrame(tangents[0])
+/**
+ * The direction at position [i] of a parabola through it and its neighbours, by the distances between them; at the
+ * ends of an open path through the end and the two positions next to it. Positions at the same place are passed over.
+ */
+private fun estimateTangent(positions: List<Vector3>, i: Int, closed: Boolean, repeats: Boolean): Vector3 {
+    val n = positions.size
+    if (n < 2) return Vector3.UNIT_Z
+    // the positions of a lap, without the repeated start
+    val m = if (repeats) n - 1 else n
+    val start = if (repeats && i == n - 1) 0 else i
+    val p = positions[start]
 
-    // Step 3: Propagate frames around the loop (without closure constraint)
-    val frames = mutableListOf(frame0)
-    for (i in 1 until n) {
-        val prevFrame = frames[i - 1]
-        val prevTangent = tangents[i - 1]
-        val currTangent = tangents[i]
-
-        val newFrame = parallelTransport(prevFrame, prevTangent, currTangent)
-        frames.add(newFrame)
+    // the index of the nearest position from [from] in the direction of [step] that is not at [at]
+    fun next(from: Int, step: Int, at: Vector3): Int? {
+        var j = from
+        repeat(m) {
+            j += step
+            if (closed) j = ((j % m) + m) % m else if (j !in 0 until n) return null
+            if (positions[j].squaredDistanceTo(at) > 1E-24) return j
+        }
+        return null
     }
 
-    // Step 4: Measure the closure error (twist accumulated around the loop)
-    val finalFrame = frames[n - 1]
-    val closureError = computeClosureError(frame0, finalFrame, tangents[0])
-
-    // Step 5: Distribute the closure error evenly around the curve
-    val correctedFrames = mutableListOf<Matrix33>()
-    for (i in 0 until n) {
-        val t = i.toDouble() / (n - 1).toDouble()
-        val twist = -closureError * t  // Negative to cancel out the error
-        val twistedFrame = applyTwist(frames[i], tangents[i], twist)
-        correctedFrames.add(twistedFrame)
+    val b = next(start, -1, p)
+    val a = next(start, 1, p)
+    // the derivative at the first of three positions with distances h0 and h1 between them
+    fun endDerivative(p0: Vector3, p1: Vector3, p2: Vector3): Vector3 {
+        val h0 = p1.distanceTo(p0)
+        val h1 = p2.distanceTo(p1)
+        return (p1 - p0) * ((2 * h0 + h1) / (h0 * (h0 + h1))) - (p2 - p1) * (h0 / (h1 * (h0 + h1)))
     }
-
-    return correctedFrames
+    return when {
+        b != null && a != null -> {
+            val before = positions[b]
+            val after = positions[a]
+            val h0 = p.distanceTo(before)
+            val h1 = after.distanceTo(p)
+            ((p - before) * (h1 / (h0 * (h0 + h1))) + (after - p) * (h0 / (h1 * (h0 + h1)))).normalized
+        }
+        a != null -> {
+            // the start of an open path, by the next two positions
+            val further = next(a, 1, positions[a])
+            if (further == null) (positions[a] - p).normalized
+            else endDerivative(p, positions[a], positions[further]).normalized
+        }
+        b != null -> {
+            // the end of an open path, by the two positions before it, as the start of the path backwards
+            val further = next(b, -1, positions[b])
+            if (further == null) (p - positions[b]).normalized
+            else -endDerivative(p, positions[b], positions[further]).normalized
+        }
+        else -> Vector3.UNIT_Z
+    }
 }
 
 /**
  * Generates rotation minimizing frames for an open curve: the first frame carried along the curve by parallel
- * transport, without the twist that [computeClosedRMF] spreads to make the ends of a closed curve meet.
+ * transport, without a twist to make the ends of a closed curve meet.
  *
  * @param tangents the directions of the curve at its sampled points
  * @param initialFrame the frame at the first point, generated from the first tangent when null
