@@ -1,12 +1,12 @@
 package org.openrndr.extra.meshgenerators
 
-import org.openrndr.extra.shapes.frames.frames
 import org.openrndr.extra.shapes.pose.pose
 import org.openrndr.extra.shapes.rectify.rectified
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.asRadians
+import org.openrndr.math.transforms.normalMatrix
 import org.openrndr.shape.Path3D
 import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
@@ -39,8 +39,8 @@ fun contourSegmentWithNormals(
         val n0 = linearContourNormals[i]
         val n1 = linearContourNormals[(i + 1).mod(linearContourNormals.size)]
 
-        val nframe0 = frame0 //.inversed
-        val nframe1 = frame1//.inversed
+        val nframe0 = normalMatrix(frame0)
+        val nframe1 = normalMatrix(frame1)
 
         val v00 = (frame0 * v0.xy01).xyz
         val v01 = (frame0 * v1.xy01).xyz
@@ -49,11 +49,12 @@ fun contourSegmentWithNormals(
         val v11 = (frame1 * v1.xy01).xyz
 
         val faceNormal = ((v10 - v00).normalized cross (v01 - v00).normalized).normalized
-        val n00 = if (useFaceNormals) faceNormal else (nframe0 * n0.xy01).xyz
-        val n01 = if (useFaceNormals) faceNormal else (nframe0 * n1.xy01).xyz
+        // normals are directions: transformed without the translation of the frames
+        val n00 = if (useFaceNormals) faceNormal else (nframe0 * n0.xy00).xyz.normalized
+        val n01 = if (useFaceNormals) faceNormal else (nframe0 * n1.xy00).xyz.normalized
 
-        val n10 = if (useFaceNormals) faceNormal else (nframe1 * n0.xy01).xyz
-        val n11 = if (useFaceNormals) faceNormal else (nframe1 * n1.xy01).xyz
+        val n10 = if (useFaceNormals) faceNormal else (nframe1 * n0.xy00).xyz.normalized
+        val n11 = if (useFaceNormals) faceNormal else (nframe1 * n1.xy00).xyz.normalized
 
         quadToTris(v00, v01, v10, v11, n00, n01, n10, n11, writer)
     }
@@ -167,8 +168,7 @@ fun contourSegmentWithNormals(
  * @param up0 the initial up-vector
  * @param contourDistanceTolerance precision for calculating steps along
  * [contour]. Lower tolerance results in higher precision.
- * @param pathDistanceTolerance precision for calculating steps along
- * [path]. Lower tolerance results in higher precision.
+ * @param pathDistanceTolerance no longer used: the steps are at equal distances along [path]
  * @param steps the resulting positions in the path
  * @param frames a list of matrices holding the transformation matrices along
  * the path
@@ -183,29 +183,15 @@ fun extrudeContourSteps(
     up0: Vector3,
     contourDistanceTolerance: Double = 0.5,
     pathDistanceTolerance: Double = 0.5,
-    steps: List<Vector3> = path.equidistantPositions(
-        stepCount,
-        pathDistanceTolerance
-    ),
-    frames: List<Matrix44> = steps.frames(up0),
+    steps: List<Vector3> = path.evenSteps(stepCount),
+    frames: List<Matrix44> = path.posesAt(steps, up0),
     startCap: Boolean = true,
     endCap: Boolean = true,
     useFaceNormals: Boolean,
     writer: VertexWriter
 ) {
-    val linearContour = contour.sampleLinear(contourDistanceTolerance)
-    val linearContourPointsWithT = contour.adaptivePositionsWithT(contourDistanceTolerance)
-    val linearContourPoints = linearContourPointsWithT.map { it.first }
-    val linearContourNormals = linearContourPointsWithT.map { contour.normal(it.second) }
-    val finalFrames = if (path.closed) frames + frames.first() else frames
-
-    // First add caps
-    extrudeCaps(linearContour.shape, path, startCap, endCap, frames, writer)
-
-    // Then add sides
-    finalFrames.windowed(2, 1).forEach {
-        contourSegmentWithNormals(linearContourPoints, linearContourNormals, it[0], it[1], writer, useFaceNormals)
-    }
+    val loops = crossSectionLoops(listOf(contour), contourDistanceTolerance)
+    extrudeLoops(loops, frameRows(frames, path.closed), path.closed, startCap, endCap, useFaceNormals, writer)
 }
 
 typealias ScalarFunction = (Double) -> Double
@@ -319,26 +305,14 @@ fun extrudeContourAdaptive(
     contourDistanceTolerance: Double = 0.5,
     pathDistanceTolerance: Double = 0.5,
     steps: List<Vector3> = path.adaptivePositions(pathDistanceTolerance),
-    frames: List<Matrix44> = steps.frames(up0),
+    frames: List<Matrix44> = path.posesAt(steps, up0),
     startCap: Boolean = true,
     endCap: Boolean = true,
     useFaceNormals: Boolean,
     writer: VertexWriter
 ) {
-    val linearContour = contour.sampleLinear(contourDistanceTolerance)
-    val linearContourPointsWithT = contour.adaptivePositionsWithT(contourDistanceTolerance)
-    val linearContourPoints = linearContourPointsWithT.map { it.first }
-    val linearContourNormals = linearContourPointsWithT.map { contour.normal(it.second) }
-
-    val finalFrames = if (path.closed) frames + frames.first() else frames
-
-    // First add caps
-    extrudeCaps(linearContour.shape, path, startCap, endCap, finalFrames, writer)
-
-    // Then add sides
-    finalFrames.windowed(2, 1).forEach {
-        contourSegmentWithNormals(linearContourPoints, linearContourNormals, it[0], it[1], writer, useFaceNormals)
-    }
+    val loops = crossSectionLoops(listOf(contour), contourDistanceTolerance)
+    extrudeLoops(loops, frameRows(frames, path.closed), path.closed, startCap, endCap, useFaceNormals, writer)
 }
 
 /**
@@ -350,8 +324,7 @@ fun extrudeContourAdaptive(
  * @param up0 the initial up-vector
  * @param contourDistanceTolerance precision for calculating steps along
  * [shape]. Lower tolerance results in higher precision.
- * @param pathDistanceTolerance precision for calculating steps along
- * [path]. Lower tolerance results in higher precision.
+ * @param pathDistanceTolerance no longer used: the steps are at equal distances along [path]
  * @param steps the resulting positions in the path
  * @param frames a list of matrices holding the transformation matrices along
  * the path
@@ -366,35 +339,15 @@ fun extrudeShapeSteps(
     up0: Vector3,
     contourDistanceTolerance: Double = 0.5,
     pathDistanceTolerance: Double = 0.5,
-    steps: List<Vector3> = path.equidistantPositions(stepCount, pathDistanceTolerance),
-    frames: List<Matrix44> = steps.frames(up0),
+    steps: List<Vector3> = path.evenSteps(stepCount),
+    frames: List<Matrix44> = path.posesAt(steps, up0),
     startCap: Boolean,
     endCap: Boolean,
     useFaceNormals: Boolean,
     writer: VertexWriter
 ) {
-    val linearShape = Shape(shape.contours.map { it.contour.sampleLinear(contourDistanceTolerance) })
-
-    // First add caps
-    extrudeCaps(linearShape, path, startCap, endCap, frames, writer)
-
-    // Then add sides
-    for (contour in linearShape.contours) {
-        extrudeContourSteps(
-            contour,
-            path,
-            stepCount,
-            up0,
-            contourDistanceTolerance,
-            pathDistanceTolerance,
-            steps,
-            frames,
-            startCap = false,
-            endCap = false,
-            useFaceNormals,
-            writer
-        )
-    }
+    val loops = crossSectionLoops(shape.contours, contourDistanceTolerance)
+    extrudeLoops(loops, frameRows(frames, path.closed), path.closed, startCap, endCap, useFaceNormals, writer)
 }
 
 fun TriangleMeshBuilder.extrudeShape(
@@ -438,36 +391,9 @@ fun extrudeShape(
     useFaceNormals: Boolean,
     writer: VertexWriter
 ) {
-    val linearShape = Shape(shape.contours.map { it.contour.sampleLinear(contourDistanceTolerance) })
-
-    val rectified = path.rectified(pathDistanceTolerance, 1.0)
-    val pose = rectified.pose(up0)
-
-    // the poses at the points, which are at equal steps of the rectified parameter
-    val rts = rectified.points.indices.map { it / (rectified.points.size - 1.0) }
-    val frames = rts.map { pose.pose(it) }
-    val dframes = rts.map { pose.poseDerivative(it) }
-
-    // First add caps
-    extrudeCaps(linearShape, path, startCap, endCap, frames, writer)
-
-    // Then add sides
-    for (contour in linearShape.contours) {
-        extrudeContourStepsScaled(
-            contour,
-            path,
-            scale,
-            torsion,
-            contourDistanceTolerance,
-            frames,
-            dframes,
-            rectified.points.map { it.second }.toDoubleArray(),
-            startCap = false,
-            endCap = false,
-            useFaceNormals = useFaceNormals,
-            writer
-        )
-    }
+    val loops = crossSectionLoops(shape.contours, contourDistanceTolerance)
+    val rows = scaledRows(path, scale, torsion, up0, pathDistanceTolerance)
+    extrudeLoops(loops, rows, path.closed, startCap, endCap, useFaceNormals, writer)
 }
 
 /**
@@ -495,33 +421,14 @@ fun extrudeShapeAdaptive(
     contourDistanceTolerance: Double = 0.5,
     pathDistanceTolerance: Double = 0.5,
     steps: List<Vector3> = path.adaptivePositions(pathDistanceTolerance),
-    frames: List<Matrix44> = steps.frames(up0),
+    frames: List<Matrix44> = path.posesAt(steps, up0),
     startCap: Boolean,
     endCap: Boolean,
     useFaceNormals: Boolean,
     writer: VertexWriter
 ) {
-    val linearShape = Shape(shape.contours.map { it.contour.sampleLinear(contourDistanceTolerance) })
-
-    // First add caps
-    extrudeCaps(linearShape, path, startCap, endCap, frames, writer)
-
-    // Then add sides
-    for (contour in linearShape.contours) {
-        extrudeContourAdaptive(
-            contour,
-            path,
-            up0,
-            contourDistanceTolerance,
-            pathDistanceTolerance,
-            steps,
-            frames,
-            startCap,
-            endCap,
-            useFaceNormals,
-            writer
-        )
-    }
+    val loops = crossSectionLoops(shape.contours, contourDistanceTolerance)
+    extrudeLoops(loops, frameRows(frames, path.closed), path.closed, startCap, endCap, useFaceNormals, writer)
 }
 
 /**
@@ -533,8 +440,7 @@ fun extrudeShapeAdaptive(
  * @param up0 the up-vector
  * @param contourDistanceTolerance precision for calculating steps along
  * [shape]. Lower tolerance results in higher precision.
- * @param pathDistanceTolerance precision for calculating steps along
- * [path]. Lower tolerance results in higher precision.
+ * @param pathDistanceTolerance no longer used: the steps are at equal distances along [path]
  * @param startCap adds a start cap if set to true
  * @param endCap adds an end cap if set to true
  */
@@ -605,8 +511,7 @@ fun TriangleMeshBuilder.extrudeShapeAdaptive(
  * @param up0 the initial up-vector
  * @param contourDistanceTolerance precision for calculating steps along
  * [contour]. Lower tolerance results in higher precision.
- * @param pathDistanceTolerance precision for calculating steps along
- * [path]. Lower tolerance results in higher precision.
+ * @param pathDistanceTolerance no longer used: the steps are at equal distances along [path]
  */
 fun TriangleMeshBuilder.extrudeContourSteps(
     contour: ShapeContour,
