@@ -34,7 +34,8 @@ fun ShapeContour.distort(
 ): ShapeContour {
 
     return ShapeContour(
-    segments.flatMap { it.distort(errorTolerance, maxDepth, samplesPerPiece, distort) },
-        closed
+        segments.flatMap { it.distort(errorTolerance, maxDepth, samplesPerPiece, distort) },
+        closed,
+        polarity
     )
 }

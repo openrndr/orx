@@ -10,7 +10,8 @@ import org.openrndr.shape.Path3D
  *
  * The distortion function is applied independently to each point of the path, and the distorted points are
  * approximated by cubic segments, split adaptively based on the error tolerance and depth limit. Every piece starts
- * and ends at the distorted ends of its part of the path, so pieces join exactly.
+ * and ends at the distorted ends of its part of the path, so pieces join exactly, and pieces join smoothly wherever the
+ * distorted path is smooth.
  *
  * @param errorTolerance The maximum allowed RMS error (in the same units as the path's coordinates) before a segment
  *                       is subdivided. Higher values result in less precise approximations but faster processing.
