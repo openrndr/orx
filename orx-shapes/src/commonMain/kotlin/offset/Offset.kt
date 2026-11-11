@@ -511,28 +511,35 @@ internal fun arcSegments(center: Vector2, from: Vector2, to: Vector2, radius: Do
 
 /**
  * The region bounded by the offset [curve] of this closed contour at [distance]: the faces of the arrangement of the
- * curve with itself whose points lie in the offset region, bounded by the edges they share with the faces that don't.
- * Faces too thin to have a point inside, or whose point is within the fit tolerance of the region's boundary, like the
- * slivers between the crossing sides of a fold, are decided by the faces around them, so that they don't leave specks
- * or pinholes.
+ * curve with itself whose points lie in the offset region, by their distance to this contour and the side they are on,
+ * see [faceRegion]. Points within the fit tolerance of the region's boundary are left to the faces around them.
  */
 private fun ShapeContour.offsetRegion(curve: ShapeContour, distance: Double, errorTolerance: Double): Shape {
+    val margin = 4.0 * errorTolerance
+    val inside = shape
+    return faceRegion(curve, polarity) { p ->
+        val d = nearest(p).position.distanceTo(p)
+        val within = p in inside
+        // how far inside the region p lies
+        val beyond = if (distance < 0.0) (if (within) d + distance else -d + distance) else (if (within) d + distance else distance - d)
+        if (abs(beyond) <= margin) null else beyond > 0.0
+    }
+}
+
+/**
+ * The region of the faces of the arrangement of [curve] with itself that [keep] keeps, bounded by the edges between
+ * them and the other faces, as contours with [polarity]: holes run the other way around than outlines.
+ *
+ * [keep] decides a face by a point well inside it, or returns null when it can't tell; faces too thin to have a point
+ * inside, and faces [keep] can't decide, like the slivers between nearly coinciding stretches of the curve, follow the
+ * faces around them, by the length of the edges they share, so that they don't leave specks or pinholes.
+ */
+internal fun faceRegion(curve: ShapeContour, polarity: YPolarity, keep: (Vector2) -> Boolean?): Shape {
     val arrangement = org.openrndr.extra.shapes.arrangement.Arrangement(
         listOf(curve, curve), maxIters = 4 * curve.segments.size + 1000
     )
-    val margin = 4.0 * errorTolerance
-    val inside = shape
     // how far inside a face, from an edge, a point is taken when the face is too thin to triangulate
     val probe = 1E-6 * (curve.bounds.width + curve.bounds.height)
-
-    /** whether [p] lies in the offset region, or null when it is too close to the region's boundary to tell */
-    fun inRegion(p: Vector2): Boolean? {
-        val d = nearest(p).position.distanceTo(p)
-        val within = p in inside
-        val beyond = if (distance < 0.0) (if (within) d + distance else -d + distance) else (if (within) d + distance else distance - d)
-        // beyond is how far inside the region p lies
-        return if (abs(beyond) <= margin) null else beyond > 0.0
-    }
 
     val faces = arrangement.faces
     val walks = arrangement.halfEdges.groupBy { it.face }
@@ -547,8 +554,8 @@ private fun ShapeContour.offsetRegion(curve: ShapeContour, distance: Double, err
         val p = interiorPoint(face.shape) ?: walks[face]?.maxByOrNull { it.contour.length }?.let { h ->
             h.contour.position(0.5) - h.contour.normal(0.5) * probe
         }
-        val keep = p?.let { inRegion(it) }
-        if (keep == null) undecided.add(face) else decided[face] = keep
+        val kept = p?.let { keep(it) }
+        if (kept == null) undecided.add(face) else decided[face] = kept
     }
     // undecided faces follow the decided faces around them, by the length of the edges they share
     repeat(undecided.size + 1) {

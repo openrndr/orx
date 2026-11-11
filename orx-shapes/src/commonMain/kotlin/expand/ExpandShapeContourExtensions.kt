@@ -1,25 +1,27 @@
 package org.openrndr.extra.shapes.expand
 
 import offset.arcSegments
+import offset.faceRegion
 import offset.offset
 import offset.offsetCurve
 import offset.withoutTinySegments
 import org.openrndr.draw.LineCap
+import org.openrndr.extra.shapes.distort.FoldMode
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Segment2D
 import org.openrndr.shape.SegmentJoin
 import org.openrndr.shape.Shape
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.difference
-import org.openrndr.shape.removeSelfIntersections
 
 /**
  * Expands this contour into the filled outline of a stroke of width [weight].
  *
- * An open contour is offset by half the [weight] to both sides, the two offsets are connected at the ends with caps of
- * type [cap] and the resulting closed outline is resolved with [ShapeContour.removeSelfIntersections], such that
- * stretches where the stroke overlaps itself are merged. A closed contour expands to the ring between its outward and
- * inward offsets, [cap] is not used then.
+ * An open contour is offset by half the [weight] to both sides, with the folds of the offsets kept, and the two offsets
+ * are connected at the ends with caps of type [cap] into a closed outline. The stroke is what that outline winds around
+ * (the non-zero rule, as a stroke is filled), read off the [org.openrndr.extra.shapes.arrangement.Arrangement] of the
+ * outline with itself: stretches where the stroke overlaps itself, and the folds of tight bends, are merged into it. A
+ * closed contour expands to the ring between its outward and inward offsets, [cap] is not used then.
  *
  * @param weight the width of the stroke
  * @param join how the offsets are joined at sharp corners of the contour
@@ -45,8 +47,8 @@ fun ShapeContour.expand(
         return if (inner.empty) outer else outer.difference(inner)
     }
 
-    val left = offsetCurve(halfWeight, join, errorTolerance, sampleDistance)
-    val right = offsetCurve(-halfWeight, join, errorTolerance, sampleDistance).reversed
+    val left = offsetCurve(halfWeight, join, errorTolerance, sampleDistance, FoldMode.FOLD)
+    val right = offsetCurve(-halfWeight, join, errorTolerance, sampleDistance, FoldMode.FOLD).reversed
     if (left.empty || right.empty) {
         return Shape(emptyList())
     }
@@ -89,7 +91,30 @@ fun ShapeContour.expand(
     }
 
     val outline = ShapeContour(segments, true, polarity).withoutTinySegments()
-    return if (outline.empty) Shape(emptyList()) else outline.removeSelfIntersections()
+    if (outline.empty) {
+        return Shape(emptyList())
+    }
+    // the winding number of the outline around a point, on a fine polygon of it; points too close to the outline to
+    // tell are left to the faces around them
+    val polygon = outline.adaptivePositions(errorTolerance / 4.0)
+    val margin = 2.0 * errorTolerance
+    return faceRegion(outline, polarity) { p ->
+        if (outline.nearest(p).position.distanceTo(p) < margin) return@faceRegion null
+        var winding = 0
+        var j = polygon.size - 1
+        for (i in polygon.indices) {
+            val a = polygon[j]
+            val b = polygon[i]
+            val cross = (b.x - a.x) * (p.y - a.y) - (p.x - a.x) * (b.y - a.y)
+            if (a.y <= p.y) {
+                if (b.y > p.y && cross > 0) winding++
+            } else if (b.y <= p.y && cross < 0) {
+                winding--
+            }
+            j = i
+        }
+        winding != 0
+    }
 }
 
 /**
