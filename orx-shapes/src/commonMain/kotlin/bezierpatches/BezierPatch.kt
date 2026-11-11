@@ -32,10 +32,32 @@ open class BezierPatchBase<C>(
         require(colors.isEmpty() || colors.size == 4 && colors.all { it.size == 4 })
     }
 
+    // the coordinates of the control points, row by row, for evaluation without allocations
+    private val xs = DoubleArray(16) { points[it / 4][it % 4].x }
+    private val ys = DoubleArray(16) { points[it / 4][it % 4].y }
+
+    /** the sum over the control points, weighted by [a0]..[a3] along u and [b0]..[b3] along v */
+    private fun combine(
+        a0: Double, a1: Double, a2: Double, a3: Double,
+        b0: Double, b1: Double, b2: Double, b3: Double
+    ): Vector2 {
+        var rx = 0.0
+        var ry = 0.0
+        for (j in 0 until 4) {
+            val b = when (j) {
+                0 -> b0; 1 -> b1; 2 -> b2; else -> b3
+            }
+            val o = j * 4
+            rx += (xs[o] * a0 + xs[o + 1] * a1 + xs[o + 2] * a2 + xs[o + 3] * a3) * b
+            ry += (ys[o] * a0 + ys[o + 1] * a1 + ys[o + 2] * a2 + ys[o + 3] * a3) * b
+        }
+        return Vector2(rx, ry)
+    }
+
     /**
      * Return a transposed version of the bezier path by transposing the [points] matrix
      */
-    val transposed
+    open val transposed: BezierPatchBase<C>
         get() = BezierPatchBase(
             listOf(
                 listOf(points[0][0], points[1][0], points[2][0], points[3][0]),
@@ -53,7 +75,7 @@ open class BezierPatchBase<C>(
             }
         )
 
-    fun transform(transform: Matrix44) = BezierPatchBase(points.map { r ->
+    open fun transform(transform: Matrix44): BezierPatchBase<C> = BezierPatchBase(points.map { r ->
         r.map { (transform * it.xy01).div.xy }
     }, colors)
 
@@ -78,23 +100,35 @@ open class BezierPatchBase<C>(
      * @param u a value between 0 and 1
      * @param v a value between 0 and 1
      */
-    fun position(u: Double, v: Double): Vector2 {
-        val csu = coeffs3(u)
-        val csv = coeffs3(v)
-        var result = Vector2.ZERO
-        for (j in 0 until 4) {
-            for (i in 0 until 4) {
-                result += points[j][i] * csu[i] * csv[j]
-            }
-        }
-        return result
-    }
+    fun position(u: Double, v: Double): Vector2 = combine(
+        bernstein3(u, 0), bernstein3(u, 1), bernstein3(u, 2), bernstein3(u, 3),
+        bernstein3(v, 0), bernstein3(v, 1), bernstein3(v, 2), bernstein3(v, 3)
+    )
+
+    /** the derivative of the patch along u at [u], [v] */
+    fun du(u: Double, v: Double): Vector2 = combine(
+        dbernstein3(u, 0), dbernstein3(u, 1), dbernstein3(u, 2), dbernstein3(u, 3),
+        bernstein3(v, 0), bernstein3(v, 1), bernstein3(v, 2), bernstein3(v, 3)
+    )
+
+    /** the derivative of the patch along v at [u], [v] */
+    fun dv(u: Double, v: Double): Vector2 = combine(
+        bernstein3(u, 0), bernstein3(u, 1), bernstein3(u, 2), bernstein3(u, 3),
+        dbernstein3(v, 0), dbernstein3(v, 1), dbernstein3(v, 2), dbernstein3(v, 3)
+    )
+
+    /** the mixed derivative of the patch along u and v at [u], [v]: the twist vector */
+    fun duv(u: Double, v: Double): Vector2 = combine(
+        dbernstein3(u, 0), dbernstein3(u, 1), dbernstein3(u, 2), dbernstein3(u, 3),
+        dbernstein3(v, 0), dbernstein3(v, 1), dbernstein3(v, 2), dbernstein3(v, 3)
+    )
 
     /**
-     * Return a gradient vector on the patch by using its u,v parameterization
+     * A ninth of the mixed derivative of the patch along u and v, [duv], at [u], [v]; not a gradient
      * @param u a value between 0 and 1
      * @param v a value between 0 and 1
      */
+    @Deprecated("A ninth of the mixed derivative, not a gradient", ReplaceWith("duv(u, v) / 9.0"))
     fun gradient(u: Double, v: Double): Vector2 {
         val f0 = List(4) { MutableList(3) { Vector2.ZERO } }
         for (j in 0 until 4) {
@@ -150,43 +184,35 @@ open class BezierPatchBase<C>(
     }
 
     /**
-     * Extract a sub-patch based on uv parameterization
+     * Extract a sub-patch based on uv parameterization, with its colors
      */
-    fun sub(u0: Double, v0: Double, u1: Double, v1: Double): BezierPatchBase<C> {
-        val c0 = Segment2D(points[0][0], points[0][1], points[0][2], points[0][3]).sub(u0, u1)
-        val c1 = Segment2D(points[1][0], points[1][1], points[1][2], points[1][3]).sub(u0, u1)
-        val c2 = Segment2D(points[2][0], points[2][1], points[2][2], points[2][3]).sub(u0, u1)
-        val c3 = Segment2D(points[3][0], points[3][1], points[3][2], points[3][3]).sub(u0, u1)
+    open fun sub(u0: Double, v0: Double, u1: Double, v1: Double): BezierPatchBase<C> = BezierPatchBase(
+        subGrid(points, u0, v0, u1, v1, { p, w -> p * w }, { a, b -> a + b }),
+        if (colors.isEmpty()) emptyList() else subGrid(colors, u0, v0, u1, v1, { c, w -> c * w }, { a, b -> a + b })
+    )
 
-        val sub0 = bezierPatch(c0, c1, c2, c3)
-        val d0 = Segment2D(sub0.points[0][0], sub0.points[1][0], sub0.points[2][0], sub0.points[3][0]).sub(v0, v1)
-        val d1 = Segment2D(sub0.points[0][1], sub0.points[1][1], sub0.points[2][1], sub0.points[3][1]).sub(v0, v1)
-        val d2 = Segment2D(sub0.points[0][2], sub0.points[1][2], sub0.points[2][2], sub0.points[3][2]).sub(v0, v1)
-        val d3 = Segment2D(sub0.points[0][3], sub0.points[1][3], sub0.points[2][3], sub0.points[3][3]).sub(v0, v1)
-
-        return fromSegments<C>(d0, d1, d2, d3).transposed
-    }
-
-    val contour: ShapeContour = ShapeContour(
+    val contour: ShapeContour by lazy {
+        ShapeContour(
         listOf(
             Segment2D(points[0][0], points[0][1], points[0][2], points[0][3]),
             Segment2D(points[0][3], points[1][3], points[2][3], points[3][3]),
             Segment2D(points[3][3], points[3][2], points[3][1], points[3][0]),
             Segment2D(points[3][0], points[2][0], points[1][0], points[0][0]),
         ), true
-    )
+        )
+    }
 
-    operator fun times(scale: Double) =
+    open operator fun times(scale: Double): BezierPatchBase<C> =
         BezierPatchBase(
             points.map { j -> j.map { i -> i * scale } },
             if (colors.isEmpty()) colors else colors.map { j -> j.map { i -> i * scale } }
         )
 
-    operator fun div(scale: Double) =
+    open operator fun div(scale: Double): BezierPatchBase<C> =
         BezierPatchBase(points.map { j -> j.map { i -> i / scale } },
             if (colors.isEmpty()) colors else colors.map { j -> j.map { i -> i / scale } }
         )
-    operator fun plus(right: BezierPatchBase<C>) =
+    open operator fun plus(right: BezierPatchBase<C>): BezierPatchBase<C> =
         BezierPatchBase(List(4) { j -> List(4) { i -> points[j][i] + right.points[j][i] } },
             if (colors.isEmpty() && right.colors.isEmpty()) { colors }
             else if (colors.isEmpty() && right.colors.isNotEmpty()) { right.colors }
@@ -194,7 +220,7 @@ open class BezierPatchBase<C>(
             else { List(4) { j -> List(4) { i -> colors[j][i] + right.colors[j][i] } } }
             )
 
-    operator fun minus(right: BezierPatchBase<C>) =
+    open operator fun minus(right: BezierPatchBase<C>): BezierPatchBase<C> =
         BezierPatchBase(List(4) { j -> List(4) { i -> points[j][i] - right.points[j][i] } },
             if (colors.isEmpty() && right.colors.isEmpty()) { colors }
             else if (colors.isEmpty() && right.colors.isNotEmpty()) { right.colors }
@@ -226,7 +252,17 @@ open class BezierPatchBase<C>(
 }
 
 class BezierPatch(points: List<List<Vector2>>, colors: List<List<ColorRGBa>> = emptyList()) :
-    BezierPatchBase<ColorRGBa>(points, colors), GeometricPrimitive2D
+    BezierPatchBase<ColorRGBa>(points, colors), GeometricPrimitive2D {
+    private fun BezierPatchBase<ColorRGBa>.typed() = BezierPatch(points, colors)
+
+    override val transposed: BezierPatch get() = super.transposed.typed()
+    override fun transform(transform: Matrix44): BezierPatch = super.transform(transform).typed()
+    override fun sub(u0: Double, v0: Double, u1: Double, v1: Double): BezierPatch = super.sub(u0, v0, u1, v1).typed()
+    override fun times(scale: Double): BezierPatch = super.times(scale).typed()
+    override fun div(scale: Double): BezierPatch = super.div(scale).typed()
+    override fun plus(right: BezierPatchBase<ColorRGBa>): BezierPatch = super.plus(right).typed()
+    override fun minus(right: BezierPatchBase<ColorRGBa>): BezierPatch = super.minus(right).typed()
+}
 
 /**
  * Create a cubic bezier patch from 4 segments. The control points of the segments are used in row-wise fashion
@@ -287,21 +323,44 @@ fun bezierPatch(corners: List<Vector2>, alpha: Double = 1.0 / 3.0): BezierPatch 
 }
 
 /**
- * Distort a shape contour
+ * Distort a shape contour: the image of [shapeContour] under the patch, with the [referenceRectangle] mapped to the
+ * unit square of u and v. Every segment is replaced by cubic pieces through the images of its points, with the
+ * directions there turned by the patch, halved until they are within [distanceTolerance] of the image.
  */
-fun BezierPatch.distort(shapeContour: ShapeContour, referenceRectangle: Rectangle = shapeContour.bounds): ShapeContour {
-    val distortedSegments = shapeContour.segments.map {
-        val c = it.cubic
-        val e = c.end.map(referenceRectangle)
-        val c0 = c.control[0].map(referenceRectangle)
-        val c1 = c.control[1].map(referenceRectangle)
-        val s = c.start.map(referenceRectangle)
-
-        val ne = position(e.x, e.y)
-        val ns = position(s.x, s.y)
-        val nc0 = position(c0.x, c0.y)
-        val nc1 = position(c1.x, c1.y)
-        Segment2D(ns, nc0, nc1, ne)
+fun BezierPatch.distort(
+    shapeContour: ShapeContour,
+    referenceRectangle: Rectangle = shapeContour.bounds,
+    distanceTolerance: Double = 0.5
+): ShapeContour {
+    val sx = 1.0 / referenceRectangle.width
+    val sy = 1.0 / referenceRectangle.height
+    fun image(p: Vector2): Vector2 = p.map(referenceRectangle).let { position(it.x, it.y) }
+    // the image of a direction d at p: the Jacobian of the patch times d, by the scale of the reference
+    fun turn(p: Vector2, d: Vector2): Vector2 {
+        val uv = p.map(referenceRectangle)
+        return du(uv.x, uv.y) * (d.x * sx) + dv(uv.x, uv.y) * (d.y * sy)
+    }
+    val distortedSegments = shapeContour.segments.flatMap { segment ->
+        val pieces = mutableListOf<Segment2D>()
+        fun add(t0: Double, t1: Double, depth: Int) {
+            val p0 = segment.position(t0)
+            val p1 = segment.position(t1)
+            val h = t1 - t0
+            val a = image(p0)
+            val b = image(p1)
+            val da = turn(p0, segment.derivative(t0)) * h
+            val db = turn(p1, segment.derivative(t1)) * h
+            val piece = Segment2D(a, a + da / 3.0, b - db / 3.0, b)
+            val error = listOf(0.25, 0.5, 0.75).maxOf { f ->
+                piece.position(f).distanceTo(image(segment.position(t0 + f * h)))
+            }
+            if (depth < 10 && error > distanceTolerance) {
+                add(t0, (t0 + t1) / 2, depth + 1)
+                add((t0 + t1) / 2, t1, depth + 1)
+            } else pieces.add(piece)
+        }
+        add(0.0, 1.0, 0)
+        pieces
     }
     return ShapeContour(distortedSegments, shapeContour.closed, shapeContour.polarity)
 }

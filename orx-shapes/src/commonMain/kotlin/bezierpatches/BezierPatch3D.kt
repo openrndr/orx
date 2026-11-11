@@ -36,10 +36,35 @@ open class BezierPatch3DBase<C>(
         require(colors.isEmpty() || colors.size == 4 && colors.all { it.size == 4 })
     }
 
+    // the coordinates of the control points, row by row, for evaluation without allocations
+    private val xs = DoubleArray(16) { points[it / 4][it % 4].x }
+    private val ys = DoubleArray(16) { points[it / 4][it % 4].y }
+    private val zs = DoubleArray(16) { points[it / 4][it % 4].z }
+
+    /** the sum over the control points, weighted by [a0]..[a3] along u and [b0]..[b3] along v */
+    private fun combine(
+        a0: Double, a1: Double, a2: Double, a3: Double,
+        b0: Double, b1: Double, b2: Double, b3: Double
+    ): Vector3 {
+        var rx = 0.0
+        var ry = 0.0
+        var rz = 0.0
+        for (j in 0 until 4) {
+            val b = when (j) {
+                0 -> b0; 1 -> b1; 2 -> b2; else -> b3
+            }
+            val o = j * 4
+            rx += (xs[o] * a0 + xs[o + 1] * a1 + xs[o + 2] * a2 + xs[o + 3] * a3) * b
+            ry += (ys[o] * a0 + ys[o + 1] * a1 + ys[o + 2] * a2 + ys[o + 3] * a3) * b
+            rz += (zs[o] * a0 + zs[o + 1] * a1 + zs[o + 2] * a2 + zs[o + 3] * a3) * b
+        }
+        return Vector3(rx, ry, rz)
+    }
+
     /**
      * Return a transposed version of the bezier path by transposing the [points] matrix
      */
-    val transposed
+    open val transposed: BezierPatch3DBase<C>
         get() = BezierPatch3DBase(
             listOf(
                 listOf(points[0][0], points[1][0], points[2][0], points[3][0]),
@@ -57,7 +82,7 @@ open class BezierPatch3DBase<C>(
             }
         )
 
-    fun transform(transform: Matrix44) = BezierPatch3DBase(points.map { r ->
+    open fun transform(transform: Matrix44): BezierPatch3DBase<C> = BezierPatch3DBase(points.map { r ->
         r.map { (transform * it.xyz1).div }
     }, colors)
 
@@ -82,53 +107,48 @@ open class BezierPatch3DBase<C>(
      * @param u a value between 0 and 1
      * @param v a value between 0 and 1
      */
-    fun position(u: Double, v: Double): Vector3 {
-        val csu = coeffs3(u)
-        val csv = coeffs3(v)
-        var result = Vector3.ZERO
-        for (j in 0 until 4) {
-            for (i in 0 until 4) {
-                result += points[j][i] * csu[i] * csv[j]
-            }
-        }
-        return result
-    }
-
-    /** the derivatives of the cubic Bernstein polynomials at [t] */
-    private fun dcoeffs3(t: Double): DoubleArray {
-        val it = 1.0 - t
-        return doubleArrayOf(-3 * it * it, 3 * it * it - 6 * it * t, 6 * it * t - 3 * t * t, 3 * t * t)
-    }
+    fun position(u: Double, v: Double): Vector3 = combine(
+        bernstein3(u, 0), bernstein3(u, 1), bernstein3(u, 2), bernstein3(u, 3),
+        bernstein3(v, 0), bernstein3(v, 1), bernstein3(v, 2), bernstein3(v, 3)
+    )
 
     /** the derivative of the patch along u at [u], [v] */
-    fun du(u: Double, v: Double): Vector3 {
-        val dsu = dcoeffs3(u)
-        val csv = coeffs3(v)
-        var result = Vector3.ZERO
-        for (j in 0 until 4) for (i in 0 until 4) result += points[j][i] * dsu[i] * csv[j]
-        return result
-    }
+    fun du(u: Double, v: Double): Vector3 = combine(
+        dbernstein3(u, 0), dbernstein3(u, 1), dbernstein3(u, 2), dbernstein3(u, 3),
+        bernstein3(v, 0), bernstein3(v, 1), bernstein3(v, 2), bernstein3(v, 3)
+    )
 
     /** the derivative of the patch along v at [u], [v] */
-    fun dv(u: Double, v: Double): Vector3 {
-        val csu = coeffs3(u)
-        val dsv = dcoeffs3(v)
-        var result = Vector3.ZERO
-        for (j in 0 until 4) for (i in 0 until 4) result += points[j][i] * csu[i] * dsv[j]
-        return result
-    }
+    fun dv(u: Double, v: Double): Vector3 = combine(
+        bernstein3(u, 0), bernstein3(u, 1), bernstein3(u, 2), bernstein3(u, 3),
+        dbernstein3(v, 0), dbernstein3(v, 1), dbernstein3(v, 2), dbernstein3(v, 3)
+    )
+
+    /** the mixed derivative of the patch along u and v at [u], [v]: the twist vector */
+    fun duv(u: Double, v: Double): Vector3 = combine(
+        dbernstein3(u, 0), dbernstein3(u, 1), dbernstein3(u, 2), dbernstein3(u, 3),
+        dbernstein3(v, 0), dbernstein3(v, 1), dbernstein3(v, 2), dbernstein3(v, 3)
+    )
 
     /**
      * the normal of the patch at [u], [v]: the cross product of [du] and [dv], of unit length; where one of them
-     * vanishes, like at a corner where control points meet, from the derivatives a little inside the patch
+     * vanishes, like at a corner where control points meet, from the derivatives a little inside the patch, then from
+     * the diagonals of the control points, then the z axis, so that it always has unit length
      */
-    fun normal(u: Double, v: Double): Vector3 {
-        val n = du(u, v).cross(dv(u, v))
+    fun normal(u: Double, v: Double): Vector3 = normal(u, v, du(u, v), dv(u, v))
+
+    /** the [normal] at [u], [v] given the derivatives [du] and [dv] there */
+    private fun normal(u: Double, v: Double, du: Vector3, dv: Vector3): Vector3 {
+        val n = du.cross(dv)
         if (n.length > 1E-12) return n.normalized
         val e = 1E-4
         val uu = u.coerceIn(e, 1.0 - e)
         val vv = v.coerceIn(e, 1.0 - e)
-        return du(uu, vv).cross(dv(uu, vv)).normalized
+        val inside = du(uu, vv).cross(dv(uu, vv))
+        if (inside.length > 1E-12) return inside.normalized
+        val net = (points[3][3] - points[0][0]).cross(points[0][3] - points[3][0])
+        if (net.length > 1E-12) return net.normalized
+        return Vector3.UNIT_Z
     }
 
     /**
@@ -140,16 +160,19 @@ open class BezierPatch3DBase<C>(
      * so the frame never has NaNs.
      */
     fun frame(u: Double, v: Double): Matrix44 {
-        val z = normal(u, v)
-        val e = 1E-4
+        val du = du(u, v)
+        val dv = dv(u, v)
+        val z = normal(u, v, du, dv)
         // the direction of x: du, du a little inside the patch, dv turned a quarter around the normal, or any
-        val candidates = sequence {
-            yield(du(u, v))
-            yield(du(u.coerceIn(e, 1.0 - e), v.coerceIn(e, 1.0 - e)))
-            yield(dv(u, v).cross(z))
-            yield(if (kotlin.math.abs(z.x) < 0.9) Vector3.UNIT_X else Vector3.UNIT_Y)
+        fun across(d: Vector3) = d - z * d.dot(z)
+        var x = across(du)
+        if (x.length <= 1E-12) {
+            val e = 1E-4
+            x = across(du(u.coerceIn(e, 1.0 - e), v.coerceIn(e, 1.0 - e)))
         }
-        val x = candidates.map { it - z * it.dot(z) }.first { it.length > 1E-12 }.normalized
+        if (x.length <= 1E-12) x = across(dv.cross(z))
+        if (x.length <= 1E-12) x = across(if (kotlin.math.abs(z.x) < 0.9) Vector3.UNIT_X else Vector3.UNIT_Y)
+        x = x.normalized
         val y = z.cross(x)
         val o = position(u, v)
         return Matrix44.fromColumnVectors(x.xyz0, y.xyz0, z.xyz0, o.xyz1)
@@ -159,10 +182,11 @@ open class BezierPatch3DBase<C>(
     fun frames(uvs: List<org.openrndr.math.Vector2>): List<Matrix44> = uvs.map { frame(it.x, it.y) }
 
     /**
-     * Return a gradient vector on the patch by using its u,v parameterization
+     * A ninth of the mixed derivative of the patch along u and v, [duv], at [u], [v]; not a gradient
      * @param u a value between 0 and 1
      * @param v a value between 0 and 1
      */
+    @Deprecated("A ninth of the mixed derivative, not a gradient", ReplaceWith("duv(u, v) / 9.0"))
     fun gradient(u: Double, v: Double): Vector3 {
         val f0 = List(4) { MutableList(3) { Vector3.ZERO } }
         for (j in 0 until 4) {
@@ -218,43 +242,35 @@ open class BezierPatch3DBase<C>(
     }
 
     /**
-     * Extract a sub-patch based on uv parameterization
+     * Extract a sub-patch based on uv parameterization, with its colors
      */
-    fun sub(u0: Double, v0: Double, u1: Double, v1: Double): BezierPatch3DBase<C> {
-        val c0 = Segment3D(points[0][0], points[0][1], points[0][2], points[0][3]).sub(u0, u1) as Segment3D
-        val c1 = Segment3D(points[1][0], points[1][1], points[1][2], points[1][3]).sub(u0, u1) as Segment3D
-        val c2 = Segment3D(points[2][0], points[2][1], points[2][2], points[2][3]).sub(u0, u1) as Segment3D
-        val c3 = Segment3D(points[3][0], points[3][1], points[3][2], points[3][3]).sub(u0, u1) as Segment3D
+    open fun sub(u0: Double, v0: Double, u1: Double, v1: Double): BezierPatch3DBase<C> = BezierPatch3DBase(
+        subGrid(points, u0, v0, u1, v1, { p, w -> p * w }, { a, b -> a + b }),
+        if (colors.isEmpty()) emptyList() else subGrid(colors, u0, v0, u1, v1, { c, w -> c * w }, { a, b -> a + b })
+    )
 
-        val sub0 = bezierPatch(c0, c1, c2, c3)
-        val d0 = Segment3D(sub0.points[0][0], sub0.points[1][0], sub0.points[2][0], sub0.points[3][0]).sub(v0, v1) as Segment3D
-        val d1 = Segment3D(sub0.points[0][1], sub0.points[1][1], sub0.points[2][1], sub0.points[3][1]).sub(v0, v1) as Segment3D
-        val d2 = Segment3D(sub0.points[0][2], sub0.points[1][2], sub0.points[2][2], sub0.points[3][2]).sub(v0, v1) as Segment3D
-        val d3 = Segment3D(sub0.points[0][3], sub0.points[1][3], sub0.points[2][3], sub0.points[3][3]).sub(v0, v1) as Segment3D
-
-        return fromSegments<C>(d0, d1, d2, d3).transposed
-    }
-
-    val path: Path3D = Path3D(
+    val path: Path3D by lazy {
+        Path3D(
         listOf(
             Segment3D(points[0][0], points[0][1], points[0][2], points[0][3]),
             Segment3D(points[0][3], points[1][3], points[2][3], points[3][3]),
             Segment3D(points[3][3], points[3][2], points[3][1], points[3][0]),
             Segment3D(points[3][0], points[2][0], points[1][0], points[0][0]),
         ), true
-    )
+        )
+    }
 
-    operator fun times(scale: Double) =
+    open operator fun times(scale: Double): BezierPatch3DBase<C> =
         BezierPatch3DBase(
             points.map { j -> j.map { i -> i * scale } },
             if (colors.isEmpty()) colors else colors.map { j -> j.map { i -> i * scale } }
         )
 
-    operator fun div(scale: Double) =
+    open operator fun div(scale: Double): BezierPatch3DBase<C> =
         BezierPatch3DBase(points.map { j -> j.map { i -> i / scale } },
             if (colors.isEmpty()) colors else colors.map { j -> j.map { i -> i / scale } }
         )
-    operator fun plus(right: BezierPatch3DBase<C>) =
+    open operator fun plus(right: BezierPatch3DBase<C>): BezierPatch3DBase<C> =
         BezierPatch3DBase(List(4) { j -> List(4) { i -> points[j][i] + right.points[j][i] } },
             if (colors.isEmpty() && right.colors.isEmpty()) { colors }
             else if (colors.isEmpty() && right.colors.isNotEmpty()) { right.colors }
@@ -262,7 +278,7 @@ open class BezierPatch3DBase<C>(
             else { List(4) { j -> List(4) { i -> colors[j][i] + right.colors[j][i] } } }
             )
 
-    operator fun minus(right: BezierPatch3DBase<C>) =
+    open operator fun minus(right: BezierPatch3DBase<C>): BezierPatch3DBase<C> =
         BezierPatch3DBase(List(4) { j -> List(4) { i -> points[j][i] - right.points[j][i] } },
             if (colors.isEmpty() && right.colors.isEmpty()) { colors }
             else if (colors.isEmpty() && right.colors.isNotEmpty()) { right.colors }
@@ -294,7 +310,17 @@ open class BezierPatch3DBase<C>(
 }
 
 class BezierPatch3D(points: List<List<Vector3>>, colors: List<List<ColorRGBa>> = emptyList()) :
-    BezierPatch3DBase<ColorRGBa>(points, colors), GeometricPrimitive3D
+    BezierPatch3DBase<ColorRGBa>(points, colors), GeometricPrimitive3D {
+    private fun BezierPatch3DBase<ColorRGBa>.typed() = BezierPatch3D(points, colors)
+
+    override val transposed: BezierPatch3D get() = super.transposed.typed()
+    override fun transform(transform: Matrix44): BezierPatch3D = super.transform(transform).typed()
+    override fun sub(u0: Double, v0: Double, u1: Double, v1: Double): BezierPatch3D = super.sub(u0, v0, u1, v1).typed()
+    override fun times(scale: Double): BezierPatch3D = super.times(scale).typed()
+    override fun div(scale: Double): BezierPatch3D = super.div(scale).typed()
+    override fun plus(right: BezierPatch3DBase<ColorRGBa>): BezierPatch3D = super.plus(right).typed()
+    override fun minus(right: BezierPatch3DBase<ColorRGBa>): BezierPatch3D = super.minus(right).typed()
+}
 
 /**
  * Create a cubic bezier patch from 4 segments. The control points of the segments are used in row-wise fashion

@@ -6,7 +6,7 @@ import org.openrndr.extra.shapes.bezierpatches.bezierPatch
 import org.openrndr.shape.Circle
 
 /**
- * Shows how to get positions and gradient values of those positions
+ * Shows how to get positions and the directions of the mixed derivatives (twist vectors) at those positions
  * from a [bezierPatch]
  *
  * You can think of bezierPatch.position() as requesting points
@@ -32,7 +32,7 @@ fun main() = application {
                     val u = i / 50.0
                     val v = j / 50.0
                     val pos = bp.position(u, v)
-                    val grad = bp.gradient(u, v).normalized * 10.0
+                    val grad = bp.duv(u, v).normalized * 10.0
                     val perpendicular = grad.perpendicular()
                     drawer.lineSegment(pos - grad, pos + grad)
                     drawer.lineSegment(pos - perpendicular, pos + perpendicular)
