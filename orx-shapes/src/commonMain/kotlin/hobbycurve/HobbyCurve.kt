@@ -63,7 +63,9 @@ private fun Vector3.atan22(other: Vector3): Double {
 /**
  * Generates a smooth contour passing through a set of points based on Hobby's algorithm.
  *
- * @param points A list of 2D points through which the curve should pass.
+ * @param points A list of 2D points through which the curve should pass. A point that repeats the point before it, or
+ *               on a closed curve a last point that repeats the first, is passed over: the curve has a segment for
+ *               every chord between distinct points.
  * @param closed A boolean value indicating whether the curve is closed (true)
  *               forming a loop, or open (false). The default is false.
  * @param curl A parameter that controls the curvature of the open-ended curve. Only
@@ -99,7 +101,8 @@ fun hobbyCurve(
  * segment lie on the same side of its chord, its handles are shortened so that the segment stays inside the triangle
  * of the chord and the two tangent lines.
  *
- * @param points the points through which the curve passes
+ * @param points the points through which the curve passes; a point that repeats the point before it, or on a closed
+ * curve a last point that repeats the first, is passed over, together with the tension of its zero-length chord
  * @param closed whether the curve is closed
  * @param curl the curl at the ends of an open curve: 0 makes the end segments straighten out, 1 makes them nearly
  * circular arcs
@@ -136,6 +139,25 @@ fun hobbyCurve(
     return hobbyCurve2D(points, closed, curl, segmentTensions)
 }
 
+/**
+ * The points of a Hobby curve without points that repeat the point before them, nor, on a [closed] curve, a last point
+ * that repeats the first, and for every chord between the remaining points the index of the chord of [points] that it
+ * stands for, for its tensions
+ */
+private fun <T> distinctPoints(points: List<T>, closed: Boolean): Pair<List<T>, IntArray> {
+    // the first point of every run of equal points
+    val starts = points.indices.filter { it == 0 || points[it] != points[it - 1] }.toMutableList()
+    var closing = points.size - 1
+    if (closed && starts.size > 1 && points[starts.last()] == points[0]) {
+        closing = starts.last() - 1
+        starts.removeAt(starts.lastIndex)
+    }
+    val n = if (closed) starts.size else starts.size - 1
+    // the chord from a run to the next is the last chord of the run: the one that leaves its points
+    val chords = IntArray(maxOf(n, 0)) { r -> if (r + 1 < starts.size) starts[r + 1] - 1 else closing }
+    return starts.map { points[it] } to chords
+}
+
 /** The 2D Hobby curve with METAFONT [segmentTensions], all 1 when null, and handle length [factors]. */
 private fun hobbyCurve2D(
     points: List<Vector2>,
@@ -143,6 +165,20 @@ private fun hobbyCurve2D(
     curl: Double,
     segmentTensions: List<HobbyTension>?,
     factors: (chordIndex: Int, inAngleDegrees: Double, outAngleDegrees: Double) -> Pair<Double, Double> = { _, _, _ -> Pair(1.0, 1.0) },
+): ShapeContour {
+    val (distinct, chordOf) = distinctPoints(points, closed)
+    return hobbyCurve2DDistinct(distinct, closed, curl, segmentTensions?.let { t -> chordOf.map { t[it] } }) { i, a, b ->
+        factors(chordOf[i], a, b)
+    }
+}
+
+/** [hobbyCurve2D] of [points] without repeats. */
+private fun hobbyCurve2DDistinct(
+    points: List<Vector2>,
+    closed: Boolean,
+    curl: Double,
+    segmentTensions: List<HobbyTension>?,
+    factors: (chordIndex: Int, inAngleDegrees: Double, outAngleDegrees: Double) -> Pair<Double, Double>,
 ): ShapeContour {
     if (points.size <= 1) return ShapeContour.EMPTY
 
@@ -187,7 +223,7 @@ private fun hobbyCurve2D(
 
 /**
  * Uses Hobby's algorithm to construct a [Path3D] through a given list of points.
- * @param points The list of points through which the curve should go.
+ * @param points The list of points through which the curve should go; repeated points are passed over, as in 2D.
  * @param closed Whether to construct a closed or open curve.
  * @param curl The 'curl' at the endpoints of the curve; this is only applicable when [closed] is false. Best results for values in [-1, 1], where a higher value makes segments closer to circular arcs.
  * @param tensions A function that returns factors for the lengths of the in and out control handles given a chord
@@ -231,6 +267,20 @@ private fun hobbyCurve3D(
     curl: Double,
     segmentTensions: List<HobbyTension>?,
     factors: (chordIndex: Int, inAngleDegrees: Double, outAngleDegrees: Double) -> Pair<Double, Double> = { _, _, _ -> Pair(1.0, 1.0) },
+): Path3D {
+    val (distinct, chordOf) = distinctPoints(points, closed)
+    return hobbyCurve3DDistinct(distinct, closed, curl, segmentTensions?.let { t -> chordOf.map { t[it] } }) { i, a, b ->
+        factors(chordOf[i], a, b)
+    }
+}
+
+/** [hobbyCurve3D] of [points] without repeats. */
+private fun hobbyCurve3DDistinct(
+    points: List<Vector3>,
+    closed: Boolean,
+    curl: Double,
+    segmentTensions: List<HobbyTension>?,
+    factors: (chordIndex: Int, inAngleDegrees: Double, outAngleDegrees: Double) -> Pair<Double, Double>,
 ): Path3D {
     if (points.size <= 1) return Path3D.EMPTY
 
