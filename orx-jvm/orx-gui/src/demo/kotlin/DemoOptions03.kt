@@ -24,7 +24,7 @@ fun main() = application {
         gui.compartmentsCollapsedByDefault = false
         val settings = @Description("Settings") object {
             @OptionParameter("Blend Mode")
-            var blendMode = BlendMode.DIFFERENCE
+            var blendMode = BlendMode.MULTIPLY
         }
 
         gui.add(settings)
