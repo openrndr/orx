@@ -1,8 +1,9 @@
-package org.openrndr.extra.shapes.arrangement
+    package org.openrndr.extra.shapes.arrangement
 
 import org.openrndr.extra.kdtree.buildKDTree
 import org.openrndr.extra.kdtree.vector2Mapper
 import org.openrndr.math.Vector2
+import org.openrndr.math.YPolarity
 import org.openrndr.shape.*
 import kotlin.math.PI
 import kotlin.math.abs
@@ -119,6 +120,56 @@ data class XVertex(val pos: Vector2) {
     }
 }
 
+/**
+ * The signed area enclosed by this contour, closed by a line from its end to its start if it is open: positive when
+ * it turns from +x to +y. Exact for the curves of the contour, by Green's theorem with 3-point Gauss-Legendre
+ * quadrature, which integrates the polynomials of quadratic and cubic Bezier segments exactly. openrndr's
+ * [ShapeContour.winding] sums over the control polygons instead, which can have the opposite sign for strongly
+ * curved segments.
+ */
+private fun ShapeContour.signedArea(): Double {
+    val gx = doubleArrayOf(0.5 - 0.5 * kotlin.math.sqrt(0.6), 0.5, 0.5 + 0.5 * kotlin.math.sqrt(0.6))
+    val gw = doubleArrayOf(5.0 / 18.0, 8.0 / 18.0, 5.0 / 18.0)
+    var sum = 0.0
+    for (s in segments) {
+        for (k in 0 until 3) {
+            val p = s.position(gx[k])
+            val d = s.derivative(gx[k])
+            sum += gw[k] * (p.x * d.y - p.y * d.x)
+        }
+    }
+    val a = segments.last().end
+    val b = segments.first().start
+    sum += a.x * b.y - a.y * b.x
+    return sum / 2.0
+}
+
+/** The winding of this contour by its exact [signedArea], with the convention of [ShapeContour.winding]. */
+private fun ShapeContour.exactWinding(): Winding {
+    val area = signedArea()
+    return when (polarity) {
+        YPolarity.CW_NEGATIVE_Y -> if (area > 0.0) Winding.CLOCKWISE else Winding.COUNTER_CLOCKWISE
+        YPolarity.CCW_POSITIVE_Y -> if (area > 0.0) Winding.COUNTER_CLOCKWISE else Winding.CLOCKWISE
+    }
+}
+
+/**
+ * The pieces of [halfEdges] joined into one contour in a single pass, like `+=` on contours but without copying the
+ * segments again for every piece: a line joins pieces whose ends do not meet
+ */
+private fun joined(halfEdges: List<XHalfEdge>): ShapeContour {
+    val segments = ArrayList<Segment2D>()
+    for (he in halfEdges) {
+        val piece = he.contour.segments
+        if (piece.isEmpty()) continue
+        if (segments.isNotEmpty() && segments.last().end != piece.first().start) {
+            segments.add(Segment2D(segments.last().end, piece.first().start))
+        }
+        segments.addAll(piece)
+    }
+    return ShapeContour(segments, false, halfEdges.first().contour.polarity)
+}
+
 /** Tangent angles closer than this are treated as equal, see [XVertex.rotation]. */
 private const val TANGENT_TIE = 1E-4
 
@@ -142,6 +193,24 @@ data class XEdge(val source: XVertex, val target: XVertex, val contour: ShapeCon
 
     /** The two half-edges that correspond to this edge. */
     lateinit var halfEdges: Pair<XHalfEdge, XHalfEdge>
+
+    /** The index of the input contour this edge is a piece of, see [Arrangement]. */
+    internal var inputContour = -1
+
+    /** The indices of the other input contours that have a piece on this edge, like a side two shapes share. */
+    internal var alsoOn = emptyList<Int>()
+
+    /** True when this edge was merged into another edge that lies on it, see [Arrangement]. */
+    internal var merged = false
+
+    /** Takes the half-edges of this edge out of its vertices, when it is merged into another edge. */
+    internal fun unlink() {
+        val (a, b) = halfEdges
+        source.outgoing.removeAll { it === a }
+        target.outgoing.removeAll { it === b }
+        source.incoming.removeAll { it === b }
+        target.incoming.removeAll { it === a }
+    }
 
     init {
         // Once an edge is created, also create half-edges and do the necessary bookkeeping.
@@ -277,6 +346,9 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
      */
     private val inputShapes = shapes.map { it.shape }
 
+    /** The bounds of each input shape, to skip the inside tests of shapes that are far away. */
+    private val inputBounds = inputShapes.map { it.bounds }
+
     /** Length of the diagonal of the bounding box of all input shapes. */
     private val diagonal = inputShapes.map { it.bounds }.bounds.let { b ->
         Vector2(b.width, b.height).length
@@ -300,8 +372,11 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
     /** All vertices of the arrangement. */
     val vertices by lazy { cVertsMap.flatMap { it.value.map { it.first } }.toSet().toList() }
 
-    /** All edges of the arrangement. */
-    val edges by lazy { hEdgesMap.flatMap { it.value } }
+    /** All edges of the arrangement, once each, also those that lie on several input contours. */
+    val edges by lazy { allEdges.toList() }
+
+    /** The edges in the order they were created, without those that were merged into others. */
+    private val allEdges = mutableListOf<XEdge>()
 
     /** All half-edges of the arrangement. */
     val halfEdges by lazy {
@@ -326,13 +401,13 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
     val boundaries: List<ShapeContour> by lazy {
         unboundedFaces.map { f ->
             val start = f.edge
+            val walk = mutableListOf(start)
             var current = start.next
-            var contour = start.contour
             while (current !== start) {
-                contour += current.contour
+                walk.add(current)
                 current = current.next
             }
-            contour
+            joined(walk)
         }
     }
 
@@ -349,14 +424,21 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
         val events = mutableListOf<ContourEvent>()
     }
 
+    /** The indices into [inputContours] of the contours of each distinct input shape, in the order of its contours. */
+    private val shapeContours = mutableMapOf<ShapeProvider, MutableList<Int>>()
+
     private val inputContours: List<InputContour> = buildList {
         val seen = mutableSetOf<ShapeProvider>()
         // A shape that is passed in twice is intersected with itself; its contours are only added once.
         val repeated = shapes.groupingBy { it }.eachCount().filterValues { it > 1 }.keys
         for ((s, shape) in shapes.zip(inputShapes)) {
             if (!seen.add(s)) continue
+            val indices = shapeContours.getOrPut(s) { mutableListOf() }
             for (c in shape.contours) {
-                if (!c.empty) add(InputContour(c, s, s in repeated))
+                if (!c.empty) {
+                    indices.add(size)
+                    add(InputContour(c, s, s in repeated))
+                }
             }
         }
     }
@@ -411,14 +493,18 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
 
         // Find segment-segment intersections with a sweep over x. Both contours of an intersection share a
         // single node, so they agree on the vertex identity.
-        class SweepItem(val contour: Int, val segment: Int, val minX: Double, val maxX: Double)
+        class SweepItem(
+            val contour: Int, val segment: Int, val minX: Double, val maxX: Double, val minY: Double, val maxY: Double
+        )
 
         val items = inputContours.flatMapIndexed { ci, ic ->
             ic.contour.segments.mapIndexed { si, s ->
                 // the control polygon contains the segment, and is cheaper than its exact bounds
                 val minX = minOf(s.start.x, s.end.x, s.control.minOfOrNull { it.x } ?: s.start.x)
                 val maxX = maxOf(s.start.x, s.end.x, s.control.maxOfOrNull { it.x } ?: s.start.x)
-                SweepItem(ci, si, minX - eps, maxX + eps)
+                val minY = minOf(s.start.y, s.end.y, s.control.minOfOrNull { it.y } ?: s.start.y)
+                val maxY = maxOf(s.start.y, s.end.y, s.control.maxOfOrNull { it.y } ?: s.start.y)
+                SweepItem(ci, si, minX - eps, maxX + eps, minY - eps, maxY + eps)
             }
         }.sortedBy { it.minX }
 
@@ -426,6 +512,8 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
         for (item in items) {
             active.removeAll { it.maxX < item.minX }
             for (other in active) {
+                // the sweep finds pairs that overlap along x; those that do not overlap along y cannot meet
+                if (other.maxY < item.minY || other.minY > item.maxY) continue
                 val sameContour = other.contour == item.contour
                 if (sameContour && (!inputContours[item.contour].selfIntersect || other.segment == item.segment)) {
                     continue
@@ -487,8 +575,9 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
 
         for (ic in inputContours) {
             val n = ic.contour.segments.size
-            for (e in ic.events) {
-                cVertsMap.add(ic.contour, nodeVertices[e.node] to (e.segment + e.t) / n)
+            // one lookup per contour: hashing a contour hashes all its segments
+            if (ic.events.isNotEmpty()) {
+                cVertsMap.addAll(ic.contour, ic.events.map { e -> nodeVertices[e.node] to (e.segment + e.t) / n })
             }
         }
     }
@@ -528,16 +617,18 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
 
     private fun createEdges() {
         val eps = vertexEpsilon
-        for (ic in inputContours) {
+        for ((index, ic) in inputContours.withIndex()) {
             val c = ic.contour
             val s = ic.shape
             val ev = ic.events
+            // added to hEdgesMap at once: hashing a contour as a key hashes all its segments
+            val created = mutableListOf<XEdge>()
 
             // A closed contour that is not intersected by anything has no vertices. We add a dummy one;
             // it is not added to the vertices list.
             if (ev.isEmpty()) {
                 val dummy = XVertex(c.segments.first().start)
-                hEdgesMap.add(s, XEdge(dummy, dummy, c, s))
+                allEdges.add(XEdge(dummy, dummy, c, s).also { it.inputContour = index })
                 continue
             }
 
@@ -551,9 +642,48 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
                 val vb = nodeVertices[b.node]
                 val p = piece(c, a.segment, a.t, b.segment, b.t, va, vb, wholeLoop = a === b) ?: continue
                 if (va === vb && p.length < 10.0 * eps) continue
-                hEdgesMap.add(s, XEdge(va, vb, p, s))
+                created.add(XEdge(va, vb, p, s).also { it.inputContour = index })
+            }
+            allEdges.addAll(created)
+        }
+        mergeCoincidentEdges()
+        // the edges of each input contour, also those it shares with others; added to hEdgesMap at once per shape:
+        // hashing a contour as a key hashes all its segments
+        val byContour = Array(inputContours.size) { mutableListOf<XEdge>() }
+        for (e in allEdges) {
+            byContour[e.inputContour].add(e)
+            for (k in e.alsoOn) byContour[k].add(e)
+        }
+        for ((shape, indices) in shapeContours) {
+            val list = mutableListOf<XEdge>()
+            for (k in indices) for (e in byContour[k]) if (list.none { it === e }) list.add(e)
+            if (list.isNotEmpty()) hEdgesMap.addAll(shape, list)
+        }
+    }
+
+    /**
+     * Pieces of input contours that lie on each other, like a side that two shapes share, are the same edge: of each
+     * set of edges between the same two vertices that coincide, the first is kept, and remembers the input contours
+     * of the others; the others are taken out of their vertices.
+     */
+    private fun mergeCoincidentEdges() {
+        val tolerance = 10.0 * vertexEpsilon
+        fun coincide(a: ShapeContour, b: ShapeContour) = listOf(0.25, 0.5, 0.75).all { t ->
+            val p = a.position(t)
+            b.nearest(p).position.distanceTo(p) < tolerance
+        }
+        for (e in allEdges) {
+            if (e.merged || e.source === e.target) continue
+            for (h in e.source.outgoing.toList()) {
+                val f = h.original
+                if (f === e || f.merged || h.target !== e.target) continue
+                if (!coincide(e.contour, h.contour) || !coincide(h.contour, e.contour)) continue
+                f.merged = true
+                f.unlink()
+                e.alsoOn = e.alsoOn + f.inputContour + f.alsoOn
             }
         }
+        allEdges.removeAll { it.merged }
     }
 
     private fun createFaces() {
@@ -563,7 +693,6 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
             heStart.walk = walk
             val visited = mutableListOf(heStart)
             var current = heStart
-            var faceContour = heStart.contour
 
             // Repeatedly go to the next half-edge, until we arrive back where we started.
             var iters = 0
@@ -571,7 +700,6 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
                 current = current.next
                 current.walk = walk
                 visited.add(current)
-                faceContour += current.contour
                 iters++
             }
             if (iters >= maxIters) {
@@ -579,28 +707,115 @@ data class Arrangement(val shapes: List<ShapeProvider>, val maxIters: Int = 1000
                         "a robustness issue arising from using input shapes that would result in small or thin faces.")
             }
 
-            val facePt = heStart.contour.position(0.5) + heStart.contour.normal(0.5) * -faceProbeOffset
-            val origins = shapes.indices.filter { i ->
-                inputShapes[i].closedContours.isNotEmpty() && facePt in inputShapes[i]
-            }.map { shapes[it] }
+            // filled in by assignOrigins, once all faces are known
+            val origins = mutableListOf<ShapeProvider>()
+            val faceContour = joined(visited)
             val closed = if (faceContour.closed) faceContour else faceContour.close()
 
             // A walk that traverses each of its edges in both directions (e.g. around an open curve) encloses
             // nothing; its winding would be decided by round-off, so treat it as unbounded.
             val encloses = !visited.all { it.twin.walk == walk }
 
-            val f = if (encloses && closed.winding == Winding.CLOCKWISE) BoundedFace(heStart, origins, closed)
+            val f = if (encloses && closed.exactWinding() == Winding.CLOCKWISE) BoundedFace(heStart, origins, closed)
             else XFace(heStart, emptyList()).also { if (encloses) outerBoundaries[it] = closed }
             faces.add(f)
-            for (s in origins) {
-                hFacesMap.add(s, f)
-            }
+            faceWalks[f] = visited
 
             visited.forEach { e ->
                 e.face = f
             }
         }
         nestComponents()
+        assignOrigins()
+    }
+
+    /** The half-edges around each face, in order. */
+    private val faceWalks = mutableMapOf<XFace, List<XHalfEdge>>()
+
+    /**
+     * Find the input shapes that contain each bounded face. Walking from face to face across an edge flips the parity
+     * of the number of crossings of the contour the edge belongs to, starting from no crossings outside everything,
+     * and from the face a nested component lies in. A shape contains a face by the rule of its region: of the
+     * contours the face is inside of, by the parity, the one with the smallest area decides, and a clockwise one is a
+     * hole. That is the
+     * point test of [Shape.contains] for every face at once, without sampling a point inside thin faces. Shapes with
+     * open contours, whose region closes them with lines that are not edges, and shapes with contours whose parity
+     * does not agree around the faces are tested with a point of each face.
+     */
+    private fun assignOrigins() {
+        val n = inputContours.size
+        val parity = mutableMapOf<XFace, BooleanArray>()
+        val children = faces.filter { it !is BoundedFace && it.parent != null }.groupBy { it.parent!! }
+        val queue = ArrayDeque<XFace>()
+        // contours whose parity does not agree around the faces, like a contour that crosses itself without being
+        // intersected with itself: the faces are not on one side of it, so the shapes of those are tested by point
+        val unreliable = BooleanArray(n)
+        for (f in faces) if (f !is BoundedFace && f.parent == null) {
+            parity[f] = BooleanArray(n)
+            queue.addLast(f)
+        }
+        while (queue.isNotEmpty()) {
+            val f = queue.removeFirst()
+            val p = parity.getValue(f)
+            for (h in faceWalks.getValue(f)) {
+                val g = h.twin.face
+                val q = p.copyOf()
+                val k = h.original.inputContour
+                if (k >= 0) q[k] = !q[k]
+                for (also in h.original.alsoOn) q[also] = !q[also]
+                val known = parity[g]
+                if (known != null) {
+                    for (c in 0 until n) if (known[c] != q[c]) unreliable[c] = true
+                    continue
+                }
+                parity[g] = q
+                queue.addLast(g)
+            }
+            if (f is BoundedFace) for (child in children[f].orEmpty()) {
+                if (child in parity) continue
+                parity[child] = p.copyOf()
+                queue.addLast(child)
+            }
+        }
+
+        // whether each input contour is clockwise, as kartifex' rings decide it, and the contours of each shape from
+        // the smallest area to the largest, the order in which its region tests them; per index of [shapes], once
+        val areas = DoubleArray(n) { inputContours[it].contour.signedArea() }
+        val clockwise = BooleanArray(n) { areas[it] < 0.0 }
+        val contoursOf = shapes.map { shapeContours[it].orEmpty() }
+        val testOrder = contoursOf.map { indices -> indices.sortedBy { kotlin.math.abs(areas[it]) } }
+        val closedShape = BooleanArray(shapes.size) { inputShapes[it].closedContours.isNotEmpty() }
+        val pointTest = BooleanArray(shapes.size) { i ->
+            inputShapes[i].contours.any { !it.closed && !it.empty } || contoursOf[i].any { unreliable[it] }
+        }
+        val pointTested = shapes.indices.filter { closedShape[it] && pointTest[it] }
+        // the shapes each contour belongs to, by index of [shapes]: a shape passed twice has its contours once
+        val shapesOf = Array(n) { mutableListOf<Int>() }
+        for (i in shapes.indices) if (closedShape[i] && !pointTest[i]) for (k in contoursOf[i]) shapesOf[k].add(i)
+
+        val perShape = shapes.indices.map { mutableListOf<XFace>() }
+        for (f in faces) {
+            if (f !is BoundedFace) continue
+            val p = parity[f] ?: continue
+            val inside = mutableSetOf<Int>()
+            // only shapes with a contour the face is inside of can contain it
+            for (k in 0 until n) if (p[k]) for (i in shapesOf[k]) if (i !in inside) {
+                val decisive = testOrder[i].first { p[it] }
+                if (!clockwise[decisive]) inside.add(i)
+            }
+            if (pointTested.isNotEmpty()) {
+                val facePt = f.edge.contour.position(0.5) + f.edge.contour.normal(0.5) * -faceProbeOffset
+                for (i in pointTested) if (facePt in inputBounds[i] && facePt in inputShapes[i]) inside.add(i)
+            }
+            val origins = f.origins as MutableList<ShapeProvider>
+            // in the order of the input
+            for (i in inside.sorted()) {
+                origins.add(shapes[i])
+                perShape[i].add(f)
+            }
+        }
+        // added to hFacesMap at once per shape: hashing a contour as a key hashes all its segments
+        for (i in shapes.indices) if (perShape[i].isNotEmpty()) hFacesMap.addAll(shapes[i], perShape[i])
     }
 
     /** Outer boundaries of the unbounded faces of components that enclose an area. */

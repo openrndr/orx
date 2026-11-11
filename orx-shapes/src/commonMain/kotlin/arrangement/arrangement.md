@@ -25,7 +25,7 @@ are allowed; they add edges but never enclose a face on their own.
 | Type          | Meaning |
 |---------------|---------|
 | `XVertex`     | A point of the arrangement, with its `outgoing` and `incoming` half-edges. |
-| `XEdge`       | A piece of one input contour between two vertices; `origin` is the shape it came from. Creating it also creates its two half-edges. |
+| `XEdge`       | A piece of an input contour between two vertices; `origin` is the shape it came from, the first of them when contours share the piece. Creating it also creates its two half-edges. |
 | `XHalfEdge`   | One direction of an edge. Has a `twin` (the opposite direction), the `face` on its right and `next`, the following half-edge around that face. |
 | `XFace`       | A face, identified by one of its half-edges (`edge`). Faces that are not `BoundedFace` are the *outer* faces of connected components. |
 | `BoundedFace` | A face enclosing an area. `contour` is its outer boundary, `innerBoundaries` the outlines of components lying inside it, `shape` the face with those holes cut out. |
@@ -123,6 +123,13 @@ Special cases:
   contour with a single vertex, whose only piece is the whole loop.
 - A piece that starts and ends at the same vertex is kept only if it is longer than 10·ε. It may be a
   genuine loop, such as a contour leaving a vertex and coming back to it.
+- Pieces of different contours that lie on each other, like a side that two shapes share, are one
+  edge. The intersection search finds the ends of such an overlap as two intersections, so both
+  contours are cut there; of the edges between the same two vertices that coincide within 10·ε,
+  the first is kept and remembers the input contours of the others, whose half-edges are taken out
+  of their vertices. Crossing a merged edge flips the parity of all its contours (see
+  `assignOrigins`), and `hEdgesMap` lists it under every shape it lies on. Closed contours that
+  coincide but touch nothing else have no vertices and are not merged.
 
 ### 3. `createFaces`: walk the faces
 
@@ -151,11 +158,26 @@ Each completed walk is classified:
 - If the walk traverses every one of its edges in both directions (for example around an open curve
   or a tree of open curves), it encloses nothing and is an unbounded `XFace`.
 - Otherwise a clockwise walk is a `BoundedFace` and a counterclockwise walk is the outer face of a
-  component.
+  component. The orientation comes from the exact signed area of the walk (Green's theorem with
+  3-point Gauss–Legendre quadrature, exact for cubic segments). openrndr's `ShapeContour.winding`
+  sums over the control polygons instead, which can have the wrong sign for long, strongly curved
+  edges and turned bounded faces into extra unbounded ones.
 
-`origins` (the input shapes containing a face) are determined by testing a point slightly inside the
-face's first edge, at `faceProbeOffset = max(1e-5 · diagonal, 2ε)` from it, against each closed input
-shape.
+`origins` (the input shapes containing a face) are found after nesting (step 4), by walking from face
+to face across edges. Crossing an edge flips the parity of the number of crossings of the contour it
+belongs to. The walk starts with no crossings at the outer faces of top-level components, and with the
+parities of the parent face at nested components. A shape then contains a face by the rule of its
+kartifex region, as `Shape.contains` would decide it: of the shape's contours that the face is inside
+of by parity, the one with the smallest area decides, and a clockwise one is a hole. This is exact for
+every face at once. A point sampled inside a thin face can land outside it.
+
+Two kinds of shapes still test a point slightly inside each face, at `faceProbeOffset =
+max(1e-5 · diagonal, 2ε)` from its first edge:
+
+- shapes with open contours, which their region closes with lines that are not edges of the
+  arrangement;
+- shapes with a contour whose parity does not agree around the faces, like a contour that crosses
+  itself but is passed only once, so that its own crossings are not in the arrangement.
 
 ### 4. `nestComponents`: holes for nested components
 
@@ -205,7 +227,8 @@ That had several consequences:
 | Edge geometry | `contour.sub(t0, t1)` | assembled from segments, ends snapped exactly onto vertices |
 | `next` | tangent angles in [0, π], probe-circle guess on ties, twin as fallback | rotational order per vertex (tangent angle; probe circle for tangencies), the edge before the twin |
 | Faces of open curves | bounded or unbounded depending on round-off | always unbounded |
-| Containment probe | fixed offset 0.01 | `max(1e-5 · diagonal, 2ε)` |
+| Containment probe | fixed offset 0.01 | parity walk across edges; a point at `max(1e-5 · diagonal, 2ε)` for shapes with open or self-crossing (passed once) contours |
+| Face orientation | control-polygon winding | exact signed area of the face's curves |
 | Nested components | outer face covers inner components | `innerBoundaries` holes, `BoundedFace.shape`, `XFace.parent` |
 | Contours in one shape | not intersected with each other | intersected with each other |
 | Face walk bookkeeping | `removeAll`/set lookups through data-class `equals` (compares whole contours) | identity comparisons and a per-half-edge walk index |
@@ -250,6 +273,7 @@ cycles can grow exponentially on dense inputs. The angle-ordered half-edge walk 
 - **Very small inputs.** Kartifex' absolute 1e-5 tolerance sets a floor: for inputs only a few units
   across, features smaller than about 1e-4 are not resolved reliably. Kartifex tolerances that scale
   with segment length or bounding box would lift this. That change would be in openrndr, not here.
-- **Face orientation** relies on openrndr's winding convention: bounded faces walk clockwise.
+- **Face orientation** relies on openrndr's winding convention: bounded faces walk clockwise. It is
+  decided by the exact signed area of the face, not by `ShapeContour.winding`.
 - The public maps (`cVertsMap`, `hEdgesMap`, `hFacesMap`, `faces`) are mutable. Treat them as
   read-only.
