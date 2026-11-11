@@ -262,4 +262,27 @@ class TestExtrusion {
         }
         check("circle to square", triangles, 20.0, 181.0)
     }
+
+    @Test
+    fun aCrossSectionThatCrossesItselfIsCapped() {
+        // a figure 8, its two lobes wound opposite ways, along a quarter of the ring
+        val figure8 = ShapeContour.fromPoints(List(64) { k ->
+            val a = 2 * PI * (k + 0.5) / 64
+            Vector2(sin(a) * 2.0, sin(a) * cos(a) * 2.0)
+        }, true)
+        val path = ring(20.0, false)
+        val triangles = collect { w ->
+            extrudeShape(figure8.shape, path, { 1.0 }, { 0.0 }, Vector3.UNIT_Y, 0.05, 0.05,
+                startCap = true, endCap = true, useFaceNormals = false, writer = w)
+        }
+        // the caps: triangles facing back along the path at its start
+        val start = path.position(0.0)
+        val back = -path.direction(0.0).normalized
+        val cap = (0 until triangles.size / 3).map { t -> (0..2).map { triangles[3 * t + it] } }
+            .filter { t -> t.all { abs(it.normal dot back) > 0.999 && abs((it.position - start) dot back) < 1E-6 } }
+        val area = cap.sumOf { (a, b, c) -> ((b.position - a.position) cross (c.position - a.position)).length / 2 }
+        // two lobes of the figure 8 2 sin a, 2 sin a cos a, each of area 8/3, less the chords of 64 samples
+        assertEquals(16.0 / 3.0, area, 0.1)
+        for (v in triangles) assertEquals(1.0, v.normal.length, 1E-9)
+    }
 }

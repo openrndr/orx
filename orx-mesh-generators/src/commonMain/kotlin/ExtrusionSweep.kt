@@ -9,7 +9,7 @@ import org.openrndr.math.transforms.normalMatrix
 import org.openrndr.shape.FillRule
 import org.openrndr.shape.Path3D
 import org.openrndr.shape.ShapeContour
-import org.openrndr.shape.triangulate
+import org.openrndr.shape.triangulateIndexed
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -408,8 +408,10 @@ private fun writeCap(loops: List<ExtrusionLoop>, row: ExtrusionRow, facing: Vect
     if (closed.isEmpty()) return
     // a cross-section scaled to nothing has no cap
     if ((row.x cross row.y).squaredLength < 1E-24) return
-    val points = closed.flatMap { it.points }
-    val indices = triangulate(closed.map { it.points }, FillRule.EVEN_ODD)
+    // the points of the loops, then the points where loops cross
+    val triangulation = triangulateIndexed(closed.map { it.points }, FillRule.EVEN_ODD)
+    val points = triangulation.vertices
+    val indices = triangulation.indices
     val normal = facing.normalized
     val minX = points.minOf { it.x }
     val minY = points.minOf { it.y }

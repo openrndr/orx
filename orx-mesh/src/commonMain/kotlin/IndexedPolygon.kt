@@ -190,9 +190,12 @@ data class IndexedPolygon(
 
     private fun tessellate(vertexData: IVertexData): List<IndexedPolygon> {
         val points = vertexData.positions.slice(positions.toList())
-        val triangles = org.openrndr.shape.triangulate(listOf(points))
+        // a polygon that crosses itself gets vertices where it crosses, which the vertex data does not have: the
+        // triangles that use them are left out
+        val triangles = org.openrndr.shape.triangulateIndexed(listOf(points)).indices
+            .windowed(3, 3).filter { t -> t.all { it in points.indices } }
 
-        return triangles.windowed(3, 3).map {
+        return triangles.map {
             IndexedPolygon(
                 positions.slice(it),
                 if (textureCoords.isNotEmpty()) textureCoords.slice(it) else listOf(),
@@ -211,7 +214,8 @@ data class IndexedPolygon(
      * @param vertexData The vertex data that defines the positions, texture coordinates,
      *                   colors, normals, tangents, and bitangents of the polygon vertices.
      * @return A list of indexed triangles representing the triangulated polygon. Each triangle
-     *         is defined using the vertex information from the provided vertex data.
+     *         is defined using the vertex information from the provided vertex data. A polygon that crosses itself
+     *         leaves out the triangles at its crossings, whose corners are not in the vertex data.
      */
     fun triangulate(vertexData: IVertexData): List<IndexedPolygon> {
         return when {

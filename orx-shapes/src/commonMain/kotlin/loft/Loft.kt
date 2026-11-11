@@ -8,7 +8,7 @@ import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Segment2D
-import org.openrndr.shape.triangulate
+import org.openrndr.shape.triangulateIndexed
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.floor
@@ -197,8 +197,11 @@ class Loft(
     fun cap(end: Boolean, around: Int, sharpCorners: Boolean = false): List<LoftVertex> {
         if (!hasCaps) return emptyList()
         val v = if (end) 1.0 else 0.0
-        val points = rim(v, around, sharpCorners)
-        val indices = triangulate(listOf(points))
+        val rim = rim(v, around, sharpCorners)
+        // the points of the rim, then the points where a cross-section that crosses itself crosses
+        val triangulation = triangulateIndexed(listOf(rim))
+        val points = triangulation.vertices
+        val indices = triangulation.indices
         val pose = pose(v)
         val x = pose[0].xyz
         val y = pose[1].xyz
