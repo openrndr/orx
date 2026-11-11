@@ -1,6 +1,5 @@
 package org.openrndr.extra.meshgenerators
 
-import org.openrndr.extra.shapes.frames.frames
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Path3D
@@ -9,14 +8,15 @@ import org.openrndr.shape.ShapeContour
 /**
  * Extrude a [contour] along a [path] specifying the number of steps.
  *
- * @param contour the cross-section of the mesh
+ * @param contour the cross-section of the mesh at the part of the steps, from 0 at the first to 1 at the last; every
+ * cross-section is sampled at as many points, at equal distances along it from its start, as the most detailed one
+ * needs at [contourDistanceTolerance], and the points of neighbouring steps are joined in order
  * @param path the 3D path
  * @param stepCount the number of steps along the [path]
  * @param up0 the initial up-vector
  * @param contourDistanceTolerance precision for calculating steps along
  * [contour]. Lower tolerance results in higher precision.
- * @param pathDistanceTolerance precision for calculating steps along
- * [path]. Lower tolerance results in higher precision.
+ * @param pathDistanceTolerance no longer used: the steps are at equal distances along [path]
  * @param steps the resulting positions in the path
  * @param frames a list of matrices holding the transformation matrices along
  * the path
@@ -31,49 +31,20 @@ fun extrudeContourStepsMorphed(
     up0: Vector3,
     contourDistanceTolerance: Double = 0.5,
     pathDistanceTolerance: Double = 0.5,
-    steps: List<Vector3> = path.equidistantPositions(
-        stepCount,
-        pathDistanceTolerance
-    ),
-    frames: List<Matrix44> = steps.frames(up0),
+    steps: List<Vector3> = path.evenSteps(stepCount),
+    frames: List<Matrix44> = path.posesAt(steps, up0),
     startCap: Boolean = true,
     endCap: Boolean = true,
     writer: VertexWriter
 ) {
-    val finalFrames = if (path.closed) frames + frames.first() else frames
-
-    val crossSections = List(finalFrames.size) {
-        val t = it / (finalFrames.size - 1.0)
-        val linearContour = contour(t).sampleLinear(contourDistanceTolerance)
-        linearContour.adaptivePositions()
+    val rows = frameRows(frames, path.closed)
+    // the cross-sections, all through as many points at equal distances along them as the most detailed one needs
+    val contours = List(rows.size) { contour(if (rows.size < 2) 0.0 else it / (rows.size - 1.0)) }
+    val count = contours.maxOf { c ->
+        c.adaptivePositions(contourDistanceTolerance).size.let { if (c.closed) it - 1 else it }
     }
-
-    // Add caps
-    if (!path.closed) {
-        if (startCap) {
-            triangulationWithFrame(
-                ShapeContour.fromPoints(crossSections.first(), true).shape.triangulation,
-                finalFrames.first(), false, writer
-            )
-        }
-        if (endCap) {
-            triangulationWithFrame(
-                ShapeContour.fromPoints(crossSections.last(), true).shape.triangulation,
-                finalFrames.last(), false, writer
-            )
-        }
-    }
-
-    // Add sides
-    var i = 0
-    (finalFrames zip crossSections).windowed(2, 1).forEach {
-        contourSegment(
-            it[0].second, it[1].second,
-            it[0].first, it[1].first,
-            i.toDouble() / crossSections.size,
-            (++i).toDouble() / crossSections.size,
-            writer)
-    }
+    val loops = contours.map { c -> listOf(loopOf(c, evenSamples(c, count))) }
+    extrudeRowLoops({ loops[it] }, rows, path.closed, startCap, endCap, false, true, writer)
 }
 
 

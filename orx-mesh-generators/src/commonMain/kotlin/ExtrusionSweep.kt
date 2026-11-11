@@ -39,18 +39,41 @@ internal fun crossSectionLoops(contours: List<ShapeContour>, distanceTolerance: 
         val points = polygons[index]
         val hole = contour.closed &&
                 polygons.indices.count { it != index && sampled[it].first.closed && inside(points[0], polygons[it]) } % 2 == 1
-        // which side is out: the right of a counterclockwise loop, the left of a clockwise one, the other for a hole
-        val area = points.indices.sumOf { i ->
-            val a = points[i]
-            val b = points[(i + 1) % points.size]
-            a.x * b.y - b.x * a.y
-        }
-        val side = (if (!contour.closed || area >= 0.0) 1.0 else -1.0) * (if (hole) -1.0 else 1.0)
-        val normals = samples.map { (_, t) ->
-            val d = tangent(contour, t)
-            Vector2(d.y, -d.x) * side
-        }
-        ExtrusionLoop(points, normals, contour.closed)
+        loopOf(contour, samples, hole)
+    }
+}
+
+/**
+ * The loop of [contour] through its [samples], points with their parameters, without the start repeated; a [hole]
+ * has its normals into it
+ */
+internal fun loopOf(contour: ShapeContour, samples: List<Pair<Vector2, Double>>, hole: Boolean = false): ExtrusionLoop {
+    val points = samples.map { it.first }
+    // which side is out: the right of a counterclockwise loop, the left of a clockwise one, the other for a hole
+    val area = points.indices.sumOf { i ->
+        val a = points[i]
+        val b = points[(i + 1) % points.size]
+        a.x * b.y - b.x * a.y
+    }
+    val side = (if (!contour.closed || area >= 0.0) 1.0 else -1.0) * (if (hole) -1.0 else 1.0)
+    val normals = samples.map { (_, t) ->
+        val d = tangent(contour, t)
+        Vector2(d.y, -d.x) * side
+    }
+    return ExtrusionLoop(points, normals, contour.closed)
+}
+
+/**
+ * [count] samples of [contour] at equal distances along it, with their parameters, without the start repeated on a
+ * closed contour
+ */
+internal fun evenSamples(contour: ShapeContour, count: Int): List<Pair<Vector2, Double>> {
+    val rectified = contour.rectified()
+    val n = count.coerceAtLeast(2)
+    return List(n) { k ->
+        val u = if (contour.closed) k.toDouble() / n else k.toDouble() / (n - 1)
+        val t = rectified.rectify(u)
+        contour.position(t) to t
     }
 }
 
@@ -261,15 +284,73 @@ internal fun extrudeLoops(
     endCap: Boolean,
     useFaceNormals: Boolean,
     writer: VertexWriter
+) = extrudeRowLoops({ loops }, rows, closedPath, startCap, endCap, useFaceNormals, false, writer)
+
+/**
+ * As [extrudeLoops], with the loops of every row from [loopsAt], the same number of them with the same number of
+ * points in every row. With [neighbourNormals], rows without derivatives take the change along the path from the rows
+ * on either side, so that normals follow a cross-section that changes along the path, like a cone.
+ */
+internal fun extrudeRowLoops(
+    loopsAt: (row: Int) -> List<ExtrusionLoop>,
+    rows: List<ExtrusionRow>,
+    closedPath: Boolean,
+    startCap: Boolean,
+    endCap: Boolean,
+    useFaceNormals: Boolean,
+    neighbourNormals: Boolean,
+    writer: VertexWriter
 ) {
     if (rows.size < 2) return
-    for (loop in loops) {
-        val n = loop.points.size
+    val rowLoops = rows.indices.map(loopsAt)
+    val loopCount = rowLoops.minOf { it.size }
+    // the first row again at the end of a closed path
+    val wraps = closedPath && rows.last().origin.squaredDistanceTo(rows.first().origin) < 1E-18
+    for (l in 0 until loopCount) {
+        val loops = rowLoops.map { it[l] }
+        val n = loops.minOf { it.points.size }
         if (n < 2) continue
-        val tangents = List(n) { k -> Vector2(-loop.normals[k].y, loop.normals[k].x) }
-        val positions = rows.map { row -> List(n) { k -> row.position(loop.points[k]) } }
-        val normals = rows.map { row -> List(n) { k -> row.normal(loop.points[k], loop.normals[k], tangents[k]) } }
-        val quads = if (loop.closed) n else n - 1
+        val closedLoop = loops[0].closed
+        val positions = rows.mapIndexed { j, row -> List(n) { k -> row.position(loops[j].points[k]) } }
+        // the side comes round where the first and the last row meet, not where a scale or a morph ends elsewhere
+        val meets = wraps && (0 until n).all { k -> positions[0][k].squaredDistanceTo(positions.last()[k]) < 1E-18 }
+        val normals = rows.mapIndexed { j, row ->
+            val loop = loops[j]
+            List(n) { k ->
+                val p = loop.points[k]
+                val normal = loop.normals[k]
+                val tangent = Vector2(-normal.y, normal.x)
+                if (!neighbourNormals || row.dOrigin != null) {
+                    row.normal(p, normal, tangent)
+                } else {
+                    val last = rows.size - 1
+                    // the change of a value along the path: central between the neighbours, of second order at open
+                    // ends
+                    fun change(f: (Int) -> Vector3): Vector3 = when {
+                        j in 1 until last -> f(j + 1) - f(j - 1)
+                        meets -> f(1) - f(last - 1)
+                        rows.size < 3 -> (f(last) - f(0)) * 2.0
+                        j == 0 -> f(1) * 4.0 - f(0) * 3.0 - f(2)
+                        else -> f(last) * 3.0 - f(last - 1) * 4.0 + f(last - 2)
+                    }
+                    // along the path, and the change of the cross-section in its plane, by scale or by morph, in the
+                    // coordinates of every frame, so that the turn of the frames is left out
+                    fun local(i: Int): Vector3 {
+                        val q = positions[i][k] - rows[i].origin
+                        return Vector3(q dot rows[i].normalX.normalized, q dot rows[i].normalY.normalized, 0.0)
+                    }
+                    val along = change { rows[it].origin }.length
+                    val dl = change(::local)
+                    val dsdv = row.z * along + row.normalX.normalized * dl.x + row.normalY.normalized * dl.y
+                    val estimate = (row.normalX * normal.x + row.normalY * normal.y).normalized
+                    val dsdu = row.x * tangent.x + row.y * tangent.y
+                    val exact = dsdu cross dsdv
+                    if (exact.squaredLength < 1E-24 || !exact.x.isFinite()) estimate
+                    else (if ((exact dot estimate) < 0.0) -exact else exact).normalized
+                }
+            }
+        }
+        val quads = if (closedLoop) n else n - 1
         for (j in 0 until rows.size - 1) {
             val v0 = j.toDouble() / (rows.size - 1)
             val v1 = (j + 1.0) / (rows.size - 1)
@@ -286,6 +367,8 @@ internal fun extrudeLoops(
                 var nc = normals[j + 1][k1]
                 var nd = normals[j + 1][k]
                 val face = (c - a) cross (d - b)
+                // a quad that has collapsed to a line or a point has no face
+                if (face.squaredLength < 1E-24) continue
                 val out = na + nb + nc + nd
                 if (useFaceNormals) {
                     val f = (if ((face dot out) < 0.0) -face else face).normalized
@@ -297,20 +380,25 @@ internal fun extrudeLoops(
                 val tb = Vector2(u1, v0)
                 val tc = Vector2(u1, v1)
                 val td = Vector2(u0, v1)
-                // counterclockwise seen from where the normals point
+                // counterclockwise seen from where the normals point; a triangle with no area, like where the side
+                // meets a cross-section scaled to a point, is left out
+                fun triangle(p0: Vector3, n0: Vector3, t0: Vector2, p1: Vector3, n1: Vector3, t1: Vector2, p2: Vector3, n2: Vector3, t2: Vector2) {
+                    if (((p1 - p0) cross (p2 - p0)).squaredLength < 1E-24) return
+                    writer(p0, n0, t0); writer(p1, n1, t1); writer(p2, n2, t2)
+                }
                 if ((face dot out) >= 0.0) {
-                    writer(a, na, ta); writer(b, nb, tb); writer(c, nc, tc)
-                    writer(a, na, ta); writer(c, nc, tc); writer(d, nd, td)
+                    triangle(a, na, ta, b, nb, tb, c, nc, tc)
+                    triangle(a, na, ta, c, nc, tc, d, nd, td)
                 } else {
-                    writer(a, na, ta); writer(c, nc, tc); writer(b, nb, tb)
-                    writer(a, na, ta); writer(d, nd, td); writer(c, nc, tc)
+                    triangle(a, na, ta, c, nc, tc, b, nb, tb)
+                    triangle(a, na, ta, d, nd, td, c, nc, tc)
                 }
             }
         }
     }
     if (!closedPath) {
-        if (startCap) writeCap(loops, rows.first(), -rows.first().z, writer)
-        if (endCap) writeCap(loops, rows.last(), rows.last().z, writer)
+        if (startCap) writeCap(rowLoops.first(), rows.first(), -rows.first().z, writer)
+        if (endCap) writeCap(rowLoops.last(), rows.last(), rows.last().z, writer)
     }
 }
 
@@ -318,6 +406,8 @@ internal fun extrudeLoops(
 private fun writeCap(loops: List<ExtrusionLoop>, row: ExtrusionRow, facing: Vector3, writer: VertexWriter) {
     val closed = loops.filter { it.closed && it.points.size >= 3 }
     if (closed.isEmpty()) return
+    // a cross-section scaled to nothing has no cap
+    if ((row.x cross row.y).squaredLength < 1E-24) return
     val points = closed.flatMap { it.points }
     val indices = triangulate(closed.map { it.points }, FillRule.EVEN_ODD)
     val normal = facing.normalized

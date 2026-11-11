@@ -1,6 +1,5 @@
 package org.openrndr.extra.meshgenerators
 
-import org.openrndr.extra.shapes.frames.frames
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Path3D
@@ -18,15 +17,15 @@ import org.openrndr.shape.ShapeContour
  * @param up0 the initial up-vector
  * @param contourDistanceTolerance precision for calculating steps along
  * [contour]. Lower tolerance results in higher precision.
- * @param pathDistanceTolerance precision for calculating steps along
- * [path]. Lower tolerance results in higher precision.
+ * @param pathDistanceTolerance no longer used: the steps are at equal distances along [path]
  * @param steps the resulting positions in the path
  * @param frames a list of matrices holding the transformation matrices along
  * the path
  * @param startCap adds a start cap if set to true
  * @param endCap adds an end cap if set to true
- * @param scale A function that takes a curve `t` value and returns
- * a scaling factor for [contour] at that point.
+ * @param scale A function that takes the part of the steps, from 0 at the first to 1 at the last, and returns
+ * a scaling factor for [contour] at that step. Where it is 0 the cross-section is a point, and a cap there is left out.
+ * @param useFaceNormals true for the normals of the faces, false for smooth normals that follow the changes of scale
  * @param writer the vertex writer function
  */
 fun extrudeContourStepsScaled(
@@ -36,45 +35,22 @@ fun extrudeContourStepsScaled(
     up0: Vector3,
     contourDistanceTolerance: Double = 0.5,
     pathDistanceTolerance: Double = 0.5,
-    steps: List<Vector3> = path.equidistantPositions(
-        stepCount,
-        pathDistanceTolerance
-    ),
-    frames: List<Matrix44> = steps.frames(up0),
+    steps: List<Vector3> = path.evenSteps(stepCount),
+    frames: List<Matrix44> = path.posesAt(steps, up0),
     startCap: Boolean = true,
     endCap: Boolean = true,
     scale: (Double) -> Double = { _ -> 1.0 },
     useFaceNormals: Boolean,
     writer: VertexWriter
 ) {
-    val finalFrames = if (path.closed) frames + frames.first() else frames
-
-    val linearContour = contour.sampleLinear(contourDistanceTolerance)
-    val linearContourPoints2D = linearContour.adaptivePositions()
-
-    val crossSections = List(finalFrames.size) {
-        val t = it / (finalFrames.size - 1.0)
-        linearContourPoints2D.map { p -> p * scale(t) }
+    val loops = crossSectionLoops(listOf(contour), contourDistanceTolerance)
+    val frameRows = frameRows(frames, path.closed)
+    // every step scaled by the part of the steps it is at
+    val rows = frameRows.mapIndexed { i, row ->
+        val s = scale(if (frameRows.size < 2) 0.0 else i / (frameRows.size - 1.0))
+        ExtrusionRow(row.origin, row.x * s, row.y * s, row.z, row.normalX, row.normalY)
     }
-    if (!path.closed) {
-        if (startCap) {
-            triangulationWithFrame(
-                ShapeContour.fromPoints(crossSections.first(), true).shape.triangulation,
-                finalFrames.first(), false, writer
-            )
-        }
-        if (endCap) {
-            triangulationWithFrame(
-                ShapeContour.fromPoints(crossSections.last(), true).shape.triangulation,
-                finalFrames.last(), false, writer
-            )
-        }
-    }
-
-    // Then add sides
-    (finalFrames zip crossSections).windowed(2, 1).forEach {
-        contourSegment(it[0].second, it[1].second, it[0].first, it[1].first, writer)
-    }
+    extrudeRowLoops({ loops }, rows, path.closed, startCap, endCap, useFaceNormals, true, writer)
 }
 
 /**

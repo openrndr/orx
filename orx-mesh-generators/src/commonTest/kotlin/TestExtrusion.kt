@@ -1,11 +1,14 @@
 import org.openrndr.extra.meshgenerators.extrudeContourAdaptive
 import org.openrndr.extra.meshgenerators.extrudeContourSteps
+import org.openrndr.extra.meshgenerators.extrudeContourStepsMorphed
+import org.openrndr.extra.meshgenerators.extrudeContourStepsScaled
 import org.openrndr.extra.meshgenerators.extrudeShape
 import org.openrndr.extra.meshgenerators.extrudeShapeAdaptive
 import org.openrndr.extra.meshgenerators.extrudeShapeSteps
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Circle
+import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Path3D
 import org.openrndr.shape.Segment3D
 import org.openrndr.shape.Shape
@@ -13,7 +16,9 @@ import org.openrndr.shape.ShapeContour
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
+import kotlin.math.cos
 import kotlin.math.round
+import kotlin.math.sin
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -165,5 +170,96 @@ class TestExtrusion {
             )
         }.size
         assertEquals(count(1.0), count(50.0))
+    }
+
+    /** the largest angle between the vertex normals of [triangles] and the normals of their faces */
+    private fun offFaces(triangles: List<Vertex>): Double = (0 until triangles.size / 3).maxOf { t ->
+        val (a, b, c) = (0..2).map { triangles[3 * t + it] }
+        val face = (b.position - a.position) cross (c.position - a.position)
+        if (face.length < 1E-12) 0.0 else listOf(a, b, c).maxOf { degrees(it.normal, face) }
+    }
+
+    @Test
+    fun scaledExtrusionsHaveOutwardNormalsAndAreClosed() {
+        for (closed in listOf(false, true)) {
+            val path = ring(20.0, closed)
+            for ((name, c) in listOf("ccw" to ccw, "cw" to cw)) {
+                val label = "${if (closed) "closed" else "open"} $name"
+                check("scaled 1 $label", collect { w ->
+                    extrudeContourStepsScaled(c, path, 120, Vector3.UNIT_Y, 0.05, useFaceNormals = false, writer = w)
+                }, 20.0, 1.0)
+                // a scale that changes along the path tilts the side: smooth normals follow the faces
+                val cone = collect { w ->
+                    extrudeContourStepsScaled(c, path, 120, Vector3.UNIT_Y, 0.05, scale = { t -> 0.5 + t }, useFaceNormals = false, writer = w)
+                }
+                if (!closed) check("scaled 0.5 + t $label", cone, 20.0, 181.0)
+                assertTrue(offFaces(cone) < 8.0, "scaled 0.5 + t $label: normals up to ${offFaces(cone)} degrees off their faces")
+            }
+        }
+    }
+
+    @Test
+    fun scaledExtrusionsUseFaceNormalsWhenAsked() {
+        val path = ring(20.0, false)
+        val face = collect { w -> extrudeContourStepsScaled(ccw, path, 40, Vector3.UNIT_Y, 0.05, useFaceNormals = true, writer = w) }
+        assertTrue(offFaces(face) < 1E-2, "face normals up to ${offFaces(face)} degrees off their faces")
+        val smooth = collect { w -> extrudeContourStepsScaled(ccw, path, 40, Vector3.UNIT_Y, 0.05, useFaceNormals = false, writer = w) }
+        assertTrue(offFaces(smooth) > 1.0, "smooth normals are those of the faces")
+    }
+
+    @Test
+    fun scaledExtrusionsEndAtTheEndOfThePathWithTheLastScale() {
+        val path = ring(20.0, false)
+        val triangles = collect { w ->
+            extrudeContourStepsScaled(ccw, path, 40, Vector3.UNIT_Y, 0.05, scale = { t -> 1.0 + t }, useFaceNormals = false, writer = w)
+        }
+        val end = path.position(1.0)
+        val direction = path.direction(1.0).normalized
+        val cap = triangles.filter { abs(it.normal dot direction) > 0.999 && abs((it.position - end) dot direction) < 1E-6 }
+        assertTrue(cap.isNotEmpty(), "no end cap at the end of the path")
+        // scaled by 2 there: the rim of the cap is 4 from the end of the path, as near as Bezier circles are round
+        assertEquals(4.0, cap.maxOf { it.position.distanceTo(end) }, 1E-2)
+    }
+
+    @Test
+    fun hairlineEndsHaveNormalsAndNoCaps() {
+        val path = ring(20.0, false)
+        val triangles = collect { w ->
+            extrudeContourStepsScaled(ccw, path, 60, Vector3.UNIT_Y, 0.05, scale = { t -> 0.5 - 0.5 * cos(t * 2 * PI) }, useFaceNormals = false, writer = w)
+        }
+        // closed at the points of the ends, without caps there
+        check("hairline", triangles, 20.0, 181.0)
+        val start = path.position(0.0)
+        assertTrue(triangles.none { it.position.distanceTo(start) < 1E-9 && abs(it.normal dot path.direction(0.0).normalized) > 0.999 }, "a cap at a point")
+    }
+
+    @Test
+    fun morphedExtrusionsHaveOutwardNormalsAndAreClosed() {
+        for (closed in listOf(false, true)) {
+            val path = ring(20.0, closed)
+            for (clockwise in listOf(false, true)) {
+                val label = "${if (closed) "closed" else "open"} ${if (clockwise) "cw" else "ccw"}"
+                // a circle that grows and shrinks again, which comes round on a closed path
+                val triangles = collect { w ->
+                    extrudeContourStepsMorphed({ t ->
+                        Circle(0.0, 0.0, 1.5 + sin(t * PI)).contour.let { if (clockwise) it.reversed else it }
+                    }, path, 120, Vector3.UNIT_Y, 0.05, writer = w)
+                }
+                check("morphed $label", triangles, 20.0, 181.0)
+                assertTrue(offFaces(triangles) < 8.0, "morphed $label: normals up to ${offFaces(triangles)} degrees off their faces")
+            }
+        }
+    }
+
+    @Test
+    fun morphedCrossSectionsMayHaveDifferentDetail() {
+        val path = ring(20.0, false)
+        // from a circle, sampled at many points, to a square, at a few
+        val triangles = collect { w ->
+            extrudeContourStepsMorphed({ t ->
+                if (t < 0.5) Circle(0.0, 0.0, 2.0).contour else Rectangle.fromCenter(Vector2.ZERO, 3.0, 3.0).contour
+            }, path, 40, Vector3.UNIT_Y, 0.05, writer = w)
+        }
+        check("circle to square", triangles, 20.0, 181.0)
     }
 }
