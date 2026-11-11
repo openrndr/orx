@@ -4,18 +4,27 @@ import org.openrndr.shape.Segment2D
 import org.openrndr.shape.ShapeContour
 
 /** create a rectified contour
- * @param distanceTolerance distance tolerance to use, 0.5 is the default distance tolerance
- * @param lengthScale used to compute the size of the LUT, default value is 1.0
+ * @param distanceTolerance no longer used
+ * @param lengthScale the number of points per unit of length in [RectifiedPath.points], default value is 1.0
+ * @param lengthTolerance the largest error of the lengths along the path, in its units, default value is 1E-3
  **/
-fun ShapeContour.rectified(distanceTolerance: Double = 0.5, lengthScale: Double = 1.0): RectifiedContour {
-    return RectifiedContour(this, distanceTolerance, lengthScale)
+fun ShapeContour.rectified(
+    distanceTolerance: Double = 0.5,
+    lengthScale: Double = 1.0,
+    lengthTolerance: Double = 1E-3
+): RectifiedContour {
+    return RectifiedContour(this, distanceTolerance, lengthScale, lengthTolerance)
 }
 
 /**  create a rectified contour
- *   @param distanceTolerance distance tolerance to use, 0.5 is the default distance tolerance
- *   @param lengthScale used to compute the size of the LUT, default value is 1.0
- *
- * */
-fun Segment2D.rectified(distanceTolerance: Double = 0.5, lengthScale: Double = 1.0): RectifiedContour {
-    return RectifiedContour(this.contour, distanceTolerance, lengthScale)
+ * @param distanceTolerance no longer used
+ * @param lengthScale the number of points per unit of length in [RectifiedPath.points], default value is 1.0
+ * @param lengthTolerance the largest error of the lengths along the path, in its units, default value is 1E-3
+ */
+fun Segment2D.rectified(
+    distanceTolerance: Double = 0.5,
+    lengthScale: Double = 1.0,
+    lengthTolerance: Double = 1E-3
+): RectifiedContour {
+    return RectifiedContour(this.contour, distanceTolerance, lengthScale, lengthTolerance)
 }

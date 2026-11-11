@@ -4,8 +4,13 @@ import org.openrndr.math.Vector3
 import org.openrndr.shape.Path3D
 import kotlin.math.floor
 
-class RectifiedPath3D(contour: Path3D, distanceTolerance: Double = 0.5, lengthScale: Double = 1.0) :
-    RectifiedPath<Vector3>(contour, distanceTolerance, lengthScale) {
+class RectifiedPath3D(
+    contour: Path3D,
+    distanceTolerance: Double = 0.5,
+    lengthScale: Double = 1.0,
+    lengthTolerance: Double = 1E-3
+) :
+    RectifiedPath<Vector3>(contour, distanceTolerance, lengthScale, lengthTolerance) {
 
     val path: Path3D get() = originalPath as Path3D
 

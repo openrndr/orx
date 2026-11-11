@@ -4,6 +4,7 @@ import org.openrndr.extra.shapes.utilities.splitAtBase
 import org.openrndr.math.EuclideanVector
 import org.openrndr.math.clamp
 import org.openrndr.shape.Path
+import kotlin.math.abs
 
 /**
  * Provides a rectified representation of a path in N-dimensional Euclidean space. Rectification refers
@@ -16,62 +17,93 @@ import org.openrndr.shape.Path
  * @property intervals Lazy-evaluated list of parameter intervals corresponding to the `points` property,
  * used for mapping and inverse mapping of parameter values.
  *
- * @param distanceTolerance The acceptable tolerance for the distance error in the rectification process.
- * Default value is 0.5.
- * @param lengthScale Scale factor to adjust the length of the Look-Up Table (LUT) for the rectified path.
+ * @param distanceTolerance No longer used: the table of lengths follows the segments of the path, see [lengthTolerance].
+ * @param lengthScale Scale factor to adjust the number of [points], about one per unit of length times [lengthScale].
  * Default value is 1.0.
+ * @param lengthTolerance The largest error, in the units of the path, of the lengths along the path that the
+ * rectification works with. Default value is 1E-3.
  */
 abstract class RectifiedPath<T : EuclideanVector<T>>(
     val originalPath: Path<T>,
     distanceTolerance: Double = 0.5,
-    lengthScale: Double = 1.0
+    private val lengthScale: Double = 1.0,
+    val lengthTolerance: Double = 1E-3
 ) {
     //<editor-fold desc="the table of lengths">
-    // the parameters of the path and the lengths along it, at samples of the parameter of every segment: 1 interval
-    // for a linear segment, [SAMPLES] for a curved one; in every interval the parameter follows the length as a cubic
-    // Hermite curve, with the rate at which the parameter changes with the length at both ends, so that positions at
-    // equal steps of the rectified parameter are equally far apart and move at an even pace
+    // the parameters of the path and the lengths along it at the ends of intervals of the parameter: 1 interval for a
+    // linear segment, and for a curved one intervals that are halved until they fit; in every interval the length
+    // follows the parameter as a cubic Hermite curve, with the speed of the path at both ends. The lengths are
+    // Gauss-Legendre integrals of the speed, so they agree with the speeds, and the length as a function of the
+    // parameter stays smooth where the speed drops to nothing, like at a cusp
     private val tableT: DoubleArray
     private val tableS: DoubleArray
 
-    // dt/ds at the start and at the end of every interval, within its segment
-    private val slope0: DoubleArray
-    private val slope1: DoubleArray
+    // ds/dt, the speed of the path by its own parameter, at the start and at the end of every interval
+    private val speed0: DoubleArray
+    private val speed1: DoubleArray
 
     init {
         val segments = originalPath.segments
         val m = segments.size
         val ts = ArrayList<Double>()
         val ss = ArrayList<Double>()
-        val s0 = ArrayList<Double>()
-        val s1 = ArrayList<Double>()
+        val v0 = ArrayList<Double>()
+        val v1 = ArrayList<Double>()
         if (m > 0) {
             var length = 0.0
             ts.add(0.0); ss.add(0.0)
             for ((i, segment) in segments.withIndex()) {
-                val samples = if (segment.linear) 1 else SAMPLES
-                // the rate of the parameter of the path per length, from the speed of the segment
-                fun slope(u: Double): Double {
-                    val speed = segment.derivative(u).length * m
-                    return if (speed > 1E-12) 1.0 / speed else Double.NaN
+                if (segment.linear) {
+                    val l = (segment.end - segment.start).length
+                    length += l
+                    ts.add((i + 1.0) / m); ss.add(length)
+                    v0.add(l * m); v1.add(l * m)
+                    continue
                 }
-                var previous = segment.start
-                for (k in 1..samples) {
-                    val u = k.toDouble() / samples
-                    val p = segment.position(u)
-                    length += (p - previous).length
-                    previous = p
-                    ts.add((i + u) / m)
-                    ss.add(length)
-                    s0.add(slope((k - 1).toDouble() / samples))
-                    s1.add(slope(u))
+                // the speed by the parameter of the path, which runs 1/m along a segment
+                fun speed(u: Double): Double = segment.derivative(u).length * m
+
+                // the length of the segment from u0 to u1
+                fun integral(u0: Double, u1: Double): Double {
+                    val h = (u1 - u0) / 2
+                    val mid = (u0 + u1) / 2
+                    var sum = 0.0
+                    for (k in GAUSS_X.indices) sum += GAUSS_W[k] * speed(mid + h * GAUSS_X[k])
+                    return sum * h / m
+                }
+
+                // adds the interval from u0 to u1 with [l] its length, or its halves when the Hermite curve misses
+                // the length to its middle or the halves add up to another length
+                fun add(u0: Double, u1: Double, l: Double, sp0: Double, sp1: Double, depth: Int) {
+                    val um = (u0 + u1) / 2
+                    val left = integral(u0, um)
+                    val right = integral(um, u1)
+                    val hermite = l / 2 + (u1 - u0) / m / 8 * (sp0 - sp1)
+                    if (depth < MAX_DEPTH &&
+                        (abs(hermite - left) > lengthTolerance || abs(left + right - l) > lengthTolerance)
+                    ) {
+                        val spm = speed(um)
+                        add(u0, um, left, sp0, spm, depth + 1)
+                        add(um, u1, right, spm, sp1, depth + 1)
+                    } else {
+                        length += l
+                        ts.add((i + u1) / m); ss.add(length)
+                        v0.add(sp0); v1.add(sp1)
+                    }
+                }
+                for (k in 0 until INITIAL_INTERVALS) {
+                    val u0 = k.toDouble() / INITIAL_INTERVALS
+                    val u1 = (k + 1.0) / INITIAL_INTERVALS
+                    add(u0, u1, integral(u0, u1), speed(u0), speed(u1), 0)
                 }
             }
+            // the last parameter exactly 1.0
+            ts[ts.lastIndex] = 1.0
         }
         tableT = ts.toDoubleArray()
         tableS = ss.toDoubleArray()
-        slope0 = s0.toDoubleArray()
-        slope1 = s1.toDoubleArray()
+        speed0 = v0.toDoubleArray()
+        speed1 = v1.toDoubleArray()
     }
 
     /** the length of the path, as measured by its table */
@@ -80,23 +112,32 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
     /** the parameter of [originalPath] at [s] along it */
     private fun parameterAt(s: Double): Double {
         if (tableS.size < 2) return 0.0
-        val total = tableLength
         if (s <= 0.0) return 0.0
-        if (s >= total) return 1.0
+        if (s >= tableLength) return 1.0
         val k = intervalOf(tableS, s)
-        val h = tableS[k + 1] - tableS[k]
-        if (h <= 0.0) return tableT[k]
-        val x = (s - tableS[k]) / h
-        val t0 = tableT[k]
-        val t1 = tableT[k + 1]
-        val m0 = slope0[k]
-        val m1 = slope1[k]
-        // without the speed at an end, like at a cusp, the parameter follows the length linearly
-        if (m0.isNaN() || m1.isNaN()) return t0 + (t1 - t0) * x
-        val x2 = x * x
-        val x3 = x2 * x
-        val t = (2 * x3 - 3 * x2 + 1) * t0 + (x3 - 2 * x2 + x) * h * m0 + (-2 * x3 + 3 * x2) * t1 + (x3 - x2) * h * m1
-        return t.coerceIn(t0, t1)
+        val s0 = tableS[k]
+        val s1 = tableS[k + 1]
+        val h = tableT[k + 1] - tableT[k]
+        if (s1 <= s0) return tableT[k]
+        val m0 = h * speed0[k]
+        val m1 = h * speed1[k]
+        // the Hermite curve of the interval solved for s by Newton steps, kept within the bracket of the solution
+        var lo = 0.0
+        var hi = 1.0
+        var x = (s - s0) / (s1 - s0)
+        val epsilon = (s1 - s0) * 1E-13
+        for (iteration in 0 until 32) {
+            val x2 = x * x
+            val x3 = x2 * x
+            val f = (2 * x3 - 3 * x2 + 1) * s0 + (x3 - 2 * x2 + x) * m0 + (-2 * x3 + 3 * x2) * s1 + (x3 - x2) * m1 - s
+            if (abs(f) <= epsilon) break
+            if (f > 0.0) hi = x else lo = x
+            val d = (6 * x2 - 6 * x) * (s0 - s1) + (3 * x2 - 4 * x + 1) * m0 + (3 * x2 - 2 * x) * m1
+            val next = x - f / d
+            x = if (next > lo && next < hi) next else (lo + hi) / 2
+            if (hi - lo < 1E-15) break
+        }
+        return tableT[k] + h * x
     }
 
     /** the length along [originalPath] at its parameter [t] */
@@ -105,27 +146,24 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
         if (t <= 0.0) return 0.0
         if (t >= 1.0) return tableLength
         val k = intervalOf(tableT, t)
-        // the inverse of the Hermite curve of the interval, by a few steps of Newton from the linear guess
-        val dt = tableT[k + 1] - tableT[k]
-        if (dt <= 0.0) return tableS[k]
-        var s = tableS[k] + (tableS[k + 1] - tableS[k]) * (t - tableT[k]) / dt
-        repeat(4) {
-            val e = parameterAt(s) - t
-            val h = (tableS[k + 1] - tableS[k]) * 1E-6
-            val d = (parameterAt(s + h) - parameterAt(s - h)) / (2 * h)
-            if (d <= 0.0 || !d.isFinite()) return s
-            s = (s - e / d).coerceIn(tableS[k], tableS[k + 1])
-        }
-        return s
+        val h = tableT[k + 1] - tableT[k]
+        if (h <= 0.0) return tableS[k]
+        val x = (t - tableT[k]) / h
+        val x2 = x * x
+        val x3 = x2 * x
+        val s = (2 * x3 - 3 * x2 + 1) * tableS[k] + (x3 - 2 * x2 + x) * h * speed0[k] +
+                (-2 * x3 + 3 * x2) * tableS[k + 1] + (x3 - x2) * h * speed1[k]
+        return s.coerceIn(tableS[k], tableS[k + 1])
     }
     //</editor-fold>
 
     /**
      * the points at equal distances along the path with their parameters of [originalPath], about one per unit of
-     * length times [lengthScale]; a closed path has the start again at its end, with the parameter 1.0.
-     * [distanceTolerance] is no longer used: the distances follow the segments of the path
+     * length times [lengthScale]; a closed path has the start again at its end, with the parameter 1.0. Computed on
+     * first use
      */
-    val points: List<Pair<T, Double>> = if (originalPath.empty) emptyList() else {
+    val points: List<Pair<T, Double>> by lazy {
+        if (originalPath.empty) return@lazy emptyList()
         val count = (originalPath.length * lengthScale).toInt().coerceAtLeast(2)
         val total = tableLength
         if (originalPath.closed) {
@@ -215,8 +253,19 @@ abstract class RectifiedPath<T : EuclideanVector<T>>(
     }
 }
 
-/** the samples of the parameter of a curved segment in the table of lengths of a [RectifiedPath] */
-private const val SAMPLES = 32
+/** the intervals that the table of lengths of a [RectifiedPath] starts with on a curved segment */
+private const val INITIAL_INTERVALS = 4
+
+/** the most times the intervals of the table of lengths of a [RectifiedPath] are halved */
+private const val MAX_DEPTH = 12
+
+/** the nodes and weights of 5-point Gauss-Legendre quadrature on [-1, 1] */
+private val GAUSS_X = doubleArrayOf(
+    -0.9061798459386640, -0.5384693101056831, 0.0, 0.5384693101056831, 0.9061798459386640
+)
+private val GAUSS_W = doubleArrayOf(
+    0.2369268850561891, 0.4786286704993665, 0.5688888888888889, 0.4786286704993665, 0.2369268850561891
+)
 
 /** the index of the interval of the ascending [values] that holds [x], from 0 to the second to last index */
 private fun intervalOf(values: DoubleArray, x: Double): Int {

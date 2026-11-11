@@ -6,8 +6,13 @@ import org.openrndr.math.YPolarity
 import org.openrndr.shape.ShapeContour
 import kotlin.math.floor
 
-class RectifiedContour(contour: ShapeContour, distanceTolerance: Double = 0.5, lengthScale: Double = 1.0) :
-    RectifiedPath<Vector2>(contour, distanceTolerance, lengthScale) {
+class RectifiedContour(
+    contour: ShapeContour,
+    distanceTolerance: Double = 0.5,
+    lengthScale: Double = 1.0,
+    lengthTolerance: Double = 1E-3
+) :
+    RectifiedPath<Vector2>(contour, distanceTolerance, lengthScale, lengthTolerance) {
     fun velocity(t: Double): Vector2 {
         return if (originalPath.empty) {
             Vector2.ZERO
