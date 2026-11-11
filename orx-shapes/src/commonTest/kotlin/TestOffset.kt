@@ -40,55 +40,68 @@ class TestOffset {
     private val sharpRoundedStar = regularStarRounded(5, 60.0, 150.0, 0.1, 0.2, center)
     private val testShapes = listOf(plainStar, roundedStar, sharpRoundedStar)
 
-//    @Test
-//    fun erosionStaysNonEmptyBeforeHalfDiagonalCollapse() {
-//        for (c in testShapes) {
-//            val halfDiagonal = 0.5 * hypot(c.bounds.width, c.bounds.height)
-//            for (i in 0..40) {
-//                val d = -halfDiagonal * 0.95 * i / 40.0
-//                val result = c.offset(d, SegmentJoin.ROUND)
-//                assertTrue(
-//                    result.contours.isNotEmpty(),
-//                    "expected nonempty erosion at d=$d (halfDiagonal=$halfDiagonal)"
-//                )
-//            }
-//        }
-//    }
+    /** the radius of the largest circle inside [c], by sampling a grid */
+    private fun inscribedRadius(c: ShapeContour): Double {
+        var best = 0.0
+        val n = 120
+        for (j in 0..n) for (i in 0..n) {
+            val p = Vector2(c.bounds.x + c.bounds.width * i / n, c.bounds.y + c.bounds.height * j / n)
+            if (p in c) best = maxOf(best, c.nearest(p).position.distanceTo(p))
+        }
+        return best
+    }
 
-//    @Test
-//    fun erosionAreaNeverIncreases() {
-//        // Two known sources of small, harmless cross-call noise (each top-level offset() call
-//        // re-walks from distance 0 independently, so two nearby target distances aren't
-//        // guaranteed to agree to the last decimal): (1) once area has shrunk to a small
-//        // fraction of the original, a concave shape's own features can fully erode away and
-//        // merge - a genuinely chaotic intermediate-topology event (confirmed separately: zero
-//        // containment violations there; the walk's stall-on-failure fallback keeps the result
-//        // nonempty and contained, but area can wobble within a small absolute range rather than
-//        // monotonically decrease); (2) at small-to-moderate erosion depths on a star shape, a
-//        // small extra fragment can appear near each point during corner-join assembly (also
-//        // confirmed harmless: zero containment violations, and already tolerated by
-//        // [erosionNeverFragmentsIntoManyComparablePieces] since one piece still dominates) -
-//        // this shifts total area slightly depending on exactly which walk checkpoints a given
-//        // call happens to pass through. A generous relative tolerance absorbs both without
-//        // masking a real regression, which showed up this session as much larger jumps
-//        // (wrongly doubling or more, or dropping to zero).
-//        for (c in testShapes) {
-//            val originalArea = c.approxArea()
-//            val halfDiagonal = 0.5 * hypot(c.bounds.width, c.bounds.height)
-//            var lastArea = originalArea
-//            for (i in 0..80) {
-//                val d = -halfDiagonal * 0.95 * i / 80.0
-//                val area = c.offset(d, SegmentJoin.ROUND).approxArea()
-//                if (lastArea > originalArea * 0.1) {
-//                    assertTrue(
-//                        area <= lastArea * 1.05 + 1e-6,
-//                        "area increased at d=$d: $area > $lastArea (original=$originalArea)"
-//                    )
-//                }
-//                if (area > 0.0) lastArea = area
-//            }
-//        }
-//    }
+    @Test
+    fun erosionStaysNonEmptyUntilTheInscribedRadius() {
+        // a smooth blob that folds at three lobes long before it vanishes, as well as the stars
+        val blob = org.openrndr.extra.shapes.hobbycurve.hobbyCurve(List(9) { k ->
+            val a = k * 2 * kotlin.math.PI / 9
+            center + Vector2(kotlin.math.cos(a), kotlin.math.sin(a)) * (110.0 + 40.0 * kotlin.math.sin(3 * a))
+        }, true)
+        for (c in testShapes + blob) {
+            val radius = inscribedRadius(c)
+            for (i in 0..40) {
+                val d = -radius * 0.98 * i / 40.0
+                assertTrue(c.offset(d, SegmentJoin.ROUND).contours.isNotEmpty(), "expected nonempty erosion at d=$d (inscribed radius $radius)")
+            }
+            assertTrue(c.offset(-radius * 1.03, SegmentJoin.ROUND).contours.isEmpty(), "expected an empty erosion beyond the inscribed radius $radius")
+        }
+    }
+
+    @Test
+    fun erosionAreaNeverIncreases() {
+        // Two known sources of small, harmless cross-call noise (each top-level offset() call
+        // re-walks from distance 0 independently, so two nearby target distances aren't
+        // guaranteed to agree to the last decimal): (1) once area has shrunk to a small
+        // fraction of the original, a concave shape's own features can fully erode away and
+        // merge - a genuinely chaotic intermediate-topology event (confirmed separately: zero
+        // containment violations there; the walk's stall-on-failure fallback keeps the result
+        // nonempty and contained, but area can wobble within a small absolute range rather than
+        // monotonically decrease); (2) at small-to-moderate erosion depths on a star shape, a
+        // small extra fragment can appear near each point during corner-join assembly (also
+        // confirmed harmless: zero containment violations, and already tolerated by
+        // [erosionNeverFragmentsIntoManyComparablePieces] since one piece still dominates) -
+        // this shifts total area slightly depending on exactly which walk checkpoints a given
+        // call happens to pass through. A generous relative tolerance absorbs both without
+        // masking a real regression, which showed up this session as much larger jumps
+        // (wrongly doubling or more, or dropping to zero).
+        for (c in testShapes) {
+            val originalArea = c.approxArea()
+            val halfDiagonal = 0.5 * hypot(c.bounds.width, c.bounds.height)
+            var lastArea = originalArea
+            for (i in 0..80) {
+                val d = -halfDiagonal * 0.95 * i / 80.0
+                val area = c.offset(d, SegmentJoin.ROUND).approxArea()
+                if (lastArea > originalArea * 0.1) {
+                    assertTrue(
+                        area <= lastArea * 1.05 + 1e-6,
+                        "area increased at d=$d: $area > $lastArea (original=$originalArea)"
+                    )
+                }
+                if (area > 0.0) lastArea = area
+            }
+        }
+    }
 
     @Test
     fun erosionStaysWithinOriginal() {
@@ -109,21 +122,21 @@ class TestOffset {
         }
     }
 
-//    @Test
-//    fun erosionNeverFragmentsIntoManyComparablePieces() {
-//        for (c in testShapes) {
-//            for (i in 1..60) {
-//                val d = -200.0 * i / 60.0
-//                val result = c.offset(d, SegmentJoin.ROUND)
-//                if (result.contours.size >= 3) {
-//                    val areas = result.contours.map { it.approxArea() }
-//                    val total = areas.sum().coerceAtLeast(1e-12)
-//                    val maxShare = (areas.maxOrNull() ?: 0.0) / total
-//                    assertTrue(maxShare >= 0.5, "fragmented into many comparable pieces at d=$d: shares=$areas")
-//                }
-//            }
-//        }
-//    }
+    @Test
+    fun erosionNeverFragmentsIntoManyComparablePieces() {
+        for (c in testShapes) {
+            for (i in 1..60) {
+                val d = -200.0 * i / 60.0
+                val result = c.offset(d, SegmentJoin.ROUND)
+                if (result.contours.size >= 3) {
+                    val areas = result.contours.map { it.approxArea() }
+                    val total = areas.sum().coerceAtLeast(1e-12)
+                    val maxShare = (areas.maxOrNull() ?: 0.0) / total
+                    assertTrue(maxShare >= 0.5, "fragmented into many comparable pieces at d=$d: shares=$areas")
+                }
+            }
+        }
+    }
 
     @Test
     fun dilationIsAlwaysSingleContour() {

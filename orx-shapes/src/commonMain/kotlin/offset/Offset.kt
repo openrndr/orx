@@ -154,11 +154,17 @@ fun Segment2D.offset(
  *
  * For a closed contour the result is moved outwards if [distance] is > 0 or inwards if [distance] is < 0, for an open
  * contour it is moved along the contour's normal. The contour is split at its sharp corners into smooth runs. Every run
- * is offset along its normal with [RectifiedContour.distortUniform], with [FoldMode.TRIM] cutting out the stretches
- * where the offset would fold over itself. The runs are then joined: where they pull apart the gap is closed with a
- * join of type [joinType], where they overlap both runs are cut back to their crossing. Remaining self-intersections
- * are resolved with [ShapeContour.removeSelfIntersections], and pieces that are not at [distance] from the contour
- * (such as the inverted remains of an inward offset larger than the shape) are dropped.
+ * is offset along its normal with [RectifiedContour.distortUniform]. The runs are then joined: where they pull apart
+ * the gap is closed with a join of type [joinType], where they overlap both runs are cut back to their crossing.
+ *
+ * For a closed contour the folds of the offset curve are kept, and the result is read off the
+ * [org.openrndr.extra.shapes.arrangement.Arrangement] of the curve with itself: of its faces, those whose points are at
+ * more than [distance] inside the contour (for an erosion), or inside it or within [distance] of it (for a dilation),
+ * are the offset shape, bounded by the edges between them and the other faces. Swallowtails, and the inverted remains
+ * of an inward offset larger than parts of the shape, are faces that are left out.
+ *
+ * For an open contour the folds are cut out with [FoldMode.TRIM], remaining self-intersections are resolved with
+ * [ShapeContour.removeSelfIntersections], and pieces that are not at [distance] from the contour are dropped.
  *
  * @param joinType Specifies how to join together the moved runs at sharp corners.
  * @param errorTolerance maximum fit error of the offset curves
@@ -185,7 +191,15 @@ fun ShapeContour.offset(
         return Shape(emptyList())
     }
 
-    // positive distances move a closed contour outwards, whichever way its normals point
+    if (closed) {
+        // positive distances move a closed contour outwards, whichever way its normals point
+        val curve = offsetCurve(distance * normalSign(), joinType, errorTolerance, sampleDistance, FoldMode.FOLD)
+        if (curve.empty) {
+            return Shape(emptyList())
+        }
+        return offsetRegion(curve, distance, errorTolerance)
+    }
+
     val cleaned = offsetCurve(distance * normalSign(), joinType, errorTolerance, sampleDistance)
     if (cleaned.empty) {
         return Shape(emptyList())
@@ -217,11 +231,12 @@ internal fun ShapeContour.offsetCurve(
     signedDistance: Double,
     joinType: SegmentJoin,
     errorTolerance: Double,
-    sampleDistance: Double
+    sampleDistance: Double,
+    foldMode: FoldMode = FoldMode.TRIM
 ): ShapeContour {
     fun offsetRun(run: ShapeContour): ShapeContour {
         val rectified = run.rectified()
-        return rectified.distortUniform(errorTolerance, maxDepth = 12, sampleDistance, FoldMode.TRIM) { t, position ->
+        return rectified.distortUniform(errorTolerance, maxDepth = 12, sampleDistance, foldMode) { t, position ->
             position + rectified.normal(t) * signedDistance
         }
     }
@@ -494,3 +509,116 @@ internal fun arcSegments(center: Vector2, from: Vector2, to: Vector2, radius: Do
     }
 }
 
+/**
+ * The region bounded by the offset [curve] of this closed contour at [distance]: the faces of the arrangement of the
+ * curve with itself whose points lie in the offset region, bounded by the edges they share with the faces that don't.
+ * Faces too thin to have a point inside, or whose point is within the fit tolerance of the region's boundary, like the
+ * slivers between the crossing sides of a fold, are decided by the faces around them, so that they don't leave specks
+ * or pinholes.
+ */
+private fun ShapeContour.offsetRegion(curve: ShapeContour, distance: Double, errorTolerance: Double): Shape {
+    val arrangement = org.openrndr.extra.shapes.arrangement.Arrangement(
+        listOf(curve, curve), maxIters = 4 * curve.segments.size + 1000
+    )
+    val margin = 4.0 * errorTolerance
+    val inside = shape
+    // how far inside a face, from an edge, a point is taken when the face is too thin to triangulate
+    val probe = 1E-6 * (curve.bounds.width + curve.bounds.height)
+
+    /** whether [p] lies in the offset region, or null when it is too close to the region's boundary to tell */
+    fun inRegion(p: Vector2): Boolean? {
+        val d = nearest(p).position.distanceTo(p)
+        val within = p in inside
+        val beyond = if (distance < 0.0) (if (within) d + distance else -d + distance) else (if (within) d + distance else distance - d)
+        // beyond is how far inside the region p lies
+        return if (abs(beyond) <= margin) null else beyond > 0.0
+    }
+
+    val faces = arrangement.faces
+    val walks = arrangement.halfEdges.groupBy { it.face }
+    val decided = HashMap<org.openrndr.extra.shapes.arrangement.XFace, Boolean>()
+    val undecided = mutableListOf<org.openrndr.extra.shapes.arrangement.XFace>()
+    for (face in faces) {
+        if (face !is org.openrndr.extra.shapes.arrangement.BoundedFace) {
+            decided[face] = false
+            continue
+        }
+        // a point well inside the face, or for a face too thin to triangulate, one just inside its longest edge
+        val p = interiorPoint(face.shape) ?: walks[face]?.maxByOrNull { it.contour.length }?.let { h ->
+            h.contour.position(0.5) - h.contour.normal(0.5) * probe
+        }
+        val keep = p?.let { inRegion(it) }
+        if (keep == null) undecided.add(face) else decided[face] = keep
+    }
+    // undecided faces follow the decided faces around them, by the length of the edges they share
+    repeat(undecided.size + 1) {
+        var changed = false
+        for (face in undecided) {
+            if (face in decided) continue
+            var keepWeight = 0.0
+            var dropWeight = 0.0
+            for (h in walks[face].orEmpty()) {
+                when (decided[h.twin.face]) {
+                    true -> keepWeight += h.contour.length
+                    false -> dropWeight += h.contour.length
+                    null -> {}
+                }
+            }
+            if (keepWeight > 0.0 || dropWeight > 0.0) {
+                decided[face] = keepWeight > dropWeight
+                changed = true
+            }
+        }
+        if (!changed) return@repeat
+    }
+    val kept = faces.filter { decided[it] == true }.toSet()
+    if (kept.isEmpty()) {
+        return Shape(emptyList())
+    }
+
+    // the half-edges with a kept face on their right and another face on their left, walked into loops
+    val boundary = arrangement.halfEdges.filter { it.face in kept && it.twin.face !in kept }
+    val visited = HashSet<org.openrndr.extra.shapes.arrangement.XHalfEdge>()
+    val loops = mutableListOf<ShapeContour>()
+    for (start in boundary) {
+        if (start in visited) continue
+        val segments = mutableListOf<Segment2D>()
+        var current = start
+        var steps = 0
+        while (current !in visited && steps++ < 10 * boundary.size + 10) {
+            visited.add(current)
+            segments.addAll(current.contour.segments)
+            // the next boundary half-edge: around the target, past the edges between two kept faces
+            var next = current.next
+            var turns = 0
+            while (next.twin.face in kept && turns++ < 1000) {
+                next = next.twin.next
+            }
+            current = next
+        }
+        if (segments.isNotEmpty()) {
+            loops.add(ShapeContour(segments, true, polarity).withoutTinySegments())
+        }
+    }
+    return Shape(loops.filter { !it.empty })
+}
+
+/**
+ * A point well inside [shape]: the centroid of the largest triangle of its triangulation, or null when it has no area
+ */
+private fun interiorPoint(shape: Shape): Vector2? {
+    val triangles = triangulate(shape, 0.05)
+    var best: Vector2? = null
+    var bestArea = 0.0
+    for (i in 0 until triangles.size / 3) {
+        val a = triangles[3 * i]
+        val b = triangles[3 * i + 1]
+        val c = triangles[3 * i + 2]
+        val area = abs((b - a).x * (c - a).y - (b - a).y * (c - a).x)
+        if (area > bestArea) {
+            bestArea = area
+            best = (a + b + c) / 3.0
+        }
+    }
+    return best
+}
