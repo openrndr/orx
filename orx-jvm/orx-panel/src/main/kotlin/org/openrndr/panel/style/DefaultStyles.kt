@@ -271,6 +271,7 @@ val defaultStylesCss = """
         padding: 6px 12px; font-size: var(--control-font-size); color: var(--control-text); width: auto;
         transition-duration: var(--transition);
     }
+    dock-tab.closable { padding-right: 26px }
     dock-tab:hover { background-color: var(--control-sunken-hover-background) }
     dock-tab:selected { background-color: var(--control-background); color: var(--control-selected-text) }
     dock-content { flex: 1; flex-basis: 0; overflow: scroll; overflow-x: hidden; padding: 5px }

@@ -324,6 +324,197 @@ class ToolsTest : PanelTestFixture() {
     }
 
     @Test
+    fun `closable panels close and open again where they were`() {
+        lateinit var dock: Dock
+        lateinit var a: DockPanel
+        lateinit var b: DockPanel
+        lateinit var c: DockPanel
+        lateinit var d: DockPanel
+        val cm = panel {
+            css("dock { width: 600px; height: 400px }")
+            layout {
+                dock = dock {
+                    a = panel("A") { p { "a" } }
+                    b = panel("B", closable = true) { p { "b" } }
+                    c = panel("C", DockZone.RIGHT, closable = true) { p { "c" } }
+                    d = panel("D", DockZone.BOTTOM, c) { p { "d" } }
+                }
+            }
+        }
+        val events = mutableListOf<String>()
+        dock.panelClosed.listen { events.add("closed ${it.title}") }
+        dock.panelOpened.listen { events.add("opened ${it.title}") }
+        cm.frames()
+        fun groups() = dock.root!!.groups().map { it.panels }
+        assertEquals(listOf(listOf(a, b), listOf(c), listOf(d)), groups())
+
+        // a panel that is not closable stays
+        dock.close(a)
+        assertTrue(dock.isOpen(a))
+        assertEquals(listOf(listOf(a, b), listOf(c), listOf(d)), groups())
+
+        // a closed panel is out of the layout and not drawn, but kept with its content
+        val content = b.content.children.toList()
+        dock.close(b)
+        cm.frames()
+        assertFalse(dock.isOpen(b))
+        assertEquals(listOf(b), dock.closedPanels)
+        assertTrue(b in dock.panels)
+        assertEquals(listOf(listOf(a), listOf(c), listOf(d)), groups())
+        assertNull(b.content.parent)
+        assertEquals(content, b.content.children.toList())
+        // and opens in its group, where it was, showing
+        dock.open(b)
+        cm.frames()
+        assertEquals(listOf(listOf(a, b), listOf(c), listOf(d)), groups())
+        assertSame(b, dock.groupOf(a)!!.selectedPanel)
+        assertNotNull(b.content.parent)
+
+        // a panel alone in its group: the group goes, and comes back on the same side of its neighbour
+        dock.close(c)
+        cm.frames()
+        assertEquals(listOf(listOf(a, b), listOf(d)), groups())
+        dock.open(c)
+        cm.frames()
+        assertEquals(listOf(listOf(a, b), listOf(c), listOf(d)), groups())
+        val right = (dock.root as DockNode.Split).second as DockNode.Split
+        assertTrue(right.vertical)
+        assertEquals(listOf(c), (right.first as DockNode.Group).panels)
+        assertEquals(listOf("closed B", "opened B", "closed C", "opened C"), events)
+
+        // the × on the tab closes it, a click elsewhere on the tab selects it
+        fun tab(panel: DockPanel): DockTab {
+            var found: DockTab? = null
+            fun visit(e: Element) { if (e is DockTab && e.panel === panel) found = e else e.children.forEach(::visit) }
+            visit(dock)
+            return found!!
+        }
+        dock.select(a)
+        cm.frames()
+        val tabB = tab(b)
+        assertTrue(tabB.layout.screenWidth > tab(a).layout.screenWidth, "the tab of a closable panel has room for its ×")
+        val middle = Vector2(tabB.layout.screenX + 14.0, tabB.layout.screenY + tabB.layout.screenHeight / 2.0)
+        // clicks more than the time of a double click apart
+        Thread.sleep(600)
+        cm.move(middle); cm.press(middle); cm.release(middle)
+        cm.frames()
+        assertTrue(dock.isOpen(b))
+        assertSame(b, dock.groupOf(a)!!.selectedPanel)
+        val cross = Vector2(tabB.layout.screenX + tabB.layout.screenWidth - 13.0, middle.y)
+        Thread.sleep(600)
+        cm.move(cross); cm.press(cross); cm.release(cross)
+        cm.frames()
+        assertFalse(dock.isOpen(b))
+        dock.open(b)
+        cm.frames()
+
+        // mod+w closes the panel with the keyboard focus, when it can be closed
+        val mod = Shortcut.parse("mod+w")!!.modifiers.single()
+        cm.keyboardInput.target = a.content.children.first()
+        cm.key(0, mod, name = "w")
+        assertTrue(dock.isOpen(a))
+        cm.keyboardInput.target = b.content.children.first()
+        cm.key(0, mod, name = "w")
+        assertFalse(dock.isOpen(b))
+        assertNull(cm.keyboardInput.target, "the focus leaves the closed panel")
+        dock.open(b)
+        cm.frames()
+        assertTrue(dock.closedPanels.isEmpty())
+    }
+
+    @Test
+    fun `panels that share a group open into it again`() {
+        lateinit var dock: Dock
+        lateinit var a: DockPanel
+        lateinit var b: DockPanel
+        lateinit var e: DockPanel
+        val cm = panel {
+            css("dock { width: 600px; height: 400px }")
+            layout {
+                dock = dock {
+                    a = panel("A") { p { "a" } }
+                    b = panel("B", DockZone.RIGHT, closable = true) { p { "b" } }
+                    e = panel("E", DockZone.CENTER, b, closable = true) { p { "e" } }
+                }
+            }
+        }
+        cm.frames()
+        fun groups() = dock.root!!.groups().map { it.panels }
+        assertEquals(listOf(listOf(a), listOf(b, e)), groups())
+        dock.close(b)
+        dock.close(e)
+        cm.frames()
+        assertEquals(listOf(listOf(a)), groups())
+        // the first back is right of a again, the other joins it
+        dock.open(b)
+        cm.frames()
+        assertEquals(listOf(listOf(a), listOf(b)), groups())
+        dock.open(e)
+        cm.frames()
+        assertEquals(listOf(listOf(a), listOf(b, e)), groups())
+        // either way round
+        dock.close(e)
+        dock.close(b)
+        dock.open(e)
+        dock.open(b)
+        cm.frames()
+        assertEquals(listOf(listOf(a), listOf(b, e)), groups())
+    }
+
+    @Test
+    fun `closed panels stay closed in a saved layout`() {
+        fun build(dockInit: Dock.() -> Unit = {}): Pair<ControlManager, Dock> {
+            lateinit var dock: Dock
+            val cm = panel {
+                css("dock { width: 600px; height: 400px }")
+                layout {
+                    dock = dock {
+                        panel("A") { p { "a" } }
+                        panel("B", closable = true) { p { "b" } }
+                        panel("C", DockZone.RIGHT, closable = true) { p { "c" } }
+                        dockInit()
+                    }
+                }
+            }
+            return cm to dock
+        }
+        val (cm, dock) = build()
+        cm.frames()
+        dock.close(dock.panels.single { it.title == "C" })
+        cm.frames()
+        val layout = dock.layout()
+        assertEquals(listOf("C"), layout.closed)
+
+        val file = java.io.File.createTempFile("dock", ".json")
+        file.delete()
+        dock.persist(file)
+        Thread.sleep(600)
+        cm.frames()
+        val (cm2, dock2) = build { persist(file) }
+        cm2.frames()
+        val c2 = dock2.panels.single { it.title == "C" }
+        assertFalse(dock2.isOpen(c2))
+        assertEquals(layout, dock2.layout())
+        // and it opens where it was added
+        dock2.open(c2)
+        cm2.frames()
+        assertEquals(listOf(listOf("A", "B"), listOf("C")), dock2.root!!.groups().map { g -> g.panels.map { it.title } })
+
+        // a layout from before panels could be closed
+        file.writeText("""{ "root": { "type": "group", "panels": [ "B", "A" ], "selected": 1 } }""")
+        val (cm3, dock3) = build { persist(file) }
+        cm3.frames()
+        assertEquals(listOf(listOf("B", "A", "C")), dock3.root!!.groups().map { g -> g.panels.map { it.title } })
+        assertTrue(dock3.closedPanels.isEmpty())
+        file.delete()
+
+        // a panel that the layout has closed but that can not be closed is docked
+        val (cm4, dock4) = build { restore(DockLayout(DockLayoutNode.Group(listOf("B", "C")), closed = listOf("A"))) }
+        cm4.frames()
+        assertTrue(dock4.closedPanels.isEmpty())
+    }
+
+    @Test
     fun `a panel in a window of its own is dragged back into a zone of the dock`() {
         lateinit var dock: Dock
         val cm = panel {
