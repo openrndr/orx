@@ -6,7 +6,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        getByName("commonMain") {
             dependencies {
                 implementation(sharedLibs.kotest.assertions)
                 implementation(sharedLibs.kotest.framework.engine)

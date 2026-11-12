@@ -14,12 +14,10 @@ kotlin {
             api(project(":orx-mesh-generators"))
         }
 
-        val jvmDemo by getting {
-            dependencies {
-                implementation(openrndr.ffmpeg)
-                implementation(project(":orx-text-on-contour"))
-                implementation(project(":orx-camera"))
-            }
+        jvmDemo.dependencies {
+            implementation(openrndr.ffmpeg)
+            implementation(project(":orx-text-on-contour"))
+            implementation(project(":orx-camera"))
         }
 
         // the tests of the extrusion of text shape glyphs, which takes the font and shaping drivers
