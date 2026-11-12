@@ -91,32 +91,40 @@ class TestExtrusion {
     private val ccw = Circle(0.0, 0.0, 2.0).contour
     private val cw = ccw.reversed
 
+    // one test per path and orientation, so that each stays well within the 2 second timeout of the JS tests
     @Test
-    fun everyExtrusionHasOutwardNormalsAndIsClosed() {
-        for (closed in listOf(false, true)) {
-            val path = ring(20.0, closed)
-            for ((name, c) in listOf("ccw" to ccw, "cw" to cw)) {
-                val label = "${if (closed) "closed" else "open"} $name"
-                check("contourSteps $label", collect { w ->
-                    extrudeContourSteps(c, path, 120, Vector3.UNIT_Y, 0.05, useFaceNormals = false, writer = w)
-                }, 20.0, 1.0)
-                check("contourAdaptive $label", collect { w ->
-                    extrudeContourAdaptive(c, path, Vector3.UNIT_Y, 0.05, 0.05, useFaceNormals = false, writer = w)
-                }, 20.0, 1.0)
-                check("shapeSteps $label", collect { w ->
-                    extrudeShapeSteps(c.shape, path, 120, Vector3.UNIT_Y, 0.05, startCap = true, endCap = true, useFaceNormals = false, writer = w)
-                }, 20.0, 1.0)
-                check("shapeAdaptive $label", collect { w ->
-                    extrudeShapeAdaptive(c.shape, path, Vector3.UNIT_Y, 0.05, 0.05, startCap = true, endCap = true, useFaceNormals = false, writer = w)
-                }, 20.0, 1.0)
-                check("shape(scale, torsion) $label", collect { w ->
-                    extrudeShape(c.shape, path, { 1.0 }, { 0.0 }, Vector3.UNIT_Y, 0.05, 0.05, startCap = true, endCap = true, useFaceNormals = false, writer = w)
-                }, 20.0, 1.0)
-                check("face normals $label", collect { w ->
-                    extrudeShape(c.shape, path, { 1.0 }, { 0.0 }, Vector3.UNIT_Y, 0.05, 0.05, startCap = true, endCap = true, useFaceNormals = true, writer = w)
-                }, 20.0, 10.0)
-            }
-        }
+    fun openPathCcwExtrusionsHaveOutwardNormalsAndAreClosed() = checkExtrusions(closed = false, "ccw", ccw)
+
+    @Test
+    fun openPathCwExtrusionsHaveOutwardNormalsAndAreClosed() = checkExtrusions(closed = false, "cw", cw)
+
+    @Test
+    fun closedPathCcwExtrusionsHaveOutwardNormalsAndAreClosed() = checkExtrusions(closed = true, "ccw", ccw)
+
+    @Test
+    fun closedPathCwExtrusionsHaveOutwardNormalsAndAreClosed() = checkExtrusions(closed = true, "cw", cw)
+
+    private fun checkExtrusions(closed: Boolean, name: String, c: ShapeContour) {
+        val path = ring(20.0, closed)
+        val label = "${if (closed) "closed" else "open"} $name"
+        check("contourSteps $label", collect { w ->
+            extrudeContourSteps(c, path, 120, Vector3.UNIT_Y, 0.05, useFaceNormals = false, writer = w)
+        }, 20.0, 1.0)
+        check("contourAdaptive $label", collect { w ->
+            extrudeContourAdaptive(c, path, Vector3.UNIT_Y, 0.05, 0.05, useFaceNormals = false, writer = w)
+        }, 20.0, 1.0)
+        check("shapeSteps $label", collect { w ->
+            extrudeShapeSteps(c.shape, path, 120, Vector3.UNIT_Y, 0.05, startCap = true, endCap = true, useFaceNormals = false, writer = w)
+        }, 20.0, 1.0)
+        check("shapeAdaptive $label", collect { w ->
+            extrudeShapeAdaptive(c.shape, path, Vector3.UNIT_Y, 0.05, 0.05, startCap = true, endCap = true, useFaceNormals = false, writer = w)
+        }, 20.0, 1.0)
+        check("shape(scale, torsion) $label", collect { w ->
+            extrudeShape(c.shape, path, { 1.0 }, { 0.0 }, Vector3.UNIT_Y, 0.05, 0.05, startCap = true, endCap = true, useFaceNormals = false, writer = w)
+        }, 20.0, 1.0)
+        check("face normals $label", collect { w ->
+            extrudeShape(c.shape, path, { 1.0 }, { 0.0 }, Vector3.UNIT_Y, 0.05, 0.05, startCap = true, endCap = true, useFaceNormals = true, writer = w)
+        }, 20.0, 10.0)
     }
 
     @Test
