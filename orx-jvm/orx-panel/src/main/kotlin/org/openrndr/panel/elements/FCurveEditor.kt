@@ -1221,7 +1221,16 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
         for (i in range) {
             val s = from[i]
             val run = runList[runOf[i]]
-            val screen = Segment2D(toScreen(s.start), s.cubic.control.map(::toScreen), toScreen(s.end))
+            // the parts of the segment outside the brush are kept as they are, only the part under it is refitted
+            val a = maxOf(s.start.x, x0)
+            val b = minOf(s.end.x, x1)
+            val splitStart = (a - s.start.x) * zoomX > 0.5
+            val splitEnd = (s.end.x - b) * zoomX > 0.5
+            val ta = if (splitStart) tAt(s, a) else 0.0
+            val tb = if (splitEnd) tAt(s, b) else 1.0
+            if (splitStart) result.add(fix(s.sub(0.0, ta)))
+            val inner = if (splitStart || splitEnd) s.sub(ta, tb) else s
+            val screen = Segment2D(toScreen(inner.start), inner.cubic.control.map(::toScreen), toScreen(inner.end))
             val pieces = screen.distort(tolerance, 6, 16) { q, _ ->
                 val c = fromScreen(q)
                 Vector2(q.x, sy(displace(c.x, c.y, run)))
@@ -1229,6 +1238,7 @@ class FCurveEditor : Element(ElementType("fcurve-editor")) {
             result.addAll(pieces.map { piece ->
                 fix(Segment2D(fromScreen(piece.start), piece.control.map(::fromScreen), fromScreen(piece.end)))
             })
+            if (splitEnd) result.add(fix(s.sub(tb, 1.0)))
         }
         // the keys at the ends of the sculpted range keep their times exactly
         val firstStart = from[range.first].start.x

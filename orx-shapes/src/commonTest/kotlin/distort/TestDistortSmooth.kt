@@ -143,4 +143,20 @@ class TestDistortSmooth {
         val separately = (2 * c.segments.size - blob.segments.size) * 25
         assertTrue(calls < 0.7 * separately, "$calls calls for ${c.segments.size} pieces, $separately when fitted separately")
     }
+
+    @Test
+    fun anUnchangedCurveIsReproduced() {
+        // cubics with long control arms and loops, whose handles are longer than their chords
+        val random = kotlin.random.Random(1)
+        repeat(100) {
+            fun point() = Vector2(random.nextDouble(0.0, 500.0), random.nextDouble(0.0, 500.0))
+            val s = org.openrndr.shape.Segment2D(point(), point(), point(), point())
+            val pieces = s.distort(0.5, 6, 16) { q, _ -> q }
+            assertEquals(1, pieces.size, "an unchanged cubic is split into ${pieces.size} pieces")
+            for (k in 0..50) {
+                val t = k / 50.0
+                assertTrue(pieces[0].position(t).distanceTo(s.position(t)) < 1E-6)
+            }
+        }
+    }
 }

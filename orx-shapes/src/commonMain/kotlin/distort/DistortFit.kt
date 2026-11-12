@@ -89,8 +89,9 @@ internal fun <T : EuclideanVector<T>> fitDistorted(
         val det = m11 * m22 - m12 * m12
         var alpha = if (abs(det) < 1E-12) -1.0 else (r1 * m22 - r2 * m12) / det
         var beta = if (abs(det) < 1E-12) -1.0 else (m11 * r2 - m12 * r1) / det
-        // a control point behind its end, or handles longer than the chord, let the piece double back on itself
-        if (alpha < 1E-6 * chordLength || beta < 1E-6 * chordLength || alpha + beta > chordLength) {
+        // a control point behind its end lets the piece double back on itself; long handles are fine, they are what
+        // makes a looping or strongly curved piece
+        if (alpha < 0.0 || beta < 0.0 || !alpha.isFinite() || !beta.isFinite()) {
             alpha = chordLength / 3.0
             beta = chordLength / 3.0
         }
