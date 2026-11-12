@@ -3,11 +3,13 @@ package org.openrndr.panel.test
 import org.openrndr.KEY_ARROW_DOWN
 import org.openrndr.KEY_ARROW_LEFT
 import org.openrndr.KEY_ARROW_RIGHT
+import org.openrndr.KEY_ENTER
 import org.openrndr.KEY_ESCAPE
 import org.openrndr.KEY_TAB
 import org.openrndr.math.Vector2
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.elements.*
+import kotlinx.coroutines.launch
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -157,5 +159,106 @@ class ComponentsTest : PanelTestFixture() {
         Thread.sleep(500)
         cm.frames(3)
         assertNull(toast.parent)
+    }
+
+    @Test
+    fun `a confirmation answers once, by its buttons, the keyboard and the backdrop`() {
+        val cm = panel { layout { button { label = "outside" } } }
+        cm.frames()
+        val answers = mutableListOf<Boolean>()
+        fun ask(destructive: Boolean = false) = cm.confirm(
+            "Discard the changes?", title = "Discard", confirmLabel = "Discard", destructive = destructive
+        ) { answers.add(it) }
+        fun Dialog.button(name: String): Button {
+            var found: Button? = null
+            fun visit(e: Element) { if (e is Button && ElementClass(name) in e.classes) found = e else e.children.forEach(::visit) }
+            visit(box)
+            return found!!
+        }
+        fun click(button: Button) {
+            val p = button.screenArea.center
+            cm.move(p); cm.press(p); cm.release(p)
+        }
+
+        // the title, the message and the buttons, with the labels that are given
+        val first = ask()
+        cm.frames()
+        assertEquals("Discard", ((first.box.children.first() as H3).children.single() as TextNode).text)
+        assertEquals("Discard", first.button("confirm-button").label)
+        assertEquals("Cancel", first.button("cancel-button").label)
+        // the confirming button has the focus
+        assertSame(first.button("confirm-button"), cm.keyboardInput.target)
+        click(first.button("confirm-button"))
+        assertFalse(first.open)
+        assertNull(first.backdrop.parent)
+        assertEquals(listOf(true), answers)
+
+        val second = ask()
+        cm.frames()
+        click(second.button("cancel-button"))
+        assertEquals(listOf(true, false), answers)
+
+        // escape cancels, enter presses the button with the focus
+        ask()
+        cm.frames()
+        cm.key(KEY_ESCAPE)
+        ask()
+        cm.frames()
+        cm.key(KEY_ENTER)
+        val third = ask()
+        cm.frames()
+        cm.key(KEY_TAB)
+        assertSame(third.button("cancel-button"), cm.keyboardInput.target)
+        cm.key(KEY_ENTER)
+        assertEquals(listOf(true, false, false, true, false), answers)
+
+        // a destructive action starts on cancel, and a click on the backdrop cancels
+        val destructive = ask(destructive = true)
+        cm.frames()
+        assertTrue(ElementClass("destructive") in destructive.button("confirm-button").classes)
+        assertSame(destructive.button("cancel-button"), cm.keyboardInput.target)
+        cm.key(KEY_ENTER)
+        val last = ask()
+        cm.frames()
+        val corner = Vector2(5.0, 5.0)
+        cm.move(corner); cm.press(corner); cm.release(corner)
+        assertFalse(last.open)
+        // closing it from the program cancels it, and an answered dialog answers once
+        val closedByProgram = ask()
+        closedByProgram.close()
+        closedByProgram.close()
+        last.close()
+        assertEquals(listOf(true, false, false, true, false, false, false, false), answers)
+    }
+
+    @Test
+    fun `a suspending confirmation returns the answer and closes when it is cancelled`() {
+        val cm = panel { layout { button { label = "outside" } } }
+        cm.frames()
+        fun backdrops() = cm.body!!.children.count { ElementClass("dialog-backdrop") in it.classes }
+        val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Unconfined)
+
+        val answers = mutableListOf<Boolean>()
+        scope.launch {
+            answers.add(cm.confirm("Save before closing?"))
+            answers.add(cm.confirm("Discard the changes?", destructive = true))
+        }
+        // the coroutine waits for the first answer, enter confirms it
+        assertEquals(1, backdrops())
+        assertTrue(answers.isEmpty())
+        cm.key(KEY_ENTER)
+        assertEquals(listOf(true), answers)
+        // then for the second, which starts on cancel
+        assertEquals(1, backdrops())
+        cm.key(KEY_ENTER)
+        assertEquals(listOf(true, false), answers)
+        assertEquals(0, backdrops())
+
+        // cancelling the coroutine closes the dialog, without an answer
+        val job = scope.launch { answers.add(cm.confirm("Quit?")) }
+        assertEquals(1, backdrops())
+        job.cancel()
+        assertEquals(0, backdrops())
+        assertEquals(listOf(true, false), answers)
     }
 }

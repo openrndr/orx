@@ -1,6 +1,8 @@
 package org.openrndr.panel.elements
 
+import org.openrndr.KEY_ENTER
 import org.openrndr.events.Event
+import org.openrndr.events.await
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.style.flexBasis
 import org.openrndr.panel.style.px
@@ -120,6 +122,73 @@ fun ControlManager.dialog(vararg classes: String, dismissable: Boolean = true, i
     }
     openDialog(dialog)
     return dialog
+}
+
+/**
+ * Asks to confirm [message] in a modal dialog, under [title] when it is set, with the buttons [cancelLabel] and
+ * [confirmLabel]. [onResult] is called once, when the dialog closes: with true when it is confirmed, false when it is
+ * cancelled, by its button, escape, a click on the backdrop or [Dialog.close]. Enter presses the button with the
+ * keyboard focus, which starts on the confirming button, or on the cancelling one when the action is [destructive].
+ *
+ * The dialog is a `dialog.confirm`, its buttons are in a `dialog-buttons`: a `.cancel-button` and a `.confirm-button`,
+ * which is `.destructive` when [destructive] is set.
+ */
+fun ControlManager.confirm(
+    message: String,
+    title: String? = null,
+    confirmLabel: String = "OK",
+    cancelLabel: String = "Cancel",
+    destructive: Boolean = false,
+    onResult: (Boolean) -> Unit
+): Dialog {
+    var result = false
+    lateinit var shown: Dialog
+    lateinit var cancelButton: Button
+    lateinit var confirmButton: Button
+    fun answer(confirmed: Boolean) {
+        result = confirmed
+        shown.close()
+    }
+    shown = dialog("confirm") {
+        title?.let { h3 { it } }
+        p { message }
+        div("dialog-buttons") {
+            cancelButton = button("cancel-button", label = cancelLabel) { clicked { answer(false) } }
+            val classes = listOfNotNull("confirm-button", "destructive".takeIf { destructive })
+            confirmButton = button(*classes.toTypedArray(), label = confirmLabel) { clicked { answer(true) } }
+        }
+    }
+    shown.closed.listen { onResult(result) }
+    keyboardInput.target = if (destructive) cancelButton else confirmButton
+    shown.box.keyboard.pressed.listen {
+        if (it.key == KEY_ENTER) {
+            answer(keyboardInput.target !== cancelButton)
+            it.cancelPropagation()
+        }
+    }
+    return shown
+}
+
+/**
+ * Asks to confirm [message] like the [confirm] that takes a callback, and suspends until the dialog closes: true when it
+ * is confirmed, false when it is cancelled. Cancelling the coroutine closes the dialog. For use in a coroutine on the
+ * thread of the program, like one that `launch` starts.
+ */
+suspend fun ControlManager.confirm(
+    message: String,
+    title: String? = null,
+    confirmLabel: String = "OK",
+    cancelLabel: String = "Cancel",
+    destructive: Boolean = false
+): Boolean {
+    var confirmed = false
+    val dialog = confirm(message, title, confirmLabel, cancelLabel, destructive) { confirmed = it }
+    try {
+        dialog.closed.await()
+    } finally {
+        dialog.close()
+    }
+    return confirmed
 }
 
 /**

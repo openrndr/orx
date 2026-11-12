@@ -105,6 +105,14 @@ val defaultStylesCss = """
         min-width: 240px; max-width: 480px; padding: 16px; border-radius: 10px; background-color: #26292f; color: var(--control-text);
         box-shadow: 0 12px 40px rgb(0 0 0 / 0.5); animation: dialog-in 150ms ease-out;
     }
+    .confirm > h3 { font-size: calc(var(--control-font-size) * 18 / 14); padding-bottom: 6px; color: var(--control-selected-text) }
+    .dialog-buttons { display: flex; flex-direction: row; justify-content: end; column-gap: 8px; width: 100%; padding-top: 14px }
+    .dialog-buttons > button { margin: 0; padding: 5px 14px; border-radius: 5px; border-width: 1px; border-color: rgb(0 0 0 / 0) }
+    .dialog-buttons > button:focus { border-color: rgb(255 255 255 / 0.7) }
+    .dialog-buttons > .cancel-button { background-color: rgb(255 255 255 / 0.1); color: var(--control-text) }
+    .dialog-buttons > .cancel-button:hover { background-color: rgb(255 255 255 / 0.16) }
+    .dialog-buttons > .confirm-button { background-color: var(--focus-color); color: var(--control-selected-text) }
+    .dialog-buttons > .confirm-button.destructive { background-color: #c0453f }
     @keyframes dialog-in { from { opacity: 0; transform: scale(0.96) } to { opacity: 1; transform: scale(1) } }
     .toasts {
         position: fixed; right: 16px; bottom: 16px; z-index: 1001; display: flex; flex-direction: column;
