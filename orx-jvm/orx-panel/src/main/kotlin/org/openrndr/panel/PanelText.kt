@@ -129,7 +129,11 @@ class PanelText internal constructor(private val fontManager: FontManager) {
     fun line(style: StyleSheet, text: String): ShapedText = line(face(style), text, spacing(style))
 
     /** [text] shaped as a single line in [face], with [spacing] after every character */
-    fun line(face: Face, text: String, spacing: Double = 0.0): ShapedText = shaped.getOrPut(Key(face, text, null, spacing, null)) {
+    fun line(face: Face, text: String, spacing: Double = 0.0): ShapedText =
+        shaped.getOrPut(Key(face, text, null, spacing, null)) { shapeLine(face, text, spacing) }
+
+    /** [text] shaped as a single line, not kept, like the words that [carets] measures */
+    private fun shapeLine(face: Face, text: String, spacing: Double): ShapedText {
         val (reference, sizeInEm) = reference(face)
         val glyphs = if (text.isEmpty()) emptyList() else
             spaced(typesetLine(reference, text, Vector2.ZERO, TextStyle.Defaults.copy(sizeInEm = sizeInEm)), spacing)
@@ -137,7 +141,7 @@ class PanelText internal constructor(private val fontManager: FontManager) {
         val trailing = text.length - text.trimEnd().length
         val width = (glyphs.lastOrNull()?.penEnd?.x ?: 0.0) + (if (glyphs.isEmpty()) 0.0 else spacing) +
                 if (trailing > 0) trailing * (spaceAdvance(face, spacing) + spacing) else 0.0
-        ShapedText(text, face, glyphs, width, face.ascent - face.descent, 1)
+        return ShapedText(text, face, glyphs, width, face.ascent - face.descent, 1)
     }
 
     private val spaceAdvances = HashMap<Pair<Face, Double>, Double>()
@@ -147,25 +151,41 @@ class PanelText internal constructor(private val fontManager: FontManager) {
         line(face, "x x", spacing).width - line(face, "xx", spacing).width - spacing
     }
 
+    /** the carets of the most recently used strings, see [carets] */
+    private val caretsOf = object : LinkedHashMap<Key, DoubleArray>(256, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Key, DoubleArray>?) = size > maxShapedTexts
+    }
+
     /**
      * The x of the caret before every character of [text] in a single line in the face of [style], and after the last:
-     * `text.length + 1` positions. From the advances of the glyphs when they are one per character, from the widths of
-     * the beginnings of the text otherwise, as with ligatures
+     * `text.length + 1` positions, kept like the shaping. From the glyphs of the line, which white space has none of:
+     * a glyph for every other character, or else for every character of a word, by the glyphs of each word alone; in
+     * the words whose glyphs are not one per character, as with ligatures, from the widths of the beginnings of the word
      */
     fun carets(style: StyleSheet, text: String): DoubleArray {
-        val shaped = line(style, text)
+        val face = face(style)
         val spacing = spacing(style)
+        return caretsOf.getOrPut(Key(face, text, null, spacing, null)) { computeCarets(face, text, spacing) }.copyOf()
+    }
+
+    private fun computeCarets(face: Face, text: String, spacing: Double): DoubleArray {
+        val shaped = line(face, text, spacing)
+        val glyphs = shaped.glyphs
         val result = DoubleArray(text.length + 1)
-        if (shaped.glyphs.size == text.length && shaped.glyphs.all { it.advance != null }) {
+        val known = glyphs.all { it.advance != null }
+        fun start(g: TypesetGlyph) = g.position.x - g.offset.x
+        if (known && glyphs.size == text.length) {
             var x = 0.0
             for (i in text.indices) {
                 result[i] = x
-                x += shaped.glyphs[i].advance!!.x + spacing
+                x += glyphs[i].advance!!.x + spacing
             }
             result[text.length] = x
-        } else if (shaped.glyphs.size == text.count { !it.isWhitespace() } && shaped.glyphs.all { it.advance != null }) {
+            return result
+        }
+        val space = spaceAdvance(face, spacing) + spacing
+        if (known && glyphs.size == text.count { !it.isWhitespace() }) {
             // white space has no glyphs: a glyph for every other character, the space advance for white space
-            val space = spaceAdvance(shaped.face, spacing) + spacing
             var x = 0.0
             var g = 0
             for (i in text.indices) {
@@ -173,15 +193,48 @@ class PanelText internal constructor(private val fontManager: FontManager) {
                     result[i] = x
                     x += space
                 } else {
-                    val glyph = shaped.glyphs[g++]
-                    result[i] = glyph.position.x - glyph.offset.x
+                    val glyph = glyphs[g++]
+                    result[i] = start(glyph)
                     x = glyph.penEnd!!.x + spacing
                 }
             }
             result[text.length] = x
-        } else {
-            for (i in 0..text.length) result[i] = line(shaped.face, text.substring(0, i), spacing).width
+            return result
         }
+        // word by word: the glyphs of a word in the line are as many as it has alone
+        var x = 0.0
+        var g = 0
+        var i = 0
+        while (i < text.length) {
+            if (text[i].isWhitespace()) {
+                result[i++] = x
+                x += space
+                continue
+            }
+            var j = i
+            while (j < text.length && !text[j].isWhitespace()) j++
+            val word = text.substring(i, j)
+            val alone = shapeLine(face, word, spacing)
+            val inLine = glyphs.subList(minOf(g, glyphs.size), minOf(g + alone.glyphs.size, glyphs.size))
+            g += alone.glyphs.size
+            val wordStart = inLine.firstOrNull()?.let(::start) ?: x
+            val codePoints = word.codePointCount(0, word.length)
+            if (inLine.size == codePoints && inLine.all { it.advance != null }) {
+                // a glyph for every character, of one or two chars
+                var k = 0
+                for (glyph in inLine) {
+                    val chars = Character.charCount(word.codePointAt(k))
+                    repeat(chars) { result[i + k + it] = start(glyph) }
+                    k += chars
+                }
+            } else {
+                // ligatures: the widths of the beginnings of the word, from where it starts in the line
+                for (k in word.indices) result[i + k] = wordStart + if (k == 0) 0.0 else shapeLine(face, word.substring(0, k), spacing).width
+            }
+            x = inLine.lastOrNull()?.penEnd?.let { it.x + spacing } ?: (wordStart + alone.width)
+            i = j
+        }
+        result[text.length] = x
         return result
     }
 

@@ -158,4 +158,35 @@ class PanelTextTest : PanelTestFixture() {
         assertEquals(text.width(style, "  float x "), carets.last(), 0.5)
         assertEquals(text.width(style, "  float"), carets[7], 0.5)
     }
+
+    @Test
+    fun `carets of a long line that is not a glyph per character are found once, without shaping its beginnings`() {
+        val cm = panel { layout { } }
+        relayout(cm)
+        val text = cm.text
+        val style = StyleSheet().apply { fontSize = 14.px }
+        // ligatures, an emoji of two chars and a line break, about 3000 characters
+        val line = (0 until 90).joinToString(" ") { "the first file of flow \uD83C\uDFA8 offline" + if (it == 30) "\nnext" else "" }
+        assertTrue(line.length > 3000, "${line.length}")
+        val shaped = text.line(style, line)
+        assertTrue(shaped.glyphs.size != line.count { !it.isWhitespace() }, "the line is a glyph per character")
+
+        val before = text.shapedCount
+        val carets = text.carets(style, line)
+        // the line and the probes of the space advance, not the beginnings of the line or its words
+        assertTrue(text.shapedCount - before <= 3, "the shaping of ${text.shapedCount - before} strings was kept")
+        val again = text.shapedCount
+        assertTrue(carets.contentEquals(text.carets(style, line)))
+        assertEquals(again, text.shapedCount)
+
+        // a caret for every char and one after the last, in order, ending where the line does
+        assertEquals(line.length + 1, carets.size)
+        for (i in 1 until carets.size) assertTrue(carets[i] >= carets[i - 1] - 1E-9, "caret $i before caret ${i - 1}")
+        assertEquals(shaped.width, carets.last(), 1E-6)
+        // the carets before words are where the beginnings of the line end
+        val starts = line.indices.filter { it > 0 && line[it - 1] == ' ' && line[it] != ' ' }
+        for (i in starts.filterIndexed { k, _ -> k % 23 == 0 }) {
+            assertEquals(text.width(style, line.substring(0, i)), carets[i], 0.5, "the caret before the word at $i")
+        }
+    }
 }
