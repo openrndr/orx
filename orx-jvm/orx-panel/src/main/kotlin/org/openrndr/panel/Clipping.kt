@@ -78,6 +78,9 @@ internal class RoundedClips {
         boxes.removeAt(boxes.lastIndex)
         radii.removeAt(radii.lastIndex)
         inverses.removeAt(inverses.lastIndex)
+        // the style is one object, which the drawer keeps for what is drawn after the box that was popped, like the
+        // elements after an element that clips in a parent that does not: it clips by the boxes that are left
+        if (boxes.isNotEmpty()) applyTo(style)
     }
 
     /** the shade style that clips to the rounded boxes, null when there are none */

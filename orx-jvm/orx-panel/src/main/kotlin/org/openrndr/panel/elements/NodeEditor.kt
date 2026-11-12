@@ -155,6 +155,20 @@ class NodeBodyEvent(
     val fraction: Vector2 get() = Vector2((position.x - box.x) / box.width, (position.y - box.y) / box.height)
 }
 
+/**
+ * a marker on a [GraphNode], see [NodeEditor.badges]: a dot in [color], or a pill with [label] in it, like a count;
+ * [tooltip] shows when the pointer rests on it, [key] tells it from the other badges of the node, by default its index
+ */
+data class NodeBadge(val color: ColorRGBa, val label: String? = null, val tooltip: String? = null, val key: Any? = null)
+
+/**
+ * a click on [badge] of [node], see [NodeEditor.Events.badgeClicked]: [area] is where the badge is in the window, and
+ * [screenPosition] its middle, like for a [popover] there
+ */
+class BadgeClicked(val node: GraphNode, val badge: NodeBadge, val area: Rectangle) {
+    val screenPosition: Vector2 get() = area.center
+}
+
 /** a wire from the output [output] of [from] to the input [input] of [to] */
 data class Wire(val from: GraphNode, val output: Int, val to: GraphNode, val input: Int)
 
@@ -204,6 +218,9 @@ class NodeEditor : Element(ElementType("node-editor")) {
         const val PORT_SPACING = 22.0
         const val STATUS_HEIGHT = 20.0
 
+        /** the height of a badge, and the width of one without a label, in pixels */
+        const val BADGE_SIZE = 14.0
+
         /** the distance between the dots of the grid, in the coordinates of the graph */
         const val GRID_SPACING = 24.0
     }
@@ -252,8 +269,12 @@ class NodeEditor : Element(ElementType("node-editor")) {
         /** the background was double clicked, at the position in the coordinates of the graph, like to add a node */
         val requested = Event<Vector2>("node-editor-requested")
 
+        /** a badge of a node was clicked, see [badges] */
+        val badgeClicked = Event<BadgeClicked>("node-editor-badge-clicked")
+
         override fun close() {
             connected.close(); disconnected.close(); added.close(); removed.close(); moved.close(); compactChanged.close(); selected.close(); requested.close()
+            badgeClicked.close()
         }
     }
 
@@ -371,6 +392,63 @@ class NodeEditor : Element(ElementType("node-editor")) {
      */
     var wireRoute: (Wire) -> List<Vector2>? = { null }
         set(value) { field = value; requestRedraw() }
+
+    /**
+     * the badges of a node, drawn next to each other on its top right corner, at the same size at every zoom, and over
+     * the nodes; a press on a badge neither selects nor moves the node, a click fires [Events.badgeClicked]. Call
+     * [requestRedraw] when the badges change
+     */
+    var badges: (GraphNode) -> List<NodeBadge> = { emptyList() }
+        set(value) { field = value; requestRedraw() }
+
+    /** the style of the labels of badges */
+    private val badgeStyle = StyleSheet().apply { fontSize = 10.px }
+
+    /** the badges of [n] with their areas in the element, the last at the right */
+    private fun badgeAreas(n: GraphNode): List<Pair<NodeBadge, Rectangle>> {
+        val list = badges(n)
+        if (list.isEmpty()) return emptyList()
+        val text = panelText
+        val corner = local(Vector2(n.position.x + n.width, n.position.y))
+        var right = corner.x - 8.0
+        val result = ArrayList<Pair<NodeBadge, Rectangle>>(list.size)
+        for (b in list.asReversed()) {
+            val width = b.label?.let { label -> maxOf(BADGE_SIZE, (text?.width(badgeStyle, label) ?: 0.0) + 8.0) } ?: BADGE_SIZE
+            result.add(b to Rectangle(right - width, corner.y - BADGE_SIZE / 2.0, width, BADGE_SIZE))
+            right -= width + 3.0
+        }
+        return result.asReversed()
+    }
+
+    /**
+     * the area of the window of the badge of [node] with [key], or with that index when the badges have no keys; null
+     * when it has none, like when the node is removed, or when the badge is out of view of the editor. For a [popover]
+     * that follows the badge when the graph pans and zooms, and hides while it is out of view:
+     * `cm.popover({ editor.badgeArea(node, key) }) { ... }`
+     */
+    fun badgeArea(node: GraphNode, key: Any): Rectangle? {
+        if (node !in nodeList) return null
+        val areas = badgeAreas(node)
+        val area = areas.withIndex().firstOrNull { (i, a) -> (a.first.key ?: i) == key }?.value?.second ?: return null
+        if (!area.intersects(Rectangle(0.0, 0.0, layout.screenWidth, layout.screenHeight))) return null
+        return area.moved(Vector2(layout.screenX, layout.screenY))
+    }
+
+    /** the badge at [p], a point of the window, with its node and its index; the badges are over the nodes */
+    private fun badgeAt(p: Vector2): Triple<GraphNode, Int, NodeBadge>? {
+        val q = p - Vector2(layout.screenX, layout.screenY)
+        for (n in nodes.asReversed()) {
+            val areas = badgeAreas(n)
+            val i = areas.indexOfLast { q in it.second }
+            if (i >= 0) return Triple(n, i, areas[i].first)
+        }
+        return null
+    }
+
+    /** the tooltip of the badge under the pointer, or the tooltip of the editor */
+    override var tooltip: String?
+        get() = (root() as? Body)?.controlManager?.mousePosition?.let { p -> badgeAt(p)?.third?.tooltip } ?: super.tooltip
+        set(value) { super.tooltip = value }
 
     /** true when the nodes whose [GraphNode.compact] is null are drawn compact */
     var compactNodes = false
@@ -563,6 +641,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
         class Select(val start: Vector2, var end: Vector2, val before: Set<GraphNode>) : Gesture()
         class Pan(val start: Vector2, val from: Vector2) : Gesture()
         class Body(val node: GraphNode, val button: MouseButton) : Gesture()
+        class Badge(val node: GraphNode, val key: Any) : Gesture()
     }
 
     private var gesture: Gesture? = null
@@ -608,7 +687,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
                 // the box follows the pointer also when the selection stays the same
                 requestRedraw()
             }
-            null -> {}
+            is Gesture.Badge, null -> {}
         }
     }
 
@@ -645,8 +724,10 @@ class NodeEditor : Element(ElementType("node-editor")) {
         mouse.pressed.listen {
             val g = graphPosition(it.position)
             val shift = KeyModifier.SHIFT in it.modifiers
+            val badge = if (it.button == MouseButton.LEFT) badgeAt(it.position) else null
             gesture = when {
                 it.button == MouseButton.CENTER || KeyModifier.ALT in it.modifiers -> Gesture.Pan(it.position, pan)
+                badge != null -> Gesture.Badge(badge.first, badge.third.key ?: badge.second)
                 outputAt(g) != null -> outputAt(g)!!.let { (n, o) -> Gesture.Connect(n, o, g, null) }
                 bodyAt(g)?.let { n -> toBody(n, MouseEventType.BUTTON_DOWN, g, it) } == true -> Gesture.Body(bodyAt(g)!!, it.button)
                 inputAt(g)?.let { (n, i) -> wires.firstOrNull { w -> w.to === n && w.input == i } } != null -> {
@@ -686,6 +767,13 @@ class NodeEditor : Element(ElementType("node-editor")) {
         mouse.released.listen {
             val g = graphPosition(it.position)
             (gesture as? Gesture.Body)?.let { b -> toBody(b.node, MouseEventType.BUTTON_UP, g, it, b.button) }
+            // a click on a badge is a release on the badge it was pressed on
+            (gesture as? Gesture.Badge)?.let { b ->
+                badgeAt(it.position)?.takeIf { (n, i, badge) -> n === b.node && (badge.key ?: i) == b.key }?.let { (n, i, badge) ->
+                    val area = badgeAreas(n)[i].second.moved(Vector2(layout.screenX, layout.screenY))
+                    events.badgeClicked.trigger(BadgeClicked(n, badge, area))
+                }
+            }
             finish(g)
         }
         mouse.doubleClicked.listen {
@@ -928,6 +1016,23 @@ class NodeEditor : Element(ElementType("node-editor")) {
                 drawer.strokeWeight = 1.0 / zoom
                 drawer.rectangle(Rectangle(minOf(s.start.x, s.end.x), minOf(s.start.y, s.end.y), kotlin.math.abs(s.end.x - s.start.x), kotlin.math.abs(s.end.y - s.start.y)))
             }
+        }
+        // the badges over the nodes, at the same size at every zoom
+        val placed = nodes.flatMap { badgeAreas(it) }
+        if (placed.isNotEmpty()) drawer.isolated {
+            drawer.stroke = ColorRGBa.fromHex("#2a2e36")
+            drawer.strokeWeight = 1.5
+            val labels = mutableListOf<PanelText.Placed>()
+            for ((badge, area) in placed) {
+                drawer.fill = badge.color
+                drawer.box(area, BADGE_SIZE / 2.0)
+                badge.label?.let { label ->
+                    val c = badge.color
+                    val light = 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b > 0.5
+                    labels += text.placeInBox(badgeStyle, label, area, 0.5, 0.5, if (light) ColorRGBa.BLACK.opacify(0.85) else ColorRGBa.WHITE)
+                }
+            }
+            text.drawBatch(drawer, this@NodeEditor, "badges", labels)
         }
     }
 

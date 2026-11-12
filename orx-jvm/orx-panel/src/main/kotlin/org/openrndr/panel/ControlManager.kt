@@ -165,6 +165,13 @@ class ControlManager : Extension {
                 checkForManualRedraw()
             }
 
+            // escape that the element with the focus leaves alone closes the last popover
+            if (!event.propagationCancelled && event.key == KEY_ESCAPE && dialogs.isEmpty() && dismissLastPopover()) {
+                event.cancelPropagation()
+                checkForManualRedraw()
+                window.requestDraw()
+                return
+            }
             if (!event.propagationCancelled) {
                 if (event.key == KEY_TAB) {
                     // the keyboard focus stays in the dialog that is open
@@ -386,6 +393,8 @@ class ControlManager : Extension {
                     openMenu = null
                 }
             }
+            // a press outside a popover closes it, and goes on to what is under the pointer
+            dismissPopoversOutside(event.position)
             // the right button opens the context menu of the innermost element that has one
             if (event.button == MouseButton.RIGHT) {
                 body?.let { root -> elementAt(root, event.position) { it.contextMenu != null } }?.let { element ->
@@ -679,6 +688,39 @@ class ControlManager : Extension {
             keyboardInput.target = null
         }
         checkForManualRedraw()
+    }
+
+    /** the popovers that are open, the last opened last, see [popover] */
+    private val popovers = mutableListOf<Popover>()
+
+    internal fun openPopover(popover: Popover, focus: Boolean) {
+        // one popover of a group at a time
+        popover.group?.let { g -> popovers.filter { it.group == g }.forEach { it.close() } }
+        popovers.add(popover)
+        if (focus) keyboardInput.target = popover.box.findAllVisible { it.handlesKeyboardFocus }.firstOrNull()
+        checkForManualRedraw()
+    }
+
+    internal fun closePopover(popover: Popover) {
+        popovers.remove(popover)
+        if (keyboardInput.target?.let { t -> generateSequence(t) { it.parent }.any { it === popover.box } } == true) {
+            keyboardInput.target = null
+        }
+        checkForManualRedraw()
+    }
+
+    /** closes the dismissable popovers that [position], a point of the window, is outside of, and outside their anchors */
+    private fun dismissPopoversOutside(position: Vector2) {
+        for (popover in popovers.toList()) {
+            if (popover.dismissable && !popover.box.containsScreenPoint(position) && popover.anchorArea?.contains(position) != true) popover.close()
+        }
+    }
+
+    /** closes the last dismissable popover that is open, true when there was one */
+    private fun dismissLastPopover(): Boolean {
+        val popover = popovers.lastOrNull { it.dismissable } ?: return false
+        popover.close()
+        return true
     }
 
     /** the toasts that show, with the time they go away and whether they are leaving */

@@ -733,6 +733,92 @@ class ToolsTest : PanelTestFixture() {
     }
 
     @Test
+    fun `badges on nodes are clicked without selecting or moving the node`() {
+        lateinit var editor: NodeEditor
+        lateinit var a: GraphNode
+        val cm = panel {
+            css("node-editor { width: 600px; height: 400px }")
+            layout {
+                editor = nodeEditor {
+                    a = add(GraphNode("noise", outputs = listOf(Port("out"))), Vector2(20.0, 40.0))
+                    add(GraphNode("blur", listOf(Port("in"))), Vector2(250.0, 40.0))
+                }
+            }
+        }
+        val orange = ColorRGBa.fromHex("#ff7a1a")
+        editor.badges = { n ->
+            if (n === a) listOf(NodeBadge(orange, tooltip = "2 issues", key = "issues"), NodeBadge(ColorRGBa.RED, label = "3", key = "errors"))
+            else emptyList()
+        }
+        cm.frames()
+        val o = Vector2(editor.layout.screenX, editor.layout.screenY)
+        val clicks = mutableListOf<BadgeClicked>()
+        editor.events.badgeClicked.listen { clicks.add(it) }
+        fun click(p: Vector2) { cm.move(p); cm.press(p); cm.release(p) }
+
+        // the last badge is at the top right corner of the node, centered on its top edge
+        click(o + Vector2(a.position.x + a.width - 8.0 - 4.0, a.position.y))
+        assertEquals(listOf("errors"), clicks.map { it.badge.key })
+        val errors = clicks.single().area
+        assertEquals(a.position.y + o.y, errors.center.y, 1E-9)
+        assertEquals(NodeEditor.BADGE_SIZE, errors.height, 1E-9)
+        assertEquals(o.x + a.position.x + a.width - 8.0, errors.x + errors.width, 1E-9)
+        assertSame(a, clicks.single().node)
+        assertEquals(errors, editor.badgeArea(a, "errors"))
+        // the badge before it, to its left; neither selects the node
+        val dot = Vector2(errors.x - 3.0 - NodeEditor.BADGE_SIZE / 2.0, errors.center.y)
+        click(dot)
+        assertEquals(listOf("errors", "issues"), clicks.map { it.badge.key })
+        assertEquals(dot, clicks.last().screenPosition)
+        assertTrue(editor.selection.isEmpty())
+
+        // dragging from a badge neither moves the node nor clicks it
+        cm.move(dot); cm.press(dot); cm.drag(dot + Vector2(30.0, 30.0)); cm.release(dot + Vector2(60.0, 60.0))
+        assertEquals(Vector2(20.0, 40.0), a.position)
+        assertEquals(2, clicks.size)
+
+        // the tooltip of the badge under the pointer
+        cm.move(dot)
+        assertEquals("2 issues", editor.tooltip)
+        cm.move(o + Vector2(500.0, 300.0))
+        assertNull(editor.tooltip)
+
+        // badges keep their size when the graph zooms, at the corner of the node
+        editor.zoom = 2.0
+        cm.frames()
+        click(o + Vector2((a.position.x + a.width) * 2.0 - 8.0 - 4.0, a.position.y * 2.0))
+        assertEquals("errors", clicks.last().badge.key)
+        assertEquals(NodeEditor.BADGE_SIZE, clicks.last().area.height, 1E-9)
+        // where a popover finds the badge as the graph moves
+        assertEquals(clicks.last().area, editor.badgeArea(a, "errors"))
+        assertNull(editor.badgeArea(a, "missing"))
+        // none while the badge is out of view
+        editor.pan = Vector2(-1000.0, 0.0)
+        assertNull(editor.badgeArea(a, "errors"))
+        editor.pan = Vector2.ZERO
+        assertNotNull(editor.badgeArea(a, "errors"))
+        editor.remove(listOf(a))
+        assertNull(editor.badgeArea(a, "errors"))
+    }
+
+    @Test
+    fun `mod+enter submits a text area`() {
+        lateinit var area: TextArea
+        val cm = panel { layout { area = textArea { } } }
+        cm.frames()
+        cm.keyboardInput.target = area
+        val submitted = mutableListOf<String>()
+        area.submitted.listen { submitted.add(it) }
+        "hi".forEach { cm.keyboardInput.character(org.openrndr.CharacterEvent(it, emptySet())) }
+        cm.key(KEY_ENTER)
+        "there".forEach { cm.keyboardInput.character(org.openrndr.CharacterEvent(it, emptySet())) }
+        assertTrue(submitted.isEmpty())
+        cm.key(KEY_ENTER, Shortcut.parse("mod+enter")!!.modifiers.single(), name = "enter")
+        assertEquals(listOf("hi\nthere"), submitted)
+        assertEquals("hi\nthere", area.value)
+    }
+
+    @Test
     fun `nodes are moved, wired, selected and removed`() {
         lateinit var editor: NodeEditor
         lateinit var a: GraphNode

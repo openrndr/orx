@@ -3,6 +3,7 @@ package org.openrndr.panel.test
 import org.openrndr.color.ColorRGBa
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.elements.*
+import org.openrndr.math.Vector2
 import org.openrndr.panel.layout.Layouter
 import org.openrndr.panel.style.*
 import kotlin.test.Test
@@ -130,5 +131,53 @@ class RedrawTest : PanelTestFixture() {
         cm.frame()
         assertEquals(full + 3, cm.fullRedraws)
         assertTrue(b.layout.screenWidth > width)
+    }
+
+    @Test
+    fun `a text area draws the background of its style over its whole width`() {
+        lateinit var area: TextArea
+        val cm = panel {
+            css(".reply { width: 376px; height: 60px; margin: 0; background-color: rgb(255 0 0) }")
+            layout { area = textArea("reply") { } }
+        }
+        cm.frame(); cm.frame()
+        val buffer = cm.renderTarget!!.colorBuffer(0)
+        buffer.shadow.download()
+        val scale = buffer.effectiveWidth / cm.program.width.toDouble()
+        fun at(x: Double, y: Double) = buffer.shadow[(x * scale).toInt(), (y * scale).toInt()]
+        val l = area.layout
+        // past the numbers of the lines, near the right and the bottom
+        for (x in listOf(l.screenX + 100.0, l.screenX + l.screenWidth - 4.0)) {
+            val c = at(x, l.screenY + l.screenHeight - 4.0)
+            assertTrue(c.r > 0.9 && c.g < 0.1 && c.b < 0.1, "the background at $x is $c")
+        }
+    }
+
+    @Test
+    fun `what follows an element with rounded corners that scrolls is drawn, in a parent that does not clip`() {
+        val cm = panel(900.0, 700.0) {
+            css("""
+                .issue-thread { height: 200px; overflow-y: scroll; background-color: rgb(0 0 255); border-radius: 4px }
+                .after { width: 300px; height: 40px; background-color: rgb(255 0 0) }
+            """)
+            layout { p { "behind" } }
+        }
+        cm.frame(); cm.frame()
+        // the thread clips by its rounded box inside the rounded box of the popover; what follows it, in a div that
+        // does not clip, is clipped by the box of the popover only
+        lateinit var body: Div
+        cm.popover({ org.openrndr.shape.Rectangle(100.0, 100.0, 14.0, 14.0) }) { body = div { } }
+        body.apply {
+            div("issue-thread") { repeat(3) { p { "message $it" } } }
+            div("after") { }
+        }
+        repeat(4) { cm.frame() }
+        val after = body.children.last()
+        val buffer = cm.renderTarget!!.colorBuffer(0)
+        buffer.shadow.download()
+        val scale = buffer.effectiveWidth / cm.program.width.toDouble()
+        val p = after.screenArea.center
+        val c = buffer.shadow[(p.x * scale).toInt(), (p.y * scale).toInt()]
+        assertTrue(c.r > 0.9 && c.g < 0.1 && c.b < 0.1, "what follows the thread at $p is $c, ${after.screenArea}")
     }
 }

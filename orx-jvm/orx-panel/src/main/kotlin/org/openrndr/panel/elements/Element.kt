@@ -130,7 +130,7 @@ open class Element(val type: ElementType) : AutoCloseable {
     val dnd = DragAndDrop()
 
     /** the text shown next to the pointer when it rests on the element, null for none */
-    var tooltip: String? = null
+    open var tooltip: String? = null
 
     /** builds the menu that opens when the element is clicked with the right button, null for none */
     var contextMenu: (ContextMenuBuilder.() -> Unit)? = null

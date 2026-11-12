@@ -114,6 +114,12 @@ val defaultStylesCss = """
     .dialog-buttons > .confirm-button { background-color: var(--focus-color); color: var(--control-selected-text) }
     .dialog-buttons > .confirm-button.destructive { background-color: #c0453f }
     @keyframes dialog-in { from { opacity: 0; transform: scale(0.96) } to { opacity: 1; transform: scale(1) } }
+    .popover {
+        position: fixed; z-index: 900; width: 280px; height: auto; max-height: 320px; overflow: scroll; overflow-x: hidden;
+        padding: 10px 12px; border-radius: 8px; border-width: 1px; border-color: rgb(255 255 255 / 0.12);
+        background-color: #26292f; color: var(--control-text); box-shadow: 0 8px 24px rgb(0 0 0 / 0.45);
+    }
+    .popover button { color: var(--control-selected-text) }
     .toasts {
         position: fixed; right: 16px; bottom: 16px; z-index: 1001; display: flex; flex-direction: column;
         align-items: end; row-gap: 8px;

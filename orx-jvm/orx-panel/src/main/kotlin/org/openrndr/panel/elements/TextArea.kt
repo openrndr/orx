@@ -3,6 +3,8 @@ package org.openrndr.panel.elements
 import org.openrndr.*
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import org.openrndr.draw.StrokeAlignment
+import org.openrndr.draw.isolated
 import org.openrndr.events.Event
 import org.openrndr.math.Vector2
 import org.openrndr.panel.Edit
@@ -71,10 +73,11 @@ object Highlighters {
 
 /**
  * Multi-line text that is edited: a caret and a selection that the pointer and the keys move, with shift extending
- * the selection and alt or ctrl moving by words; enter keeps the indentation of the line, tab indents and shift-tab
- * outdents the selected lines; mod+a, mod+c, mod+x and mod+v select all, copy, cut and paste. The text scrolls with the
- * wheel and keeps the caret in view; the edits can be undone, see [org.openrndr.panel.History]. [lineNumbers] shows
- * the numbers of the lines, [highlighter] colors the lines, see [Highlighters].
+ * the selection and alt or ctrl moving by words; enter keeps the indentation of the line, mod+enter fires [submitted],
+ * tab indents and shift-tab outdents the selected lines; mod+a, mod+c, mod+x and mod+v select all, copy, cut and
+ * paste. The text scrolls with the wheel and keeps the caret in view; the edits can be undone, see
+ * [org.openrndr.panel.History]. [lineNumbers] shows the numbers of the lines, [highlighter] colors the lines, see
+ * [Highlighters].
  */
 class TextArea : Element(ElementType("text-area")) {
     override val handlesKeyboardFocus = true
@@ -82,6 +85,9 @@ class TextArea : Element(ElementType("text-area")) {
 
     /** the text changed, by the user or not */
     val valueChanged = Event<ValueChange<String>>("text-area-value-changed")
+
+    /** mod+enter was pressed, with the text, like to send it; enter alone starts a new line */
+    val submitted = Event<String>("text-area-submitted")
 
     private var lines = mutableListOf("")
 
@@ -294,6 +300,11 @@ class TextArea : Element(ElementType("text-area")) {
         val word = KeyModifier.ALT in event.modifiers || KeyModifier.CTRL in event.modifiers
         val command = KeyModifier.SUPER in event.modifiers || KeyModifier.CTRL in event.modifiers
         val clipboard = (root() as? Body)?.controlManager?.program?.clipboard
+        if (command && event.key == KEY_ENTER) {
+            submitted.trigger(value)
+            event.cancelPropagation()
+            return
+        }
         if (command && event.name.length == 1) {
             when (event.name) {
                 "a" -> { anchor = Position(0, 0); caret = Position(lines.lastIndex, lines.last().length); requestRedraw() }
@@ -346,6 +357,16 @@ class TextArea : Element(ElementType("text-area")) {
         val last = minOf(lines.lastIndex, first + (h / lh).toInt() + 1)
         val focused = ElementPseudoClass("focus") in pseudoClasses || (root() as? Body)?.controlManager?.keyboardInput?.target === this
         val (a, b) = ordered()
+        // the background and the border of the box, under the text
+        val background = computedStyle.effectiveBackground ?: ColorRGBa.TRANSPARENT
+        val border = computedStyle.effectiveBorderColor ?: ColorRGBa.TRANSPARENT
+        if (background.alpha > 0.0 || (border.alpha > 0.0 && layout.borderWidth > 0.0)) drawer.isolated {
+            drawer.fill = background
+            drawer.stroke = border
+            drawer.strokeWeight = layout.borderWidth
+            drawer.strokeAlignment = StrokeAlignment.INSIDE
+            drawer.box(layout.boundsAtOrigin, cornerRadius)
+        }
         drawer.stroke = null
         // the text that scrolls is cut off at the numbers of the lines
         val outerClip = drawer.drawStyle.clip

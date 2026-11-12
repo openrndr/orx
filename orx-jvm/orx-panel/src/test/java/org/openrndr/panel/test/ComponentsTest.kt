@@ -10,6 +10,9 @@ import org.openrndr.math.Vector2
 import org.openrndr.panel.ControlManager
 import org.openrndr.panel.elements.*
 import kotlinx.coroutines.launch
+import org.openrndr.panel.style.Display
+import org.openrndr.panel.style.display
+import org.openrndr.shape.Rectangle
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -260,5 +263,86 @@ class ComponentsTest : PanelTestFixture() {
         job.cancel()
         assertEquals(0, backdrops())
         assertEquals(listOf(true, false), answers)
+    }
+
+    @Test
+    fun `a popover stays next to its anchor and inside the window, and closes when dismissed`() {
+        lateinit var outside: Button
+        val cm = panel(640.0, 480.0) { layout { outside = button { label = "outside" } } }
+        cm.frames()
+        fun area(p: Popover) = p.box.layout.let { Rectangle(it.screenX, it.screenY, it.screenWidth, it.screenHeight) }
+
+        // below a point, at its left
+        var anchor: Rectangle? = Rectangle(100.0, 100.0, 20.0, 10.0)
+        val popover = cm.popover({ anchor }) { p { "the thread of an issue" } }
+        cm.frames(3)
+        assertEquals(100.0, area(popover).x, 1E-9)
+        assertEquals(116.0, area(popover).y, 1E-9)
+        // it follows the anchor, above it where it does not fit below, and moved into the window
+        anchor = Rectangle(560.0, 460.0, 20.0, 10.0)
+        cm.frames(3)
+        val a = area(popover)
+        assertEquals(460.0 - 6.0, a.y + a.height, 1E-9)
+        assertEquals(640.0 - 4.0, a.x + a.width, 1E-9)
+        // hidden while there is no anchor, and back when there is
+        anchor = null
+        cm.frames(2)
+        assertEquals(Display.NONE, popover.box.computedStyle.display)
+        anchor = Rectangle(100.0, 100.0, 20.0, 10.0)
+        cm.frames(3)
+        assertEquals(116.0, area(popover).y, 1E-9)
+
+        // presses inside it and on the anchor keep it, a press outside closes it and goes on to what is there
+        var closed = 0
+        popover.closed.listen { closed++ }
+        val inside = area(popover).center
+        cm.move(inside); cm.press(inside); cm.release(inside)
+        cm.move(Vector2(110.0, 105.0)); cm.press(Vector2(110.0, 105.0)); cm.release(Vector2(110.0, 105.0))
+        assertTrue(popover.open)
+        var clicked = 0
+        outside.events.clicked.listen { clicked++ }
+        val button = outside.screenArea.center
+        cm.move(button); cm.press(button); cm.release(button)
+        assertFalse(popover.open)
+        assertEquals(1, closed)
+        assertEquals(1, clicked)
+        assertNull(popover.box.parent)
+
+        // escape closes it, also when the focus is in it, which leaves it
+        lateinit var field: TextArea
+        val second = cm.popover(Vector2(200.0, 200.0), focus = true) { field = textArea { } }
+        cm.frames(3)
+        assertSame(field, cm.keyboardInput.target)
+        cm.key(KEY_ESCAPE)
+        assertFalse(second.open)
+        assertNull(cm.keyboardInput.target)
+
+        // one of a group at a time; one that is not dismissable stays
+        val first = cm.popover(Vector2(50.0, 50.0), group = "issues") { p { "one" } }
+        val other = cm.popover(Vector2(80.0, 80.0), group = "issues", dismissable = false) { p { "two" } }
+        cm.frames(2)
+        assertFalse(first.open)
+        assertTrue(other.open)
+        cm.key(KEY_ESCAPE)
+        cm.move(Vector2(600.0, 20.0)); cm.press(Vector2(600.0, 20.0)); cm.release(Vector2(600.0, 20.0))
+        assertTrue(other.open)
+        other.close()
+        assertNull(other.box.parent)
+    }
+
+    @Test
+    fun `a long popover scrolls inside its height and follows an element`() {
+        lateinit var anchor: Button
+        val cm = panel(640.0, 480.0) {
+            css(".popover { max-height: 200px }")
+            layout { anchor = button { label = "anchor" } }
+        }
+        cm.frames()
+        val popover = cm.popover(anchor) { repeat(40) { i -> p { "message $i" } } }
+        cm.frames(3)
+        val box = popover.box.layout
+        assertEquals(200.0, box.screenHeight, 1E-9)
+        assertEquals(anchor.layout.screenY + anchor.layout.screenHeight + 6.0, box.screenY, 1E-9)
+        assertTrue(popover.box.layout.scrollHeight > 200.0, "the content is higher than the popover: ${popover.box.layout.scrollHeight}")
     }
 }
