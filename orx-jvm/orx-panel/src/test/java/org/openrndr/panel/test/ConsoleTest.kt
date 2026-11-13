@@ -1,5 +1,6 @@
 package org.openrndr.panel.test
 
+import org.openrndr.panel.style.cursor
 import org.openrndr.CharacterEvent
 import org.openrndr.KEY_ARROW_DOWN
 import org.openrndr.KEY_ARROW_RIGHT
@@ -255,5 +256,180 @@ class ConsoleTest : PanelTestFixture() {
         cm.frames(3)
         assertEquals(first, bottom(console.input), 0.5)
         assertTrue(bottom(console.input) <= bottom(panel.content) + 0.5, "${bottom(console.input)} > ${bottom(panel.content)}")
+    }
+
+    @Test
+    fun `a log keeps its start or its end in view, and its scrolling when its lines are replaced`() {
+        lateinit var console: Console
+        val cm = panel {
+            css("console { width: 300px; height: 200px }")
+            layout { console = console { } }
+        }
+        val log = console.log
+        val rows = List(30) { ConsoleLine("row $it") }
+        rows.forEach { log.add(it) }
+        cm.frames()
+        val n = log.visibleLines
+        assertTrue(n in 3..20, "$n lines fit")
+        val content = log.layout.contentBoundsAtOrigin
+        val top = log.layout.screenY + content.y
+        val bottom = top + content.height
+        val h = log.pointOf(LogPosition(1, 0)).y - log.pointOf(LogPosition(0, 0)).y
+
+        // the end in view: the last line at the bottom
+        assertEquals(bottom - h / 2.0, log.pointOf(LogPosition(29, 0)).y, 1E-6)
+        // scrolled back, which replacing the lines keeps, and clear does not
+        log.scrolledBack = 5
+        assertEquals(bottom - h / 2.0, log.pointOf(LogPosition(24, 0)).y, 1E-6)
+        log.replaceAll(List(30) { ConsoleLine("new row $it") })
+        assertEquals(5, log.scrolledBack)
+        assertEquals("new row 0", log.lines.first().text)
+        log.scrolledBack = 1000
+        assertEquals(30 - n, log.scrolledBack)
+        log.clear()
+        assertEquals(0, log.scrolledBack)
+
+        // the start in view: the first line at the top, also while lines are added under it
+        log.anchor = LogAnchor.START
+        rows.take(10).forEach { log.add(it) }
+        assertEquals(top + h / 2.0, log.pointOf(LogPosition(0, 0)).y, 1E-6)
+        rows.drop(10).forEach { log.add(it) }
+        assertEquals(top + h / 2.0, log.pointOf(LogPosition(0, 0)).y, 1E-6)
+        assertEquals(0, log.scrolledDown)
+        // scrolled down, which replacing the lines keeps, measured from the start
+        log.scrolledDown = 4
+        assertEquals(top + h / 2.0, log.pointOf(LogPosition(4, 0)).y, 1E-6)
+        log.replaceAll(rows.map { it.copy(text = "again " + it.text) })
+        assertEquals(4, log.scrolledDown)
+        assertEquals(top + h / 2.0, log.pointOf(LogPosition(4, 0)).y, 1E-6)
+        // the wheel scrolls back up towards the start
+        val p = log.pointOf(LogPosition(6, 0))
+        cm.move(p)
+        log.mouse.scrolled.trigger(org.openrndr.MouseEvent(p, org.openrndr.math.Vector2(0.0, 1.0), org.openrndr.math.Vector2.ZERO, org.openrndr.MouseEventType.SCROLLED, org.openrndr.MouseButton.NONE, emptySet()))
+        assertEquals(1, log.scrolledDown)
+        // to either end: the last line is the last whole line, under the lines that fit from the top
+        log.scrollToEnd()
+        val lastMiddle = log.pointOf(LogPosition(29, 0)).y
+        assertTrue(lastMiddle + h / 2.0 <= bottom + 1E-6 && lastMiddle + h / 2.0 > bottom - h, "the last line at $lastMiddle")
+        log.scrollToStart()
+        assertEquals(top + h / 2.0, log.pointOf(LogPosition(0, 0)).y, 1E-6)
+        // switching ends keeps the lines that show; from the end, the first of them is the first whole line
+        log.scrolledDown = 7
+        log.anchor = LogAnchor.END
+        val firstTop = log.pointOf(LogPosition(7, 0)).y - h / 2.0
+        assertTrue(firstTop >= top - 1E-6 && firstTop < top + h, "the first whole line at $firstTop")
+    }
+
+    @Test
+    fun `a click on a line of a log tells which line it is, from either end`() {
+        lateinit var console: Console
+        val cm = panel {
+            css("console { width: 300px; height: 200px }")
+            layout { console = console { } }
+        }
+        val log = console.log
+        log.clickableLines = true
+        val clicks = mutableListOf<LogLineClicked>()
+        log.lineClicked.listen { clicks.add(it) }
+        log.replaceAll(List(30) { ConsoleLine("node $it", data = "node#$it") })
+        cm.frames()
+        val content = log.layout.contentBoundsAtOrigin
+        val top = log.layout.screenY + content.y
+        val bottom = top + content.height
+        val h = log.pointOf(LogPosition(1, 0)).y - log.pointOf(LogPosition(0, 0)).y
+        val x = log.layout.screenX + content.x + 20.0
+        fun click(y: Double) {
+            // more than a double click apart
+            Thread.sleep(450)
+            val p = org.openrndr.math.Vector2(x, y)
+            cm.move(p); cm.press(p); cm.release(p)
+        }
+
+        // from the end, scrolled back 3 lines: the second line from the bottom
+        log.scrolledBack = 3
+        click(bottom - 1.5 * h)
+        assertEquals(30 - 1 - 3 - 1, clicks.last().index)
+        assertEquals("node#25", clicks.last().line.data)
+        assertEquals(LogPosition(25, clicks.last().position.char), clicks.last().position)
+
+        // from the start, scrolled down 4 lines: the second line from the top
+        log.anchor = LogAnchor.START
+        log.scrolledDown = 4
+        click(top + 1.5 * h)
+        assertEquals(5, clicks.last().index)
+        assertEquals("node#5", clicks.last().line.data)
+        assertEquals(2, clicks.size)
+
+        // a drag selects and does not click
+        Thread.sleep(450)
+        val a = org.openrndr.math.Vector2(x, top + 2.5 * h)
+        cm.move(a); cm.press(a); cm.drag(a + org.openrndr.math.Vector2(40.0, h)); cm.release(a + org.openrndr.math.Vector2(40.0, h))
+        assertEquals(2, clicks.size)
+        // the pointer is a hand over a log with clickable lines
+        cm.frames()
+        assertEquals(org.openrndr.panel.style.Cursor.Pointer, log.computedStyle.cursor)
+    }
+
+    @Test
+    fun `a log wraps long lines into rows, which stay one line`() {
+        lateinit var console: Console
+        val cm = panel {
+            css(".narrow { width: 240px; height: 300px } .wide { width: 480px; height: 300px }")
+            layout { console = console("narrow") { } }
+        }
+        val log = console.log
+        log.wrap = true
+        val long = (1..30).joinToString(" ") { "word$it" }
+        log.add(ConsoleLine("short", data = "first"))
+        log.add(ConsoleLine(long, indent = 4.0, wrapIndent = 24.0, data = "long"))
+        cm.frames()
+        val content = log.layout.contentBoundsAtOrigin
+        val left = log.layout.screenX + content.x
+        val right = left + content.width
+        val bottom = log.layout.screenY + content.y + content.height
+        val h = log.pointOf(LogPosition(1, 0)).y - log.pointOf(LogPosition(0, 0)).y
+
+        // the rows of the long line: their starts, at the starts of words
+        fun rowStarts(line: Int, text: String): List<Int> = text.indices.filter { c ->
+            c == 0 || log.pointOf(LogPosition(line, c)).y > log.pointOf(LogPosition(line, c - 1)).y + h / 2.0
+        }
+        val starts = rowStarts(1, long)
+        assertTrue(starts.size >= 3, "rows at $starts")
+        for (c in starts.drop(1)) assertEquals(' ', long[c - 1], "a row starts within a word at $c")
+        // the first row at the indent, the others at the hanging indent, none past the right
+        assertEquals(left + 4.0, log.pointOf(LogPosition(1, 0)).x, 1E-6)
+        for (c in starts.drop(1)) assertEquals(left + 24.0, log.pointOf(LogPosition(1, c)).x, 1E-6)
+        for (c in long.indices) assertTrue(log.pointOf(LogPosition(1, c)).x <= right + 1E-6, "character $c is past the right")
+        // the end in view: the last row of the last line at the bottom
+        assertEquals(bottom - h / 2.0, log.pointOf(LogPosition(1, long.length)).y, 1E-6)
+
+        // a click on the second row is on the line
+        val clicks = mutableListOf<LogLineClicked>()
+        log.lineClicked.listen { clicks.add(it) }
+        val second = log.pointOf(LogPosition(1, starts[1] + 2))
+        cm.move(second); cm.press(second); cm.release(second)
+        assertEquals(1, clicks.single().index)
+        assertEquals("long", clicks.single().line.data)
+        assertEquals(starts[1] + 2, clicks.single().position.char, "${clicks.single().position}")
+        // the selection of the line is its text, without the breaks
+        log.select(LogPosition(1, 0), LogPosition(1, long.length))
+        assertEquals(long, log.selectedText)
+
+        // wider, it is broken again, into fewer rows
+        console.classes.remove(org.openrndr.panel.elements.ElementClass("narrow"))
+        console.classes.add(org.openrndr.panel.elements.ElementClass("wide"))
+        cm.frames(3)
+        val wider = rowStarts(1, long)
+        assertTrue(wider.size < starts.size, "${wider.size} rows, ${starts.size} before")
+
+        // line breaks break rows, and a word that is wider than a row is broken within
+        log.replaceAll(listOf(ConsoleLine("one\ntwo"), ConsoleLine("x".repeat(200))))
+        cm.frames()
+        assertTrue(log.pointOf(LogPosition(0, 4)).y > log.pointOf(LogPosition(0, 2)).y + h / 2.0)
+        assertTrue(rowStarts(1, "x".repeat(200)).size > 1)
+        // without wrapping, a line is a row
+        log.wrap = false
+        cm.frames()
+        assertEquals(log.pointOf(LogPosition(1, 0)).y, log.pointOf(LogPosition(1, 199)).y, 1E-6)
     }
 }
