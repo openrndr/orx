@@ -1,5 +1,4 @@
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
@@ -8,6 +7,13 @@ import org.openrndr.extra.noise.scatter
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle
 
+/**
+ * Interactive demonstration of how to quickly find the scattered circles that are touching or contained by a rectangle
+ * placed at the mouse position, using BHV.
+ *
+ * The `bvh.queryRectangle(q)` method is used to get the indices of all the circles that are intersecting the query
+ * rectangle.
+ */
 fun main() {
     application {
         configure {
@@ -16,16 +22,15 @@ fun main() {
         }
         program {
             val circles = drawer.bounds.scatter(10.0).map { Circle(it, 10.0) }.shuffled()
-            val bvh =
-                withContext(Dispatchers.IO) {
-                    BVHNode2D.fromObjects(circles) {
-                        Rectangle.fromCenter(
-                            it.center,
-                            it.radius * 2.0,
-                            it.radius * 2.0
-                        )
-                    }
+            val bvh = withContext(Dispatchers.IO) {
+                BVHNode2D.fromObjects(circles) {
+                    Rectangle.fromCenter(
+                        it.center,
+                        it.radius * 2.0,
+                        it.radius * 2.0
+                    )
                 }
+            }
 
             extend {
                 fun drawBvh(node: BVHNode2D) {
@@ -45,9 +50,8 @@ fun main() {
 
                 drawer.circles(found.map { circles[it] })
 
-
+                // draw all the bounding boxes
                 //drawBvh(bvh)
-
             }
         }
     }

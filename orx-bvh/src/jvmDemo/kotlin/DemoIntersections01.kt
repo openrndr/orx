@@ -9,6 +9,19 @@ import org.openrndr.extra.noise.scatter
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle
 
+/**
+ * Demonstrates how to quickly find overlapping circles in a collection of scattered circles using BVH.
+ *
+ * The circles are placed with a scatter radius of 5.0, but the circle radii are actually 6.0, so some
+ * overlap will likely happen.
+ *
+ * The BVH data structure is created out of the rectangular bounding boxes of the circles.
+ *
+ * The `findIntersectingPairs()` is used to find all intersections between those bounding boxes.
+ * Next, the program creates a list of circles that actually intersect, not just their bounding boxes.
+ *
+ * The original circles are then rendered white, and the intersecting ones in red.
+ */
 fun main() {
     application {
         configure {
@@ -39,7 +52,8 @@ fun main() {
                 println("intersections took ${end - start} ms")
 
                 val ci = intersections.flatMap {
-                    if (circles[it.first].center.distanceTo(circles[it.second].center) < circles[it.first].radius + circles[it.second].radius) listOf(circles[it.first], circles[it.second]) else listOf()
+                    if (circles[it.first].center.distanceTo(circles[it.second].center) < circles[it.first].radius + circles[it.second].radius)
+                        listOf(circles[it.first], circles[it.second]) else listOf()
                 }
 
                 drawer.circles(circles)
