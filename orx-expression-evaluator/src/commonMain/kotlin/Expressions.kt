@@ -62,7 +62,11 @@ internal class ExpressionListener(
 
     override fun exitExpressionStatement(ctx: KeyLangParser.ExpressionStatementContext) {
         ifError {
-            throw ExpressionException("error in evaluation of '${ctx.text}': ${it.message ?: ""}")
+            // the problems of all the errors, the message of the last
+            val problems = (exceptionStack.flatMap { e -> e.problems } + (it as ExpressionException).problems).distinct().sortedBy { p -> p.start }
+            exceptionStack.clear()
+            doubleStack.clear()
+            throw ExpressionException("error in evaluation of '${ctx.text}': ${it.message ?: ""}", problems)
         }
         val result = doubleStack.pop()
         lastExpressionResult = result
@@ -80,7 +84,7 @@ internal class ExpressionListener(
 
     override fun exitBinaryOperation1(ctx: KeyLangParser.BinaryOperation1Context) {
         ifError {
-            pushError(it.message ?: "")
+            exceptionStack.push(it as ExpressionException)
             return
         }
 
@@ -99,7 +103,7 @@ internal class ExpressionListener(
 
     override fun exitBinaryOperation2(ctx: KeyLangParser.BinaryOperation2Context) {
         ifError {
-            pushError(it.message ?: "")
+            exceptionStack.push(it as ExpressionException)
             return
         }
 
@@ -125,7 +129,7 @@ internal class ExpressionListener(
 
     override fun exitFunctionCall0Expression(ctx: KeyLangParser.FunctionCall0ExpressionContext) {
         ifError {
-            pushError(it.message ?: "")
+            exceptionStack.push(it as ExpressionException)
             return
         }
 
@@ -140,7 +144,7 @@ internal class ExpressionListener(
 
     override fun exitFunctionCall1Expression(ctx: KeyLangParser.FunctionCall1ExpressionContext) {
         ifError {
-            pushError(it.message ?: "")
+            exceptionStack.push(it as ExpressionException)
             return
         }
 
@@ -157,7 +161,7 @@ internal class ExpressionListener(
 
     override fun exitFunctionCall2Expression(ctx: KeyLangParser.FunctionCall2ExpressionContext) {
         ifError {
-            pushError(it.message ?: "")
+            exceptionStack.push(it as ExpressionException)
             return
         }
 
@@ -175,7 +179,7 @@ internal class ExpressionListener(
 
     override fun exitFunctionCall3Expression(ctx: KeyLangParser.FunctionCall3ExpressionContext) {
         ifError {
-            pushError(it.message ?: "")
+            exceptionStack.push(it as ExpressionException)
             return
         }
 
@@ -194,7 +198,7 @@ internal class ExpressionListener(
 
     override fun exitFunctionCall4Expression(ctx: KeyLangParser.FunctionCall4ExpressionContext) {
         ifError {
-            pushError(it.message ?: "")
+            exceptionStack.push(it as ExpressionException)
             return
         }
 
@@ -215,7 +219,7 @@ internal class ExpressionListener(
 
     override fun exitFunctionCall5Expression(ctx: KeyLangParser.FunctionCall5ExpressionContext) {
         ifError {
-            pushError(it.message ?: "")
+            exceptionStack.push(it as ExpressionException)
             return
         }
 
@@ -230,13 +234,23 @@ internal class ExpressionListener(
         doubleStack.push(result)
     }
 
-    private fun <T> errorValue(message: String, value: T): T {
-        pushError(message)
+    /** an error about [node], the name of a value or a function, of [kind], whose value is [value] */
+    private fun <T> errorValue(message: String, node: TerminalNode, kind: ExpressionProblem.Kind, value: T): T {
+        val name = node.text.replace("`", "")
+        val token = node.symbol
+        val call = node.getParent() as? ParserRuleContext
+        val problem = when {
+            token == null -> ExpressionProblem(ExpressionProblem.Kind.EVALUATION, 0, 0, message, name)
+            kind == ExpressionProblem.Kind.UNKNOWN_VALUE -> span(token).let { ExpressionProblem(kind, it.first, it.last + 1, "no value $name", name) }
+            // a function that takes other numbers of arguments: the call
+            arities(name, functions).isNotEmpty() && call != null -> span(call).let {
+                val arguments = (0 until call.childCount).count { i -> call.getChild(i) is KeyLangParser.ExpressionContext }
+                ExpressionProblem(ExpressionProblem.Kind.WRONG_ARGUMENTS, it.first, it.last + 1, argumentsMessage(name, arities(name, functions), arguments), name)
+            }
+            else -> span(token).let { ExpressionProblem(ExpressionProblem.Kind.UNKNOWN_FUNCTION, it.first, it.last + 1, "no function $name", name) }
+        }
+        exceptionStack.push(ExpressionException(message, listOf(problem)))
         return value
-    }
-
-    private fun pushError(message: String) {
-        exceptionStack.push(ExpressionException(message))
     }
 
     private inline fun ifError(f: (e: Throwable) -> Unit) {
@@ -261,7 +275,7 @@ internal class ExpressionListener(
                 IDType.VARIABLE -> doubleStack.push(
                     when (name) {
                         "PI" -> PI
-                        else -> constants[name] ?: errorValue("unresolved value: '${name}'. available values: ${constants}", 0.0 / 0.0)
+                        else -> constants[name] ?: errorValue("unresolved value: '${name}'. available values: ${constants}", node, ExpressionProblem.Kind.UNKNOWN_VALUE, 0.0 / 0.0)
                     }
                 )
 
@@ -271,7 +285,7 @@ internal class ExpressionListener(
                             "random" -> { _ -> Double.uniform(0.0, 1.0) }
                             else -> functions.functions0[name]?.let { { _: DoubleArray -> it.invoke() } }
                                 ?: errorValue(
-                                    "unresolved function: '${name}()'"
+                                    "unresolved function: '${name}()'", node, ExpressionProblem.Kind.UNKNOWN_FUNCTION
                                 ) { _ -> error("this is the error function") }
                         }
                     functionStack.push(function)
@@ -297,7 +311,7 @@ internal class ExpressionListener(
                             "saturate" -> { x -> x[0].coerceIn(0.0, 1.0) }
                             else -> functions.functions1[name]?.let { { x: DoubleArray -> it.invoke(x[0]) } }
                                 ?: errorValue(
-                                    "unresolved function: '${name}(x0)'"
+                                    "unresolved function: '${name}(x0)'", node, ExpressionProblem.Kind.UNKNOWN_FUNCTION
                                 ) { _ -> error("this is the error function") }
                         }
                     functionStack.push(function)
@@ -315,7 +329,7 @@ internal class ExpressionListener(
                             "length" -> { x -> Vector2(x[0], x[1]).length }
                             else -> functions.functions2[name]?.let { { x: DoubleArray -> it.invoke(x[0], x[1]) } }
                                 ?: errorValue(
-                                    "unresolved function: '${name}(x0, x1)'"
+                                    "unresolved function: '${name}(x0, x1)'", node, ExpressionProblem.Kind.UNKNOWN_FUNCTION
                                 ) { _ -> error("this is the error function") }
                         }
                     functionStack.push(function)
@@ -340,7 +354,7 @@ internal class ExpressionListener(
                                 }
                             }
                                 ?: errorValue(
-                                    "unresolved function: '${name}(x0, x1, x2)'"
+                                    "unresolved function: '${name}(x0, x1, x2)'", node, ExpressionProblem.Kind.UNKNOWN_FUNCTION
                                 ) { _ -> error("this is the error function") }
                         }
                     functionStack.push(function)
@@ -364,7 +378,7 @@ internal class ExpressionListener(
                                 }
                             }
                                 ?: errorValue(
-                                    "unresolved function: '${name}(x0, x1, x2, x3)'"
+                                    "unresolved function: '${name}(x0, x1, x2, x3)'", node, ExpressionProblem.Kind.UNKNOWN_FUNCTION
                                 ) { _ -> error("this is the error function") }
                         }
                     functionStack.push(function)
@@ -389,7 +403,7 @@ internal class ExpressionListener(
                                 }
                             }
                                 ?: errorValue(
-                                    "unresolved function: '${name}(x0, x1, x2, x3, x4)'"
+                                    "unresolved function: '${name}(x0, x1, x2, x3, x4)'", node, ExpressionProblem.Kind.UNKNOWN_FUNCTION
                                 ) { _ -> error("this is the error function") }
                         }
                     functionStack.push(function)
@@ -401,35 +415,39 @@ internal class ExpressionListener(
     }
 }
 
-class ExpressionException(message: String) : RuntimeException(message)
+/**
+ * An expression could not be read or evaluated, see [problems] for where; the message is for people, the problems for
+ * an editor to mark
+ */
+class ExpressionException(
+    message: String,
+    /** what is wrong and where, at least one */
+    val problems: List<ExpressionProblem> = listOf(ExpressionProblem(ExpressionProblem.Kind.EVALUATION, 0, 0, message))
+) : RuntimeException(message)
+
+/** the parse tree of [expression], or an [ExpressionException] with all its syntax problems */
+private fun parseOrThrow(expression: String): KeyLangParser.KeyLangFileContext {
+    val (root, problems) = parseWithProblems(expression, lexer = false)
+    if (problems.isNotEmpty()) {
+        val first = problems.first()
+        val line = expression.take(first.start).count { it == '\n' } + 1
+        val character = first.start - (expression.lastIndexOf('\n', first.start - 1) + 1)
+        throw ExpressionException("parser error in expression: '$expression'; [line: $line, character: $character]: ${first.message}", problems)
+    }
+    return root
+}
 
 fun evaluateExpression(
     expression: String,
     constants: Map<String, Double> = emptyMap(),
     functions: FunctionExtensions = FunctionExtensions.EMPTY
 ): Double? {
-    val lexer = KeyLangLexer(CharStreams.fromString(expression))
-    val parser = KeyLangParser(CommonTokenStream(lexer))
-    parser.removeErrorListeners()
-    parser.addErrorListener(object : BaseErrorListener() {
-        override fun syntaxError(
-            recognizer: Recognizer<*, *>,
-            offendingSymbol: Any?,
-            line: Int,
-            charPositionInLine: Int,
-            msg: String,
-            e: RecognitionException?
-        ) {
-            throw ExpressionException("parser error in expression: '$expression'; [line: $line, character: $charPositionInLine ${offendingSymbol?.let { ", near: $it" } ?: ""} ]")
-        }
-    })
-
-    val root = parser.keyLangFile()
+    val root = parseOrThrow(expression)
     val listener = ExpressionListener(functions, constants)
     try {
         ParseTreeWalker.DEFAULT.walk(listener, root)
     } catch (e: ExpressionException) {
-        throw ExpressionException(e.message ?: "")
+        throw ExpressionException(e.message ?: "", e.problems)
     }
     return listener.lastExpressionResult
 }
@@ -439,22 +457,7 @@ fun compileExpression(
     constants: Map<String, Double> = emptyMap(),
     functions: FunctionExtensions = FunctionExtensions.EMPTY
 ): () -> Double {
-    val lexer = KeyLangLexer(CharStreams.fromString(expression))
-    val parser = KeyLangParser(CommonTokenStream(lexer))
-    parser.removeErrorListeners()
-    parser.addErrorListener(object : BaseErrorListener() {
-        override fun syntaxError(
-            recognizer: Recognizer<*, *>,
-            offendingSymbol: Any?,
-            line: Int,
-            charPositionInLine: Int,
-            msg: String,
-            e: RecognitionException?
-        ) {
-            throw ExpressionException("parser error in expression: '$expression'; [line: $line, character: $charPositionInLine ${offendingSymbol?.let { ", near: $it" } ?: ""} ]")
-        }
-    })
-    val root = parser.keyLangFile()
+    val root = parseOrThrow(expression)
     val listener = ExpressionListener(functions, constants)
 
 
@@ -462,28 +465,13 @@ fun compileExpression(
         try {
             ParseTreeWalker.DEFAULT.walk(listener, root)
         } catch (e: ExpressionException) {
-            throw ExpressionException(e.message ?: "")
+            throw ExpressionException(e.message ?: "", e.problems)
         }
         listener.lastExpressionResult ?: error("no result")
     }
 }
 
 internal fun expressionRoot(expression: String): KeyLangParser.KeyLangFileContext {
-    val lexer = KeyLangLexer(CharStreams.fromString(expression))
-    val parser = KeyLangParser(CommonTokenStream(lexer))
-    parser.removeErrorListeners()
-    parser.addErrorListener(object : BaseErrorListener() {
-        override fun syntaxError(
-            recognizer: Recognizer<*, *>,
-            offendingSymbol: Any?,
-            line: Int,
-            charPositionInLine: Int,
-            msg: String,
-            e: RecognitionException?
-        ) {
-            throw ExpressionException("parser error in expression: '$expression'; [line: $line, character: $charPositionInLine ${offendingSymbol?.let { ", near: $it" } ?: ""} ]")
-        }
-    })
-    return parser.keyLangFile()
+    return parseOrThrow(expression)
 }
 
