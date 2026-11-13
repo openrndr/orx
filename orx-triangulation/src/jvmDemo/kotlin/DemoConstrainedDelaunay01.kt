@@ -2,7 +2,6 @@ import org.openrndr.application
 import org.openrndr.color.ColorHSVa
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.isolated
-import org.openrndr.extra.noise.scatter
 import org.openrndr.extra.remotecontrol.RemoteControl
 import org.openrndr.extra.triangulation.constrainedDelaunayTriangulation
 import org.openrndr.math.Vector2
@@ -37,7 +36,6 @@ fun main() = application {
         val hole2 = Rectangle(380.0, 380.0, 80.0, 50.0).contour.reversed
         val shape = Shape(listOf(outer, hole1, hole2))
 
-        val pts = shape.scatter(20.0, distanceToEdge = 10.0)
         val cdt = shape.constrainedDelaunayTriangulation()
         val voronoi = cdt.voronoiDiagram()
 
@@ -63,7 +61,7 @@ fun main() = application {
 
             // right: the dual constrained Voronoi diagram, cells clipped to the shape
             drawer.isolated {
-                drawer.translate(0.0, 0.0)
+                drawer.translate(720.0, 0.0)
 
                 drawer.stroke = ColorRGBa.WHITE.opacify(0.5)
                 drawer.strokeWeight = 0.5
