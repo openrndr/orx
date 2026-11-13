@@ -1,6 +1,5 @@
 package org.openrndr.extra.expressions
 
-import org.antlr.v4.kotlinruntime.tree.ParseTreeWalker
 
 
 /**
@@ -23,13 +22,12 @@ fun compileFunction1(
         val root = expressionRoot(expression)
         val variables = mutableMapOf<String, Double>()
         variables.putAll(constants)
-        val listener = ExpressionListener(functions, variables)
+        val compiled = CompiledExpression(root, variables, functions)
 
         return { p0 ->
             variables[parameter0] = p0
             try {
-                ParseTreeWalker.DEFAULT.walk(listener, root)
-                listener.lastExpressionResult ?: error("no result")
+                compiled.evaluate() ?: error("no result")
             } catch (e: ExpressionException) {
                 error(p0)
             }
@@ -62,14 +60,13 @@ fun compileFunction2(
         val root = expressionRoot(expression)
         val variables = mutableMapOf<String, Double>()
         variables.putAll(constants)
-        val listener = ExpressionListener(functions, variables)
+        val compiled = CompiledExpression(root, variables, functions)
 
         return { p0, p1 ->
             variables[parameter0] = p0
             variables[parameter1] = p1
             try {
-                ParseTreeWalker.DEFAULT.walk(listener, root)
-                listener.lastExpressionResult ?: error("no result")
+                compiled.evaluate() ?: error("no result")
             } catch (e: ExpressionException) {
                 error(p0, p1)
             }
@@ -106,15 +103,14 @@ fun compileFunction3(
         val root = expressionRoot(expression)
         val variables = mutableMapOf<String, Double>()
         variables.putAll(constants)
-        val listener = ExpressionListener(functions, variables)
+        val compiled = CompiledExpression(root, variables, functions)
 
         return { p0, p1, p2 ->
             variables[parameter0] = p0
             variables[parameter1] = p1
             variables[parameter2] = p2
             try {
-                ParseTreeWalker.DEFAULT.walk(listener, root)
-                listener.lastExpressionResult ?: error("no result")
+                compiled.evaluate() ?: error("no result")
             } catch (e: ExpressionException) {
                 error(p0, p1, p2)
             }

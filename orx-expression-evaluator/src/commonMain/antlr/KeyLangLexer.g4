@@ -21,8 +21,10 @@ FUNCTION_ID        : [$_]*[a-z][A-Za-z0-9_]* ;
 
 // Literals
 
-DECLIT             : [0-9][0-9]* '.' [0-9]+ ;
+// decimals: 1.5, .5, and numbers with an exponent: 1e3, 2.5E-3, .5e2
+DECLIT             : [0-9]+ '.' [0-9]+ EXPONENT? | '.' [0-9]+ EXPONENT? | [0-9]+ EXPONENT ;
 INTLIT             : '0'|[0-9][0-9]* ;
+fragment EXPONENT  : [eE] [+-]? [0-9]+ ;
 
 // Operators
 PLUS               : '+' ;
