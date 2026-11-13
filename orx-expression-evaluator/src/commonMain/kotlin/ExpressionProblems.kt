@@ -60,8 +60,8 @@ internal fun arities(name: String, functions: FunctionExtensions): Set<Int> = bu
     4.takeIf { name in functions.functions4 }, 5.takeIf { name in functions.functions5 }
 )
 
-/** that [name] takes the numbers of arguments [takes], not [arguments] */
-internal fun argumentsMessage(name: String, takes: Set<Int>, arguments: Int): String {
+/** the message that [name] takes the numbers of arguments [takes], not [arguments] */
+fun argumentsMessage(name: String, takes: Set<Int>, arguments: Int): String {
     fun count(n: Int) = if (n == 1) "1 argument" else "$n arguments"
     val sorted = takes.sorted()
     val allowed = when {
@@ -72,11 +72,11 @@ internal fun argumentsMessage(name: String, takes: Set<Int>, arguments: Int): St
     return "$name takes $allowed, not $arguments"
 }
 
-/** the characters of [token], end exclusive */
-internal fun span(token: Token): IntRange = token.startIndex until token.stopIndex + 1
+/** the characters of [token], as the start and the end, exclusive, of an [ExpressionProblem] */
+fun span(token: Token): IntRange = token.startIndex until token.stopIndex + 1
 
-/** the characters of [ctx], end exclusive */
-internal fun span(ctx: ParserRuleContext): IntRange {
+/** the characters of [ctx], as the start and the end, exclusive, of an [ExpressionProblem] */
+fun span(ctx: ParserRuleContext): IntRange {
     val start = ctx.start?.startIndex ?: 0
     val stop = ctx.stop?.stopIndex ?: (start - 1)
     return start until maxOf(start, stop + 1)
@@ -103,8 +103,11 @@ private fun unclosed(tokens: List<Token>): Pair<Token, Char>? {
     return stack.lastOrNull()?.let { it to closing.getValue(it.type) }
 }
 
-/** the parse tree of [expression] and its syntax problems, all of them; with [lexer] also the characters that are no tokens */
-internal fun parseWithProblems(expression: String, lexer: Boolean = true): Pair<KeyLangParser.KeyLangFileContext, List<ExpressionProblem>> {
+/**
+ * the parse tree of [expression] and its syntax problems, all of them; with [lexer] also the characters that are no
+ * tokens. For evaluators of this grammar, like the typed one
+ */
+fun parseWithProblems(expression: String, lexer: Boolean = true): Pair<KeyLangParser.KeyLangFileContext, List<ExpressionProblem>> {
     val problems = mutableListOf<ExpressionProblem>()
     // the offsets of the lines, for the errors of the lexer, which only know a line and a column
     val lineStarts = listOf(0) + expression.indices.filter { expression[it] == '\n' }.map { it + 1 }

@@ -189,6 +189,21 @@ internal fun mat4(x: Any): Matrix44 {
     }
 }
 
+/** [x] rounded to the nearest whole number, halves away from zero, of a number or of the components of a vector */
+internal fun round(x: Any): Any {
+    fun r(v: Double): Double {
+        val whole = kotlin.math.truncate(v)
+        return if (kotlin.math.abs(v - whole) == 0.5) whole + kotlin.math.sign(v) else kotlin.math.round(v)
+    }
+    return when (x) {
+        is Double -> r(x)
+        is Vector2 -> Vector2(r(x.x), r(x.y))
+        is Vector3 -> Vector3(r(x.x), r(x.y), r(x.z))
+        is Vector4 -> Vector4(r(x.x), r(x.y), r(x.z), r(x.w))
+        else -> error("round(): unsupported argument: '$x'")
+    }
+}
+
 internal fun dispatchFunction1(name: String, functions: Map<String, TypedFunction1>): ((Array<Any>) -> Any)? {
     return when (name) {
         "vec2" -> { x -> vec2(x[0]) }
@@ -205,6 +220,7 @@ internal fun dispatchFunction1(name: String, functions: Map<String, TypedFunctio
         "transpose" -> { x -> transpose(x[0]) }
         "inverse" -> { x -> inverse(x[0]) }
         "normalize" -> { x -> normalize(x[0]) }
+        "round" -> { x -> round(x[0]) }
         else -> functions[name]?.let { { x: Array<Any> -> it.invoke(x[0]) } }
     }
 }

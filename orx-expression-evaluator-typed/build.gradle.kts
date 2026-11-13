@@ -11,7 +11,7 @@ kotlin {
             implementation(sharedLibs.kotlin.coroutines)
             implementation(project(":orx-property-watchers"))
             implementation(project(":orx-noise"))
-            implementation(project(":orx-expression-evaluator"))
+            api(project(":orx-expression-evaluator"))
         }
         jvmDemo.dependencies {
             implementation(project(":orx-jvm:orx-gui"))
