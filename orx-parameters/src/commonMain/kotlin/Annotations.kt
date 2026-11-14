@@ -30,6 +30,18 @@ annotation class Description(val title: String, val description: String = "")
 annotation class OptionParameter(val label: String, val order: Int = Int.MAX_VALUE, val description: String = "")
 
 /**
+ * The label of a constant of an enum that an [OptionParameter] chooses from, as user interfaces show it; constants
+ * without one are shown by their names in lowercase, with spaces for underscores, see [Parameter.optionLabels]
+ *
+ * ```
+ * enum class BlendMode { @OptionLabel("soft light (W3C)") SOFT_LIGHT, MULTIPLY }
+ * ```
+ */
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class OptionLabel(val label: String)
+
+/**
  * ListParameter annotation for a `SelectableList`
  *
  * @property label a short description of the parameter
@@ -298,6 +310,11 @@ class Parameter(
         val nestedProperty: KProperty1<out Any, Any?>? = null,
         val nestedParameters: List<Parameter>? = null,
         val description: String? = null,
+        /**
+         * for an option parameter, the labels of the constants it chooses from by their names, in the order they are
+         * declared, see [OptionLabel]
+         */
+        val optionLabels: Map<String, String>? = null,
         )
 //</editor-fold>
 //<editor-fold desc="4. Add handling annotation code to listParameters" defaultstate="collapsed">

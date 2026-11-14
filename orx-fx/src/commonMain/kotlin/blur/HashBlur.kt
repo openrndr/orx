@@ -13,6 +13,10 @@ import org.openrndr.extra.shadestyles.presets.ConstantVector2
 import org.openrndr.extra.shadestyles.presets.ScalarPreset
 import org.openrndr.extra.shadestyles.presets.Vector2Preset
 import org.openrndr.extra.shadestyles.presets.presetSlot
+import org.openrndr.extra.shadestyles.presets.setFxContext
+import org.openrndr.extra.shadestyles.presets.PresetSlot
+import org.openrndr.extra.shadestyles.presets.PresetFilter
+import org.openrndr.extra.shadestyles.presets.FX_CONTEXT_USE
 import org.openrndr.math.Vector2
 
 /**
@@ -62,10 +66,23 @@ class HashBlur : ShadeStyleFilter1to1(shadeStyle {
             vec2 offset = circle * hashblur_circle(randomC) + line * hashblur_line(randomL, direction);
             acc += textureLod(p_input0, uv + offset, 0.0);
         }
+        // the average of premultiplied colors, made straight, which the filter premultiplies when it writes it
         x_fill = acc / float(p_samples);
+        if (x_fill.a > 0.0) x_fill.rgb /= x_fill.a;
         x_fill.rgb *= p_gain;
-    """.trimIndent()
-}) {
+    """.trimIndent() + "\n" + FX_CONTEXT_USE
+}), PresetFilter {
+    private val radiusScaleSlot = presetSlot<ScalarPreset>("radiusScale", ScalarPreset.CONTRACT, ConstantScalar(1.0))
+    private val directionSlot = presetSlot<Vector2Preset>("direction", Vector2Preset.CONTRACT, ConstantVector2(Vector2.ZERO))
+
+    override val presetSlots: List<PresetSlot<*>> get() = listOf(radiusScaleSlot, directionSlot)
+
+    override fun setFxContext(time: Double, frame: Int, resolution: Vector2) = shadeStyle.setFxContext(time, frame, resolution)
+
+    init {
+        setFxContext(0.0, 0, Vector2(1.0, 1.0))
+    }
+
     /**
      * Blur radius in pixels, default is 5.0
      */
@@ -100,12 +117,12 @@ class HashBlur : ShadeStyleFilter1to1(shadeStyle {
      * [ConstantScalar] of 1.0.
      */
     @NestedParameter("radius scale")
-    var radiusScale: ScalarPreset by presetSlot("radiusScale", ScalarPreset.CONTRACT, ConstantScalar(1.0))
+    var radiusScale: ScalarPreset by radiusScaleSlot
 
     /**
      * Direction of the line blur, scaled by [spread], can vary per pixel, for example with `TextureVector2(map)`.
      * The default, a [ConstantVector2] of [Vector2.ZERO], blurs a disc only.
      */
     @NestedParameter("direction")
-    var direction: Vector2Preset by presetSlot("direction", Vector2Preset.CONTRACT, ConstantVector2(Vector2.ZERO))
+    var direction: Vector2Preset by directionSlot
 }

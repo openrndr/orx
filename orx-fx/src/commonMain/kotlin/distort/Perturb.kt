@@ -7,6 +7,10 @@ import org.openrndr.extra.parameters.*
 import org.openrndr.extra.shadestyles.presets.NoiseWarp
 import org.openrndr.extra.shadestyles.presets.WarpPreset
 import org.openrndr.extra.shadestyles.presets.presetSlot
+import org.openrndr.extra.shadestyles.presets.setFxContext
+import org.openrndr.extra.shadestyles.presets.PresetSlot
+import org.openrndr.extra.shadestyles.presets.PresetFilter
+import org.openrndr.extra.shadestyles.presets.FX_CONTEXT_USE
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 
@@ -46,14 +50,26 @@ class Perturb : ShadeStyleFilter1to1(shadeStyle {
         } else {
             x_fill = textureLod(p_input0, distCoord, 0.0);
         }
-    """.trimIndent()
-}) {
+        // the input holds premultiplied colors, the filter premultiplies what it writes
+        if (!p_outputUV && x_fill.a > 0.0) x_fill.rgb /= x_fill.a;
+    """.trimIndent() + "\n" + FX_CONTEXT_USE
+}), PresetFilter {
+    private val warpSlot = presetSlot<WarpPreset>("warp", WarpPreset.CONTRACT, NoiseWarp())
+
+    override val presetSlots: List<PresetSlot<*>> get() = listOf(warpSlot)
+
+    override fun setFxContext(time: Double, frame: Int, resolution: Vector2) = shadeStyle.setFxContext(time, frame, resolution)
+
+    init {
+        setFxContext(0.0, 0, Vector2(1.0, 1.0))
+    }
+
     /**
      * the warp, a function `vec2 warp(vec2 uv)` that maps a texture coordinate to the coordinate to read from.
      * The default is a [NoiseWarp].
      */
     @NestedParameter("warp", order = 5)
-    var warp: WarpPreset by presetSlot("warp", WarpPreset.CONTRACT, NoiseWarp())
+    var warp: WarpPreset by warpSlot
 
     @IntParameter("x segments", 0, 256, order = 0)
     var xSegments: Int by Parameter("xSegments", 0)

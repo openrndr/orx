@@ -180,6 +180,7 @@ private fun Any.listParameters(path: MutableList<Any>): List<Parameter> {
             pathExtensions = pathExtensions,
             pathIsDirectory = pathIsDirectory,
             order = order,
+            optionLabels = if (type == ParameterType.Option) optionLabels(property) else null,
             description = annotations.firstNotNullOfOrNull { annotation ->
                 // every parameter annotation has a description
                 (annotation.annotationClass.java.methods.firstOrNull { it.name == "description" }?.invoke(annotation) as? String)
@@ -220,4 +221,13 @@ actual fun Any.title() = this::class.findAnnotation<Description>()?.title
 
 actual fun Any.description(): String? = this::class.findAnnotation<Description>()?.description
 
-
+/** the labels of the constants of the enum that [property] holds, by their names, see [OptionLabel] */
+private fun optionLabels(property: kotlin.reflect.KProperty<*>): Map<String, String>? {
+    val enumClass = (property.returnType.classifier as? kotlin.reflect.KClass<*>)?.java ?: return null
+    val constants = enumClass.enumConstants ?: return null
+    return constants.associate { constant ->
+        val name = (constant as Enum<*>).name
+        val label = runCatching { enumClass.getField(name).getAnnotation(OptionLabel::class.java)?.label }.getOrNull()
+        name to (label ?: optionLabelOf(name))
+    }
+}

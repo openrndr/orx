@@ -36,33 +36,39 @@ interface Preset : DynamicParameterSource {
 }
 
 /**
- * A property that holds a preset and sets it as the parameter [name] of [parameters], a shade style, a filter or the
- * function of another preset. Assigned presets must have [contract].
+ * A property that holds a preset and sets it as the parameter [name] of every one of [targets]: shade styles, the passes
+ * of a filter, or the function of another preset. Assigned presets must have [contract].
  */
 class PresetSlot<P : Preset>(
-    private val parameters: StyleParameters,
+    private val targets: List<StyleParameters>,
     val name: String,
     val contract: GlslContract,
     initial: P
 ) : ReadWriteProperty<Any?, P> {
-    private var value: P = initial
+    /** a slot that sets its preset as the parameter [name] of [parameters] */
+    constructor(parameters: StyleParameters, name: String, contract: GlslContract, initial: P) :
+            this(listOf(parameters), name, contract, initial)
+
+    /** the preset in the slot; assigning one that does not have [contract] throws an [IllegalArgumentException] */
+    var preset: P = initial
+        set(value) {
+            val parameter = value.dynamicParameter
+            require(contract.accepts(parameter)) {
+                "slot '$name' takes a $contract, ${value::class.simpleName ?: "the preset"} provides a ${signatureOf(parameter)}"
+            }
+            field = value
+            for (target in targets) target.parameter(name, value)
+        }
 
     init {
-        set(initial)
+        preset = initial
     }
 
-    private fun set(preset: P) {
-        val parameter = preset.dynamicParameter
-        require(contract.accepts(parameter)) {
-            "slot '$name' takes a $contract, ${preset::class.simpleName ?: "the preset"} provides a ${signatureOf(parameter)}"
-        }
-        value = preset
-        parameters.parameter(name, preset)
+    override fun getValue(thisRef: Any?, property: KProperty<*>): P = preset
+
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: P) {
+        preset = value
     }
-
-    override fun getValue(thisRef: Any?, property: KProperty<*>): P = value
-
-    override fun setValue(thisRef: Any?, property: KProperty<*>, value: P) = set(value)
 }
 
 /**

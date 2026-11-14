@@ -39,7 +39,7 @@ fun main() = application {
 
         extend(gui)
         extend {
-            grain.time = seconds
+            chain.time = seconds
             chain.apply(image, result)
             drawer.imageFit(result, drawer.bounds)
         }

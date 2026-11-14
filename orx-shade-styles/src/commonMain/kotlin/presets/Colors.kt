@@ -373,15 +373,17 @@ class Dither : ColorPreset() {
 }
 
 /**
- * Film grain. [time] animates the grain at [rate] changes per second; [strength] and [pitch] set the strength and
- * size of the grain, [liftRatio] mixes multiplied grain (0) with added grain (1). Colored grain is desaturated by
- * [colorLevel]. The grain is aligned to the pixels of the output.
+ * Film grain, which changes [rate] times per second with the time of the context, `fx_time()`, see
+ * [fxContextLibrary]; [strength] and [pitch] set the strength and size of the grain, [liftRatio] mixes multiplied grain
+ * (0) with added grain (1). Colored grain is desaturated by [colorLevel]. The grain is aligned to the pixels of the
+ * output. Like every preset that reads the context, it is for effect chains, preset filters and shaders that set the
+ * context, see [setFxContext].
  */
 class FilmGrain : ColorPreset() {
     override val dynamicParameter = glslFunction<Vector4>(
         "vec4 c, vec2 uv", """
         vec2 x = gl_FragCoord.xy;
-        float t = p_time;
+        float t = fx_time() + p_time;
         vec3 grain;
         if (p_useColor) {
             float rg = film_grain_source(vec3(x, floor(p_rate * t)), p_strength, p_pitch);
@@ -393,10 +395,10 @@ class FilmGrain : ColorPreset() {
             grain = vec3(film_grain_source(vec3(x, floor(p_rate * t)), p_strength / sqrt(2.0), p_pitch));
         }
         return vec4(max(mix(c.rgb * grain, c.rgb + (grain - 1.0), p_liftRatio), 0.0), c.a);
-        """.trimIndent(), listOf(filmGrainLibrary)
+        """.trimIndent(), listOf(filmGrainLibrary, fxContextLibrary)
     )
 
-    /** time in seconds, default is 0.0 */
+    /** an offset in seconds of the time of the context, default is 0.0 */
     var time: Double by dynamicParameter.Parameter("time", 0.0)
 
     @BooleanParameter("use color", order = 0)
