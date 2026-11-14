@@ -88,17 +88,33 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
                 val pngFile = "${outputDir.get().asFile}/$imageName.png"
 
                 fun launchDemoProgram() {
-                    execOperations.javaexec {
-                        this.classpath = classpathBundle.get()
-                        this.mainClass.set(klassName)
-                        this.workingDir(rootProjectDir.get())
-                        this.jvmArgs(
-                            "-DtakeScreenshot=true",
-                            "-DscreenshotPath=$pngFile",
-                            "-Dorg.openrndr.exceptions=JVM",
-                            "-Dorg.openrndr.gl3.debug=true",
-                            "-Dorg.openrndr.gl3.delete_angle_on_exit=false"
-                        )
+                    // Unique per demo, used by the watchdog to find the demo's process
+                    val screenshotPathArg = "-DscreenshotPath=$pngFile"
+                    val watchdog = Thread {
+                        try {
+                            Thread.sleep(DEMO_TIMEOUT_SECONDS * 1000)
+                        } catch (_: InterruptedException) {
+                            return@Thread
+                        }
+                        dumpThreadsAndKill(klassName, screenshotPathArg)
+                    }
+                    watchdog.isDaemon = true
+                    watchdog.start()
+                    try {
+                        execOperations.javaexec {
+                            this.classpath = classpathBundle.get()
+                            this.mainClass.set(klassName)
+                            this.workingDir(rootProjectDir.get())
+                            this.jvmArgs(
+                                "-DtakeScreenshot=true",
+                                screenshotPathArg,
+                                "-Dorg.openrndr.exceptions=JVM",
+                                "-Dorg.openrndr.gl3.debug=true",
+                                "-Dorg.openrndr.gl3.delete_angle_on_exit=false"
+                            )
+                        }
+                    } finally {
+                        watchdog.interrupt()
                     }
                 }
 
@@ -182,6 +198,40 @@ abstract class CollectScreenshotsTask @Inject constructor() : DefaultTask() {
             readme.delete()
             readme.writeText(readmeLines.joinToString("\n"))
         }
+    }
+}
+
+/**
+ * How long a demo program may run before it is considered stuck.
+ */
+private const val DEMO_TIMEOUT_SECONDS = 120L
+
+/**
+ * Called when a demo program did not exit in time: prints the stack traces of all its threads, to show what
+ * keeps it alive, and kills it so that the build fails instead of waiting forever.
+ *
+ * @param commandLineMarker a command line argument that is unique to the demo's process
+ */
+private fun dumpThreadsAndKill(klassName: String, commandLineMarker: String) {
+    println("TIMEOUT: $klassName is still running after $DEMO_TIMEOUT_SECONDS seconds")
+    val stuck = ProcessHandle.current().descendants().filter { process ->
+        val info = process.info()
+        info.commandLine().orElse("").contains(commandLineMarker) ||
+                info.arguments().map { commandLineMarker in it }.orElse(false)
+    }.toList()
+    if (stuck.isEmpty()) {
+        println("TIMEOUT: could not find the process of $klassName, not killing anything")
+    }
+    for (process in stuck) {
+        runCatching {
+            val jstack = File(System.getProperty("java.home"), "bin/jstack").path
+            val dump = ProcessBuilder(jstack, process.pid().toString()).redirectErrorStream(true).start()
+            println("Thread dump of $klassName (pid ${process.pid()}):")
+            println(dump.inputStream.bufferedReader().readText())
+        }.onFailure {
+            println("Could not get a thread dump of $klassName: $it")
+        }
+        process.destroyForcibly()
     }
 }
 
