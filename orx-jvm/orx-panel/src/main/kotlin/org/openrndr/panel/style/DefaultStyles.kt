@@ -277,6 +277,11 @@ val defaultStylesCss = """
         font-size: calc(var(--control-font-size) * 12 / 14); color: var(--control-text);
     }
 
+    clip-timeline {
+        width: 100%; height: 200px; overflow: hidden; background-color: var(--control-sunken-background);
+        font-size: calc(var(--control-font-size) * 12 / 14); color: var(--control-text);
+    }
+
     /* docks */
     dock { width: 100%; height: 100% }
     dock-group { display: flex; flex-direction: column; align-items: stretch; width: 100%; height: 100%; position: relative }
