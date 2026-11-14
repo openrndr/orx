@@ -180,4 +180,50 @@ class RedrawTest : PanelTestFixture() {
         val c = buffer.shadow[(p.x * scale).toInt(), (p.y * scale).toInt()]
         assertTrue(c.r > 0.9 && c.g < 0.1 && c.b < 0.1, "what follows the thread at $p is $c, ${after.screenArea}")
     }
+
+    @Test
+    fun `a tinted node is drawn in its tint, which a status color overrules on the title bar`() {
+        lateinit var editor: NodeEditor
+        lateinit var plain: GraphNode
+        lateinit var tinted: GraphNode
+        val cm = panel {
+            css("node-editor { width: 600px; height: 300px }")
+            layout {
+                editor = nodeEditor {
+                    plain = add(GraphNode("plain", listOf(Port("in"))), org.openrndr.math.Vector2(20.0, 20.0))
+                    tinted = add(GraphNode("tinted", listOf(Port("in"))), org.openrndr.math.Vector2(250.0, 20.0))
+                }
+            }
+        }
+        tinted.tint = ColorRGBa.fromHex("#ff7a1a")
+        cm.frame(); cm.frame()
+        fun pixel(n: GraphNode, dx: Double, dy: Double): ColorRGBa {
+            val buffer = cm.renderTarget!!.colorBuffer(0)
+            buffer.shadow.download()
+            val scale = buffer.effectiveWidth / cm.program.width.toDouble()
+            val p = org.openrndr.math.Vector2(editor.layout.screenX, editor.layout.screenY) + n.position + org.openrndr.math.Vector2(dx, dy)
+            return buffer.shadow[(p.x * scale).toInt(), (p.y * scale).toInt()]
+        }
+        // the title bars, away from the titles: the tinted one is orange, the plain one gray
+        val tintedTitle = pixel(tinted, tinted.width - 6.0, 4.0)
+        val plainTitle = pixel(plain, plain.width - 6.0, 4.0)
+        assertTrue(tintedTitle.r - tintedTitle.b > 0.15, "the tinted title bar is $tintedTitle")
+        assertTrue(kotlin.math.abs(plainTitle.r - plainTitle.b) < 0.05, "the plain title bar is $plainTitle")
+        // the boxes, faintly
+        val tintedBox = pixel(tinted, tinted.width - 6.0, tinted.height - 4.0)
+        val plainBox = pixel(plain, plain.width - 6.0, plain.height - 4.0)
+        assertTrue(tintedBox.r > plainBox.r + 0.02 && tintedBox.r - tintedBox.b < 0.15, "the boxes are $tintedBox and $plainBox")
+        // a status color wins on the title bar
+        tinted.statusColor = ColorRGBa.fromHex("#2f80ff")
+        cm.frame(); cm.frame()
+        val status = pixel(tinted, tinted.width - 6.0, 4.0)
+        assertTrue(status.b > status.r + 0.1, "the title bar with a status is $status")
+        // compact, still tinted, and the tint follows changes
+        tinted.statusColor = null
+        tinted.compact = true
+        tinted.tint = ColorRGBa.fromHex("#20c060")
+        cm.frame(); cm.frame()
+        val green = pixel(tinted, tinted.width - 6.0, 4.0)
+        assertTrue(green.g > green.r + 0.1 && green.g > green.b + 0.1, "the compact title bar is $green")
+    }
 }

@@ -55,6 +55,13 @@ class GraphNode(
         set(value) { if (value != field) { field = value; editor?.requestRedraw() } }
 
     /**
+     * a color the node is drawn in, like for the kind of node it is: it tints the title bar, the outline when the
+     * node is neither selected nor highlighted, and faintly the box; a [statusColor] still tints the title bar
+     */
+    var tint: ColorRGBa? = null
+        set(value) { if (value != field) { field = value; editor?.requestRedraw() } }
+
+    /**
      * draws the body of the node, in the box of [bodyHeight] under the ports, in the coordinates of the graph; call
      * [NodeEditor.requestRedraw] when what it draws changes
      */
@@ -949,17 +956,19 @@ class NodeEditor : Element(ElementType("node-editor")) {
                     for (n in layer) {
                         val selected = n in selection
                         val highlighted = n in highlightedNodes
+                        val tint = n.tint
                         stroke = when {
                             selected -> accent
                             highlighted -> highlightColor
+                            tint != null -> tint.opacify(0.45)
                             else -> color.opacify(0.25)
                         }
                         strokeWeight = if (selected || highlighted) 2.0 else 1.0
-                        fill = nodeFill
+                        fill = if (tint != null) nodeFill.mix(tint, 0.08) else nodeFill
                         rectangle(n.bounds)
-                        // the title bar, tinted by the status
+                        // the title bar, tinted by the status, else by the tint
                         stroke = null
-                        fill = n.statusColor?.opacify(0.35) ?: color.opacify(0.08)
+                        fill = n.statusColor?.opacify(0.35) ?: tint?.opacify(0.35) ?: color.opacify(0.08)
                         rectangle(n.position.x, n.position.y, n.width, TITLE_HEIGHT)
                     }
                 }
