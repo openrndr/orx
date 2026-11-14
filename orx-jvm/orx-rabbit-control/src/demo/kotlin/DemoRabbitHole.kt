@@ -5,17 +5,24 @@ import org.openrndr.extra.parameters.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
+import kotlin.system.exitProcess
 
 /**
  * Starts the RabbitControlServer with a `Rabbithole` using the key 'orxtest'.
  *
- * `Rabbithole` allows you to access your exposed parameters from Internet
- * connected computers that are not in the same network.
+ * `Rabbithole` allows you to access your exposed parameters from
+ * Internet-connected computers that are not in the same network.
  *
- * To use it with this example use 'orxtest' as the tunnel-name in https://rabbithole.rabbitcontrol.cc
+ * To use it with this example, use 'orxtest' as the tunnel-name in
+ * https://rabbithole.rabbitcontrol.cc
  *
  */
 fun main() = application {
+    // skip this demo on CI
+    if (System.getProperty("takeScreenshot") == "true") {
+        exitProcess(0)
+    }
+
     configure {
         width = 800
         height = 800
