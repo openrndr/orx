@@ -49,7 +49,8 @@ private fun strokeContains(shape: Shape, p: Vector2, weight: Double): Boolean =
 private fun insideClip(node: CompositionNode, p: Vector2): Boolean {
     val clip = node.style.clipPath as? ClipPath.Shapes ?: return true
     val point = when (clip.units) {
-        PaintUnits.OBJECT -> p
+        // SVG has objectBoundingBox (BOUNDS) and userSpaceOnUse (OBJECT), the other units of PaintStyle are taken as OBJECT
+        PaintUnits.OBJECT, PaintUnits.WORLD, PaintUnits.VIEW, PaintUnits.SCREEN -> p
         PaintUnits.BOUNDS -> {
             val bounds = localBounds(node) ?: return false
             (boundsTransform(bounds).inversed * p.xy01).xy

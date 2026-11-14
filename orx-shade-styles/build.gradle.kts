@@ -14,6 +14,12 @@ kotlin {
             implementation(sharedLibs.kotlin.reflect)
         }
 
+        getByName("jvmTest") {
+            dependencies {
+                implementation(project(":testing"))
+            }
+        }
+
         jvmDemo.dependencies {
             implementation(project(":orx-color"))
             implementation(project(":orx-shade-styles"))
@@ -23,5 +29,13 @@ kotlin {
             implementation(project(":orx-camera"))
             implementation(project(":orx-obj-loader"))
         }
+    }
+}
+
+tasks.named<Test>("jvmTest") {
+    // every test class that uses the test fixture opens a window, opening more than one window per JVM is unreliable
+    forkEvery = 1
+    if (org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem().isMacOsX) {
+        jvmArgs("-XstartOnFirstThread")
     }
 }

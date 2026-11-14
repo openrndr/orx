@@ -427,7 +427,8 @@ private fun Drawer.intoTarget(target: RenderTarget, draw: Drawer.() -> Unit) {
  */
 private fun Drawer.pushClip3d(clip: ClipPath.Shapes, node: CompositionNode, tolerance: Double): Boolean {
     val units = when (clip.units) {
-        PaintUnits.OBJECT -> Matrix44.IDENTITY
+        // SVG has objectBoundingBox (BOUNDS) and userSpaceOnUse (OBJECT), the other units of PaintStyle are taken as OBJECT
+        PaintUnits.OBJECT, PaintUnits.WORLD, PaintUnits.VIEW, PaintUnits.SCREEN -> Matrix44.IDENTITY
         PaintUnits.BOUNDS -> {
             val bounds = localBounds(node) ?: return false
             if (bounds.width <= 0.0 || bounds.height <= 0.0) return false

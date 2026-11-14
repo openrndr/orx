@@ -68,7 +68,8 @@ internal fun Drawer.preparePaint(paint: Paint.Server, bounds: Rectangle): Matrix
                     bounds.x + paint.tile.x * bounds.width, bounds.y + paint.tile.y * bounds.height,
                     paint.tile.width * bounds.width, paint.tile.height * bounds.height
                 )
-                PaintUnits.OBJECT -> paint.tile
+                // SVG has objectBoundingBox (BOUNDS) and userSpaceOnUse (OBJECT), the other units of PaintStyle are taken as OBJECT
+                PaintUnits.OBJECT, PaintUnits.WORLD, PaintUnits.VIEW, PaintUnits.SCREEN -> paint.tile
             }
             if (tile.width <= 0.0 || tile.height <= 0.0) return null
             val texture = patternTile(paint, tile, bounds) ?: return null
@@ -77,7 +78,8 @@ internal fun Drawer.preparePaint(paint: Paint.Server, bounds: Rectangle): Matrix
             paint.transform * boundsTransform(tile) * Matrix44.translate(0.0, 1.0, 0.0) * Matrix44.scale(1.0, -1.0, 1.0)
         }
         else -> when (paint.units) {
-            PaintUnits.OBJECT -> paint.transform
+            // SVG has objectBoundingBox (BOUNDS) and userSpaceOnUse (OBJECT), the other units of PaintStyle are taken as OBJECT
+            PaintUnits.OBJECT, PaintUnits.WORLD, PaintUnits.VIEW, PaintUnits.SCREEN -> paint.transform
             PaintUnits.BOUNDS -> if (emptyBounds) null else boundsTransform(bounds) * paint.transform
         }
     }
@@ -262,7 +264,8 @@ internal fun localBounds(node: CompositionNode): Rectangle? = when (node) {
  */
 private fun Drawer.pushClip(clip: ClipPath.Shapes, node: CompositionNode, depth: Int): Boolean {
     val units = when (clip.units) {
-        PaintUnits.OBJECT -> Matrix44.IDENTITY
+        // SVG has objectBoundingBox (BOUNDS) and userSpaceOnUse (OBJECT), the other units of PaintStyle are taken as OBJECT
+        PaintUnits.OBJECT, PaintUnits.WORLD, PaintUnits.VIEW, PaintUnits.SCREEN -> Matrix44.IDENTITY
         PaintUnits.BOUNDS -> {
             val bounds = localBounds(node) ?: return false
             if (bounds.width <= 0.0 || bounds.height <= 0.0) return false

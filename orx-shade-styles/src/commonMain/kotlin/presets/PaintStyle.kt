@@ -11,22 +11,46 @@ enum class PaintUnits {
     BOUNDS,
 
     /** the coordinates of the shape itself, before the model transform, like SVG's userSpaceOnUse */
-    OBJECT
+    OBJECT,
+
+    /** the coordinates after the model transform, before the view transform */
+    WORLD,
+
+    /** the coordinates after the model and the view transform, before the projection */
+    VIEW,
+
+    /** the position on the target in points, from its bottom left corner, with y up */
+    SCREEN
+}
+
+/** how a paint in [PaintUnits.BOUNDS] units fits bounds that are not square */
+enum class PaintFit {
+    /** the 0..1 square of the paint stretches over the bounds */
+    STRETCH,
+
+    /** the 0..1 square of the paint fits inside the bounds, centered, keeping its aspect ratio */
+    FIT,
+
+    /** the 0..1 square of the paint covers the bounds, centered, keeping its aspect ratio */
+    FILL
 }
 
 /**
- * A paint of a [PaintStyle]: [source] read at coordinates in [units], transformed by the inverse of [transform]
+ * A paint of a [PaintStyle]: [source] read at coordinates in [units], transformed by the inverse of [transform]. In
+ * [PaintUnits.BOUNDS] units [fit] keeps the aspect ratio of the paint in bounds that are not square, before the
+ * transform; for other units it does nothing, put it in the transform.
  */
 class PaintLayer(
     val source: SourcePreset,
     val units: PaintUnits = PaintUnits.BOUNDS,
-    val transform: Matrix44 = Matrix44.IDENTITY
+    val transform: Matrix44 = Matrix44.IDENTITY,
+    val fit: PaintFit = PaintFit.STRETCH
 )
 
 /**
  * A shade style that paints the fills and strokes of shapes with sources, such as gradients: the color of the source
  * replaces the color of the fill or stroke, their alpha multiplies. A fill or stroke without a paint keeps its
- * color. [PaintUnits.OBJECT] reads the position of the shape and works for shapes and contours.
+ * color. All [PaintUnits] work for shapes, contours, circles and rectangles, also drawn in batches.
  *
  * [PaintUnits.BOUNDS] reads `c_boundsPosition`. For shapes, a paint over the bounds of a shape can be drawn in
  * [PaintUnits.OBJECT] units with a transform that maps 0..1 to the bounds, see [boundsTransform].
@@ -37,8 +61,15 @@ class PaintStyle(val fill: PaintLayer?, val stroke: PaintLayer?) : ShadeStyle() 
             for ((name, layer) in listOf("fill" to fill, "stroke" to stroke)) {
                 if (layer == null) continue
                 val coordinate = when (layer.units) {
-                    PaintUnits.BOUNDS -> "c_boundsPosition.xy"
+                    PaintUnits.BOUNDS -> when (layer.fit) {
+                        PaintFit.STRETCH -> "c_boundsPosition.xy"
+                        PaintFit.FIT -> "((c_boundsPosition.xy - 0.5) * c_boundsSize.xy / max(min(c_boundsSize.x, c_boundsSize.y), 1e-8) + 0.5)"
+                        PaintFit.FILL -> "((c_boundsPosition.xy - 0.5) * c_boundsSize.xy / max(max(c_boundsSize.x, c_boundsSize.y), 1e-8) + 0.5)"
+                    }
                     PaintUnits.OBJECT -> "v_objectPosition.xy"
+                    PaintUnits.WORLD -> "v_worldPosition.xy"
+                    PaintUnits.VIEW -> "v_viewPosition.xy"
+                    PaintUnits.SCREEN -> "c_screenPosition.xy"
                 }
                 appendLine("{")
                 appendLine("    vec2 p = (p_${name}Transform * vec4($coordinate, 0.0, 1.0)).xy;")
@@ -76,14 +107,14 @@ class PaintStyleBuilder {
     private var fill: PaintLayer? = null
     private var stroke: PaintLayer? = null
 
-    /** paints fills with [source] at coordinates in [units], transformed by [transform] */
-    fun fill(source: SourcePreset, units: PaintUnits = PaintUnits.BOUNDS, transform: Matrix44 = Matrix44.IDENTITY) {
-        fill = PaintLayer(source, units, transform)
+    /** paints fills with [source] at coordinates in [units], transformed by [transform], fitted by [fit] */
+    fun fill(source: SourcePreset, units: PaintUnits = PaintUnits.BOUNDS, transform: Matrix44 = Matrix44.IDENTITY, fit: PaintFit = PaintFit.STRETCH) {
+        fill = PaintLayer(source, units, transform, fit)
     }
 
-    /** paints strokes with [source] at coordinates in [units], transformed by [transform] */
-    fun stroke(source: SourcePreset, units: PaintUnits = PaintUnits.BOUNDS, transform: Matrix44 = Matrix44.IDENTITY) {
-        stroke = PaintLayer(source, units, transform)
+    /** paints strokes with [source] at coordinates in [units], transformed by [transform], fitted by [fit] */
+    fun stroke(source: SourcePreset, units: PaintUnits = PaintUnits.BOUNDS, transform: Matrix44 = Matrix44.IDENTITY, fit: PaintFit = PaintFit.STRETCH) {
+        stroke = PaintLayer(source, units, transform, fit)
     }
 
     fun build(): PaintStyle = PaintStyle(fill, stroke)
