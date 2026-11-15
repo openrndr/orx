@@ -18,9 +18,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class TestExpandStroke {
-    /** the distance to [curve] by brute force over dense samples */
-    private fun distances(curve: ShapeContour): (Vector2) -> Double {
-        val dense = List(20000) { curve.position(it / 20000.0) }
+    /** the distance to [curve] by brute force over [samples] dense samples */
+    private fun distances(curve: ShapeContour, samples: Int = 20000): (Vector2) -> Double {
+        val dense = List(samples) { curve.position(it / samples.toDouble()) }
         return { p -> sqrt(dense.minOf { it.squaredDistanceTo(p) }) }
     }
 
@@ -66,9 +66,11 @@ class TestExpandStroke {
             hobbyCurve(List(9) { k -> val a = k * 2 * PI / 8 + 0.2; center + Vector2(sin(a) * 160.0, sin(a) * cos(a) * 110.0) }),
             hobbyCurve(List(30) { k -> val a = k * 0.5; center + Vector2(cos(a), sin(a)) * (20.0 + k * 6.0) })
         )
-        val n = 70
+        // a coarse grid and curve samples less than half a pixel apart keep the test fast enough for the JS tests,
+        // the points closer to the edge of the stroke than two steps of the grid are not tested anyway
+        val n = 50
         for ((index, curve) in curves.withIndex()) {
-            val distance = distances(curve)
+            val distance = distances(curve, 4000)
             val b = curve.bounds.offsetEdges(60.0)
             val step = maxOf(b.width, b.height) / n
             for (weight in listOf(10.0, 80.0)) {
