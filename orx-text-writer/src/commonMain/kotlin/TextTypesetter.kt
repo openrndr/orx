@@ -52,7 +52,7 @@ class TypesetLine(val boxIndex: Int, val glyphs: List<TypesetGlyph>)
 
 /**
  * Typesets [spans] into [boxes] using Knuth-Plass line breaking. Text flows from one box to the next,
- * lines that do not fit in any of the boxes are placed in the last box.
+ * text that does not fit in any of the boxes is discarded.
  *
  * Typesetting only computes glyph positions, it does not draw. Use [SlugTextDrawer] to draw text or
  * [VectorTextDrawer] to produce glyph outlines.
@@ -95,13 +95,15 @@ fun typesetText(
         maxOf(maxLines, 1)
     }
 
-    // Each line uses the width of the box it belongs to, lines that don't fit use the first box's width
+    // Each line uses the width of the box it belongs to, the lines after the last box, which are discarded, are
+    // broken at the width of the last box
     val lineWidths = boxes.indices.flatMap { boxIdx -> List(boxLineCapacities[boxIdx]) { boxes[boxIdx].width } }
-    val defaultLineWidth = boxes.first().width
+    val overflowLineWidth = boxes.last().width
 
+    // lines that do not fit in any of the boxes are discarded
     val lines = breakLines(items) { lineIndex ->
-        if (lineIndex < lineWidths.size) lineWidths[lineIndex] else defaultLineWidth
-    }
+        if (lineIndex < lineWidths.size) lineWidths[lineIndex] else overflowLineWidth
+    }.take(lineWidths.size)
 
     // Pre-compute which box each line belongs to
     val totalLines = lines.size
@@ -111,18 +113,12 @@ fun typesetText(
         var bi = 0
         var lic = 0
         for (li in 0 until totalLines) {
-            while (bi < boxes.size && lic >= boxLineCapacities[bi]) {
+            while (lic >= boxLineCapacities[bi]) {
                 bi++
                 lic = 0
             }
-            if (bi >= boxes.size) {
-                // Lines that don't fit are assigned to the last box (will be clipped)
-                lineBoxIndex[li] = boxes.size - 1
-                lineIndexInBox[li] = lic
-            } else {
-                lineBoxIndex[li] = bi
-                lineIndexInBox[li] = lic
-            }
+            lineBoxIndex[li] = bi
+            lineIndexInBox[li] = lic
             lic++
         }
     }

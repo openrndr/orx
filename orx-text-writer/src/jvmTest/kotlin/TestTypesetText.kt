@@ -84,6 +84,31 @@ class TestTypesetText {
     }
 
     @Test
+    fun textThatDoesNotFitInTheBoxesIsDiscarded() {
+        val face = face()
+        // two lines high, the text takes more
+        val box = Rectangle(0.0, 0.0, 200.0, 60.0)
+        for (verticalAlign in listOf(0.0, 0.5, 1.0)) {
+            val lines = typesetText(listOf(TextSpan(text.repeat(3), null)), listOf(box), TextStyle.Defaults.copy(face = face, verticalAlign = verticalAlign))
+            val baselines = lines.map { it.glyphs.first().position.y }
+            assertTrue(lines.size in 1..3, "${lines.size} lines")
+            // no line is placed over another one at the start of the box
+            assertEquals(baselines.sorted(), baselines)
+            assertEquals(baselines.size, baselines.distinct().size, "$baselines")
+            // all within the box, also when aligned to its bottom
+            assertTrue(baselines.first() - face.ascent >= box.y - 1E-6 && baselines.last() - face.descent <= box.y + box.height + 1E-6,
+                "align $verticalAlign: $baselines")
+        }
+        // with several boxes, the last box is not filled from its start again
+        val boxes = listOf(Rectangle(0.0, 0.0, 200.0, 60.0), Rectangle(300.0, 0.0, 200.0, 60.0))
+        val lines = typesetText(listOf(TextSpan(text.repeat(6), null)), boxes, TextStyle.Defaults.copy(face = face))
+        val last = lines.filter { it.boxIndex == 1 }.map { it.glyphs.first().position.y }
+        assertTrue(last.isNotEmpty())
+        assertEquals(last.size, last.distinct().size, "$last")
+        assertEquals(lines.size, lines.filter { it.boxIndex == 0 }.size + last.size)
+    }
+
+    @Test
     fun horizontalAlignmentShiftsLinesRigidly() {
         val box = Rectangle(0.0, 0.0, 220.0, 400.0)
         val left = typesetText(listOf(TextSpan(text, null)), listOf(box), TextStyle.Defaults.copy(face = face()))
