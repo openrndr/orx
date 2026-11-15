@@ -23,6 +23,63 @@ _The code in `orx-composition` was previously found under `openrndr-draw` in the
 
 <!-- __demos__ -->
 ## Demos
+### DemoComposition3D01
+
+Demonstrates drawing a composition in 3D with [composition3d]: its fills and strokes are tessellated into triangles
+in the plane of the composition, so it can be turned and seen in perspective with an orbital camera, with depth
+testing. The composition has fills with holes, strokes with miter, round and bevel joins and butt, round and square
+caps, a dashed stroke, a linear gradient, translucent strokes that overlap themselves, a translucent stroke with round joins
+and caps that keeps its width on the screen, and text.
+
+The composition turns slowly; drag to turn the camera, scroll to zoom.
+
+![DemoComposition3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoComposition3D01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoComposition3D01.kt)
+
+### DemoComposition3D02
+
+Demonstrates text in 3D with [composition3d]: the glyphs of text are drawn as shapes, with gradients over the bounds
+of a text element, a tspan with a gradient of its own, gradient strokes, and text along a path, like
+DemoCompositionTextGradients01 draws them in 2D. The composition turns slowly; drag to turn the camera.
+
+![DemoComposition3D02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoComposition3D02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoComposition3D02.kt)
+
+### DemoComposition3D03
+
+Demonstrates clip paths and masks in 3D with [composition3d]: a clip path with a hole, a clip in the bounds of a
+group, clips in clips, a luminance mask with a gradient that fades stripes out, and an alpha mask of text. The clips
+and masks are rendered with the transforms of the composition, so they clip in perspective. The composition turns
+slowly; space shows it in 2D, as [composition] draws it, to compare.
+
+![DemoComposition3D03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoComposition3D03Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoComposition3D03.kt)
+
+### DemoComposition3D04
+
+Demonstrates filters and blend modes in 3D with [composition3d]: a blur, a drop shadow, a hue rotation of a group,
+text displaced by turbulence, and circles blended by multiply, screen and difference. A node with filters or a blend
+mode is drawn flat on a layer of the resolution it has on the screen, which is drawn in the plane, so it turns in
+perspective with the rest. The composition turns slowly; space shows it in 2D, as [composition] draws it, to compare.
+
+![DemoComposition3D04Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoComposition3D04Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoComposition3D04.kt)
+
+### DemoComposition3D05
+
+Demonstrates markers in 3D with [composition3d]: arrowheads that turn with the path and the reversed start of
+auto-start-reverse, dots at the vertices of a polyline that take the stroke of the line as context-stroke, and flags
+in user units that take the fill of the path as context-fill. The content of the markers is drawn in 3D like the
+rest of the composition. The composition turns slowly; space shows it in 2D, as [composition] draws it, to compare.
+
+![DemoComposition3D05Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-composition/images/DemoComposition3D05Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoComposition3D05.kt)
+
 ### DemoCompositionDrawer01
 
 Demonstrates how to

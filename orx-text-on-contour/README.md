@@ -4,6 +4,16 @@ Write texts on contours.
 
 <!-- __demos__ -->
 ## Demos
+### DemoExtrudedText01
+
+Demonstrates [extrudeText]: solid letters from a text layout, here text along a helix laid out by
+[layoutTextOnPath3D]. Every glyph is filled, with the holes of letters cut out, and extruded along the z-axis of its
+placement, 0.3 units deep and centered on the path. Drag with the mouse to orbit around.
+
+![DemoExtrudedText01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-on-contour/images/DemoExtrudedText01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoExtrudedText01.kt)
+
 ### DemoSlugTextOnContour01
 
 Demo Functionality includes:
@@ -61,3 +71,16 @@ Demo Functionality includes:
 ![DemoTextOnContour01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-on-contour/images/DemoTextOnContour01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoTextOnContour01.kt)
+
+### DemoTextOnPath3D01
+
+Demonstrates [layoutTextOnPath3D]: text along a 3D path, here a helix, the 3D counterpart of text on a contour.
+
+Every glyph gets a transform that places its outline in the frame of the path where it stands, the frames of
+PosePath3D, which start with their y-axis up and turn as little as possible, so the text runs along the helix
+without twisting. The text is drawn with a [SlugTextDrawer] from the glyphs of the layout, and slides along the
+path over time. Drag with the mouse to orbit around.
+
+![DemoTextOnPath3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-on-contour/images/DemoTextOnPath3D01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/DemoTextOnPath3D01.kt)

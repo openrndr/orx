@@ -15,6 +15,8 @@
   - DemoBezierPatch [01](#bezierpatchdemobezierpatch01), [02](#bezierpatchdemobezierpatch02), [03](#bezierpatchdemobezierpatch03), [04](#bezierpatchdemobezierpatch04), [05](#bezierpatchdemobezierpatch05), [06](#bezierpatchdemobezierpatch06)
   - DemoBezierPatchDrawer [01](#bezierpatchdemobezierpatchdrawer01), [02](#bezierpatchdemobezierpatchdrawer02), [03](#bezierpatchdemobezierpatchdrawer03), [04](#bezierpatchdemobezierpatchdrawer04)
   - [DemoBezierPatches01](#bezierpatchdemobezierpatches01)
+  - DemoBezierVolumeDeform [01](#bezierpatchdemobeziervolumedeform01), [02](#bezierpatchdemobeziervolumedeform02)
+  - [DemoPatchClip01](#bezierpatchdemopatchclip01)
 - **blend**
   - DemoContourBlend [01](#blenddemocontourblend01), [02](#blenddemocontourblend02)
 - **deform**
@@ -24,8 +26,10 @@
   - [DemoConvoluteContour](#distortdemoconvolutecontour)
   - DemoDistortContour [01](#distortdemodistortcontour01), [02](#distortdemodistortcontour02), [04](#distortdemodistortcontour04)
   - [DemoDistortUniformContour01](#distortdemodistortuniformcontour01)
+  - DemoEnvelopePath3D [01](#distortdemoenvelopepath3d01), [02](#distortdemoenvelopepath3d02)
   - [DemoEnvelopeShape01](#distortdemoenvelopeshape01)
   - DemoWarpContour [01](#distortdemowarpcontour01), [02](#distortdemowarpcontour02)
+  - [DemoWarpPath3D01](#distortdemowarppath3d01)
   - [DemoWarpShape01](#distortdemowarpshape01)
 - **expand**
   - DemoExpand [01](#expanddemoexpand01), [02](#expanddemoexpand02)
@@ -378,7 +382,7 @@ is created using a circular contour with the required 4 segments.
 
 ### bezierpatch/DemoBezierPatch04
 
-Shows how to get positions and gradient values of those positions
+Shows how to get positions and the directions of the mixed derivatives (twist vectors) at those positions
 from a [bezierPatch]
 
 You can think of bezierPatch.position() as requesting points
@@ -485,6 +489,48 @@ to use in bezier patches.
 ![bezierpatch-DemoBezierPatches01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierPatches01Kt.webp)
 
 [source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierPatches01.kt)
+
+### bezierpatch/DemoBezierVolumeDeform01
+
+Demonstrates deforming meshes in a [BezierVolume], on the CPU and on the GPU.
+
+A finely subdivided bar is twisted and bent by a Bezier volume whose control points move over time. At the top the
+bar is deformed on the CPU, with `TriangleMeshBuilder.envelope`, and written into its vertex buffer every frame. At
+the bottom the bar is the same undeformed mesh every frame, deformed on the GPU by [bezierVolumeShadeStyle], whose
+volume is set with [setBezierVolume]. Both map normals along, so the light follows the deformed surface, and both
+bars look the same. Drag with the mouse to orbit around.
+
+![bezierpatch-DemoBezierVolumeDeform01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierVolumeDeform01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierVolumeDeform01.kt)
+
+### bezierpatch/DemoBezierVolumeDeform02
+
+Demonstrates deforming a mesh by two [BezierVolume]s in one shade style, with [bezierVolumeDeformFunctionGlsl], the
+form of the deformation that takes its volume as arguments, and uniforms that [setBezierVolume] sets with a prefix
+for each volume.
+
+A bar is first twisted by one volume and then bent by a second one, whose box holds the twisted bar. At the top the
+two deformations are done on the CPU one after the other, at the bottom on the GPU in one shade style; both bars look
+the same. Drag with the mouse to orbit around.
+
+![bezierpatch-DemoBezierVolumeDeform02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoBezierVolumeDeform02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/bezierpatch/DemoBezierVolumeDeform02.kt)
+
+### bezierpatch/DemoPatchClip01
+
+Demonstrates [PatchClip]: the part of a Bezier patch inside a shape, tessellated, as a solid.
+
+The letters of "CLIP" are cut out of a patch whose control points ripple over time, and given a thickness along the
+normal of the patch, so they stand on the surface as solid letters that bend with it. The tessellation is made once,
+in the u, v square of the patch, clipped to a grid so that the letters bend inside too; every frame only maps it onto
+the patch as it is and writes it into the same vertex buffer. The patch itself is drawn as a grid of its curves.
+Drag with the mouse to orbit around.
+
+![bezierpatch-DemoPatchClip01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/bezierpatch-DemoPatchClip01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/bezierpatch/DemoPatchClip01.kt)
 
 ### blend/DemoContourBlend01
 
@@ -641,6 +687,37 @@ increases and decreases 7 times, creating a 7-point rounded star as a result.
 
 [source code](src/jvmDemo/kotlin/distort/DemoDistortUniformContour01.kt)
 
+### distort/DemoEnvelopePath3D01
+
+Demonstrates how
+[`Path3D.envelope`](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.distort/envelope.html)
+with a [BezierVolume] deforms 3D paths: free-form deformation.
+
+A bundle of coils fills a box. A Bezier volume made with [BezierVolume.fromBox] would leave them as they are; here
+every layer of its control points along the length of the box is turned around the axis of the box, further for the
+layers further along, by an angle that swings back and forth over time. The coils twist with the volume. The lattice
+of control points is drawn too. Drag with the mouse to orbit around.
+
+![distort-DemoEnvelopePath3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoEnvelopePath3D01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/distort/DemoEnvelopePath3D01.kt)
+
+### distort/DemoEnvelopePath3D02
+
+Demonstrates how
+[`Path3D.envelope`](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.distort/envelope.html)
+with a [BezierPatch3D] lays 3D paths onto a curved surface.
+
+The outlines of the text "ENVELOPE" are turned into 3D paths in the plane of z = 0. Their x and y in the bounds of
+the text give the u and v on a Bezier patch whose control points ripple over time, so the text lies on the surface.
+A copy of the outlines is lifted off the surface along its normal by giving its points a z: the distance follows
+the normal wherever the surface bends. The patch is drawn as a grid of its curves. Drag with the mouse to orbit
+around.
+
+![distort-DemoEnvelopePath3D02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoEnvelopePath3D02Kt.webp)
+
+[source code](src/jvmDemo/kotlin/distort/DemoEnvelopePath3D02.kt)
+
 ### distort/DemoEnvelopeShape01
 
 Demonstrates how
@@ -693,6 +770,22 @@ The resulting wobbly grid is shown in pink.
 ![distort-DemoWarpContour02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoWarpContour02Kt.webp)
 
 [source code](src/jvmDemo/kotlin/distort/DemoWarpContour02.kt)
+
+### distort/DemoWarpPath3D01
+
+Demonstrates how
+[`RectifiedPath3D.warp`](https://orx.openrndr.org/orx-shapes/org.openrndr.extra.shapes.distort/warp.html)
+moves 3D paths from following one path to following another.
+
+Two coils wind around a straight basis line along x, one close and one wide. The warp path is a curve through
+points that move over time. Every point of the coils is found by its nearest point on the basis, its offset there is
+measured in the frame of the basis, and it is placed at the same offset in the frame of the warp path at the same
+place along it: the coils wind around the moving curve as they wind around the line. Where the curve bends more
+tightly than a coil is wide, the coil folds there. Drag with the mouse to orbit around.
+
+![distort-DemoWarpPath3D01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-shapes/images/distort-DemoWarpPath3D01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/distort/DemoWarpPath3D01.kt)
 
 ### distort/DemoWarpShape01
 
