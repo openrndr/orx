@@ -155,6 +155,100 @@ the content of a Div is replaced by a button and some sliders.
 
 [source code](src/demo/kotlin/DemoComplex01.kt)
 
+### DemoComponents01
+
+Demonstrates the components of panels: a split pane with a tree on the left and a table on the right, rich text with
+spans in their own styles and a link, a dialog that keeps the keyboard focus, and toasts.
+
+![DemoComponents01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoComponents01Kt.webp)
+
+[source code](src/demo/kotlin/DemoComponents01.kt)
+
+### DemoComponents02
+
+Demonstrates the tools of panels: a menu bar whose items are also commands in the command palette (cmd/ctrl+K),
+panels in a dock that are dragged by their tabs into other groups and out of the window, a knob, a range slider, a
+logarithmic slider with ticks, number fields that take arithmetic, a curve editor, a gradient editor, a list that is
+reordered by dragging and a timeline of keyframes that animates the drawing. The knobs, the number field and the curve
+editor are bound to the values of the drawing both ways, so they follow the timeline; the layout of the dock is kept
+between runs, and edits are undone with mod+z.
+
+![DemoComponents02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoComponents02Kt.webp)
+
+[source code](src/demo/kotlin/DemoComponents02.kt)
+
+### DemoComponents03
+
+Demonstrates more tools of panels, in a dock: a node editor of a small graph, with ports colored by their types,
+a live value on a port, a node with a body that draws a wave, a slider in the body of the mix node, and a status that
+tells the output has no input; Graph > Compact nodes shows only the connected ports, and the wire from the time to
+the radius of the blur goes around the nodes through waypoints. Hovering over a port highlights what leads to it or
+what it leads to. A text area with the code of a shader
+in highlighted GLSL, a color editor with a wheel in OKLCH, swatches and a pipette that picks colors from the window,
+and live plots of the frame time and of values, a histogram and a scope. The edits are undone with mod+z, and the
+menus are used with the keyboard: F10, then the arrow keys.
+
+![DemoComponents03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoComponents03Kt.webp)
+
+[source code](src/demo/kotlin/DemoComponents03.kt)
+
+### DemoConsole01
+
+Demonstrates a console for a small command language over circles: `add <color> at <x> <y> as <name>`,
+`remove <name>`, `move <name> to <x> <y>` and `list`. Tab completes the commands, the colors and the names of the
+circles from a list under the caret, the rest of the best candidate shows dimmed and right takes it. Words that
+are not understood are underlined while typing, errors show under their span in the log, and up and down go
+through the commands that were given.
+
+![DemoConsole01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoConsole01Kt.webp)
+
+[source code](src/demo/kotlin/DemoConsole01.kt)
+
+### DemoCss01
+
+Demonstrates styling a user interface with CSS: selectors with classes, states and structural pseudo-classes,
+shorthands, !important, and custom properties with var(). Hover the buttons to see their states.
+
+![DemoCss01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoCss01Kt.webp)
+
+[source code](src/demo/kotlin/DemoCss01.kt)
+
+### DemoCss02
+
+Demonstrates the effects of CSS in panels: gradient backgrounds, box shadows, transforms that transition when the
+cards are hovered, animations with @keyframes, and selectors of attributes and states, like `button[label="Delete"]`
+and `toggle:checked`.
+
+![DemoCss02Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoCss02Kt.webp)
+
+[source code](src/demo/kotlin/DemoCss02.kt)
+
+### DemoCss03
+
+Demonstrates more of CSS in panels: a media query that stacks the columns when the window is narrow and one for the
+color scheme, text with letter spacing, an ellipsis and decorations, an inset shadow, a rotated box that clips its
+scrolling content by its shape, flex items with a basis, an order and their own alignment, and a list of ten thousand
+rows of which only the rows in view are built.
+
+![DemoCss03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoCss03Kt.webp)
+
+[source code](src/demo/kotlin/DemoCss03.kt)
+
+### DemoFCurveEditor01
+
+Demonstrates the editor of fcurves on a long curve of 600 keys over two minutes, with jumps here and there. The
+view zooms horizontally with the wheel, vertically with shift and the wheel, and F frames the whole curve. The
+tools: select and move keys and handles (V), add keys with the pen (P), draw the curve by hand (D), cut the curve
+(C), break it into a jump (B), and sculpt it under a brush with grab (G), smooth (S), flatten (L) and noise (N);
+[ and ] change the radius of the brush. Simplify (R) fits the curve between the selected keys again with fewer
+segments, like after sculpting. Clear removes the curve, to build a new one with the pen or by drawing; the context
+menu makes the selected keys smooth, linear or constant. The circle above the editor follows the curve at the
+playhead, and mod+z undoes the edits.
+
+![DemoFCurveEditor01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoFCurveEditor01Kt.webp)
+
+[source code](src/demo/kotlin/DemoFCurveEditor01.kt)
+
 ### DemoGridLayout01
 
 Demonstrates the use of grid layouts.
@@ -177,6 +271,54 @@ by CSS, and `layout { }`, which is structured similarly to HTML.
 ![DemoHorizontalLayout01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoHorizontalLayout01Kt.webp)
 
 [source code](src/demo/kotlin/DemoHorizontalLayout01.kt)
+
+### DemoScrolling01
+
+Demonstrates scrolling: elements with `overflow = Overflow.Scroll` scroll content that does not fit them.
+
+- the strip at the top is a row of tiles that do not shrink, it scrolls horizontally
+- the area below is a grid that is wider and taller than the area, it scrolls both ways
+
+Scroll with a trackpad or with the wheels of a mouse; with shift held a vertical wheel scrolls horizontally. The
+scrollbars show how far the content is scrolled: drag a thumb to scroll, click a track to scroll by a page. They
+show while scrolling and while the pointer is over them, and fade out after that; the strip keeps its scrollbar with
+`scrollbarVisibility = ScrollbarVisibility.Always`. The strip styles its scrollbar with `scrollbarColor`,
+`scrollbarTrackColor` and `scrollbarWidth`, which are inherited.
+
+![DemoScrolling01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoScrolling01Kt.webp)
+
+[source code](src/demo/kotlin/DemoScrolling01.kt)
+
+### DemoSettings01
+
+Demonstrates the styling and navigation of a list of settings:
+
+- the list scrolls vertically only, `overflowX = Overflow.Hidden`, smoothly with the wheel and its scrollbar
+- the headers of the sections are sticky: they stay at the top while their sections scroll by
+- controls with rounded corners, `borderRadius`, whose colors change smoothly when hovered, `transitionDuration`
+- the last section is faded with `opacity`
+- tab and shift-tab move the keyboard focus between the controls, which shows a focus ring and scrolls the focused
+control into view
+
+![DemoSettings01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoSettings01Kt.webp)
+
+[source code](src/demo/kotlin/DemoSettings01.kt)
+
+### DemoShadeStyleEditor01
+
+A node based editor of shade styles. The nodes of the graph are pieces of GLSL with typed inputs and outputs, wired
+into the color of the output node; the graph is compiled to the fragment transform of a shade style, which colors the
+preview. The parameters of the nodes are uniforms of the shade style: a selected node shows sliders for its
+parameters, which change the preview while they are dragged without compiling the shade style again; only adding,
+removing and wiring nodes compiles it. The generated GLSL is shown, highlighted.
+
+A right click on the graph adds a node where the pointer is, so does the Add menu in the middle of the graph; inputs
+of different types are converted, an input without a wire takes its default, delete removes the selected nodes and
+mod+z undoes the edits.
+
+![DemoShadeStyleEditor01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoShadeStyleEditor01Kt.webp)
+
+[source code](src/demo/kotlin/DemoShadeStyleEditor01.kt)
 
 ### DemoSimpleUI01
 
@@ -263,3 +405,18 @@ those coordinates.
 ![DemoWatchObjectDiv01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoWatchObjectDiv01Kt.webp)
 
 [source code](src/demo/kotlin/DemoWatchObjectDiv01.kt)
+
+### DemoWidgets01
+
+Demonstrates tabs, number fields, tooltips and context menus:
+
+- the tabs at the top switch between pages
+- number fields change by dragging them left and right, more finely with shift, or by typing: double-click a field or
+press enter. The arrow keys change the focused field
+- resting the pointer on a field shows its tooltip
+- clicking a number field with the right button opens its context menu
+- the text field selects by dragging, copies, cuts and pastes with the keyboard
+
+![DemoWidgets01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoWidgets01Kt.webp)
+
+[source code](src/demo/kotlin/DemoWidgets01.kt)

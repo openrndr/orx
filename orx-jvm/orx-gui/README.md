@@ -243,6 +243,16 @@ visible (and clickable) in the panel.
 
 [source code](src/demo/kotlin/DemoCompartments01.kt)
 
+### DemoCssFile01
+
+Demonstrates a theme for the GUI in a CSS file, `demo-data/css/gui-theme.css`: it sets the custom properties of the
+default styles and of the GUI, like `--gui-base` and `--control-background`, and adds rules of its own. The file is
+read again when it changes, edit and save it while the demo runs to restyle the GUI.
+
+![DemoCssFile01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-gui/images/DemoCssFile01Kt.webp)
+
+[source code](src/demo/kotlin/DemoCssFile01.kt)
+
 ### DemoCustom01
 
 
@@ -290,6 +300,10 @@ outer object. Click the header of a group to collapse or expand it.
 
 The nested groups `fill` and `stroke` both have a `color` parameter, nested parameters are
 stored and saved per group so they do not clash.
+
+Resting the pointer on a control shows the description of its parameter. Clicking a control with the right button
+resets it to its default, copies its value or pastes a value copied from a control of the same type. Command or
+control and z undoes changes, with shift redoes them.
 
 `stroke` nests a `style` group of its own. Its property is a `var` of an interface type: press
 "next style" (or the space bar) to assign a style of another class, and the GUI replaces the
