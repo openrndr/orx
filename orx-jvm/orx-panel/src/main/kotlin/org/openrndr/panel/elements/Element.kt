@@ -229,6 +229,14 @@ open class Element(val type: ElementType) : AutoCloseable {
     open val handlesDoubleClick = false
     open val handlesKeyboardFocus = false
 
+    /**
+     * Where text is typed in this element while it has the focus: the line of the caret, in the coordinates of the
+     * window, with the caret from its left edge. The control manager gives it to the window, so that input methods
+     * place their candidates and on-screen keyboards next to the caret; null for elements that do not take text.
+     */
+    open val textInputArea: TextInputArea?
+        get() = null
+
     open val widthHint: Double?
         get() {
             return null

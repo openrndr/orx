@@ -611,7 +611,18 @@ class TextInput : Element(ElementType("text-input")) {
             drawer.stroke = ColorRGBa.WHITE
             drawer.lineSegment(caretX + scroll, baseline - face.descent, caretX + scroll, baseline - face.descent - face.ascent)
         }
+        // the line of the caret over the width of the content, with the caret in it
+        val content = layout.contentBoundsAtOrigin
+        caretLine = if (isInputActive) {
+            Rectangle(content.x, baseline - face.ascent, content.width, face.ascent - face.descent) to (caretX + scroll - content.x)
+        } else null
     }
+
+    /** the line of the caret and the caret in it, in the coordinates of the element, as it was drawn last */
+    private var caretLine: Pair<Rectangle, Double>? = null
+
+    override val textInputArea: TextInputArea?
+        get() = caretLine?.let { (line, cursor) -> TextInputArea(line.movedBy(org.openrndr.math.Vector2(layout.screenX, layout.screenY)), cursor) }
 
     /** true when the keyboard is to come back to the input, after a candidate of the list was clicked */
     internal var refocus = false

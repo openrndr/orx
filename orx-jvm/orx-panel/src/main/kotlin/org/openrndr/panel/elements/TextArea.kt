@@ -263,6 +263,9 @@ class TextArea : Element(ElementType("text-area")) {
     //</editor-fold>
 
     init {
+        // the caret shows while the area has the focus, also when the focus comes by the keyboard or from code
+        keyboard.focusGained.listen { requestRedraw() }
+        keyboard.focusLost.listen { requestRedraw() }
         mouse.pressed.listen {
             val p = positionAt(it.position)
             move(p, KeyModifier.SHIFT in it.modifiers)
@@ -400,11 +403,13 @@ class TextArea : Element(ElementType("text-area")) {
                 text.draw(drawer, this, "line $i", shaped, Vector2(g - scroll.x, y + (lh + face.ascent + face.descent) / 2.0), color, glyphColors = colors)
             }
         }
-        // the caret
+        // the caret, and its line over the width of the text for input methods
+        caretLine = null
         if (focused && caret.line in first..last) {
             val x = g + carets(caret.line)[caret.column] - scroll.x
             drawer.fill = color
             drawer.rectangle(x - 0.75, caret.line * lh + 4.0 - scroll.y + 2.0, 1.5, lh - 4.0)
+            caretLine = Rectangle(g, caret.line * lh + 4.0 - scroll.y, w - g, lh) to (x - g)
         }
         drawer.drawStyle.clip = outerClip
         // the numbers of the lines
@@ -418,6 +423,12 @@ class TextArea : Element(ElementType("text-area")) {
             }
         }
     }
+
+    /** the line of the caret and the caret in it, in the coordinates of the element, as it was drawn last */
+    private var caretLine: Pair<Rectangle, Double>? = null
+
+    override val textInputArea: TextInputArea?
+        get() = caretLine?.let { (line, cursor) -> TextInputArea(line.movedBy(Vector2(layout.screenX, layout.screenY)), cursor) }
 
     override fun close() {
         super.close()

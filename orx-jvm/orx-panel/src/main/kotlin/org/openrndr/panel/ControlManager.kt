@@ -1039,7 +1039,21 @@ class ControlManager : Extension {
     }
 
     var drawCount = 0
+    /** the text input area that was given to the window last */
+    private var textInputArea: TextInputArea? = null
+
+    /** gives the window the text input area of the element with the focus, or none */
+    private fun updateTextInputArea() {
+        val area = keyboardInput.target?.takeIf { !it.isHidden() }?.textInputArea
+        if (area != textInputArea) {
+            textInputArea = area
+            window.textInputArea = area
+        }
+    }
+
     override fun afterDraw(drawer: Drawer, program: Program) {
+        // the area of the caret as it was drawn last
+        updateTextInputArea()
         if (program.width > 0 && program.height > 0) {
             if (program.width != renderTarget?.width || program.height != renderTarget?.height) {
                 fullRedrawPending = true
