@@ -11,8 +11,11 @@ import org.openrndr.events.Event
 import org.openrndr.math.Vector2
 import org.openrndr.panel.Edit
 import org.openrndr.panel.editHistory
+import org.openrndr.panel.style.Cursor
+import org.openrndr.panel.style.cursor
 import org.openrndr.panel.style.effectiveColor
 import org.openrndr.shape.Rectangle
+import org.openrndr.shape.ShapeContour
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -23,7 +26,7 @@ import kotlin.math.round
 /**
  * a clip of a [ClipTimeline]: on the track at index [track], from [start] for [duration] seconds; [label] and [color]
  * are how it is shown, the accent of the timeline when null, [tag] is the host's, like the number of a scene, and is
- * kept as it is
+ * kept as it is; [fadeIn] and [fadeOut] are the seconds it fades in over at its start and out over at its end
  */
 data class TimelineClip(
     val track: Int,
@@ -31,9 +34,26 @@ data class TimelineClip(
     val duration: Double,
     val label: String = "",
     val color: ColorRGBa? = null,
-    val tag: Int = 0
+    val tag: Int = 0,
+    val fadeIn: Double = 0.0,
+    val fadeOut: Double = 0.0
 ) {
     val end: Double get() = start + duration
+
+    /**
+     * this clip with its fades within its duration, together too: [fadeIn] is clamped to the duration and [fadeOut]
+     * to what is left when [keepsFadeIn], else the other way around
+     */
+    fun withFadesClamped(keepsFadeIn: Boolean = true): TimelineClip {
+        val d = maxOf(0.0, duration)
+        return if (keepsFadeIn) {
+            val i = fadeIn.coerceIn(0.0, d)
+            copy(fadeIn = i, fadeOut = fadeOut.coerceIn(0.0, d - i))
+        } else {
+            val o = fadeOut.coerceIn(0.0, d)
+            copy(fadeIn = fadeIn.coerceIn(0.0, d - o), fadeOut = o)
+        }
+    }
 }
 
 /** what a [ClipTimeline] shows and edits: the names of its tracks, top to bottom, and its clips */
@@ -65,7 +85,9 @@ class ClipTimelineClipboard {
  * - a click selects a clip, shift adds it to or removes it from the selection, a click on empty space clears it;
  *   dragging on empty space selects the clips in a rectangle, with shift adding them
  * - dragging a clip moves the selected clips in time and across tracks, with alt it moves copies of them; dragging an
- *   edge of a clip trims it
+ *   edge of a clip trims it, keeping its fades within it
+ * - the handles at the top left and the top right of a clip set how long the selected clips fade in and out, see
+ *   [TimelineClip.fadeIn] and [TimelineClip.fadeOut]
  * - mod+c, mod+x and mod+v copy, cut and paste the selected clips, see [clipboard]; pasted clips start at the pointer
  * - with the [ClipTimelineTool.RAZOR] a click cuts a clip in two, see [splitClip]
  * - a double click on empty space adds the clip that [newClip] gives; delete and backspace remove the selected clips
@@ -158,6 +180,10 @@ class ClipTimeline : Element(ElementType("clip-timeline")) {
     /** the pointer over the element, in its coordinates, null when it is not over it */
     private var pointer: Vector2? = null
 
+    /** the clip under the pointer, whose fade handles are shown */
+    private var hoveredClip: Int? = null
+    private var shownCursor: Cursor = Cursor.Default
+
     /**
      * the clip to add for a double click on empty space, at [track] and the [time] under the pointer, snapped; null,
      * or a null result, adds nothing
@@ -196,6 +222,8 @@ class ClipTimeline : Element(ElementType("clip-timeline")) {
 
         /** how close in pixels the pointer has to be to the edge of a clip to trim it */
         const val EDGE = 6.0
+        /** how far down from the top of a clip its fade handles are grabbed */
+        const val FADE_HANDLE = 8.0
 
         /** how close in pixels clips snap */
         const val SNAP_DISTANCE = 8.0
@@ -247,18 +275,45 @@ class ClipTimeline : Element(ElementType("clip-timeline")) {
         class Move(val time: Double, val track: Int, val grabbed: Int, val from: List<TimelineClip>, val moving: Set<Int>, val copy: Boolean) : Gesture()
         class Select(val start: Vector2, val base: Set<Int>, var end: Vector2) : Gesture()
         class Trim(val index: Int, val left: Boolean, val from: List<TimelineClip>) : Gesture()
+        class Fade(val index: Int, val fadeIn: Boolean, val from: List<TimelineClip>) : Gesture()
         class Pan(val start: Vector2, val viewX: Double, val scrollY: Double) : Gesture()
         object Scrub : Gesture()
     }
 
     private var gesture: Gesture? = null
 
-    /** the clip at [p], in the coordinates of the element, the topmost, with whether [p] is on its left or right edge */
+    /** where the handles of the fades of [clip] are, at the top of the clip, in the coordinates of the element */
+    private fun fadeHandles(clip: TimelineClip): Pair<Double, Double> {
+        val (fadeIn, fadeOut) = shownFades(clip)
+        val a = clipArea(clip)
+        return (a.x + fadeIn * zoomX) to (a.x + a.width - fadeOut * zoomX)
+    }
+
+    /** the fades of [clip] as they are shown: each within the duration, and when together longer, meeting in it */
+    private fun shownFades(clip: TimelineClip): Pair<Double, Double> {
+        val d = maxOf(0.0, clip.duration)
+        val fadeIn = clip.fadeIn.coerceIn(0.0, d)
+        val fadeOut = clip.fadeOut.coerceIn(0.0, d)
+        val k = if (fadeIn + fadeOut > d && d > 0.0) d / (fadeIn + fadeOut) else 1.0
+        return (fadeIn * k) to (fadeOut * k)
+    }
+
+    /**
+     * the clip at [p], in the coordinates of the element, the topmost, with whether [p] is on its left (-1) or right (1)
+     * edge, on the handle of its fade in (-2) or out (2), or in it (0)
+     */
     private fun clipAt(p: Vector2): Pair<Int, Int>? {
         if (p.x < plot.x || p.y < plot.y) return null
         for (i in clips.indices.reversed()) {
             val a = clipArea(clips[i])
             if (p.y < a.y || p.y > a.y + a.height || p.x < a.x - EDGE || p.x > a.x + a.width + EDGE) continue
+            // the handles of the fades, along the top, before the edges, where the clip is wide enough to grab both
+            if (p.y <= a.y + FADE_HANDLE && a.width >= 4.0 * EDGE && p.x in a.x..(a.x + a.width)) {
+                val (h0, h1) = fadeHandles(clips[i])
+                val d0 = abs(p.x - h0)
+                val d1 = abs(p.x - h1)
+                if (minOf(d0, d1) <= EDGE) return i to if (d0 < d1 || (d0 == d1 && p.x < a.x + a.width / 2.0)) -2 else 2
+            }
             // the edges where the clip is wide enough to have a middle
             val edge = minOf(EDGE, a.width / 3.0)
             return when {
@@ -352,7 +407,8 @@ class ClipTimeline : Element(ElementType("clip-timeline")) {
 
     /** the two clips that [c] is cut into at [at] */
     private fun parts(c: TimelineClip, at: Double): Pair<TimelineClip, TimelineClip> =
-        splitClip?.invoke(c, at) ?: (c.copy(duration = at - c.start) to c.copy(start = at, duration = c.end - at))
+        splitClip?.invoke(c, at) ?: (c.copy(duration = at - c.start, fadeOut = 0.0).withFadesClamped() to
+                c.copy(start = at, duration = c.end - at, fadeIn = 0.0).withFadesClamped(false))
 
     /**
      * cuts the selected clips that [time] is in, or all clips it is in when [all] is set or none is selected, in two at
@@ -435,6 +491,7 @@ class ClipTimeline : Element(ElementType("clip-timeline")) {
         val copy = KeyModifier.ALT in modifiers
         gesture = when {
             edge == 0 || copy -> Gesture.Move(timeAt(p.x), trackAt(p.y), index, clips.toList(), selection, copy)
+            abs(edge) == 2 -> Gesture.Fade(index, edge < 0, clips.toList())
             else -> Gesture.Trim(index, edge < 0, clips.toList())
         }
     }
@@ -487,13 +544,28 @@ class ClipTimeline : Element(ElementType("clip-timeline")) {
             is Gesture.Trim -> {
                 val c = g.from[g.index]
                 val t = snapped(timeAt(p.x), snapTargets(setOf(g.index)))
+                // the fades stay as long as they were, within the clip, the one at the edge that moves gives way first
                 val trimmed = if (g.left) {
                     val start = t.coerceIn(0.0, maxOf(0.0, c.end - minimumDuration))
-                    c.copy(start = start, duration = c.end - start)
+                    c.copy(start = start, duration = c.end - start).withFadesClamped(false)
                 } else {
-                    c.copy(duration = maxOf(minimumDuration, t - c.start))
+                    c.copy(duration = maxOf(minimumDuration, t - c.start)).withFadesClamped(true)
                 }
                 update(g.from.mapIndexed { i, x -> if (i == g.index) trimmed else x })
+            }
+            is Gesture.Fade -> {
+                val c = g.from[g.index]
+                // snapped like the rest, also to the start and end of the clip itself
+                val t = snapped(timeAt(p.x), snapTargets(setOf(g.index)) + listOf(c.start, c.end))
+                val seconds = maxOf(0.0, if (g.fadeIn) t - c.start else c.end - t)
+                // the same fade for the selected clips, each within its duration and its other fade
+                update(g.from.mapIndexed { i, x ->
+                    when {
+                        i !in selection -> x
+                        g.fadeIn -> x.copy(fadeIn = seconds.coerceIn(0.0, maxOf(0.0, x.duration - x.fadeOut)))
+                        else -> x.copy(fadeOut = seconds.coerceIn(0.0, maxOf(0.0, x.duration - x.fadeIn)))
+                    }
+                })
             }
             null -> {}
         }
@@ -508,6 +580,7 @@ class ClipTimeline : Element(ElementType("clip-timeline")) {
             }
             is Gesture.Select -> requestRedraw()
             is Gesture.Trim -> finish("Trim clip", g.from)
+            is Gesture.Fade -> finish(if (selection.size == 1) "Fade clip" else "Fade clips", g.from)
             else -> {}
         }
         gesture = null
@@ -515,10 +588,23 @@ class ClipTimeline : Element(ElementType("clip-timeline")) {
 
     init {
         mouse.moved.listen {
-            pointer = local(it.position)
+            val p = local(it.position)
+            pointer = p
+            // a resize pointer over the edges and the fade handles of clips
+            val over = if (tool == ClipTimelineTool.SELECT) clipAt(p) else null
+            val hovered = over?.first
+            if (hovered != hoveredClip) {
+                hoveredClip = hovered
+                requestRedraw()
+            }
+            val cursor = if (over != null && over.second != 0) Cursor.ColResize else Cursor.Default
+            if (cursor != shownCursor) {
+                shownCursor = cursor
+                style { this.cursor = cursor }
+            }
             if (tool == ClipTimelineTool.RAZOR) requestRedraw()
         }
-        mouse.exited.listen { pointer = null; requestRedraw() }
+        mouse.exited.listen { pointer = null; hoveredClip = null; requestRedraw() }
         mouse.pressed.listen { pointer = local(it.position); press(it.position, it.button, it.modifiers); it.cancelPropagation() }
         mouse.dragged.listen { pointer = local(it.position); drag(it.position); it.cancelPropagation() }
         mouse.released.listen { release() }
@@ -628,6 +714,29 @@ class ClipTimeline : Element(ElementType("clip-timeline")) {
                 drawer.stroke = if (i in selection) ColorRGBa.WHITE else fill.shade(0.6)
                 drawer.strokeWeight = if (i in selection) 2.0 else 1.0
                 drawer.box(a, 4.0)
+                // the fades: darker above a ramp from the bottom to the top, those that would overlap meet
+                val (fadeIn, fadeOut) = shownFades(clip)
+                if (fadeIn > 0.0 || fadeOut > 0.0) {
+                    val wIn = fadeIn * zoomX
+                    val wOut = fadeOut * zoomX
+                    val bottom = a.y + a.height
+                    drawer.fill = ColorRGBa.BLACK.opacify(0.45)
+                    drawer.stroke = null
+                    if (wIn > 0.0) drawer.contour(ShapeContour.fromPoints(listOf(Vector2(a.x, bottom), Vector2(a.x, a.y), Vector2(a.x + wIn, a.y)), true))
+                    if (wOut > 0.0) drawer.contour(ShapeContour.fromPoints(listOf(Vector2(a.x + a.width, bottom), Vector2(a.x + a.width - wOut, a.y), Vector2(a.x + a.width, a.y)), true))
+                    drawer.stroke = ColorRGBa.WHITE.opacify(0.7)
+                    drawer.strokeWeight = 1.0
+                    if (wIn > 0.0) drawer.lineSegment(a.x, bottom, a.x + wIn, a.y)
+                    if (wOut > 0.0) drawer.lineSegment(a.x + a.width, bottom, a.x + a.width - wOut, a.y)
+                }
+                // the handles of the fades, on the clip under the pointer and on selected clips
+                if ((i == hoveredClip || i in selection) && tool == ClipTimelineTool.SELECT && a.width >= 4.0 * EDGE) {
+                    val (h0, h1) = fadeHandles(clip)
+                    drawer.fill = ColorRGBa.WHITE
+                    drawer.stroke = fill.shade(0.5)
+                    drawer.strokeWeight = 1.0
+                    for (h in listOf(h0, h1)) drawer.rectangle(h.coerceIn(a.x + 3.0, a.x + a.width - 3.0) - 3.0, a.y + 1.0, 6.0, 6.0)
+                }
                 if (clip.label.isNotEmpty() && a.width > 14.0) {
                     val light = 0.2126 * fill.r + 0.7152 * fill.g + 0.0722 * fill.b > 0.55
                     val shown = text.ellipsized(computedStyle, clip.label, a.width - 10.0)

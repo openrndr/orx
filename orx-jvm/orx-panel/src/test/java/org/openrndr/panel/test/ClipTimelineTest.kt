@@ -284,4 +284,56 @@ class ClipTimelineTest : PanelTestFixture() {
         assertEquals(listOf("x1", "x2", "y1", "y21", "y22", "z"), s.clips.map { it.label })
         assertTrue(!t.splitAt(10.0))
     }
+
+    @Test
+    fun `the handles at the top of clips set their fades, within their durations, and trims and cuts keep them within`() {
+        val s = timeline()
+        val t = s.timeline
+        t.snap = 0.25
+        // the handles are along the top of a clip, the middle of its row is 14 down, its top 2 down
+        fun top(time: Double, track: Int) = t.screenPosition(time, track) - Vector2(0.0, 9.0)
+        // the fade in from the start of the clip, the fade out from its end
+        s.cm.drag(top(1.0, 0) + Vector2(2.0, 0.0), top(1.5, 0))
+        assertEquals(0.5, s.clips[0].fadeIn, 1E-9)
+        assertEquals(listOf("Fade clip"), s.recorded.map { it.first })
+        assertEquals(1, s.changes.size, "one change for the drag")
+        s.cm.drag(top(3.0, 0) - Vector2(2.0, 0.0), top(2.25, 0))
+        assertEquals(0.75, s.clips[0].fadeOut, 1E-9)
+        assertEquals(TimelineClip(0, 1.0, 2.0, "one", tag = 7, fadeIn = 0.5, fadeOut = 0.75), s.clips[0], "the rest stays")
+        // not longer than what the other fade leaves, nor shorter than 0
+        s.cm.drag(top(1.5, 0), top(2.9, 0))
+        assertEquals(1.25, s.clips[0].fadeIn, 1E-9)
+        s.cm.drag(top(2.25, 0), top(3.8, 0))
+        assertEquals(0.0, s.clips[0].fadeOut, 1E-9)
+        s.recorded.last().second()
+        assertEquals(0.75, s.clips[0].fadeOut, 1E-9, "undone")
+
+        // the selected clips fade together, each within its own duration
+        t.selection = setOf(0, 1)
+        s.cm.drag(top(5.0, 1) - Vector2(2.0, 0.0), top(4.25, 1))
+        assertEquals(listOf(0.75, 0.75), s.clips.map { it.fadeOut })
+        assertEquals("Fade clips", s.recorded.last().first)
+        s.cm.drag(top(4.25, 1), top(3.0, 1))
+        assertEquals(listOf(0.75, 1.0), s.clips.map { it.fadeOut }, "the first is held by its fade in, the second by its duration")
+
+        // moving a clip carries its fades, trimming it keeps them within it, the one at the edge that moves first
+        s.cm.click(t.screenPosition(2.0, 0))
+        s.cm.drag(t.screenPosition(2.0, 0), t.screenPosition(3.0, 0))
+        assertEquals(TimelineClip(0, 2.0, 2.0, "one", tag = 7, fadeIn = 1.25, fadeOut = 0.75), s.clips[0])
+        s.cm.drag(t.screenPosition(4.0, 0) - Vector2(2.0, 0.0), t.screenPosition(3.5, 0) - Vector2(2.0, 0.0))
+        assertEquals(1.5, s.clips[0].duration, 1E-9)
+        assertEquals(1.25 to 0.25, s.clips[0].fadeIn to s.clips[0].fadeOut)
+        s.cm.drag(t.screenPosition(2.0, 0) + Vector2(2.0, 0.0), t.screenPosition(3.0, 0) + Vector2(2.0, 0.0))
+        assertEquals(0.5, s.clips[0].duration, 1E-9)
+        assertEquals(0.25 to 0.25, s.clips[0].fadeIn to s.clips[0].fadeOut)
+
+        // a cut leaves no fade where it cuts, and the others within the parts
+        t.value = ClipTimelineValue(listOf("a"), listOf(TimelineClip(0, 0.0, 4.0, fadeIn = 1.0, fadeOut = 3.0)))
+        t.selection = emptySet()
+        assertTrue(t.splitAt(1.0))
+        assertEquals(listOf(TimelineClip(0, 0.0, 1.0, fadeIn = 1.0), TimelineClip(0, 1.0, 3.0, fadeOut = 3.0)), s.clips)
+        // a clip whose fades are longer than it keeps the fade in first
+        assertEquals(TimelineClip(0, 0.0, 1.0, fadeIn = 1.0, fadeOut = 0.0), TimelineClip(0, 0.0, 1.0, fadeIn = 2.0, fadeOut = 0.5).withFadesClamped())
+        assertEquals(TimelineClip(0, 0.0, 1.0, fadeIn = 0.5, fadeOut = 0.5), TimelineClip(0, 0.0, 1.0, fadeIn = 2.0, fadeOut = 0.5).withFadesClamped(false))
+    }
 }
