@@ -11,6 +11,8 @@ _The code in `orx-text-writer` was previously found under `openrndr-draw` in the
 - [DemoGlyphOutput01](#demoglyphoutput01)
 - [DemoTextBreaker01](#demotextbreaker01)
 - DemoTextWriter [01](#demotextwriter01), [02](#demotextwriter02), [03](#demotextwriter03)
+- **math**
+  - [DemoMath01](#mathdemomath01)
 - **slug**
   - DemoSlugTextDrawer [01](#slugdemoslugtextdrawer01), [02](#slugdemoslugtextdrawer02), [03](#slugdemoslugtextdrawer03), [04](#slugdemoslugtextdrawer04), [05](#slugdemoslugtextdrawer05), [06](#slugdemoslugtextdrawer06), [07](#slugdemoslugtextdrawer07), [08](#slugdemoslugtextdrawer08), [09](#slugdemoslugtextdrawer09)
   - [DemoVectorTextDrawer01](#slugdemovectortextdrawer01)
@@ -102,6 +104,16 @@ It creates a grid of 3x3 cells to demonstrate all alignment combinations by sett
 ![DemoTextWriter03Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/DemoTextWriter03Kt.webp)
 
 [source code](src/jvmDemo/kotlin/DemoTextWriter03.kt)
+
+### math/DemoMath01
+
+Demonstrates math layout: formulas in MathML laid out by the OpenType MATH table of a math font, with fractions,
+radicals, scripts, limits and fences that stretch. The glyphs are drawn with a [SlugTextDrawer], the bars of the
+fractions and radicals as rectangles.
+
+![math-DemoMath01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-text-writer/images/math-DemoMath01Kt.webp)
+
+[source code](src/jvmDemo/kotlin/math/DemoMath01.kt)
 
 ### slug/DemoSlugTextDrawer01
 
