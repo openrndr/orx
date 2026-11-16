@@ -101,6 +101,19 @@ fun RectifiedContour.distortUniform(
     sampleDistance: Double = 4.0,
     foldMode: FoldMode = FoldMode.FOLD,
     distort: (t: Double, position: Vector2) -> Vector2
+): ShapeContour = distortUniform(errorTolerance, maxDepth, sampleDistance, foldMode, Double.POSITIVE_INFINITY, distort)
+
+/**
+ * [distortUniform] that with [FoldMode.TRIM] only trims the folds whose cut removes at most [maxTrimmedLength] of the
+ * original contour, and keeps the larger ones
+ */
+internal fun RectifiedContour.distortUniform(
+    errorTolerance: Double,
+    maxDepth: Int,
+    sampleDistance: Double,
+    foldMode: FoldMode,
+    maxTrimmedLength: Double,
+    distort: (t: Double, position: Vector2) -> Vector2
 ): ShapeContour {
     if (contour.empty) {
         return ShapeContour.EMPTY
@@ -196,7 +209,10 @@ fun RectifiedContour.distortUniform(
     val rectifiedBounds = (0..segmentCount).map { inverseRectify(it.toDouble() / segmentCount) }
 
     val trimmed = if (foldMode == FoldMode.TRIM) {
-        findFoldCuts(sampleDistance, errorTolerance, rectifiedBounds, ::displaced)
+        findFoldCuts(sampleDistance, errorTolerance, rectifiedBounds, ::displaced)?.let { (domainStart, cuts) ->
+            val small = cuts.filter { (it.s2 - it.s1) * contour.length <= maxTrimmedLength }
+            if (small.isEmpty()) null else domainStart to small
+        }
     } else {
         null
     }

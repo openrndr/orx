@@ -193,7 +193,7 @@ fun ShapeContour.offset(
 
     if (closed) {
         // positive distances move a closed contour outwards, whichever way its normals point
-        val curve = offsetCurve(distance * normalSign(), joinType, errorTolerance, sampleDistance, FoldMode.FOLD)
+        val curve = offsetCurve(distance * normalSign(), joinType, errorTolerance, sampleDistance, FoldMode.TRIM, SMALL_FOLD * errorTolerance)
         if (curve.empty) {
             return Shape(emptyList())
         }
@@ -222,21 +222,31 @@ fun ShapeContour.offset(
 }
 
 /**
+ * How long, in error tolerances, the stretch that a fold of an offset curve cuts out can be for the fold to be trimmed
+ * when the curve is resolved by its arrangement: folds below the resolution of the fit, where the offset distance is
+ * about the radius of curvature, cross too close to their cusps for the arrangement to find, and would be left in its
+ * edges as spikes. Larger folds are kept and resolved by the arrangement.
+ */
+internal const val SMALL_FOLD = 4.0
+
+/**
  * The offset curve of this contour at [signedDistance] along its normal, before self-intersections are resolved. The
  * contour is split at its sharp corners into smooth runs that are offset with [RectifiedContour.distortUniform] and
- * [FoldMode.TRIM]. Neighbouring runs that overlap are cut back to their crossing, gaps are closed with a join of type
- * [joinType]. Segments too short for removeSelfIntersections are dropped.
+ * [foldMode], which with [FoldMode.TRIM] trims the folds that cut out at most [maxTrimmedLength]. Neighbouring runs
+ * that overlap are cut back to their crossing, gaps are closed with a join of type [joinType]. Segments too short for
+ * removeSelfIntersections are dropped.
  */
 internal fun ShapeContour.offsetCurve(
     signedDistance: Double,
     joinType: SegmentJoin,
     errorTolerance: Double,
     sampleDistance: Double,
-    foldMode: FoldMode = FoldMode.TRIM
+    foldMode: FoldMode = FoldMode.TRIM,
+    maxTrimmedLength: Double = Double.POSITIVE_INFINITY
 ): ShapeContour {
     fun offsetRun(run: ShapeContour): ShapeContour {
         val rectified = run.rectified()
-        return rectified.distortUniform(errorTolerance, maxDepth = 12, sampleDistance, foldMode) { t, position ->
+        return rectified.distortUniform(errorTolerance, 12, sampleDistance, foldMode, maxTrimmedLength) { t, position ->
             position + rectified.normal(t) * signedDistance
         }
     }

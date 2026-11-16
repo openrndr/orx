@@ -4,6 +4,7 @@ import offset.arcSegments
 import offset.faceRegion
 import offset.offset
 import offset.offsetCurve
+import offset.SMALL_FOLD
 import offset.withoutTinySegments
 import org.openrndr.draw.LineCap
 import org.openrndr.extra.shapes.distort.FoldMode
@@ -47,8 +48,8 @@ fun ShapeContour.expand(
         return if (inner.empty) outer else outer.difference(inner)
     }
 
-    val left = offsetCurve(halfWeight, join, errorTolerance, sampleDistance, FoldMode.FOLD)
-    val right = offsetCurve(-halfWeight, join, errorTolerance, sampleDistance, FoldMode.FOLD).reversed
+    val left = offsetCurve(halfWeight, join, errorTolerance, sampleDistance, FoldMode.TRIM, SMALL_FOLD * errorTolerance)
+    val right = offsetCurve(-halfWeight, join, errorTolerance, sampleDistance, FoldMode.TRIM, SMALL_FOLD * errorTolerance).reversed
     if (left.empty || right.empty) {
         return Shape(emptyList())
     }
