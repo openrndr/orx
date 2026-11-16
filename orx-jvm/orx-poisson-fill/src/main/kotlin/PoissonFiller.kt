@@ -24,11 +24,14 @@ class PoissonFiller(val width: Int, val height: Int, type: ColorType = ColorType
         pyramid.h2 = h2
     }
 
-    fun process(input: ColorBuffer): ColorBuffer {
+    fun process(input: ColorBuffer): ColorBuffer = process(input, combined)
+
+    /** fills [input] into [target], which has the size of the filler, and returns it */
+    fun process(input: ColorBuffer, target: ColorBuffer): ColorBuffer {
         fillBoundary.apply(input, preproc)
         val result = pyramid.process(preproc)
-        fillCombine.apply(arrayOf(result, input), arrayOf(combined))
-        return combined
+        fillCombine.apply(arrayOf(result, input), arrayOf(target))
+        return target
     }
 
     fun destroy() {
@@ -56,10 +59,7 @@ class PoissonFill : Filter1to1(null) {
                 filler = PoissonFiller(target[0].effectiveWidth, target[0].effectiveHeight)
             }
 
-            filler?.let {
-                val result = it.process(source[0])
-                result.copyTo(target[0])
-            }
+            filler?.process(source[0], target[0])
         }
     }
 }
