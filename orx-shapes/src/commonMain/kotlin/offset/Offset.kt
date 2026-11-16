@@ -251,7 +251,8 @@ internal fun ShapeContour.offsetCurve(
         }
     }
 
-    val runs = cornerRuns()
+    // a kink is a corner when the offsets on either side of it part or overlap by more than the fit tolerance
+    val runs = cornerRuns(if (signedDistance == 0.0) Double.POSITIVE_INFINITY else errorTolerance / abs(signedDistance))
     val result = if (runs == null) {
         // a closed contour without sharp corners is offset in one piece
         offsetRun(this)
@@ -353,19 +354,20 @@ private fun ShapeContour.normalSign(): Double {
     return if (shape.contains(p + n * eps)) -1.0 else 1.0
 }
 
-private fun isCorner(incoming: Vector2, outgoing: Vector2): Boolean {
+private fun isCorner(incoming: Vector2, outgoing: Vector2, minAngle: Double): Boolean {
     val cross = incoming.x * outgoing.y - incoming.y * outgoing.x
-    return abs(kotlin.math.atan2(cross, incoming.dot(outgoing))) > 1E-3
+    return abs(kotlin.math.atan2(cross, incoming.dot(outgoing))) > minAngle
 }
 
 /**
- * Splits this contour at its sharp corners into smooth open runs, the first run starting at a corner.
+ * Splits this contour at its corners, where the direction turns by more than [minAngle], into smooth open runs, the
+ * first run starting at a corner.
  * @return the runs, or null for a closed contour without sharp corners
  */
-private fun ShapeContour.cornerRuns(): List<ShapeContour>? {
+private fun ShapeContour.cornerRuns(minAngle: Double): List<ShapeContour>? {
     val n = segments.size
     val cornerAfter = (0 until n).map { i ->
-        if (i == n - 1 && !closed) false else isCorner(segments[i].direction(1.0), segments[(i + 1) % n].direction(0.0))
+        if (i == n - 1 && !closed) false else isCorner(segments[i].direction(1.0), segments[(i + 1) % n].direction(0.0), minAngle)
     }
     if (closed && cornerAfter.none { it }) {
         return null
@@ -405,8 +407,7 @@ private fun ShapeContour.joinRuns(
         if (a.empty || b.empty) {
             null
         } else {
-            intersections(a, b).minByOrNull { (1.0 - it.a.contourT) * a.length + it.b.contourT * b.length }
-                ?.let { it.a.contourT to it.b.contourT }
+            cornerCrossing(a, b)
         }
     }
 
@@ -468,6 +469,27 @@ private fun ShapeContour.joinRuns(
         }
     }
     return ShapeContour(segments, closed, polarity)
+}
+
+/**
+ * The crossing of the end of the offset run [a] with the start of the offset run [b] that follows it at a corner, as
+ * their contour parameters, the one closest to the corner; null when they don't cross there, which leaves a gap.
+ * Crossings of the start of [a] with the end of [b] belong to another corner, or are folds that are resolved later.
+ * A closed contour with a single corner has one run that follows itself: its second half is crossed with its first.
+ */
+private fun cornerCrossing(a: ShapeContour, b: ShapeContour): Pair<Double, Double>? {
+    if (a === b) {
+        val n = a.segments.size
+        if (n < 2) return null
+        val m = n / 2
+        val tail = ShapeContour(a.segments.subList(m, n), false, a.polarity)
+        val head = ShapeContour(a.segments.subList(0, m), false, a.polarity)
+        // the contour parameters of the halves, which consist of whole segments, back on the run
+        return cornerCrossing(tail, head)?.let { (ta, tb) -> (m + ta * (n - m)) / n to tb * m / n }
+    }
+    return intersections(a, b).filter { it.a.contourT >= 0.5 && it.b.contourT <= 0.5 }
+        .minByOrNull { (1.0 - it.a.contourT) * a.length + it.b.contourT * b.length }
+        ?.let { it.a.contourT to it.b.contourT }
 }
 
 /**
