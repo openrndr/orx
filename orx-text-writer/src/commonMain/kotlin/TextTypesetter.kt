@@ -101,7 +101,8 @@ fun typesetText(
     val overflowLineWidth = boxes.last().width
 
     // lines that do not fit in any of the boxes are discarded
-    val lines = breakLines(items) { lineIndex ->
+    val shortLastLine = if (baseStyle.justify == true) 0.0 else RAGGED_SHORT_LAST_LINE
+    val lines = breakLines(items, shortLastLine) { lineIndex ->
         if (lineIndex < lineWidths.size) lineWidths[lineIndex] else overflowLineWidth
     }.take(lineWidths.size)
 
@@ -190,7 +191,8 @@ fun typesetText(
     fun layout(offsets: DoubleArray): Pair<List<LineSlot>, List<BrokenLine>> {
         val slots = lineSlots(shapes, offsets, metrics.ascent, metrics.descent, lineHeight, rightToLeft)
         if (slots.isEmpty()) return slots to emptyList()
-        return slots to breakLines(paragraph.items) { lineIndex -> slots[minOf(lineIndex, slots.lastIndex)].width }
+        val shortLastLine = if (baseStyle.justify == true) 0.0 else RAGGED_SHORT_LAST_LINE
+        return slots to breakLines(paragraph.items, shortLastLine) { lineIndex -> slots[minOf(lineIndex, slots.lastIndex)].width }
     }
 
     val offsets = DoubleArray(shapes.size)

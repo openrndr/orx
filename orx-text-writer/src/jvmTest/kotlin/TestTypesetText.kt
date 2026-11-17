@@ -11,6 +11,8 @@ import org.openrndr.extra.textwriter.TextStyle
 import org.openrndr.extra.textwriter.hyphenate
 import org.openrndr.extra.textwriter.typesetLine
 import org.openrndr.extra.textwriter.typesetText
+import org.openrndr.extra.textwriter.LineGlue
+import org.openrndr.extra.textwriter.shapeParagraph
 import org.openrndr.math.Vector2
 import org.openrndr.fontdriver.freetype.FontDriverFreetype
 import org.openrndr.shape.Rectangle
@@ -246,5 +248,45 @@ class TestTypesetText {
         // the space between the words is an em wider
         assertEquals(plain.map { it.position.x }.zip(listOf(0, 0, 1, 1)).map { (x, n) -> x + n * 24.0 },
             words.map { it.position.x })
+    }
+
+    private val description = "Maps every element of a list with an expression, like mapIndexed: the expression reads " +
+            "the element as it, its index as i and the number of elements as n, and can build values with functions " +
+            "like rectangle(x, y, width, height) or vec2(x, y) for every element"
+
+    @Test
+    fun raggedTextKeepsItsSpacesAndLeavesNoWordAloneOnItsLastLine() {
+        val face = loadFace("../demo-data/fonts/IBMPlexMono-Regular.ttf").withSize(13.0)
+        val space = face.glyphForCharacter(' ').advanceWidth()
+        val advance = face.glyphForCharacter('m').advanceWidth()
+        for (width in listOf(220.0, 260.0, 300.0)) {
+            val box = Rectangle(0.0, 0.0, width, 2000.0)
+            val lines = typesetText(listOf(TextSpan(description, null)), listOf(box), TextStyle.Defaults.copy(face = face))
+            for (line in lines) {
+                // a monospaced font: every glyph is an advance after the one before, every space as wide as it is
+                val xs = line.glyphs.map { it.position.x }
+                for ((a, b) in xs.zipWithNext()) {
+                    val step = b - a
+                    assertTrue(kotlin.math.abs(step - advance) < 0.01 || kotlin.math.abs(step - advance - space) < 0.02, "width $width: a step of $step")
+                }
+                assertTrue(xs.last() + advance <= width + 0.05, "width $width: a line past the width")
+            }
+            val last = lines.last().glyphs.let { it.last().position.x + advance - it.first().position.x }
+            assertTrue(last >= 0.25 * width, "width $width: a last line of $last")
+        }
+    }
+
+    @Test
+    fun justifiedTextIsBrokenWithStretchableSpaces() {
+        val face = face()
+        val justified = shapeParagraph(listOf(TextSpan("one two three", null)), TextStyle.Defaults.copy(face = face, justify = true), null)
+        val glues = justified.items.filterIsInstance<LineGlue>().dropLast(1)
+        assertEquals(2, glues.size)
+        assertTrue(glues.all { it.width > 0.0 && it.stretch > 0.0 && it.shrink > 0.0 })
+        // ragged text breaks after glue that stretches and takes the stretch back after the break
+        val ragged = shapeParagraph(listOf(TextSpan("one two three", null)), TextStyle.Defaults.copy(face = face), null)
+        val raggedGlues = ragged.items.filterIsInstance<LineGlue>().dropLast(1)
+        assertEquals(listOf(0.0, glues[0].width, 0.0, glues[0].width), raggedGlues.map { it.width })
+        assertEquals(0.0, raggedGlues.sumOf { it.stretch }, 1E-9)
     }
 }

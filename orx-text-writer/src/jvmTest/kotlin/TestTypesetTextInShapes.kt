@@ -120,9 +120,11 @@ class TestTypesetTextInShapes {
             assertEquals(glyphCount, lines.sumOf { it.glyphs.size })
         }
         assertTrue(firstY(top) < firstY(center) && firstY(center) < firstY(bottom))
-        // centered text is roughly centered in the circle
+        // centered text is roughly centered in the circle: within a line, since the text flows anew where it is moved
+        // to, into lines of other widths
         val middle = (firstY(center) - face.ascent + lastY(center) - face.descent) / 2.0
-        assertEquals(circle.center.y, middle, 15.0)
+        val lineHeight = (face.ascent - face.descent + face.lineGap) * style.lineHeightInEm!!
+        assertEquals(circle.center.y, middle, lineHeight)
     }
 
     @Test

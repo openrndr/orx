@@ -10,6 +10,9 @@ import org.openrndr.math.Vector2
 
 private const val SOFT_HYPHEN = '\u00AD'
 
+/** how far, in em, the end of a ragged line may be from the line width before the line counts as bad */
+private const val RAGGED_STRETCH = 3.0
+
 /**
  * A text shaped into Knuth-Plass [items], together with the bidirectional analysis of the text that is used to
  * reorder lines.
@@ -95,6 +98,9 @@ fun shapeParagraph(
 ): ShapedParagraph {
     val text = spans.joinToString("") { it.text }
     val bidi = bidiDriver.analyze(text, direction)
+    // text that is not justified is set ragged: a line is judged by the room left at its end, not by how far its
+    // spaces would have to stretch
+    val ragged = style.cascade(spans.firstOrNull()?.style).justify != true
 
     val items = mutableListOf<LineItem<ShapedWord<TextStyle>>>()
     val itemStarts = mutableListOf<Int>()
@@ -163,8 +169,18 @@ fun shapeParagraph(
                 val hyphenated = index < parts.lastIndex
                 addBoxes(part.first, part.last + 1, hyphenated)
                 if (hyphenated) {
+                    // in ragged text a line that ends at a hyphen is judged by the room at its end, like at a space
+                    val stretch = RAGGED_STRETCH * face.sizeInPoints * sizeInEm
+                    if (ragged) {
+                        items.add(LineGlue(0.0, stretch, 0.0))
+                        itemStarts.add(-1)
+                    }
                     items.add(LinePenalty(hyphen.sumOf { it.advance.x } * scale, LinePenalty.HYPHEN, true))
                     itemStarts.add(-1)
+                    if (ragged) {
+                        items.add(LineGlue(0.0, -stretch, 0.0))
+                        itemStarts.add(-1)
+                    }
                 }
             }
         }
@@ -174,7 +190,19 @@ fun shapeParagraph(
         while (i < spanText.length) {
             when (spanText[i]) {
                 ' ', '\t' -> {
-                    items.add(LineGlue(spaceWidth, spaceWidth / 2.0, spaceWidth / 3.0))
+                    if (ragged) {
+                        // Knuth and Plass' ragged right: a line that breaks here ends in glue that stretches by
+                        // RAGGED_STRETCH em, a line that goes on has the stretch taken back by the space after it
+                        val stretch = RAGGED_STRETCH * face.sizeInPoints * sizeInEm
+                        items.add(LineGlue(0.0, stretch, 0.0))
+                        itemStarts.add(-1)
+                        items.add(LinePenalty(0.0, 0.0, false))
+                        itemStarts.add(-1)
+                        // spaces shrink a little as in justified text, so that as many words fit on a line
+                        items.add(LineGlue(spaceWidth, -stretch, 0.0))
+                    } else {
+                        items.add(LineGlue(spaceWidth, spaceWidth / 2.0, spaceWidth / 3.0))
+                    }
                     itemStarts.add(offset + i)
                     i++
                 }

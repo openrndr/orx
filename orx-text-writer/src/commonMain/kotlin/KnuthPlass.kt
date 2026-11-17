@@ -12,6 +12,11 @@ sealed interface LineItem<out T> {
     val width: Double
 }
 
+/**
+ * The fraction of the line width under which the last line of a ragged paragraph costs more, see [breakLines]
+ */
+const val RAGGED_SHORT_LAST_LINE = 0.25
+
 /** Unbreakable content of a given [width]. */
 class LineBox<out T>(override val width: Double, val content: T) : LineItem<T>
 
@@ -43,6 +48,9 @@ class LinePenalty(override val width: Double, val penalty: Double, val flagged: 
 
         /** Additional demerits for two consecutive lines that end at a flagged penalty */
         const val CONSECUTIVE_FLAGGED_DEMERITS = 3000.0
+
+        /** Additional demerits for a last line of a paragraph with nothing on it, see breakLines' shortLastLine */
+        const val SHORT_LAST_LINE_DEMERITS = 1000000.0
     }
 }
 
@@ -95,10 +103,12 @@ private class Breakpoint(
  * Breaks a paragraph into lines using the Knuth-Plass algorithm.
  *
  * @param items the paragraph, should end with [appendForcedBreak]
+ * @param shortLastLine for ragged text: a last line of a paragraph that is shorter than this fraction of its width costs
+ * as much more as it is shorter, so that a word is not left alone on it; 0.0 for none, as for justified text
  * @param lineWidth the available width for the line with the given index
  * @return the lines in order, lines that cannot be broken to fit are overfull
  */
-fun breakLines(items: List<LineItem<*>>, lineWidth: (lineIndex: Int) -> Double): List<BrokenLine> {
+fun breakLines(items: List<LineItem<*>>, shortLastLine: Double = 0.0, lineWidth: (lineIndex: Int) -> Double): List<BrokenLine> {
     val cumWidth = DoubleArray(items.size + 1)
     val cumStretch = DoubleArray(items.size + 1)
     val cumShrink = DoubleArray(items.size + 1)
@@ -137,6 +147,22 @@ fun breakLines(items: List<LineItem<*>>, lineWidth: (lineIndex: Int) -> Double):
         }
     }
 
+    /** the demerits of a short last line of a paragraph, from [bp] to the forced break at [itemIndex] */
+    fun shortLineDemerits(bp: Breakpoint, itemIndex: Int): Double {
+        val item = items[itemIndex]
+        if (shortLastLine <= 0.0 || item !is LinePenalty || item.penalty > LinePenalty.FORCED) return 0.0
+        val wanted = shortLastLine * lineWidth(bp.line)
+        val w = cumWidth[itemIndex] - bp.totalWidth
+        return if (w >= wanted || wanted <= 0.0) 0.0 else LinePenalty.SHORT_LAST_LINE_DEMERITS * (wanted - w) / wanted
+    }
+
+    /** the totals at the start of the line after a break at [index]: the glue and penalties there are left out */
+    fun lineStart(index: Int): Int {
+        var j = index + 1
+        while (j < items.size && (items[j] is LineGlue || (items[j] as? LinePenalty)?.let { it.penalty > LinePenalty.FORCED } == true)) j++
+        return j
+    }
+
     val activeBreakpoints = mutableListOf(Breakpoint(0, 0.0, 0, 0.0, 0.0, 0.0, false, null))
 
     for (i in items.indices) {
@@ -160,7 +186,7 @@ fun breakLines(items: List<LineItem<*>>, lineWidth: (lineIndex: Int) -> Double):
                 val penalty = if (item is LinePenalty) item.penalty else 0.0
                 val flaggedDemerits =
                     if (item is LinePenalty && item.flagged && bp.flagged) LinePenalty.CONSECUTIVE_FLAGGED_DEMERITS else 0.0
-                val d = bp.demerits + demerits(penalty, r) + flaggedDemerits
+                val d = bp.demerits + demerits(penalty, r) + flaggedDemerits + shortLineDemerits(bp, i)
                 if (d < bestDemerits) {
                     bestDemerits = d
                     bestCandidate = bp
@@ -181,7 +207,7 @@ fun breakLines(items: List<LineItem<*>>, lineWidth: (lineIndex: Int) -> Double):
             activeBreakpoints.add(
                 Breakpoint(
                     i, bestDemerits, bestCandidate.line + 1,
-                    cumWidth[i + 1], cumStretch[i + 1], cumShrink[i + 1],
+                    cumWidth[lineStart(i)], cumStretch[lineStart(i)], cumShrink[lineStart(i)],
                     item is LinePenalty && item.flagged,
                     bestCandidate
                 )
@@ -203,13 +229,8 @@ fun breakLines(items: List<LineItem<*>>, lineWidth: (lineIndex: Int) -> Double):
         val startBp = chain[lineIdx]
         val end = chain[lineIdx + 1].index
 
-        // Skip leading glue at the start of each line (after a line break)
-        var start = startBp.index
-        if (lineIdx > 0) {
-            while (start < end && items[start] is LineGlue) {
-                start++
-            }
-        }
+        // a line after a break starts after the break and the glue and penalties that follow it
+        val start = if (lineIdx > 0) minOf(lineStart(startBp.index), end) else startBp.index
         val breakItem = items[end]
         BrokenLine(
             // overfull lines shrink as much as possible but no further
