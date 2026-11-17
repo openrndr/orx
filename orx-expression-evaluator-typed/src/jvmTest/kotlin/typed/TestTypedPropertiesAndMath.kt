@@ -99,4 +99,17 @@ class TestTypedPropertiesAndMath {
         // inside a lambda, it is the lambda's own
         assertEquals(listOf(10.0, 20.0), evaluateTypedExpression("[1.0, 2.0].map { it * 10.0 }", { if (it == "it") 99.0 else null }))
     }
+
+    @Test
+    fun `negative and positive zero are equal, also in vectors and colors`() {
+        assertEquals(1.0, eval("-0.0 == 0.0"))
+        assertEquals(-0.0, eval("round(-0.3)"))
+        assertEquals(1.0, eval("round(-0.3) == 0.0"))
+        assertEquals(1.0, eval("vec2(-0.0, 1.0) == vec2(0.0, 1.0)"))
+        assertEquals(1.0, eval("vec3(-0.0, -0.0, 1.0) == vec3(0.0, 0.0, 1.0)"))
+        assertEquals(1.0, eval("rgba(-0.0, 0.5, 0.5, 1.0) == rgba(0.0, 0.5, 0.5, 1.0)"))
+        assertEquals(0.0, eval("0.1 == 0.2"))
+        assertEquals(0.0, eval("vec2(0.0, 1.0) == vec2(0.0, 2.0)"))
+        assertEquals(1.0, eval("\"ab\" == \"ab\""))
+    }
 }

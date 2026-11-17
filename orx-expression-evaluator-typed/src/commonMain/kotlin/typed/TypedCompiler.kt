@@ -336,7 +336,17 @@ internal class TypedCompiledExpression(
                         (left is Vector3 && right is Vector3) || (left is Vector4 && right is Vector4) ||
                         (left is ColorRGBa && right is ColorRGBa) || (left is String && right is String)
                 if (!comparable) operands(ctx, symbol, left, right)
-                (left == right).number()
+                // numbers, also those of vectors and colors, compare as IEEE numbers: -0.0 equals 0.0
+                when (left) {
+                    is Double -> left == right as Double
+                    is Vector2 -> (right as Vector2).let { left.x == it.x && left.y == it.y }
+                    is Vector3 -> (right as Vector3).let { left.x == it.x && left.y == it.y && left.z == it.z }
+                    is Vector4 -> (right as Vector4).let { left.x == it.x && left.y == it.y && left.z == it.z && left.w == it.w }
+                    is ColorRGBa -> (right as ColorRGBa).let {
+                        left.r == it.r && left.g == it.g && left.b == it.b && left.alpha == it.alpha && left.linearity == it.linearity
+                    }
+                    else -> left == right
+                }.number()
             } else {
                 if (left !is Double || right !is Double) operands(ctx, symbol, left, right)
                 when (operator) {
