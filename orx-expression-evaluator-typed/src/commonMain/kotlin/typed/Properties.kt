@@ -4,19 +4,23 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Matrix44
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
+import org.openrndr.math.Polar
+import org.openrndr.math.Spherical
 import org.openrndr.math.Vector4
+import org.openrndr.shape.Circle
+import org.openrndr.shape.Rectangle
 
-internal fun String.property(property: String): Any {
+internal fun String.property(property: String): Any? {
     return when (property) {
         "length" -> this.length.toDouble()
         "uppercase" -> this.uppercase()
         "lowercase" -> this.lowercase()
         "reversed" -> this.reversed()
-        else -> error("unknown property '$property'")
+        else -> null
     }
 }
 
-internal fun Vector2.property(property: String): Any {
+internal fun Vector2.property(property: String): Any? {
     return when (property) {
         "x" -> x
         "y" -> y
@@ -28,11 +32,11 @@ internal fun Vector2.property(property: String): Any {
         "xxy" -> Vector3(x, x, y)
         "length" -> length
         "normalized" -> normalized
-        else -> error("unknown property '$property")
+        else -> null
     }
 }
 
-internal fun Vector3.property(property: String): Any {
+internal fun Vector3.property(property: String): Any? {
     return when (property) {
         "x" -> x
         "y" -> y
@@ -48,11 +52,11 @@ internal fun Vector3.property(property: String): Any {
         "length" -> length
         "normalized" -> normalized
 
-        else -> error("unknown property '$property")
+        else -> null
     }
 }
 
-internal fun Vector4.property(property: String): Any {
+internal fun Vector4.property(property: String): Any? {
     return when (property) {
         "x" -> x
         "y" -> y
@@ -67,11 +71,11 @@ internal fun Vector4.property(property: String): Any {
         "xxy" -> Vector3(x, x, y)
         "length" -> length
         "normalized" -> normalized
-        else -> error("unknown property '$property")
+        else -> null
     }
 }
 
-internal fun ColorRGBa.property(property: String): Any {
+internal fun ColorRGBa.property(property: String): Any? {
     return when (property) {
         "r" -> r
         "g" -> g
@@ -79,14 +83,71 @@ internal fun ColorRGBa.property(property: String): Any {
         "a" -> alpha
         "linear" -> toLinear()
         "srgb" -> toSRGB()
-        else -> error("unknown property '$property")
+        else -> null
     }
 }
 
-internal fun Matrix44.property(property: String): Any {
+internal fun Matrix44.property(property: String): Any? {
     return when (property) {
         "inversed" -> inversed
         "transposed" -> transposed
-        else -> error("unknown property '$property")
+        else -> null
     }
+}
+internal fun Circle.property(property: String): Any? {
+    return when (property) {
+        "center" -> center
+        "x" -> center.x
+        "y" -> center.y
+        "radius" -> radius
+        "area" -> kotlin.math.PI * radius * radius
+        else -> null
+    }
+}
+
+internal fun Rectangle.property(property: String): Any? {
+    return when (property) {
+        "x" -> x
+        "y" -> y
+        "width" -> width
+        "height" -> height
+        "center" -> center
+        "corner" -> corner
+        "area" -> width * height
+        else -> null
+    }
+}
+
+internal fun Polar.property(property: String): Any? {
+    return when (property) {
+        "theta" -> theta
+        "radius" -> radius
+        "cartesian" -> cartesian
+        else -> null
+    }
+}
+
+internal fun Spherical.property(property: String): Any? {
+    return when (property) {
+        "theta" -> theta
+        "phi" -> phi
+        "radius" -> radius
+        "cartesian" -> cartesian
+        else -> null
+    }
+}
+
+/** the built-in property [name] of [receiver], null when it has none of that name */
+internal fun builtInProperty(receiver: Any, name: String): Any? = when (receiver) {
+    is Vector2 -> receiver.property(name)
+    is Vector3 -> receiver.property(name)
+    is Vector4 -> receiver.property(name)
+    is ColorRGBa -> receiver.property(name)
+    is Matrix44 -> receiver.property(name)
+    is String -> receiver.property(name)
+    is Circle -> receiver.property(name)
+    is Rectangle -> receiver.property(name)
+    is Polar -> receiver.property(name)
+    is Spherical -> receiver.property(name)
+    else -> null
 }

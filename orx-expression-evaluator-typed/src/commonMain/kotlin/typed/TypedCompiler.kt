@@ -374,13 +374,8 @@ internal class TypedCompiledExpression(
                 Missing -> Missing
                 is Map<*, *> -> r[name] ?: failure(ctx, "property '$name' not found")
                 is Function<*> -> (r as (String) -> Any?).invoke(name) ?: failure(ctx, "property '$name' not found")
-                is Vector2 -> r.property(name)
-                is Vector3 -> r.property(name)
-                is Vector4 -> r.property(name)
-                is ColorRGBa -> r.property(name)
-                is Matrix44 -> r.property(name)
-                is String -> r.property(name)
-                else -> failure(ctx, "${typeName(r)} has no property '$name'")
+                else -> builtInProperty(r, name) ?: functions.properties(r, name)
+                    ?: failure(ctx, "${typeName(r)} has no property '$name'")
             }
         }
     }

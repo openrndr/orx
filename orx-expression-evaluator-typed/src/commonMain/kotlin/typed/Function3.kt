@@ -34,7 +34,7 @@ internal fun dispatchFunction3(name: String, functions: Map<String, TypedFunctio
         "vec3" -> { x -> vec3(x[0], x[1], x[2]) }
         "vec4" -> { x -> vec4(x[0], x[1], x[2]) }
         "mix" -> { x -> mix(x[0], x[1], x[2]) }
-        else -> functions[name]?.let {
+        else -> mathFunction3(name) ?: functions[name]?.let {
             { x: Array<Any> ->
                 it.invoke(x[0], x[1], x[2])
             }

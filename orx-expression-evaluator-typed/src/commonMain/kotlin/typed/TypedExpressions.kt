@@ -18,7 +18,13 @@ class TypedFunctionExtensions(
     val functions2: Map<String, TypedFunction2> = emptyMap(),
     val functions3: Map<String, TypedFunction3> = emptyMap(),
     val functions4: Map<String, TypedFunction4> = emptyMap(),
-    val functions5: Map<String, TypedFunction5> = emptyMap()
+    val functions5: Map<String, TypedFunction5> = emptyMap(),
+    /**
+     * the property [name] of a value of the host, like `it.mass`, null when it has none of that name; tried after the
+     * built-in properties of vectors, colors, matrices, strings, circles, rectangles and polar and spherical
+     * coordinates
+     */
+    val properties: (receiver: Any, name: String) -> Any? = { _, _ -> null }
 ) {
     companion object {
         val EMPTY = TypedFunctionExtensions()

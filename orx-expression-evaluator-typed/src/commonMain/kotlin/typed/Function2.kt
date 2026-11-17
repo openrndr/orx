@@ -81,6 +81,6 @@ internal fun dispatchFunction2(name: String, functions: Map<String, TypedFunctio
             "vec2" -> { x -> vec2(x[0], x[1]) }
             "vec3" -> { x -> vec3(x[0], x[1]) }
             "rotate" -> { x -> rotate(x[0], x[1]) }
-            else -> functions[name]?.let { { x: Array<Any> -> it.invoke(x[0], x[1]) } }
+            else -> mathFunction2(name) ?: functions[name]?.let { { x: Array<Any> -> it.invoke(x[0], x[1]) } }
     }
 }

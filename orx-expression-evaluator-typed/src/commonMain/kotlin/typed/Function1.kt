@@ -221,6 +221,6 @@ internal fun dispatchFunction1(name: String, functions: Map<String, TypedFunctio
         "inverse" -> { x -> inverse(x[0]) }
         "normalize" -> { x -> normalize(x[0]) }
         "round" -> { x -> round(x[0]) }
-        else -> functions[name]?.let { { x: Array<Any> -> it.invoke(x[0]) } }
+        else -> mathFunction1(name) ?: functions[name]?.let { { x: Array<Any> -> it.invoke(x[0]) } }
     }
 }
