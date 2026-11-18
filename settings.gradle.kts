@@ -69,6 +69,7 @@ include(
         "orx-mesh-noise",
         "orx-jvm:orx-minim",
         "orx-jvm:orx-kotlin-parser",
+        "orx-jvm:orx-mediapipe",
         "orx-jvm:orx-midi",
         "orx-no-clear",
         "orx-noise",

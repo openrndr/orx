@@ -71,6 +71,7 @@ val publishedProjects = listOf(
     ":orx-jvm:orx-kinect-v1",
     ":orx-jvm:orx-kinect-v1-demo",
     ":orx-jvm:orx-kotlin-parser",
+    ":orx-jvm:orx-mediapipe",
     ":orx-jvm:orx-midi",
     ":orx-jvm:orx-minim",
     ":orx-jvm:orx-olive",
