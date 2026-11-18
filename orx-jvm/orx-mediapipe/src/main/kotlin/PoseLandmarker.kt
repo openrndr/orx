@@ -17,13 +17,15 @@ import kotlin.math.sin
  * @param presence for each landmark how likely it is to be in the image
  * @param worldLandmarks the landmarks in meters, around the center of the hips
  * @param score how sure the model is that this is a body
+ * @param mask how likely the pixels around the body are to be of the body
  */
 class PoseLandmarks(
     val landmarks: List<Vector3>,
     val visibility: List<Double>,
     val presence: List<Double>,
     val worldLandmarks: List<Vector3>,
-    val score: Double
+    val score: Double,
+    val mask: PoseMask
 ) {
     companion object {
         /** the pairs of the landmarks that are connected, like MediaPipe's pose connections */
@@ -41,8 +43,8 @@ class PoseLandmarks(
  * Finds bodies and their landmarks like MediaPipe's pose landmarker, BlazePose: the bodies are found in the whole
  * image, the landmarks in a square around each body, turned such that it stands upright. In video, with [tracking],
  * the bodies are followed from frame to frame, they are looked for only while fewer than [maxPoses] are followed.
- * @param landmarksPath the landmark model, `pose_landmarks_detector_full.onnx` or the faster and less precise
- * `pose_landmarks_detector_lite.onnx`
+ * @param landmarksPath the landmark model, `pose_landmarks_detector_full.onnx`, the faster and less precise
+ * `pose_landmarks_detector_lite.onnx` or the slower and more precise `pose_landmarks_detector_heavy.onnx`
  * @param maxPoses the most bodies that are found
  * @param minDetectionScore the least score of a body in the whole image
  * @param minScore the least score of a body in the square around it
@@ -139,12 +141,14 @@ class PoseLandmarker(
             val y = world[3 * i + 1].toDouble()
             Vector3(c * x - s * y, s * x + c * y, world[3 * i + 2].toDouble())
         }
+        val mask = outputs.getValue("Identity_2").let { logits -> FloatArray(logits.size) { sigmoid(logits[it]).toFloat() } }
         val pose = PoseLandmarks(
             landmarks.take(33),
             (0 until 33).map { sigmoid(raw[5 * it + 3]) },
             (0 until 33).map { sigmoid(raw[5 * it + 4]) },
             worldLandmarks,
-            score
+            score,
+            PoseMask(size, size, mask, square.center, square.width, square.rotation)
         )
         // the two landmarks after the 33 of the body are the center of the hips and the point that gives its size
         return pose to alignedSquare(landmarks[33].xy, landmarks[34].xy)
@@ -186,3 +190,36 @@ class PoseLandmarker(
 }
 
 private fun sigmoid(x: Float) = 1.0 / (1.0 + exp(-x.toDouble()))
+
+/**
+ * The mask of a body found by [PoseLandmarker]: how likely the pixels of the square around the body, of [center],
+ * [size] and [rotation] in the image, are to be of the body, in [width] × [height] values, row by row from the top
+ * @param rotation the turn of the square in radians, clockwise in the image
+ */
+class PoseMask(
+    val width: Int,
+    val height: Int,
+    val values: FloatArray,
+    val center: Vector2,
+    val size: Double,
+    val rotation: Double
+) {
+    private val fromImage = Affine.rotatedRect(square(center, size, rotation), width).inversed()
+
+    /** how likely the pixel at ([x], [y]) of the image is to be of the body, 0 outside the square, like MediaPipe's mask */
+    fun at(x: Double, y: Double): Double {
+        val p = fromImage(Vector2(x, y))
+        val x0 = kotlin.math.floor(p.x).toInt()
+        val y0 = kotlin.math.floor(p.y).toInt()
+        val fx = p.x - x0
+        val fy = p.y - y0
+        fun v(i: Int, j: Int) = if (i < 0 || j < 0 || i >= width || j >= height) 0.0 else values[j * width + i].toDouble()
+        return (v(x0, y0) * (1 - fx) + v(x0 + 1, y0) * fx) * (1 - fy) + (v(x0, y0 + 1) * (1 - fx) + v(x0 + 1, y0 + 1) * fx) * fy
+    }
+
+    /**
+     * Writes the mask into the red channel of [target], a color buffer of [width] × [height] pixels in floating point,
+     * which is drawn in the square around the body
+     */
+    fun write(target: ColorBuffer) = writeMask(values, width, height, target)
+}

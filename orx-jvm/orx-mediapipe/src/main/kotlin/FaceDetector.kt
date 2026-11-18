@@ -34,15 +34,22 @@ class FaceDetector(
     private val anchors = ssdAnchors(model.size, listOf(8, 16, 16, 16))
 
     /** the faces in [image] */
-    fun detect(image: RgbaImage): List<FaceDetection> {
-        val toImage = Affine.letterbox(image.width, image.height, model.size)
+    fun detect(image: RgbaImage): List<FaceDetection> = detect(image, Affine.letterbox(image.width, image.height, model.size))
+
+    /** the faces in the square [rect] of [image], in the pixels of the image */
+    internal fun detectIn(image: RgbaImage, rect: RotatedRect): List<FaceDetection> = detect(image, Affine.rotatedRect(rect, model.size))
+
+    private fun detect(image: RgbaImage, toImage: Affine): List<FaceDetection> {
         val outputs = model.run(image.tensor(model.size, toImage, -1f, 1f))
         val detections = decodeDetections(
             outputs.getValue("regressors"), outputs.getValue("classificators"), anchors, model.size, 6, minScore
         )
         val size = model.size.toDouble()
         return weightedNonMaxSuppression(detections, minSuppressionThreshold).map { d ->
-            val corners = listOf(d.box.corner, d.box.corner + d.box.dimensions).map { toImage(it * size) }
+            // all four corners, the box is turned in the image when the square is
+            val corners = listOf(
+                d.box.corner, d.box.corner + Vector2(d.box.width, 0.0), d.box.corner + d.box.dimensions, d.box.corner + Vector2(0.0, d.box.height)
+            ).map { toImage(it * size) }
             FaceDetection(bounds(corners), d.keypoints.map { toImage(it * size) }, d.score)
         }
     }

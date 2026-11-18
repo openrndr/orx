@@ -14,6 +14,16 @@ import kotlin.math.sin
 internal class Affine(val a: Double, val b: Double, val c: Double, val d: Double, val tx: Double, val ty: Double) {
     operator fun invoke(p: Vector2) = Vector2(a * p.x + b * p.y + tx, c * p.x + d * p.y + ty)
 
+    /** the map from the pixels of the image to those of the tensor */
+    fun inversed(): Affine {
+        val det = a * d - b * c
+        val ia = d / det
+        val ib = -b / det
+        val ic = -c / det
+        val id = a / det
+        return Affine(ia, ib, ic, id, -(ia * tx + ib * ty), -(ic * tx + id * ty))
+    }
+
     companion object {
         /** the whole image in a tensor of [width] × [height] pixels, stretched */
         fun stretch(imageWidth: Int, imageHeight: Int, width: Int, height: Int) =
@@ -45,10 +55,12 @@ internal class Affine(val a: Double, val b: Double, val c: Double, val d: Double
 internal fun RgbaImage.tensor(size: Int, toImage: Affine, low: Float, high: Float) = tensor(size, size, toImage, low, high)
 
 /**
- * The part of the image at [toImage] in a tensor of [width] × [height] pixels from [low] to [high], black outside, of
- * the RGB channels or, with [channels] 4, the RGBA channels
+ * The part of the image at [toImage] in a tensor of [width] × [height] pixels from [low] to [high], black outside or,
+ * with [replicate], the colors of the edges, of the RGB channels or, with [channels] 4, the RGBA channels
  */
-internal fun RgbaImage.tensor(width: Int, height: Int, toImage: Affine, low: Float, high: Float, channels: Int = 3): FloatBuffer {
+internal fun RgbaImage.tensor(
+    width: Int, height: Int, toImage: Affine, low: Float, high: Float, channels: Int = 3, replicate: Boolean = false
+): FloatBuffer {
     val tensor = ByteBuffer.allocateDirect(width * height * channels * 4).order(ByteOrder.nativeOrder()).asFloatBuffer()
     val scale = (high - low) / 255f
     val rgb = FloatArray(channels)
@@ -57,7 +69,12 @@ internal fun RgbaImage.tensor(width: Int, height: Int, toImage: Affine, low: Flo
             // bilinear, the pixels of the tensor and the image at their indices like OpenCV's warpAffine, which
             // MediaPipe uses
             val p = toImage(Vector2(u.toDouble(), v.toDouble()))
-            sample(p.x, p.y, rgb)
+            // the width and height of the image, not of the tensor
+            if (replicate) {
+                sample(p.x.coerceIn(0.0, this@tensor.width - 1.0), p.y.coerceIn(0.0, this@tensor.height - 1.0), rgb)
+            } else {
+                sample(p.x, p.y, rgb)
+            }
             for (k in 0 until channels) tensor.put(low + rgb[k] * scale)
         }
     }

@@ -29,6 +29,10 @@ internal class OnnxModel(path: String, imageInput: Boolean = true) : AutoCloseab
     /** the width of the input image */
     val width: Int = inputShape[2].toInt()
 
+    /** the shapes of the inputs by name, -1 for a size that is not fixed */
+    val inputShapes: Map<String, LongArray> =
+        session.inputInfo.mapValues { (_, info) -> (info.info as ai.onnxruntime.TensorInfo).shape }
+
     /** the shapes of the outputs by name */
     val outputShapes: Map<String, LongArray> =
         session.outputInfo.mapValues { (_, info) -> (info.info as ai.onnxruntime.TensorInfo).shape }
@@ -40,15 +44,22 @@ internal class OnnxModel(path: String, imageInput: Boolean = true) : AutoCloseab
     fun run(input: FloatBuffer): Map<String, FloatArray> = run(input, longArrayOf(1, height.toLong(), width.toLong(), channels.toLong()))
 
     /** the outputs by name, for an input of [shape] */
-    fun run(input: FloatBuffer, shape: LongArray): Map<String, FloatArray> =
-        OnnxTensor.createTensor(environment, input, shape).use { tensor ->
-            session.run(mapOf(inputName to tensor)).use { result ->
+    fun run(input: FloatBuffer, shape: LongArray): Map<String, FloatArray> = run(mapOf(inputName to (input to shape)))
+
+    /** the outputs by name, for the inputs by name, each with its shape */
+    fun run(inputs: Map<String, Pair<FloatBuffer, LongArray>>): Map<String, FloatArray> {
+        val tensors = inputs.mapValues { (_, input) -> OnnxTensor.createTensor(environment, input.first, input.second) }
+        try {
+            return session.run(tensors).use { result ->
                 result.associate { (name, value) ->
                     val buffer = (value as OnnxTensor).floatBuffer
                     name to FloatArray(buffer.remaining()).also { buffer.get(it) }
                 }
             }
+        } finally {
+            tensors.values.forEach { it.close() }
         }
+    }
 
     override fun close() {
         session.close()

@@ -63,9 +63,11 @@ class HandLandmarker(
     /** the squares around the hands found in the frame before, for [tracking] */
     private var followed: List<RotatedRect> = emptyList()
 
-    private val detector = OnnxModel(handDetectorPath)
+    // the palm detector is loaded when palms are first looked for
+    private val detectorModel = lazy { OnnxModel(handDetectorPath) }
+    private val detector by detectorModel
     private val landmarker = OnnxModel(landmarksPath)
-    private val anchors = ssdAnchors(detector.size, listOf(8, 16, 16, 16))
+    private val anchors by lazy { ssdAnchors(detector.size, listOf(8, 16, 16, 16)) }
 
     /** the hands in [image], with [tracking] in the frame after that of the previous call */
     fun detect(image: RgbaImage): List<HandLandmarks> {
@@ -141,7 +143,8 @@ class HandLandmarker(
         return square(center, max(box.width, box.height) * 2.6, rotation)
     }
 
-    private fun landmarks(image: RgbaImage, square: RotatedRect): HandLandmarks? {
+    /** the landmarks of the hand in [square] of [image], null when the model is not sure of a hand there */
+    internal fun landmarks(image: RgbaImage, square: RotatedRect): HandLandmarks? {
         val size = landmarker.size
         val toImage = Affine.rotatedRect(square, size)
         val outputs = landmarker.run(image.tensor(size, toImage, 0f, 1f))
@@ -168,7 +171,7 @@ class HandLandmarker(
     }
 
     override fun close() {
-        detector.close()
+        if (detectorModel.isInitialized()) detector.close()
         landmarker.close()
     }
 }

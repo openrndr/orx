@@ -58,15 +58,7 @@ class Segmentation(
         require(target.effectiveWidth == width && target.effectiveHeight == height) {
             "the color buffer is ${target.effectiveWidth} × ${target.effectiveHeight}, the masks $width × $height"
         }
-        val mask = confidence(category)
-        val buffer = ByteBuffer.allocateDirect(width * height * 4).order(ByteOrder.nativeOrder())
-        // the rows of color buffers from the bottom up, unless they are stored upside down
-        for (y in 0 until height) {
-            val row = if (target.flipV) y else height - 1 - y
-            for (x in 0 until width) buffer.putFloat(mask[row * width + x])
-        }
-        buffer.rewind()
-        target.write(MPPBuffer(buffer), ColorFormat.R, ColorType.FLOAT32)
+        writeMask(confidence(category), width, height, target)
     }
 
     private fun index(category: String) = categories.indexOf(category).also {
@@ -81,6 +73,7 @@ class Segmentation(
  * - `selfie_multiclass_256x256.onnx`, the default, finds the categories `background`, `hair`, `body-skin`,
  *   `face-skin`, `clothes` and `others`, like accessories
  * - `selfie_segmenter.onnx` and `selfie_segmenter_landscape.onnx`, faster, for images of 16:9, find `person`
+ * - `hair_segmenter.onnx` finds `background` and `hair`; it reads the alpha channel of the image too, as MediaPipe's
  */
 class ImageSegmenter(
     modelPath: String = "orx-jvm/orx-mediapipe/models/selfie_multiclass_256x256.onnx"
@@ -90,6 +83,7 @@ class ImageSegmenter(
     /** the names of the categories that the model finds */
     val categories: List<String> = when (val channels = model.outputShapes.values.single().last().toInt()) {
         1 -> listOf("person")
+        2 -> listOf("background", "hair")
         6 -> listOf("background", "hair", "body-skin", "face-skin", "clothes", "others")
         else -> error("a model with $channels categories")
     }
@@ -100,9 +94,11 @@ class ImageSegmenter(
         val h = model.height
         val toImage = Affine.stretch(image.width, image.height, w, h)
         // the multiclass model takes colors from -1 to 1 and gives scores for a softmax, the selfie models take colors
-        // from 0 to 1 and give the likelihood of a person
+        // from 0 to 1 and give the likelihood of a person, the hair segmenter takes colors and alpha from 0 to 1 and
+        // gives scores for a softmax
         val channels = categories.size
-        val outputs = model.run(image.tensor(w, h, toImage, if (channels > 1) -1f else 0f, 1f)).values.single()
+        val low = if (channels == 6) -1f else 0f
+        val outputs = model.run(image.tensor(w, h, toImage, low, 1f, channels = model.channels)).values.single()
         if (channels == 1) return Segmentation(categories, w, h, listOf(outputs))
         // the softmax over the categories of each pixel
         val confidences = List(channels) { FloatArray(w * h) }
@@ -121,4 +117,19 @@ class ImageSegmenter(
     fun segment(image: ColorBuffer) = segment(image.toRgbaImage())
 
     override fun close() = model.close()
+}
+
+/** writes [mask] of [width] × [height] into the red channel of [target], a color buffer in floating point */
+internal fun writeMask(mask: FloatArray, width: Int, height: Int, target: ColorBuffer) {
+    require(target.effectiveWidth == width && target.effectiveHeight == height) {
+        "the color buffer is ${target.effectiveWidth} × ${target.effectiveHeight}, the mask $width × $height"
+    }
+    val buffer = ByteBuffer.allocateDirect(width * height * 4).order(ByteOrder.nativeOrder())
+    // the rows of color buffers from the bottom up, unless they are stored upside down
+    for (y in 0 until height) {
+        val row = if (target.flipV) y else height - 1 - y
+        for (x in 0 until width) buffer.putFloat(mask[row * width + x])
+    }
+    buffer.rewind()
+    target.write(MPPBuffer(buffer), ColorFormat.R, ColorType.FLOAT32)
 }

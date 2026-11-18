@@ -3,6 +3,8 @@ package org.openrndr.extra.mediapipe
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
+import org.openrndr.draw.colorBuffer
+import org.openrndr.utils.buffer.MPPBuffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -33,3 +35,22 @@ fun ColorBuffer.toRgbaImage(): RgbaImage {
     }
     return RgbaImage(w, h, pixels)
 }
+
+/** writes the pixels into [target], a color buffer of the same size */
+fun RgbaImage.write(target: ColorBuffer) {
+    require(target.effectiveWidth == width && target.effectiveHeight == height) {
+        "the color buffer is ${target.effectiveWidth} × ${target.effectiveHeight}, the image $width × $height"
+    }
+    val buffer = ByteBuffer.allocateDirect(width * height * 4).order(ByteOrder.nativeOrder())
+    val row = width * 4
+    // the rows from the bottom up, except into color buffers that are stored upside down
+    for (y in 0 until height) {
+        buffer.position((if (target.flipV) y else height - 1 - y) * row)
+        buffer.put(pixels, y * row, row)
+    }
+    buffer.rewind()
+    target.write(MPPBuffer(buffer), ColorFormat.RGBa, ColorType.UINT8)
+}
+
+/** a new color buffer with the pixels */
+fun RgbaImage.toColorBuffer(): ColorBuffer = colorBuffer(width, height, format = ColorFormat.RGBa, type = ColorType.UINT8).also { write(it) }

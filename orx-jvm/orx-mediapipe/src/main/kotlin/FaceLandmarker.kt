@@ -167,13 +167,15 @@ class FaceLandmarker(
         return square(box.center, max(box.width, box.height) * 1.5, rotationTo(landmarks[33], landmarks[263], 0.0))
     }
 
-    private fun landmarks(image: RgbaImage, rect: RotatedRect): FaceLandmarks? {
+    /** the landmarks of the face in [rect] of [image], null when the model is not sure of a face there */
+    internal fun landmarks(image: RgbaImage, rect: RotatedRect): FaceLandmarks? {
         val size = landmarker.size
         val toImage = Affine.rotatedRect(rect, size)
         val outputs = landmarker.run(image.tensor(size, toImage, 0f, 1f))
-        val score = sigmoid(outputs.getValue("Identity_1")[0])
+        // by their sizes, the outputs of the models of the face landmarker and of the face stylizer are named apart
+        val raw = outputs.values.single { it.size == 478 * 3 }
+        val score = sigmoid((outputs["Identity_1"] ?: outputs.values.first { it.size == 1 })[0])
         if (score < minScore) return null
-        val raw = outputs.getValue("Identity")
         val scale = rect.width / size
         val landmarks = (0 until raw.size / 3).map { i ->
             val p = toImage(Vector2(raw[3 * i].toDouble(), raw[3 * i + 1].toDouble()))
