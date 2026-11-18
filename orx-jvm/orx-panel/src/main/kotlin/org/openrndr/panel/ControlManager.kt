@@ -1165,7 +1165,7 @@ class ControlManager : Extension {
                         root.visit { all.add(this) }
                         all.flatMap { listOfNotNull(it.paintArea, it.drawnArea) }
                     } ?: emptyList()
-                    val areas = moved + dirty.flatMap { listOfNotNull(it.paintArea, it.drawnArea) } +
+                    val areas = moved + dirty.flatMap { listOfNotNull(it.paintArea, it.drawnArea) + it.vacatedAreas } +
                             listOfNotNull(tooltip, tooltipArea).map { Rectangle(it.x - 2.0, it.y - 2.0, it.width + 4.0, it.height + 4.0) }
                     val union = areas.reduceOrNull { a, b ->
                         val x0 = minOf(a.x, b.x)
@@ -1219,6 +1219,7 @@ class ControlManager : Extension {
 
             body.visit {
                 draw.dirty = false
+                vacatedAreas.clear()
             }
 
             // the cursor of the element under the pointer, over a scrollbar and while dragging one that of the scrollbar

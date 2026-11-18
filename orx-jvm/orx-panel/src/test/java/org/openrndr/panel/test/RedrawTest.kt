@@ -134,6 +134,29 @@ class RedrawTest : PanelTestFixture() {
     }
 
     @Test
+    fun `what a removed slide-out drew over other elements is drawn over`() {
+        lateinit var picker: ColorpickerButton
+        val cm = panel {
+            styleSheets(sheets())
+            layout {
+                picker = colorpickerButton { }
+                div("a") { style = StyleSheet().apply { width = 300.px; height = 300.px } }
+            }
+        }
+        repeat(2) { cm.frame() }
+        val before = cm.pixels()
+        picker.openPicker()
+        repeat(2) { cm.frame() }
+        assertTrue(before != cm.pixels(), "the picker is drawn")
+        val partial = cm.partialRedraws
+        // as when the pointer left it, without closing the picker through the button
+        picker.children.filterIsInstance<SlideOut>().single().dispose()
+        cm.frame()
+        assertEquals(partial + 1, cm.partialRedraws, "only a part is drawn again")
+        assertTrue(before == cm.pixels(), "nothing of the picker is left")
+    }
+
+    @Test
     fun `a text area draws the background of its style over its whole width`() {
         lateinit var area: TextArea
         val cm = panel {

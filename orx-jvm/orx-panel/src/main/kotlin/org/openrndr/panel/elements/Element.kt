@@ -277,6 +277,12 @@ open class Element(val type: ElementType) : AutoCloseable {
     /** the paint area of the element when it was last drawn, null when it was not */
     internal var drawnArea: Rectangle? = null
 
+    /** the children at the last change of [children], to find those that were removed */
+    private var childrenBefore: List<Element> = emptyList()
+
+    /** the areas where removed children and their descendants were drawn, drawn again with this element */
+    internal val vacatedAreas = mutableListOf<Rectangle>()
+
     class MouseObservables : AutoCloseable {
         val clicked = Event<MouseEvent>("element-mouse-clicked")
         val doubleClicked = Event<MouseEvent>("element-mouse-double-clicked")
@@ -455,6 +461,11 @@ open class Element(val type: ElementType) : AutoCloseable {
 
         children.changed.listen {
             draw.dirty = true
+            // what removed children drew, like a slide-out over other elements, is drawn over
+            for (removed in childrenBefore) {
+                if (removed !in children) removed.visit { drawnArea?.let { this@Element.vacatedAreas.add(it) } }
+            }
+            childrenBefore = children.toList()
             // selectors of siblings match again
             for (child in children) child.subtreeStyleDirty = true
             invalidateStyle()
