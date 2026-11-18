@@ -15,48 +15,57 @@ internal class Affine(val a: Double, val b: Double, val c: Double, val d: Double
     operator fun invoke(p: Vector2) = Vector2(a * p.x + b * p.y + tx, c * p.x + d * p.y + ty)
 
     companion object {
+        /** the whole image in a tensor of [width] × [height] pixels, stretched */
+        fun stretch(imageWidth: Int, imageHeight: Int, width: Int, height: Int) =
+            Affine(imageWidth.toDouble() / width, 0.0, 0.0, imageHeight.toDouble() / height, 0.0, 0.0)
+
         /** the whole image in a square tensor of [size] pixels, keeping its aspect ratio, with black bars */
         fun letterbox(width: Int, height: Int, size: Int): Affine {
             val scale = max(width, height).toDouble() / size
             return Affine(scale, 0.0, 0.0, scale, (width - size * scale) / 2.0, (height - size * scale) / 2.0)
         }
 
-        /** the square of [side] pixels around [center], turned by [rotation] radians, in a tensor of [size] pixels */
-        fun rotatedSquare(center: Vector2, side: Double, rotation: Double, size: Int): Affine {
-            val s = side / size
-            val cr = cos(rotation)
-            val sr = sin(rotation)
+        /** [rect] in a tensor of [size] × [size] pixels, stretched when it is not square */
+        fun rotatedRect(rect: RotatedRect, size: Int): Affine {
+            val sx = rect.width / size
+            val sy = rect.height / size
+            val cr = cos(rect.rotation)
+            val sr = sin(rect.rotation)
             // the center of the tensor is at the center, its x axis along the rotation
             return Affine(
-                cr * s, -sr * s, sr * s, cr * s,
-                center.x - (cr * side - sr * side) / 2.0,
-                center.y - (sr * side + cr * side) / 2.0
+                cr * sx, -sr * sy, sr * sx, cr * sy,
+                rect.center.x - (cr * rect.width - sr * rect.height) / 2.0,
+                rect.center.y - (sr * rect.width + cr * rect.height) / 2.0
             )
         }
     }
 }
 
 /** the part of the image at [toImage] in a tensor of [size] × [size] RGB pixels from [low] to [high], black outside */
-internal fun RgbaImage.tensor(size: Int, toImage: Affine, low: Float, high: Float): FloatBuffer {
-    val tensor = ByteBuffer.allocateDirect(size * size * 3 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer()
+internal fun RgbaImage.tensor(size: Int, toImage: Affine, low: Float, high: Float) = tensor(size, size, toImage, low, high)
+
+/**
+ * The part of the image at [toImage] in a tensor of [width] × [height] pixels from [low] to [high], black outside, of
+ * the RGB channels or, with [channels] 4, the RGBA channels
+ */
+internal fun RgbaImage.tensor(width: Int, height: Int, toImage: Affine, low: Float, high: Float, channels: Int = 3): FloatBuffer {
+    val tensor = ByteBuffer.allocateDirect(width * height * channels * 4).order(ByteOrder.nativeOrder()).asFloatBuffer()
     val scale = (high - low) / 255f
-    val rgb = FloatArray(3)
-    for (v in 0 until size) {
-        for (u in 0 until size) {
+    val rgb = FloatArray(channels)
+    for (v in 0 until height) {
+        for (u in 0 until width) {
             // bilinear, the pixels of the tensor and the image at their indices like OpenCV's warpAffine, which
             // MediaPipe uses
             val p = toImage(Vector2(u.toDouble(), v.toDouble()))
             sample(p.x, p.y, rgb)
-            tensor.put(low + rgb[0] * scale)
-            tensor.put(low + rgb[1] * scale)
-            tensor.put(low + rgb[2] * scale)
+            for (k in 0 until channels) tensor.put(low + rgb[k] * scale)
         }
     }
     tensor.rewind()
     return tensor
 }
 
-/** the color at ([x], [y]), pixel (i, j) at (i, j), bilinear, black outside the image */
+/** the color at ([x], [y]), pixel (i, j) at (i, j), bilinear, black outside the image; the first `rgb.size` channels */
 private fun RgbaImage.sample(x: Double, y: Double, rgb: FloatArray) {
     val x0 = floor(x).toInt()
     val y0 = floor(y).toInt()
@@ -69,7 +78,7 @@ private fun RgbaImage.sample(x: Double, y: Double, rgb: FloatArray) {
         if (px < 0 || py < 0 || px >= width || py >= height) continue
         val w = (if (i == 0) 1f - fx else fx) * (if (j == 0) 1f - fy else fy)
         val o = (py * width + px) * 4
-        for (k in 0..2) rgb[k] += w * (pixels[o + k].toInt() and 0xff)
+        for (k in rgb.indices) rgb[k] += w * (pixels[o + k].toInt() and 0xff)
     }
 }
 

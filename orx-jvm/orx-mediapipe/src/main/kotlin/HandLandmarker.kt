@@ -4,11 +4,7 @@ import org.openrndr.draw.ColorBuffer
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.shape.Rectangle
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.atan2
 import kotlin.math.cos
-import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.sin
 
@@ -65,7 +61,7 @@ class HandLandmarker(
         }
 
     /** the squares around the hands found in the frame before, for [tracking] */
-    private var followed: List<Square> = emptyList()
+    private var followed: List<RotatedRect> = emptyList()
 
     private val detector = OnnxModel(handDetectorPath)
     private val landmarker = OnnxModel(landmarksPath)
@@ -79,7 +75,7 @@ class HandLandmarker(
             palmSquares(image).filter { palm -> squares.none { iou(it.bounds, palm.bounds) > 0.5 } }
         } else emptyList()
         val hands = mutableListOf<HandLandmarks>()
-        val handSquares = mutableListOf<Square>()
+        val handSquares = mutableListOf<RotatedRect>()
         for (square in (squares + found).take(maxHands)) {
             val hand = landmarks(image, square) ?: continue
             // two squares that came to follow the same hand
@@ -93,7 +89,7 @@ class HandLandmarker(
     }
 
     /** the squares around the hands of the palms in [image] */
-    private fun palmSquares(image: RgbaImage): List<Square> {
+    private fun palmSquares(image: RgbaImage): List<RotatedRect> {
         val toImage = Affine.letterbox(image.width, image.height, detector.size)
         val outputs = detector.run(image.tensor(detector.size, toImage, 0f, 1f))
         val palms = weightedNonMaxSuppression(
@@ -110,26 +106,16 @@ class HandLandmarker(
     /** the hands in [image] */
     fun detect(image: ColorBuffer) = detect(image.toRgbaImage())
 
-    /** a square around a hand, turned by [rotation] radians */
-    private class Square(val center: Vector2, val side: Double, val rotation: Double) {
-        /** the bounds of the turned square */
-        val bounds: Rectangle
-            get() {
-                val half = side / 2.0 * (abs(cos(rotation)) + abs(sin(rotation)))
-                return Rectangle(center.x - half, center.y - half, 2.0 * half, 2.0 * half)
-            }
-    }
-
     /**
      * The square around a hand in the next frame, from its landmarks, like MediaPipe's HandLandmarksToRectCalculator: turned
      * such that the knuckles of the index, middle and ring fingers are above the wrist, around the palm and the bases of
      * the fingers
      */
-    private fun landmarksSquare(landmarks: List<Vector2>): Square {
+    private fun landmarksSquare(landmarks: List<Vector2>): RotatedRect {
         val points = listOf(0, 1, 2, 3, 5, 6, 9, 10, 13, 14, 17, 18).map { landmarks[it] }
         val wrist = landmarks[0]
         val knuckles = ((landmarks[5] + landmarks[13]) / 2.0 + landmarks[9]) / 2.0
-        val rotation = normalizedRadians(PI / 2.0 - atan2(-(knuckles.y - wrist.y), knuckles.x - wrist.x))
+        val rotation = uprightRotation(wrist, knuckles)
         // the bounds of the points turned upright, around the center of their bounds
         val center = bounds(points).center
         val c = cos(-rotation)
@@ -140,29 +126,29 @@ class HandLandmarker(
         // a tenth of the height towards the fingers, a square of twice the longest side
         val shiftY = -0.1
         val shifted = boxCenter + Vector2(-upright.height * shiftY * sin(rotation), upright.height * shiftY * cos(rotation))
-        return Square(shifted, max(upright.width, upright.height) * 2.0, rotation)
+        return square(shifted, max(upright.width, upright.height) * 2.0, rotation)
     }
 
     /** the square around the hand of a palm, from the wrist to the middle finger upwards */
-    private fun handSquare(box: Rectangle, keypoints: List<Vector2>): Square {
+    private fun handSquare(box: Rectangle, keypoints: List<Vector2>): RotatedRect {
         val wrist = keypoints[0]
         val middle = keypoints[2]
         // the turn that makes the middle finger point up
-        val rotation = normalizedRadians(PI / 2.0 - atan2(-(middle.y - wrist.y), middle.x - wrist.x))
+        val rotation = uprightRotation(wrist, middle)
         // half the height of the palm towards the fingers, a square of 2.6 times its longest side
         val shiftY = -0.5
         val center = box.center + Vector2(-box.height * shiftY * sin(rotation), box.height * shiftY * cos(rotation))
-        return Square(center, max(box.width, box.height) * 2.6, rotation)
+        return square(center, max(box.width, box.height) * 2.6, rotation)
     }
 
-    private fun landmarks(image: RgbaImage, square: Square): HandLandmarks? {
+    private fun landmarks(image: RgbaImage, square: RotatedRect): HandLandmarks? {
         val size = landmarker.size
-        val toImage = Affine.rotatedSquare(square.center, square.side, square.rotation, size)
+        val toImage = Affine.rotatedRect(square, size)
         val outputs = landmarker.run(image.tensor(size, toImage, 0f, 1f))
         val score = outputs.getValue("Identity_1")[0].toDouble()
         if (score < minScore) return null
         val raw = outputs.getValue("Identity")
-        val scale = square.side / size
+        val scale = square.width / size
         val landmarks = (0 until 21).map { i ->
             val p = toImage(Vector2(raw[3 * i].toDouble(), raw[3 * i + 1].toDouble()))
             // the depth is normalized like MediaPipe's, by 0.4
@@ -186,6 +172,3 @@ class HandLandmarker(
         landmarker.close()
     }
 }
-
-/** [angle] in -π to π */
-private fun normalizedRadians(angle: Double) = angle - 2.0 * PI * floor((angle + PI) / (2.0 * PI))
