@@ -488,10 +488,15 @@ class ControlManager : Extension {
                 checkForManualRedraw()
                 return
             }
-            if (scrollbarPressed) return
+            // what is dragged from a press on the panel, also before it moved far enough to be a drag, is the panel's
+            if (scrollbarPressed) {
+                event.cancelPropagation()
+                return
+            }
             if (!dragging) {
                 val start = pressPosition
                 if (start != null && event.position.distanceTo(start) < dragThreshold) {
+                    if (dragTarget != null) event.cancelPropagation()
                     return
                 }
                 dragging = true
