@@ -164,7 +164,7 @@ class Camera2D : Extension, ChangeEvents {
      */
     var controls = { mouse: MouseEvents, keyboard: KeyEvents ->
         mouse.buttonDown.listen {
-            if(userInteraction) {
+            if (!it.propagationCancelled && userInteraction) {
                 rotationCenter = it.position
                 if (it.button == MouseButton.CENTER) {
                     defaults()
