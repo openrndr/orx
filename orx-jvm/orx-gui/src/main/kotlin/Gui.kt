@@ -40,7 +40,15 @@ There is a 6-step incantation to add a new parameter type
 
 You can use your editor's search functionality to jump to "1)", "2)".
  */
-internal class CompartmentState(var collapsed: Boolean, val parameterValues: MutableMap<String, Any> = mutableMapOf())
+/**
+ * @param byDefault true while [collapsed] is that of [GUI.compartmentsCollapsedByDefault], false once the compartment
+ * was collapsed or expanded
+ */
+internal class CompartmentState(
+    var collapsed: Boolean,
+    val parameterValues: MutableMap<String, Any> = mutableMapOf(),
+    var byDefault: Boolean = true
+)
 private class SidebarState(
     var hidden: Boolean = false,
     var collapsed: Boolean = false,
@@ -153,7 +161,18 @@ open class GUI(
             sidebarState().hidden = !field
         }
 
+    /** whether compartments start collapsed, also those that were added and were not collapsed or expanded since */
     var compartmentsCollapsedByDefault = true
+        set(value) {
+            field = value
+            // with a compartment selector only the selected compartment is expanded
+            if (compartmentSelector != null) return
+            for (binding in bindings.bindings) {
+                val state = compartmentState()[binding.label]?.takeIf { it.byDefault } ?: continue
+                state.collapsed = value
+                compartments[binding.label]?.classes?.let { if (value) it.add(collapsed) else it.remove(collapsed) }
+            }
+        }
     var doubleBind = true
     var defaultSaveFolder = "gui-parameters"
     var persistState = true
@@ -259,6 +278,7 @@ open class GUI(
                         collapsible.classes.add(collapsed)
                         collapseState.collapsed = true
                     }
+                    collapseState.byDefault = false
                 }
             }
         }
@@ -270,7 +290,10 @@ open class GUI(
     fun selectCompartment(label: String) {
         // only compartments, the states of nested groups are kept
         for (binding in bindings.bindings) {
-            compartmentState()[binding.label]?.collapsed = binding.label != label
+            compartmentState()[binding.label]?.let {
+                it.collapsed = binding.label != label
+                it.byDefault = false
+            }
         }
         for ((compartmentLabel, compartment) in compartments) {
             if (compartmentLabel == label) {
