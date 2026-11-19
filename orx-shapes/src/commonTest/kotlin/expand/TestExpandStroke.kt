@@ -20,7 +20,7 @@ import kotlin.test.assertTrue
 class TestExpandStroke {
     /** the distance to [curve] by brute force over [samples] dense samples */
     private fun distances(curve: ShapeContour, samples: Int = 20000): (Vector2) -> Double {
-        val dense = List(samples) { curve.position(it / samples.toDouble()) }
+        val dense = curve.equidistantPositions(samples)
         return { p -> sqrt(dense.minOf { it.squaredDistanceTo(p) }) }
     }
 
@@ -40,10 +40,13 @@ class TestExpandStroke {
         val random = Random(11)
         repeat(12) { k ->
             val curve = hobbyCurve(List(random.nextInt(4, 10)) { Vector2(random.nextDouble(0.0, 400.0), random.nextDouble(0.0, 400.0)) })
-            val distance = distances(curve)
+            // curve samples half a pixel apart put the distances less than 0.02 off for the thinnest stroke, against
+            // the 0.5 tested; denser samples make the test too slow for the JS tests
+            val distance = distances(curve, (curve.length * 2).toInt())
             for (weight in listOf(4.0, 30.0, 90.0)) {
-                for ((join, cap) in listOf(SegmentJoin.ROUND to LineCap.ROUND, SegmentJoin.MITER to LineCap.SQUARE, SegmentJoin.BEVEL to LineCap.BUTT)) {
-                    val stroke = curve.expand(weight, join, cap)
+                val strokes = listOf(SegmentJoin.ROUND to LineCap.ROUND, SegmentJoin.MITER to LineCap.SQUARE, SegmentJoin.BEVEL to LineCap.BUTT)
+                    .map { (join, cap) -> Triple(join, cap, curve.expand(weight, join, cap)) }
+                for ((join, cap, stroke) in strokes) {
                     val inside = curve.equidistantPositions(60).drop(1).dropLast(1).count { it in stroke }
                     assertEquals(58, inside, "curve $k, weight $weight, $join/$cap: the stroke leaves parts of the curve out")
                     for (c in stroke.contours) {
@@ -51,7 +54,7 @@ class TestExpandStroke {
                     }
                 }
                 // round joins and caps: the outlines of the stroke are at half the weight from the curve
-                val round = curve.expand(weight, SegmentJoin.ROUND, LineCap.ROUND)
+                val round = strokes.first().third
                 val worst = round.contours.maxOf { c -> c.equidistantPositions(80).maxOf { abs(distance(it) - weight / 2) } }
                 assertTrue(worst < 0.5, "curve $k, weight $weight: an outline is $worst off half the weight")
             }
