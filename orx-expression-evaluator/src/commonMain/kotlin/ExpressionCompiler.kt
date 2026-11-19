@@ -14,6 +14,10 @@ import kotlin.math.*
  *
  * Like the evaluation of the tree did, a name that can not be found evaluates to NaN and is reported once the whole
  * expression is evaluated, with the problems of all the names that could not be found.
+ *
+ * An expression can be a small program, of statements separated by semicolons or new lines, that declare values with
+ * `val` for the statements after them: `val a = 5; val b = 3; a + b`. A value is declared once, and comes before the
+ * constants of the same name.
  */
 internal class CompiledExpression(
     root: KeyLangParser.KeyLangFileContext,
@@ -28,26 +32,46 @@ internal class CompiledExpression(
     /** the errors of the current evaluation */
     private val errors = ArrayList<ExpressionException>()
 
-    /** the statements, of which the last gives the result, with their texts for the messages */
-    private val statements: List<Pair<Node, String>> = root.line().map { line ->
-        val statement = line.statement() as KeyLangParser.ExpressionStatementContext
-        compileRoot(statement.expressionRoot()) to statement.text
+    /** the names of the values declared by the statements compiled so far, by their slots in [locals] */
+    private val declared = ArrayList<String>()
+
+    /** a statement: its node, its text for the messages, and the slot of the value it declares or -1 */
+    private class Statement(val node: Node, val text: String, val slot: Int)
+
+    /** the statements, of which the last gives the result */
+    private val statements: List<Statement> = root.line().map { line ->
+        when (val statement = line.statement()) {
+            is KeyLangParser.ValDeclarationContext -> {
+                // the value is declared after its expression, which can read a constant of the same name
+                val node = compileRoot(statement.expressionRoot())
+                val id = statement.ID()!!
+                val name = id.text.replace("`", "")
+                if (name in declared) Statement(redeclared(id), statement.text, -1)
+                else Statement(node, statement.text, declared.size).also { declared.add(name) }
+            }
+            is KeyLangParser.ExpressionStatementContext -> Statement(compileRoot(statement.expressionRoot()), statement.text, -1)
+            else -> throw IllegalStateException("unknown statement '${statement?.text}'")
+        }
     }
 
-    /** evaluates the expression, null when it has no statements */
+    /** the values declared by the statements, of the current evaluation */
+    private val locals = DoubleArray(declared.size)
+
+    /** evaluates the expression, null when it has no statements or the last declares a value */
     fun evaluate(): Double? {
         var result: Double? = null
-        for ((node, text) in statements) {
+        for (statement in statements) {
             errors.clear()
-            val value = node.eval()
+            val value = statement.node.eval()
             if (errors.isNotEmpty()) {
                 // the message of the last error, the problems of all of them
                 val problems = errors.flatMap { it.problems }.distinct().sortedBy { it.start }
                 val last = errors.last()
                 errors.clear()
-                throw ExpressionException("error in evaluation of '$text': ${last.message ?: ""}", problems)
+                throw ExpressionException("error in evaluation of '${statement.text}': ${last.message ?: ""}", problems)
             }
-            result = value
+            if (statement.slot >= 0) locals[statement.slot] = value
+            result = if (statement.slot >= 0) null else value
         }
         return result
     }
@@ -68,6 +92,17 @@ internal class CompiledExpression(
         }
         errors.add(ExpressionException(message, listOf(problem)))
         return Double.NaN
+    }
+
+    /** an error about the declaration of [id], a value that is declared already */
+    private fun redeclared(id: TerminalNode): Node {
+        val name = id.text.replace("`", "")
+        val range = span(id.symbol)
+        val problem = ExpressionProblem(ExpressionProblem.Kind.DUPLICATE_VALUE, range.first, range.last + 1, "$name is declared already", name)
+        return Node {
+            errors.add(ExpressionException("value '$name' is declared already", listOf(problem)))
+            Double.NaN
+        }
     }
 
     /** an error about a part of the grammar that is not evaluated */
@@ -116,9 +151,11 @@ internal class CompiledExpression(
 
     private fun constant(v: Double) = Node { v }
 
-    /** the value of [id], read at every evaluation */
+    /** the value of [id]: a value declared before it, PI, or a constant read at every evaluation */
     private fun value(id: TerminalNode): Node {
         val name = id.text.replace("`", "")
+        val slot = declared.indexOf(name)
+        if (slot >= 0) return Node { locals[slot] }
         if (name == "PI") return constant(PI)
         return Node {
             constants[name] ?: error("unresolved value: '${name}'. available values: $constants", id, ExpressionProblem.Kind.UNKNOWN_VALUE)

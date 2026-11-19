@@ -14,6 +14,8 @@ RANGE_DOWNTO : 'downTo' ;
 
 STEP : 'step' ;
 
+VAL : 'val' ;
+
 
 // Identifiers
 ID                 : [_] | [$_]*[a-zA-Z][A-Za-z0-9_]* | '`'[$_]*[A-Za-z0-9_-]*'`';
@@ -46,6 +48,7 @@ COLON              : ':' ;
 ARROW              : '->' ;
 
 COMMA              : ',' ;
+SEMICOLON          : ';' ;
 DOT                : '.' ;
 
 EQ             : '==' ;

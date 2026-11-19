@@ -22,14 +22,24 @@ private fun typedArities(name: String, functions: TypedFunctionExtensions): Set<
 
 /**
  * A walk over a typed expression that knows the parameters of the lambdas around every name: [named] is called with
- * every name of a value that is not a parameter, [called] with every call of a function, with its number of arguments
+ * every name of a value that is neither a parameter nor declared before it, [called] with every call of a function,
+ * with its number of arguments, [declaredTwice] with every name of a value that is declared again
  */
 private class NameWalk(
     val named: (TerminalNode) -> Unit,
     val called: (ParserRuleContext, TerminalNode, Int) -> Unit = { _, _, _ -> },
-    val lambda: (KeyLangParser.FunctionLiteralContext, Int) -> Unit = { _, _ -> }
+    val lambda: (KeyLangParser.FunctionLiteralContext, Int) -> Unit = { _, _ -> },
+    val declaredTwice: (TerminalNode) -> Unit = {}
 ) : KeyLangParserBaseListener() {
     private val scopes = ArrayList<List<String>>()
+
+    /** the values declared by the statements walked so far */
+    private val declared = mutableSetOf<String>()
+
+    override fun exitValDeclaration(ctx: KeyLangParser.ValDeclarationContext) {
+        val id = ctx.ID() ?: return
+        if (!declared.add(id.text.replace("`", ""))) declaredTwice(id)
+    }
 
     override fun enterFunctionLiteral(ctx: KeyLangParser.FunctionLiteralContext) {
         val names = ctx.ID().map { it.text.replace("`", "") }
@@ -44,7 +54,7 @@ private class NameWalk(
     override fun enterValueReference(ctx: KeyLangParser.ValueReferenceContext) {
         val id = ctx.ID() ?: return
         val name = id.text.replace("`", "")
-        if (name == "PI" || scopes.any { name in it }) return
+        if (name == "PI" || name in declared || scopes.any { name in it }) return
         named(id)
     }
 
@@ -58,7 +68,7 @@ private class NameWalk(
 
 /**
  * The problems of the typed [expression], all of them, without evaluating it: syntax errors, names that are neither
- * in [values], parameters of the lambdas around them nor PI, calls of functions that are neither built in, in
+ * in [values], parameters of the lambdas around them, values declared before them nor PI, values declared twice, calls of functions that are neither built in, in
  * [functions] nor in [values] (a constant can be a function), or that take other numbers of arguments, and lambdas of
  * more than two parameters. The types of values are not known before they are evaluated, so the properties and
  * functions of values, and the types of operands, are not checked. Names are only checked when the expression can be
@@ -91,14 +101,18 @@ fun checkTypedExpression(
         },
         lambda = { ctx, n ->
             if (n > 2) add(ExpressionProblem.Kind.UNSUPPORTED, span(ctx), "lambdas with $n parameters are not supported")
+        },
+        declaredTwice = { id ->
+            val name = id.text.replace("`", "")
+            add(ExpressionProblem.Kind.DUPLICATE_VALUE, span(id.symbol), "$name is declared already", name)
         }
     ), root)
     return problems.sortedBy { it.start }
 }
 
 /**
- * the names of the values that the typed [expression] reads, without the parameters of its lambdas and PI, as far as
- * it can be read
+ * the names of the values that the typed [expression] reads, without the parameters of its lambdas, the values it
+ * declares before reading them and PI, as far as it can be read
  */
 fun typedExpressionNames(expression: String): Set<String> {
     val (root, _) = parseWithProblems(expression, lexer = false)

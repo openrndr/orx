@@ -31,6 +31,9 @@ data class ExpressionProblem(
         /** a function that takes another number of arguments */
         WRONG_ARGUMENTS,
 
+        /** a value that is declared with `val` a second time */
+        DUPLICATE_VALUE,
+
         /** something the grammar reads that is not evaluated, like a comparison or a list */
         UNSUPPORTED,
 
@@ -148,7 +151,7 @@ fun parseWithProblems(expression: String, lexer: Boolean = true): Pair<KeyLangPa
             }
             // at the end, the last token before it
             val at = if (atEnd) {
-                (tokens.tokens.lastOrNull { it.type != Token.EOF && it.channel == Token.DEFAULT_CHANNEL && it.type != KeyLangLexer.Tokens.NEWLINE })
+                (tokens.tokens.lastOrNull { it.type != Token.EOF && it.channel == Token.DEFAULT_CHANNEL && it.type != KeyLangLexer.Tokens.NEWLINE && it.type != KeyLangLexer.Tokens.SEMICOLON })
             } else token
             val range = at?.let(::span) ?: (expression.length until expression.length)
             problems.add(ExpressionProblem(ExpressionProblem.Kind.SYNTAX, range.first, range.last + 1, syntaxMessage(msg, token)))
@@ -160,7 +163,7 @@ fun parseWithProblems(expression: String, lexer: Boolean = true): Pair<KeyLangPa
 
 /**
  * The problems of [expression], all of them, without evaluating it: syntax errors, names that are neither in
- * [values], built-in values nor functions, calls of functions with numbers of arguments they do not take, and what is
+ * [values], built-in values, values declared before them nor functions, values declared twice, calls of functions with numbers of arguments they do not take, and what is
  * read but not evaluated. Names of values are only checked when the expression can be read.
  */
 fun checkExpression(
@@ -188,11 +191,19 @@ fun checkExpression(
 
     fun unsupported(ctx: ParserRuleContext, what: String) = add(ExpressionProblem.Kind.UNSUPPORTED, span(ctx), "$what not supported")
 
+    // the values declared by the statements walked so far
+    val declared = mutableSetOf<String>()
     ParseTreeWalker.DEFAULT.walk(object : KeyLangParserBaseListener() {
         override fun enterValueReference(ctx: KeyLangParser.ValueReferenceContext) {
             val token = ctx.ID()?.symbol ?: return
             val name = token.text?.replace("`", "") ?: return
-            if (name !in values && name !in builtInValues) add(ExpressionProblem.Kind.UNKNOWN_VALUE, span(token), "no value $name", name)
+            if (name !in values && name !in builtInValues && name !in declared) add(ExpressionProblem.Kind.UNKNOWN_VALUE, span(token), "no value $name", name)
+        }
+
+        override fun exitValDeclaration(ctx: KeyLangParser.ValDeclarationContext) {
+            val token = ctx.ID()?.symbol ?: return
+            val name = token.text?.replace("`", "") ?: return
+            if (!declared.add(name)) add(ExpressionProblem.Kind.DUPLICATE_VALUE, span(token), "$name is declared already", name)
         }
 
         override fun enterFunctionCall0Expression(ctx: KeyLangParser.FunctionCall0ExpressionContext) = call(ctx, ctx.ID(), 0)
@@ -222,7 +233,10 @@ fun checkExpression(
     return problems.sortedBy { it.start }
 }
 
-/** the names of the values that [expression] reads, without the built-in values; also of an expression with syntax errors, as far as it can be read */
+/**
+ * the names of the values that [expression] reads, without the built-in values and the values it declares before
+ * reading them; also of an expression with syntax errors, as far as it can be read
+ */
 fun expressionNames(expression: String): Set<String> {
     val (root, problems) = parseWithProblems(expression, lexer = false)
     val names = linkedSetOf<String>()
@@ -231,18 +245,34 @@ fun expressionNames(expression: String): Set<String> {
         val tokens = CommonTokenStream(KeyLangLexer(CharStreams.fromString(expression)).also { it.removeErrorListeners() })
         tokens.fill()
         val visible = tokens.tokens.filter { it.channel == Token.DEFAULT_CHANNEL }
+        // the values declared so far, of which a name is read from the next statement on
+        val declared = mutableSetOf<String>()
+        var declaring: String? = null
         for ((i, t) in visible.withIndex()) {
+            if (t.type == KeyLangLexer.Tokens.NEWLINE || t.type == KeyLangLexer.Tokens.SEMICOLON) {
+                declaring?.let(declared::add)
+                declaring = null
+            }
             if (t.type != KeyLangLexer.Tokens.ID) continue
-            if (visible.getOrNull(i + 1)?.type == KeyLangLexer.Tokens.LPAREN || visible.getOrNull(i - 1)?.type == KeyLangLexer.Tokens.DOT) continue
             val name = t.text?.replace("`", "") ?: continue
-            if (name !in builtInValues) names.add(name)
+            if (visible.getOrNull(i - 1)?.type == KeyLangLexer.Tokens.VAL) {
+                declaring = name
+                continue
+            }
+            if (visible.getOrNull(i + 1)?.type == KeyLangLexer.Tokens.LPAREN || visible.getOrNull(i - 1)?.type == KeyLangLexer.Tokens.DOT) continue
+            if (name !in builtInValues && name !in declared) names.add(name)
         }
         return names
     }
+    val declared = mutableSetOf<String>()
     ParseTreeWalker.DEFAULT.walk(object : KeyLangParserBaseListener() {
         override fun enterValueReference(ctx: KeyLangParser.ValueReferenceContext) {
             val name = ctx.ID()?.symbol?.text?.replace("`", "") ?: return
-            if (name !in builtInValues) names.add(name)
+            if (name !in builtInValues && name !in declared) names.add(name)
+        }
+
+        override fun exitValDeclaration(ctx: KeyLangParser.ValDeclarationContext) {
+            ctx.ID()?.symbol?.text?.replace("`", "")?.let(declared::add)
         }
     }, root)
     return names

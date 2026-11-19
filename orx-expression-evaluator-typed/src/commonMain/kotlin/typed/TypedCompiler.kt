@@ -41,6 +41,10 @@ private fun interface TypedNode {
  * A name that can not be found is reported once the whole expression is evaluated, with all the other names that
  * could not be found; what goes wrong otherwise, like operands of types that do not go together, is reported where it
  * happens. Both as an [ExpressionException] with the problems and where they are.
+ *
+ * An expression can be a small program, of statements separated by semicolons or new lines, that declare values with
+ * `val` for the statements after them: `val a = 5; val b = 3; a + b`. A value is declared once, not with the name of a
+ * parameter, and comes before the constants of the same name.
  */
 internal class TypedCompiledExpression(
     root: KeyLangParser.KeyLangFileContext,
@@ -48,20 +52,48 @@ internal class TypedCompiledExpression(
     private val functions: TypedFunctionExtensions,
     parameters: List<String> = emptyList()
 ) {
-    /** the names of the parameters of the expression and of the lambdas around what is being compiled, innermost last */
-    private val scopes = ArrayList<List<String>>().apply { add(parameters) }
+    /**
+     * the names of the parameters of the expression, followed by the values declared by the statements compiled so
+     * far, and of the parameters of the lambdas around what is being compiled, innermost last
+     */
+    private val scopes = ArrayList<List<String>>()
 
-    private val statements: List<Pair<TypedNode, ParserRuleContext>> = root.line().map { line ->
-        val statement = line.statement() as KeyLangParser.ExpressionStatementContext
-        compileRoot(statement.expressionRoot()) to statement
+    /** the parameters of the expression, then the values declared by the statements compiled so far */
+    private val top = parameters.toMutableList().also { scopes.add(it) }
+
+    /** a statement: its node, the statement for the messages, and the slot of the value it declares or -1 */
+    private class Statement(val node: TypedNode, val context: ParserRuleContext, val slot: Int)
+
+    /** the statements, of which the last gives the result */
+    private val statements: List<Statement> = root.line().map { line ->
+        when (val statement = line.statement()) {
+            is KeyLangParser.ValDeclarationContext -> {
+                // the value is declared after its expression, which can read a constant of the same name
+                val node = compileRoot(statement.expressionRoot())
+                val id = statement.ID()!!
+                val name = id.text.replace("`", "")
+                if (name in top) Statement(redeclared(id), statement, -1)
+                else Statement(node, statement, top.size).also { top.add(name) }
+            }
+            is KeyLangParser.ExpressionStatementContext -> Statement(compileRoot(statement.expressionRoot()), statement, -1)
+            else -> throw IllegalStateException("unknown statement '${statement?.text}'")
+        }
     }
 
-    /** evaluates the expression with the values of its parameters, null when it has no statements */
+    /** the number of the parameters and the values declared by the statements */
+    private val slots = top.size
+
+    /** evaluates the expression with the values of its parameters, null when it has no statements or the last declares a value */
     fun evaluate(vararg arguments: Any?): Any? {
         var result: Any? = null
-        for ((node, statement) in statements) {
+        // the parameters, then the values declared by the statements evaluated so far
+        val values = arrayOfNulls<Any?>(maxOf(slots, arguments.size))
+        arguments.copyInto(values)
+        for (s in statements) {
+            val node = s.node
+            val statement = s.context
             val errors = ArrayList<ExpressionException>()
-            val frame = Frame(null, arrayOf(*arguments), errors)
+            val frame = Frame(null, values, errors)
             val value = try {
                 node.eval(frame)
             } catch (f: Failure) {
@@ -79,7 +111,8 @@ internal class TypedCompiledExpression(
                 val problems = errors.flatMap { it.problems }.distinct().sortedBy { it.start }
                 throw ExpressionException("error in evaluation of '${statement.text}': ${errors.last().message ?: ""}", problems)
             }
-            result = value
+            if (s.slot >= 0) values[s.slot] = value
+            result = if (s.slot >= 0) null else value
         }
         return result
     }
@@ -88,6 +121,14 @@ internal class TypedCompiledExpression(
     private fun failure(ctx: ParserRuleContext, message: String): Nothing {
         val range = span(ctx)
         throw Failure(message, ExpressionProblem(ExpressionProblem.Kind.EVALUATION, range.first, range.last + 1, message))
+    }
+
+    /** the declaration of [id], a value that is declared already or a parameter */
+    private fun redeclared(id: TerminalNode): TypedNode {
+        val name = id.text.replace("`", "")
+        val range = span(id.symbol)
+        val problem = ExpressionProblem(ExpressionProblem.Kind.DUPLICATE_VALUE, range.first, range.last + 1, "$name is declared already", name)
+        return TypedNode { throw Failure("value '$name' is declared already", problem) }
     }
 
     private fun typeName(x: Any) = x::class.simpleName ?: "value"

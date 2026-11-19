@@ -3,12 +3,17 @@ parser grammar KeyLangParser;
 
 options { tokenVocab=KeyLangLexer; }
 
-keyLangFile : lines=line+ ;
+// statements are separated by semicolons or new lines; a program gives the value of its last statement, when that is
+// an expression
+keyLangFile : separator* lines=line+ ;
 
-line      : statement (NEWLINE | EOF) ;
+line      : statement (separator+ | EOF) ;
+
+separator : NEWLINE | SEMICOLON ;
 
 statement :
-           expressionRoot       # expressionStatement ;
+           VAL ID ASSIGN expressionRoot       # valDeclaration
+         | expressionRoot                     # expressionStatement ;
 
 rangeExpression: expression operator=(RANGE_INCLUSIVE|RANGE_EXCLUSIVE|RANGE_EXCLUSIVE_UNTIL|RANGE_DOWNTO) expression (step=STEP expression)?;
 

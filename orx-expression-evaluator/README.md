@@ -9,6 +9,14 @@ val expression = "x + y"
 val constants = mapOf("x" to 1.0, "y" to 2.0)
 evaluateExpression(expression, constants)
 ```
+
+An expression can also be a small program without side effects: statements, separated by semicolons or new lines,
+that declare values with `val` for the statements after them, and end in the expression that gives the result.
+
+```kotlin
+evaluateExpression("val a = 5; val b = 3; a + b") // 8.0
+```
+
 ## Built-in expression constants
 
 * `PI`
