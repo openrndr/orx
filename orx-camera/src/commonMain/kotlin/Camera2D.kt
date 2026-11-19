@@ -1,10 +1,12 @@
 package org.openrndr.extra.camera
 
 import org.openrndr.Extension
+import org.openrndr.GestureEvents
 import org.openrndr.KeyEvents
 import org.openrndr.MouseButton
 import org.openrndr.MouseEvents
 import org.openrndr.Program
+import org.openrndr.ScrollSource
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.RenderTarget
 import org.openrndr.draw.isolated
@@ -155,7 +157,8 @@ class Camera2D : Extension, ChangeEvents {
      *
      * - Mouse button interactions are used to configure the center of rotation and reset the view.
      * - Mouse drag events control panning and rotation with the left and right mouse buttons respectively.
-     * - Mouse scrolling adjusts the zoom level based on the scroll direction and position.
+     * - Mouse scrolling adjusts the zoom level based on the scroll direction and position, except the scrolling of
+     *   a touchpad that pinches, see [gestureControls].
      *
      * @param mouse an instance of `MouseEvents` providing data for mouse interactions,
      *              such as button presses, movement, and scrolling.
@@ -181,9 +184,24 @@ class Camera2D : Extension, ChangeEvents {
             }
         }
         mouse.scrolled.listen {
-            if (!it.propagationCancelled && userInteraction) {
+            // a touchpad zooms by pinching
+            if (!it.propagationCancelled && userInteraction && it.source != ScrollSource.TOUCHPAD) {
                 val scaleFactor = 1.0 - it.rotation.y * 0.03
                 zoom(it.position, scaleFactor)
+            }
+        }
+        Unit
+    }
+
+    /**
+     * Sets up the gestures for interacting with the camera: pinching zooms around where the fingers are.
+     *
+     * @param gestures an instance of `GestureEvents` providing the pinches of a touchpad or touch screen
+     */
+    var gestureControls = { gestures: GestureEvents ->
+        gestures.pinchUpdated.listen {
+            if (!it.propagationCancelled && userInteraction) {
+                zoom(it.position, it.scale)
             }
         }
         Unit
@@ -195,17 +213,19 @@ class Camera2D : Extension, ChangeEvents {
      *
      * @param mouse the MouseEvents instance that provides mouse interaction data, including
      *              button presses, dragging, and scrolling events.
+     * @param gestures the GestureEvents instance that provides the pinches, none when null
      */
-    fun setupControls(mouse: MouseEvents, keyboard: KeyEvents) {
+    fun setupControls(mouse: MouseEvents, keyboard: KeyEvents, gestures: GestureEvents? = null) {
         if (!controlInitialized) {
             controls(mouse, keyboard)
+            gestures?.let { gestureControls(it) }
         }
         controlInitialized = true
     }
 
     override fun setup(program: Program) {
         this.program = program
-        setupControls(program.mouse, program.keyboard)
+        setupControls(program.mouse, program.keyboard, program.gestures)
     }
 
     override fun beforeDraw(drawer: Drawer, program: Program) {

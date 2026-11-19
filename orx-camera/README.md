@@ -26,6 +26,7 @@ fun main() = application {
 * right-click drag - rotating
 * middle-click - reset camera
 * mouse-wheel - zoom
+* touchpad pinch - zoom, where the back-end delivers pinches (SDL, web); the scrolls of such a touchpad are ignored
 
 ## Camera2DManual
 
@@ -87,6 +88,7 @@ fun main() = application {
 * left-click drag - rotate
 * right-click drag - pan
 * mouse-wheel - zoom
+* touchpad pinch - zoom, where the back-end delivers pinches (SDL, web); the scrolls of such a touchpad are ignored
 
 ### Key bindings
 

@@ -190,6 +190,18 @@ class OrbitalCamera(
      * @param distance the amount to adjust the camera's distance by
      * @param instant whether the adjustment should be applied immediately (default is `false`)
      */
+    /**
+     * Zooms by [scale], the change of a pinch: closer to the target, or with a smaller orthographic magnitude, for a
+     * [scale] above 1.0, and away for one below
+     */
+    internal fun pinch(scale: Double) {
+        if (projectionType == ProjectionType.PERSPECTIVE) {
+            dolly(sphericalEnd.radius / scale - sphericalEnd.radius)
+        } else {
+            scaleTo(magnitudeEnd / scale)
+        }
+    }
+
     fun dolly(distance: Double, instant: Boolean = false) {
         sphericalEnd += Spherical(0.0, 0.0, distance)
         if (instant) {

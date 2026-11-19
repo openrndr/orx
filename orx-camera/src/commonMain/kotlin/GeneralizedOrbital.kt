@@ -10,7 +10,9 @@ import org.openrndr.KEY_PAGE_UP
 import org.openrndr.KeyEvent
 import org.openrndr.MouseButton
 import org.openrndr.MouseEvent
+import org.openrndr.PinchEvent
 import org.openrndr.Program
+import org.openrndr.ScrollSource
 import org.openrndr.draw.DepthTestPass
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.RenderTarget
@@ -323,6 +325,7 @@ class GeneralizedOrbital(
         program.mouse.buttonDown.listen { onMouseButtonDown(it) }
         program.mouse.buttonUp.listen { mouseState = MouseState.NONE }
         program.mouse.scrolled.listen { onMouseScrolled(it) }
+        program.gestures.pinchUpdated.listen { onPinch(it) }
         program.keyboard.keyDown.listen { onKeyPressed(it) }
         program.keyboard.keyRepeat.listen { onKeyPressed(it) }
     }
@@ -390,13 +393,20 @@ class GeneralizedOrbital(
     // ---- controls ----
 
     private fun onMouseScrolled(event: MouseEvent) {
-        if (!userInteraction || event.propagationCancelled) return
+        // a touchpad zooms by pinching
+        if (!userInteraction || event.propagationCancelled || event.source == ScrollSource.TOUCHPAD) return
         val rot = event.rotation
         if (abs(rot.x) > abs(rot.y)) return
         when {
             rot.y > 0 -> dollyIn(rot.y)
             rot.y < 0 -> dollyOut(rot.y)
         }
+    }
+
+    /** closer to [lookAt] for a pinch that scales up, away for one that scales down */
+    private fun onPinch(event: PinchEvent) {
+        if (!userInteraction || event.propagationCancelled) return
+        dolly(sphericalEnd.radius / event.scale - sphericalEnd.radius)
     }
 
     private fun onMouseMoved(event: MouseEvent) {

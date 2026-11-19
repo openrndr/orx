@@ -25,7 +25,8 @@ class OrbitalControls(
     private lateinit var lastMousePosition: Vector2
 
     private fun mouseScrolled(event: MouseEvent) {
-        if (userInteraction && !event.propagationCancelled) {
+        // a touchpad zooms by pinching
+        if (userInteraction && !event.propagationCancelled && event.source != ScrollSource.TOUCHPAD) {
             val rot = event.rotation
             if (orbitalCamera.projectionType == ProjectionType.PERSPECTIVE) {
                 if (abs(rot.x) > abs(rot.y)) return
@@ -148,6 +149,9 @@ class OrbitalControls(
         program.mouse.buttonDown.listen { mouseButtonDown(it) }
         program.mouse.buttonUp.listen { state = STATE.NONE }
         program.mouse.scrolled.listen { mouseScrolled(it) }
+        program.gestures.pinchUpdated.listen {
+            if (userInteraction && !it.propagationCancelled) orbitalCamera.pinch(it.scale)
+        }
         program.keyboard.keyDown.listen { keyPressed(it) }
         program.keyboard.keyRepeat.listen { keyPressed(it) }
     }
