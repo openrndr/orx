@@ -78,7 +78,7 @@ class Segmentation(
 class ImageSegmenter(
     modelPath: String = MediaPipeModels.model("selfie_multiclass_256x256.onnx")
 ) : AutoCloseable {
-    private val model = OnnxModel(modelPath)
+    private val model = MediaPipeModel(modelPath)
 
     /** the names of the categories that the model finds */
     val categories: List<String> = when (val channels = model.outputShapes.values.single().last().toInt()) {

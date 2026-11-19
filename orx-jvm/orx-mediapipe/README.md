@@ -1,7 +1,7 @@
 # orx-mediapipe
 
 Finds faces, objects, the landmarks of faces, hands and bodies, classifies and segments images, with the models of [MediaPipe](https://ai.google.dev/edge/mediapipe/solutions/guide),
-on the JVM with [ONNX Runtime](https://onnxruntime.ai). The models are converted from TFLite to ONNX, the pre- and
+on the JVM with [ONNX Runtime](https://onnxruntime.ai), through [orx-onnx-runtime](../orx-onnx-runtime). The models are converted from TFLite to ONNX, the pre- and
 post-processing of MediaPipe's tasks is done in Kotlin.
 
 ## Models

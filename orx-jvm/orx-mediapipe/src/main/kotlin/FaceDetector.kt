@@ -30,7 +30,7 @@ class FaceDetector(
     var minScore: Double = 0.5,
     var minSuppressionThreshold: Double = 0.3
 ) : AutoCloseable {
-    private val model = OnnxModel(modelPath)
+    private val model = MediaPipeModel(modelPath)
     private val anchors = ssdAnchors(model.size, listOf(8, 16, 16, 16))
 
     /** the faces in [image] */

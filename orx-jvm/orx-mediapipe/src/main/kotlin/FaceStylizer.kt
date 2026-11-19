@@ -34,7 +34,7 @@ class FaceStylizer(
     seed: Int? = null
 ) : AutoCloseable {
     private val landmarker = FaceLandmarker(detectorPath, landmarksPath, blendshapesPath = null)
-    private val stylizer = OnnxModel(stylizerPath, imageInput = false)
+    private val stylizer = MediaPipeModel(stylizerPath, imageInput = false)
     private val random = seed?.let { Random(it) } ?: Random.Default
 
     // the image input and the noise inputs of the model

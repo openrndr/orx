@@ -35,8 +35,8 @@ class GestureRecognizer(
 
     /** the landmarker of the hands */
     val landmarker = HandLandmarker(handDetectorPath, landmarksPath, maxHands = maxHands, tracking = tracking)
-    private val embedder = OnnxModel(embedderPath, imageInput = false)
-    private val classifier = OnnxModel(classifierPath, imageInput = false)
+    private val embedder = MediaPipeModel(embedderPath, imageInput = false)
+    private val classifier = MediaPipeModel(classifierPath, imageInput = false)
 
     /** the hands in [image] and their gestures, with tracking in the frame after that of the previous call */
     fun recognize(image: RgbaImage): List<HandGesture> = landmarker.detect(image).map { gesture(it, image.width, image.height) }

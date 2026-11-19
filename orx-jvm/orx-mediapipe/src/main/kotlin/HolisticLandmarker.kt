@@ -41,7 +41,7 @@ class HolisticLandmarker(
     private val faceLandmarker = FaceLandmarker(faceDetectorPath, faceLandmarksPath, blendshapesPath)
     // the palms are not looked for, the hands are found from the body
     private val handLandmarker = HandLandmarker(landmarksPath = handLandmarksPath)
-    private val handRefinement = OnnxModel(handRefinementPath)
+    private val handRefinement = MediaPipeModel(handRefinementPath)
 
     /** true to follow the body in the frames of a video */
     var tracking: Boolean

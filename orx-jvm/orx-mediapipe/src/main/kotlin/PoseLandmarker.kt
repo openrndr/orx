@@ -65,8 +65,8 @@ class PoseLandmarker(
             followed = emptyList()
         }
 
-    private val detector = OnnxModel(detectorPath)
-    private val landmarker = OnnxModel(landmarksPath)
+    private val detector = MediaPipeModel(detectorPath)
+    private val landmarker = MediaPipeModel(landmarksPath)
     private val anchors = ssdAnchors(detector.size, listOf(8, 16, 32, 32, 32))
 
     /** the squares around the bodies found in the frame before, for [tracking] */

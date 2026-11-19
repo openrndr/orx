@@ -22,7 +22,7 @@ internal fun labels(modelPath: String): List<String> {
 class ImageClassifier(
     modelPath: String = MediaPipeModels.model("efficientnet_lite0.onnx")
 ) : AutoCloseable {
-    private val model = OnnxModel(modelPath)
+    private val model = MediaPipeModel(modelPath)
 
     /** the labels of the categories */
     val labels = labels(modelPath)
@@ -48,7 +48,7 @@ class ImageClassifier(
 class ImageEmbedder(
     modelPath: String = MediaPipeModels.model("mobilenet_v3_small.onnx")
 ) : AutoCloseable {
-    private val model = OnnxModel(modelPath)
+    private val model = MediaPipeModel(modelPath)
 
     /** the embedding of [image], of length 1 */
     fun embed(image: RgbaImage): FloatArray {

@@ -22,7 +22,7 @@ class ObjectDetector(
     var maxResults: Int = -1,
     var suppressionThreshold: Double = 0.3
 ) : AutoCloseable {
-    private val model = OnnxModel(modelPath)
+    private val model = MediaPipeModel(modelPath)
 
     /** the labels of the categories, `???` for those that are not used */
     val labels = labels(modelPath)

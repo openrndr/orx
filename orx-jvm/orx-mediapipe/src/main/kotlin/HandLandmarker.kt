@@ -64,9 +64,9 @@ class HandLandmarker(
     private var followed: List<RotatedRect> = emptyList()
 
     // the palm detector is loaded when palms are first looked for
-    private val detectorModel = lazy { OnnxModel(handDetectorPath) }
+    private val detectorModel = lazy { MediaPipeModel(handDetectorPath) }
     private val detector by detectorModel
-    private val landmarker = OnnxModel(landmarksPath)
+    private val landmarker = MediaPipeModel(landmarksPath)
     private val anchors by lazy { ssdAnchors(detector.size, listOf(8, 16, 16, 16)) }
 
     /** the hands in [image], with [tracking] in the frame after that of the previous call */

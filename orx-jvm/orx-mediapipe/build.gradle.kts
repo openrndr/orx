@@ -5,6 +5,6 @@ plugins {
 dependencies {
     implementation(openrndr.application.core)
     implementation(openrndr.math)
-    implementation(libs.onnx.runtime)
+    implementation(project(":orx-jvm:orx-onnx-runtime"))
     demoImplementation(openrndr.bundles.video)
 }

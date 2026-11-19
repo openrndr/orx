@@ -125,8 +125,8 @@ class FaceLandmarker(
         }
 
     private val detector = FaceDetector(detectorPath, minDetectionScore)
-    private val landmarker = OnnxModel(landmarksPath)
-    private val blendshapes = blendshapesPath?.let { OnnxModel(it, imageInput = false) }
+    private val landmarker = MediaPipeModel(landmarksPath)
+    private val blendshapes = blendshapesPath?.let { MediaPipeModel(it, imageInput = false) }
 
     /** the rectangles around the faces found in the frame before, for [tracking] */
     private var followed: List<RotatedRect> = emptyList()

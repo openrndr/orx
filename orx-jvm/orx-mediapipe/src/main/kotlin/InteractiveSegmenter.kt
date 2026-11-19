@@ -16,7 +16,7 @@ import kotlin.math.roundToInt
 class InteractiveSegmenter(
     modelPath: String = MediaPipeModels.model("magic_touch.onnx")
 ) : AutoCloseable {
-    private val model = OnnxModel(modelPath)
+    private val model = MediaPipeModel(modelPath)
 
     /** the segmentation of the object at [point], in the pixels of [image] */
     fun segment(image: RgbaImage, point: Vector2): Segmentation = segment(image) { alpha, thickness ->
