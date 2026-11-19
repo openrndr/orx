@@ -21,24 +21,57 @@ private fun typedArities(name: String, functions: TypedFunctionExtensions): Set<
 }
 
 /**
- * A walk over a typed expression that knows the parameters of the lambdas around every name: [named] is called with
- * every name of a value that is neither a parameter nor declared before it, [called] with every call of a function,
- * with its number of arguments, [declaredTwice] with every name of a value that is declared again
+ * A walk over a typed expression that knows the parameters of the lambdas and functions around every name, and the
+ * values and functions declared before it: [named] is called with every name of a value that is neither a parameter
+ * nor declared, [called] with every call of a function that is not declared with as many parameters, with its number
+ * of arguments and the numbers of parameters of the functions of its name that are declared, [declaredTwice] with
+ * every name of a value, parameter or function that is declared again, with the kind of the problem, [function] with
+ * every declaration of a function, with its number of parameters
  */
 private class NameWalk(
     val named: (TerminalNode) -> Unit,
-    val called: (ParserRuleContext, TerminalNode, Int) -> Unit = { _, _, _ -> },
+    val called: (ParserRuleContext, TerminalNode, Int, Set<Int>) -> Unit = { _, _, _, _ -> },
     val lambda: (KeyLangParser.FunctionLiteralContext, Int) -> Unit = { _, _ -> },
-    val declaredTwice: (TerminalNode) -> Unit = {}
+    val declaredTwice: (TerminalNode, ExpressionProblem.Kind) -> Unit = { _, _ -> },
+    val function: (KeyLangParser.FunDeclarationContext, Int) -> Unit = { _, _ -> }
 ) : KeyLangParserBaseListener() {
+    /** the parameters of the lambdas around what is walked */
     private val scopes = ArrayList<List<String>>()
 
-    /** the values declared by the statements walked so far */
-    private val declared = mutableSetOf<String>()
+    /** the values and functions declared in the program and the bodies of the functions around what is walked */
+    private class Declarations {
+        val values = mutableSetOf<String>()
+        val functions = mutableSetOf<Pair<String, Int>>()
+    }
+
+    private val declarations = ArrayList<Declarations>().apply { add(Declarations()) }
+
+    private fun name(id: TerminalNode) = id.text.replace("`", "")
 
     override fun exitValDeclaration(ctx: KeyLangParser.ValDeclarationContext) {
         val id = ctx.ID() ?: return
-        if (!declared.add(id.text.replace("`", ""))) declaredTwice(id)
+        if (!declarations.last().values.add(name(id))) declaredTwice(id, ExpressionProblem.Kind.DUPLICATE_VALUE)
+    }
+
+    override fun enterFunDeclaration(ctx: KeyLangParser.FunDeclarationContext) {
+        function(ctx, ctx.ID().size - 1)
+        val body = Declarations()
+        for (parameter in ctx.ID().drop(1)) {
+            if (!body.values.add(name(parameter))) declaredTwice(parameter, ExpressionProblem.Kind.DUPLICATE_VALUE)
+        }
+        declarations.add(body)
+    }
+
+    // the function is declared after its body, which can not call it
+    override fun exitFunDeclaration(ctx: KeyLangParser.FunDeclarationContext) {
+        declarations.removeAt(declarations.lastIndex)
+        val id = ctx.ID(0) ?: return
+        if (!declarations.last().functions.add(name(id) to ctx.ID().size - 1)) declaredTwice(id, ExpressionProblem.Kind.DUPLICATE_FUNCTION)
+    }
+
+    private fun call(ctx: ParserRuleContext, id: TerminalNode, n: Int) {
+        val declared = declarations.flatMap { d -> d.functions.filter { it.first == name(id) }.map { it.second } }.toSet()
+        if (n !in declared) called(ctx, id, n, declared)
     }
 
     override fun enterFunctionLiteral(ctx: KeyLangParser.FunctionLiteralContext) {
@@ -54,21 +87,22 @@ private class NameWalk(
     override fun enterValueReference(ctx: KeyLangParser.ValueReferenceContext) {
         val id = ctx.ID() ?: return
         val name = id.text.replace("`", "")
-        if (name == "PI" || name in declared || scopes.any { name in it }) return
+        if (name == "PI" || declarations.any { name in it.values } || scopes.any { name in it }) return
         named(id)
     }
 
-    override fun enterFunctionCall0Expression(ctx: KeyLangParser.FunctionCall0ExpressionContext) = called(ctx, ctx.ID()!!, 0)
-    override fun enterFunctionCall1Expression(ctx: KeyLangParser.FunctionCall1ExpressionContext) = called(ctx, ctx.ID()!!, 1)
-    override fun enterFunctionCall2Expression(ctx: KeyLangParser.FunctionCall2ExpressionContext) = called(ctx, ctx.ID()!!, 2)
-    override fun enterFunctionCall3Expression(ctx: KeyLangParser.FunctionCall3ExpressionContext) = called(ctx, ctx.ID()!!, 3)
-    override fun enterFunctionCall4Expression(ctx: KeyLangParser.FunctionCall4ExpressionContext) = called(ctx, ctx.ID()!!, 4)
-    override fun enterFunctionCall5Expression(ctx: KeyLangParser.FunctionCall5ExpressionContext) = called(ctx, ctx.ID()!!, 5)
+    override fun enterFunctionCall0Expression(ctx: KeyLangParser.FunctionCall0ExpressionContext) = call(ctx, ctx.ID()!!, 0)
+    override fun enterFunctionCall1Expression(ctx: KeyLangParser.FunctionCall1ExpressionContext) = call(ctx, ctx.ID()!!, 1)
+    override fun enterFunctionCall2Expression(ctx: KeyLangParser.FunctionCall2ExpressionContext) = call(ctx, ctx.ID()!!, 2)
+    override fun enterFunctionCall3Expression(ctx: KeyLangParser.FunctionCall3ExpressionContext) = call(ctx, ctx.ID()!!, 3)
+    override fun enterFunctionCall4Expression(ctx: KeyLangParser.FunctionCall4ExpressionContext) = call(ctx, ctx.ID()!!, 4)
+    override fun enterFunctionCall5Expression(ctx: KeyLangParser.FunctionCall5ExpressionContext) = call(ctx, ctx.ID()!!, 5)
 }
 
 /**
  * The problems of the typed [expression], all of them, without evaluating it: syntax errors, names that are neither
- * in [values], parameters of the lambdas around them, values declared before them nor PI, values declared twice, calls of functions that are neither built in, in
+ * in [values], parameters of the lambdas and functions around them, values declared before them nor PI, values and
+ * functions declared twice, functions of more than 5 parameters, calls of functions that are neither built in, in
  * [functions] nor in [values] (a constant can be a function), or that take other numbers of arguments, and lambdas of
  * more than two parameters. The types of values are not known before they are evaluated, so the properties and
  * functions of values, and the types of operands, are not checked. Names are only checked when the expression can be
@@ -90,9 +124,9 @@ fun checkTypedExpression(
             val name = id.text.replace("`", "")
             if (name !in values) add(ExpressionProblem.Kind.UNKNOWN_VALUE, span(id.symbol), "no value $name", name)
         },
-        called = { ctx, id, n ->
+        called = { ctx, id, n, declared ->
             val name = id.text.replace("`", "")
-            val takes = typedArities(name, functions)
+            val takes = typedArities(name, functions) + declared
             when {
                 n in takes || name in values -> {}
                 takes.isEmpty() -> add(ExpressionProblem.Kind.UNKNOWN_FUNCTION, span(id.symbol), "no function $name", name)
@@ -102,17 +136,20 @@ fun checkTypedExpression(
         lambda = { ctx, n ->
             if (n > 2) add(ExpressionProblem.Kind.UNSUPPORTED, span(ctx), "lambdas with $n parameters are not supported")
         },
-        declaredTwice = { id ->
+        declaredTwice = { id, kind ->
             val name = id.text.replace("`", "")
-            add(ExpressionProblem.Kind.DUPLICATE_VALUE, span(id.symbol), "$name is declared already", name)
+            add(kind, span(id.symbol), "$name is declared already", name)
+        },
+        function = { ctx, n ->
+            if (n > 5) add(ExpressionProblem.Kind.UNSUPPORTED, span(ctx), "functions of more than 5 parameters are not supported")
         }
     ), root)
     return problems.sortedBy { it.start }
 }
 
 /**
- * the names of the values that the typed [expression] reads, without the parameters of its lambdas, the values it
- * declares before reading them and PI, as far as it can be read
+ * the names of the values that the typed [expression] reads, without the parameters of its lambdas and functions, the
+ * values it declares before reading them and PI, as far as it can be read
  */
 fun typedExpressionNames(expression: String): Set<String> {
     val (root, _) = parseWithProblems(expression, lexer = false)

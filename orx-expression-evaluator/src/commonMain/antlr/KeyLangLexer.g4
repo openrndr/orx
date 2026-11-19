@@ -15,6 +15,7 @@ RANGE_DOWNTO : 'downTo' ;
 STEP : 'step' ;
 
 VAL : 'val' ;
+FUN : 'fun' ;
 
 
 // Identifiers

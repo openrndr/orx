@@ -31,8 +31,11 @@ data class ExpressionProblem(
         /** a function that takes another number of arguments */
         WRONG_ARGUMENTS,
 
-        /** a value that is declared with `val` a second time */
+        /** a value that is declared with `val` a second time, or a parameter of a function twice */
         DUPLICATE_VALUE,
+
+        /** a function that is declared with `fun` a second time, with as many parameters */
+        DUPLICATE_FUNCTION,
 
         /** something the grammar reads that is not evaluated, like a comparison or a list */
         UNSUPPORTED,
@@ -162,9 +165,55 @@ fun parseWithProblems(expression: String, lexer: Boolean = true): Pair<KeyLangPa
 }
 
 /**
+ * A walk over a program that knows the values and functions it declares, in the program and in the bodies of its
+ * functions, from the statement after the declaration on; [declaredTwice] is called with the names of the values,
+ * parameters and functions that are declared again, with the kind of the problem
+ */
+private open class DeclarationWalk(
+    val declaredTwice: (TerminalNode, ExpressionProblem.Kind) -> Unit = { _, _ -> }
+) : KeyLangParserBaseListener() {
+    private class Scope {
+        val values = mutableSetOf<String>()
+        val functions = mutableSetOf<Pair<String, Int>>()
+    }
+
+    private val scopes = ArrayList<Scope>().apply { add(Scope()) }
+
+    private fun name(id: TerminalNode) = id.text.replace("`", "")
+
+    /** whether [name] is a value declared before, or a parameter of a function around it */
+    fun isDeclaredValue(name: String) = scopes.any { name in it.values }
+
+    /** the numbers of parameters of the functions [name] declared before */
+    fun declaredArities(name: String): Set<Int> = scopes.flatMap { s -> s.functions.filter { it.first == name }.map { it.second } }.toSet()
+
+    override fun exitValDeclaration(ctx: KeyLangParser.ValDeclarationContext) {
+        val id = ctx.ID() ?: return
+        if (!scopes.last().values.add(name(id))) declaredTwice(id, ExpressionProblem.Kind.DUPLICATE_VALUE)
+    }
+
+    override fun enterFunDeclaration(ctx: KeyLangParser.FunDeclarationContext) {
+        val body = Scope()
+        for (parameter in ctx.ID().drop(1)) {
+            if (!body.values.add(name(parameter))) declaredTwice(parameter, ExpressionProblem.Kind.DUPLICATE_VALUE)
+        }
+        scopes.add(body)
+    }
+
+    // the function is declared after its body, which can not call it
+    override fun exitFunDeclaration(ctx: KeyLangParser.FunDeclarationContext) {
+        scopes.removeAt(scopes.lastIndex)
+        val id = ctx.ID(0) ?: return
+        if (!scopes.last().functions.add(name(id) to ctx.ID().size - 1)) declaredTwice(id, ExpressionProblem.Kind.DUPLICATE_FUNCTION)
+    }
+}
+
+/**
  * The problems of [expression], all of them, without evaluating it: syntax errors, names that are neither in
- * [values], built-in values, values declared before them nor functions, values declared twice, calls of functions with numbers of arguments they do not take, and what is
- * read but not evaluated. Names of values are only checked when the expression can be read.
+ * [values], built-in values, parameters nor values declared before them, calls of functions that are neither built
+ * in, in [functions] nor declared before them, or that take other numbers of arguments, values and functions declared
+ * twice, functions of more than 5 parameters, and what is read but not evaluated. Names of values are only checked
+ * when the expression can be read.
  */
 fun checkExpression(
     expression: String,
@@ -178,32 +227,32 @@ fun checkExpression(
         problems.add(ExpressionProblem(kind, range.first, range.last + 1, message, name))
     }
 
-    fun call(ctx: ParserRuleContext, id: TerminalNode?, arguments: Int) {
-        val token = id?.symbol ?: return
-        val name = token.text?.replace("`", "") ?: return
-        val takes = arities(name, functions)
-        when {
-            arguments in takes -> {}
-            takes.isEmpty() -> add(ExpressionProblem.Kind.UNKNOWN_FUNCTION, span(token), "no function $name", name)
-            else -> add(ExpressionProblem.Kind.WRONG_ARGUMENTS, span(ctx), argumentsMessage(name, takes, arguments), name)
-        }
-    }
-
     fun unsupported(ctx: ParserRuleContext, what: String) = add(ExpressionProblem.Kind.UNSUPPORTED, span(ctx), "$what not supported")
 
-    // the values declared by the statements walked so far
-    val declared = mutableSetOf<String>()
-    ParseTreeWalker.DEFAULT.walk(object : KeyLangParserBaseListener() {
+    ParseTreeWalker.DEFAULT.walk(object : DeclarationWalk({ id, kind ->
+        val name = id.text.replace("`", "")
+        add(kind, span(id.symbol), "$name is declared already", name)
+    }) {
+        fun call(ctx: ParserRuleContext, id: TerminalNode?, arguments: Int) {
+            val token = id?.symbol ?: return
+            val name = token.text?.replace("`", "") ?: return
+            val takes = arities(name, functions) + declaredArities(name)
+            when {
+                arguments in takes -> {}
+                takes.isEmpty() -> add(ExpressionProblem.Kind.UNKNOWN_FUNCTION, span(token), "no function $name", name)
+                else -> add(ExpressionProblem.Kind.WRONG_ARGUMENTS, span(ctx), argumentsMessage(name, takes, arguments), name)
+            }
+        }
+
         override fun enterValueReference(ctx: KeyLangParser.ValueReferenceContext) {
             val token = ctx.ID()?.symbol ?: return
             val name = token.text?.replace("`", "") ?: return
-            if (name !in values && name !in builtInValues && name !in declared) add(ExpressionProblem.Kind.UNKNOWN_VALUE, span(token), "no value $name", name)
+            if (name !in values && name !in builtInValues && !isDeclaredValue(name)) add(ExpressionProblem.Kind.UNKNOWN_VALUE, span(token), "no value $name", name)
         }
 
-        override fun exitValDeclaration(ctx: KeyLangParser.ValDeclarationContext) {
-            val token = ctx.ID()?.symbol ?: return
-            val name = token.text?.replace("`", "") ?: return
-            if (!declared.add(name)) add(ExpressionProblem.Kind.DUPLICATE_VALUE, span(token), "$name is declared already", name)
+        override fun enterFunDeclaration(ctx: KeyLangParser.FunDeclarationContext) {
+            super.enterFunDeclaration(ctx)
+            if (ctx.ID().size > 6) unsupported(ctx, "functions of more than 5 parameters are")
         }
 
         override fun enterFunctionCall0Expression(ctx: KeyLangParser.FunctionCall0ExpressionContext) = call(ctx, ctx.ID(), 0)
@@ -234,8 +283,8 @@ fun checkExpression(
 }
 
 /**
- * the names of the values that [expression] reads, without the built-in values and the values it declares before
- * reading them; also of an expression with syntax errors, as far as it can be read
+ * the names of the values that [expression] reads, without the built-in values, the parameters of its functions and
+ * the values it declares before reading them; also of an expression with syntax errors, as far as it can be read
  */
 fun expressionNames(expression: String): Set<String> {
     val (root, problems) = parseWithProblems(expression, lexer = false)
@@ -245,18 +294,26 @@ fun expressionNames(expression: String): Set<String> {
         val tokens = CommonTokenStream(KeyLangLexer(CharStreams.fromString(expression)).also { it.removeErrorListeners() })
         tokens.fill()
         val visible = tokens.tokens.filter { it.channel == Token.DEFAULT_CHANNEL }
-        // the values declared so far, of which a name is read from the next statement on
+        // the values declared so far, of which a name is read from the next statement on, and the parameters of the
+        // functions, which are taken for declared from the function on
         val declared = mutableSetOf<String>()
         var declaring: String? = null
+        var parameters = false
         for ((i, t) in visible.withIndex()) {
             if (t.type == KeyLangLexer.Tokens.NEWLINE || t.type == KeyLangLexer.Tokens.SEMICOLON) {
                 declaring?.let(declared::add)
                 declaring = null
             }
+            if (t.type == KeyLangLexer.Tokens.FUN) parameters = true
+            if (t.type == KeyLangLexer.Tokens.RPAREN) parameters = false
             if (t.type != KeyLangLexer.Tokens.ID) continue
             val name = t.text?.replace("`", "") ?: continue
             if (visible.getOrNull(i - 1)?.type == KeyLangLexer.Tokens.VAL) {
                 declaring = name
+                continue
+            }
+            if (parameters && visible.getOrNull(i + 1)?.type != KeyLangLexer.Tokens.LPAREN) {
+                declared.add(name)
                 continue
             }
             if (visible.getOrNull(i + 1)?.type == KeyLangLexer.Tokens.LPAREN || visible.getOrNull(i - 1)?.type == KeyLangLexer.Tokens.DOT) continue
@@ -264,15 +321,10 @@ fun expressionNames(expression: String): Set<String> {
         }
         return names
     }
-    val declared = mutableSetOf<String>()
-    ParseTreeWalker.DEFAULT.walk(object : KeyLangParserBaseListener() {
+    ParseTreeWalker.DEFAULT.walk(object : DeclarationWalk() {
         override fun enterValueReference(ctx: KeyLangParser.ValueReferenceContext) {
             val name = ctx.ID()?.symbol?.text?.replace("`", "") ?: return
-            if (name !in builtInValues && name !in declared) names.add(name)
-        }
-
-        override fun exitValDeclaration(ctx: KeyLangParser.ValDeclarationContext) {
-            ctx.ID()?.symbol?.text?.replace("`", "")?.let(declared::add)
+            if (name !in builtInValues && !isDeclaredValue(name)) names.add(name)
         }
     }, root)
     return names

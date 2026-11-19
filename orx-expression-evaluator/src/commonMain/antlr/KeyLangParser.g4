@@ -13,7 +13,11 @@ separator : NEWLINE | SEMICOLON ;
 
 statement :
            VAL ID ASSIGN expressionRoot       # valDeclaration
+         | FUN ID LPAREN (ID ( COMMA ID )*)? RPAREN (ASSIGN expressionRoot | block)  # funDeclaration
          | expressionRoot                     # expressionStatement ;
+
+// the body of a function: statements that end in the expression that gives its value
+block : LCURLY separator* (statement separator+)* expressionRoot separator* RCURLY ;
 
 rangeExpression: expression operator=(RANGE_INCLUSIVE|RANGE_EXCLUSIVE|RANGE_EXCLUSIVE_UNTIL|RANGE_DOWNTO) expression (step=STEP expression)?;
 

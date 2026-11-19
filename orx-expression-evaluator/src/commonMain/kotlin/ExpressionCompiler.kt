@@ -16,8 +16,11 @@ import kotlin.math.*
  * expression is evaluated, with the problems of all the names that could not be found.
  *
  * An expression can be a small program, of statements separated by semicolons or new lines, that declare values with
- * `val` for the statements after them: `val a = 5; val b = 3; a + b`. A value is declared once, and comes before the
- * constants of the same name.
+ * `val` and functions with `fun` for the statements after them:
+ * `fun f(x) { x * 5.0 }; fun g(x) = x * 6.0; val a = f(5); val b = g(a); a + b`. The body of a function is an
+ * expression or a block of statements that ends in one; it sees its parameters and the values and functions declared
+ * before it, not itself. A value is declared once in its program or body, a function once with as many parameters, at
+ * most 5; they come before the constants and the functions of the same name.
  */
 internal class CompiledExpression(
     root: KeyLangParser.KeyLangFileContext,
@@ -32,32 +35,38 @@ internal class CompiledExpression(
     /** the errors of the current evaluation */
     private val errors = ArrayList<ExpressionException>()
 
-    /** the names of the values declared by the statements compiled so far, by their slots in [locals] */
-    private val declared = ArrayList<String>()
+    /**
+     * the values and functions declared in a program or in the body of a function, those declared so far while it is
+     * compiled, with the [values] of its parameters and values while it is evaluated. A function only calls the
+     * functions declared before it, so it is never called while it is evaluated, and its values need no frames
+     */
+    private class Scope(val parent: Scope?) {
+        val names = ArrayList<String>()
 
-    /** a statement: its node, its text for the messages, and the slot of the value it declares or -1 */
-    private class Statement(val node: Node, val text: String, val slot: Int)
-
-    /** the statements, of which the last gives the result */
-    private val statements: List<Statement> = root.line().map { line ->
-        when (val statement = line.statement()) {
-            is KeyLangParser.ValDeclarationContext -> {
-                // the value is declared after its expression, which can read a constant of the same name
-                val node = compileRoot(statement.expressionRoot())
-                val id = statement.ID()!!
-                val name = id.text.replace("`", "")
-                if (name in declared) Statement(redeclared(id), statement.text, -1)
-                else Statement(node, statement.text, declared.size).also { declared.add(name) }
-            }
-            is KeyLangParser.ExpressionStatementContext -> Statement(compileRoot(statement.expressionRoot()), statement.text, -1)
-            else -> throw IllegalStateException("unknown statement '${statement?.text}'")
-        }
+        /** the functions by name and number of parameters */
+        val functions = HashMap<Pair<String, Int>, Function>()
+        var values = DoubleArray(0)
     }
 
-    /** the values declared by the statements, of the current evaluation */
-    private val locals = DoubleArray(declared.size)
+    /** a declared function, of which the parameters are the first values of [scope] */
+    private class Function(val scope: Scope, val body: Node)
 
-    /** evaluates the expression, null when it has no statements or the last declares a value */
+    /** a statement: its node, its text for the messages, the slot of the value it declares or -1, and whether it declares */
+    private class Statement(val node: Node, val text: String, val slot: Int, val declares: Boolean)
+
+    private val top = Scope(null)
+
+    /** the scope of what is being compiled */
+    private var scope = top
+
+    /** the statements, of which the last gives the result */
+    private val statements: List<Statement> = root.line().map { compileStatement(it.statement()!!) }
+
+    init {
+        top.values = DoubleArray(top.names.size)
+    }
+
+    /** evaluates the expression, null when it has no statements or the last declares a value or a function */
     fun evaluate(): Double? {
         var result: Double? = null
         for (statement in statements) {
@@ -70,23 +79,82 @@ internal class CompiledExpression(
                 errors.clear()
                 throw ExpressionException("error in evaluation of '${statement.text}': ${last.message ?: ""}", problems)
             }
-            if (statement.slot >= 0) locals[statement.slot] = value
-            result = if (statement.slot >= 0) null else value
+            if (statement.slot >= 0) top.values[statement.slot] = value
+            result = if (statement.declares) null else value
         }
         return result
     }
 
-    /** an error about [node], the name of a value or a function, whose value is NaN */
-    private fun error(message: String, node: TerminalNode, kind: ExpressionProblem.Kind): Double {
+    private fun compileStatement(statement: KeyLangParser.StatementContext): Statement = when (statement) {
+        is KeyLangParser.ValDeclarationContext -> {
+            // the value is declared after its expression, which can read a constant of the same name
+            val node = compileRoot(statement.expressionRoot())
+            val id = statement.ID()!!
+            val name = id.text.replace("`", "")
+            if (name in scope.names) Statement(declaredTwice(id, ExpressionProblem.Kind.DUPLICATE_VALUE), statement.text, -1, true)
+            else Statement(node, statement.text, scope.names.size, true).also { scope.names.add(name) }
+        }
+        is KeyLangParser.FunDeclarationContext -> Statement(function(statement), statement.text, -1, true)
+        is KeyLangParser.ExpressionStatementContext -> Statement(compileRoot(statement.expressionRoot()), statement.text, -1, false)
+        else -> throw IllegalStateException("unknown statement '${statement.text}'")
+    }
+
+    /**
+     * declares the function of [ctx] in the current scope, after compiling its body, which can not call it; a node
+     * that evaluates to nothing, or to the error of a declaration that is not possible
+     */
+    private fun function(ctx: KeyLangParser.FunDeclarationContext): Node {
+        val id = ctx.ID(0)!!
+        val name = id.text.replace("`", "")
+        val parameters = ctx.ID().drop(1)
+        if (parameters.size > 5) {
+            return failing(ExpressionProblem.Kind.UNSUPPORTED, span(ctx), "functions of more than 5 parameters are not supported")
+        }
+        if ((name to parameters.size) in scope.functions) return declaredTwice(id, ExpressionProblem.Kind.DUPLICATE_FUNCTION)
+        val body = Scope(scope)
+        for (parameter in parameters) {
+            val parameterName = parameter.text.replace("`", "")
+            if (parameterName in body.names) return declaredTwice(parameter, ExpressionProblem.Kind.DUPLICATE_VALUE)
+            body.names.add(parameterName)
+        }
+        val outer = scope
+        scope = body
+        val node = ctx.block()?.let(::block) ?: compileRoot(ctx.expressionRoot()!!)
+        scope = outer
+        body.values = DoubleArray(body.names.size)
+        scope.functions[name to parameters.size] = Function(body, node)
+        return Node { 0.0 }
+    }
+
+    /** the statements of [ctx] and the expression that they end in, which gives the value */
+    private fun block(ctx: KeyLangParser.BlockContext): Node {
+        val statements = ctx.statement().map(::compileStatement)
+        val result = compileRoot(ctx.expressionRoot()!!)
+        val values = scope
+        return Node {
+            for (s in statements) {
+                val v = s.node.eval()
+                if (s.slot >= 0) values.values[s.slot] = v
+            }
+            result.eval()
+        }
+    }
+
+    /**
+     * an error about [node], the name of a value or a function, whose value is NaN; a function takes the numbers of
+     * arguments of [declared] too
+     */
+    private fun error(message: String, node: TerminalNode, kind: ExpressionProblem.Kind, declared: Set<Int> = emptySet()): Double {
         val name = node.text.replace("`", "")
         val token = node.symbol
         val call = node.getParent() as? ParserRuleContext
+        val takes = arities(name, functions) + declared
         val problem = when {
             kind == ExpressionProblem.Kind.UNKNOWN_VALUE -> span(token).let { ExpressionProblem(kind, it.first, it.last + 1, "no value $name", name) }
             // a function that takes other numbers of arguments: the call
-            arities(name, functions).isNotEmpty() && call != null -> span(call).let {
+            takes.isNotEmpty() && call != null -> span(call).let {
                 val arguments = (0 until call.childCount).count { i -> call.getChild(i) is KeyLangParser.ExpressionContext }
-                ExpressionProblem(ExpressionProblem.Kind.WRONG_ARGUMENTS, it.first, it.last + 1, argumentsMessage(name, arities(name, functions), arguments), name)
+                ExpressionProblem(ExpressionProblem.Kind.WRONG_ARGUMENTS, it.first, it.last + 1, argumentsMessage(name, takes, arguments), name)
             }
             else -> span(token).let { ExpressionProblem(ExpressionProblem.Kind.UNKNOWN_FUNCTION, it.first, it.last + 1, "no function $name", name) }
         }
@@ -94,15 +162,19 @@ internal class CompiledExpression(
         return Double.NaN
     }
 
-    /** an error about the declaration of [id], a value that is declared already */
-    private fun redeclared(id: TerminalNode): Node {
-        val name = id.text.replace("`", "")
-        val range = span(id.symbol)
-        val problem = ExpressionProblem(ExpressionProblem.Kind.DUPLICATE_VALUE, range.first, range.last + 1, "$name is declared already", name)
+    /** a node that evaluates to the error of a [kind] at [range], NaN */
+    private fun failing(kind: ExpressionProblem.Kind, range: IntRange, message: String, name: String? = null): Node {
+        val problem = ExpressionProblem(kind, range.first, range.last + 1, message, name)
         return Node {
-            errors.add(ExpressionException("value '$name' is declared already", listOf(problem)))
+            errors.add(ExpressionException(message, listOf(problem)))
             Double.NaN
         }
+    }
+
+    /** an error about the declaration of [id], a value or a function, of [kind], that is declared already */
+    private fun declaredTwice(id: TerminalNode, kind: ExpressionProblem.Kind): Node {
+        val name = id.text.replace("`", "")
+        return failing(kind, span(id.symbol), "$name is declared already", name)
     }
 
     /** an error about a part of the grammar that is not evaluated */
@@ -151,27 +223,49 @@ internal class CompiledExpression(
 
     private fun constant(v: Double) = Node { v }
 
-    /** the value of [id]: a value declared before it, PI, or a constant read at every evaluation */
+    /** the value of [id]: a parameter or a value declared before it, PI, or a constant read at every evaluation */
     private fun value(id: TerminalNode): Node {
         val name = id.text.replace("`", "")
-        val slot = declared.indexOf(name)
-        if (slot >= 0) return Node { locals[slot] }
+        var s: Scope? = scope
+        while (s != null) {
+            val slot = s.names.indexOf(name)
+            val owner = s
+            if (slot >= 0) return Node { owner.values[slot] }
+            s = s.parent
+        }
         if (name == "PI") return constant(PI)
         return Node {
             constants[name] ?: error("unresolved value: '${name}'. available values: $constants", id, ExpressionProblem.Kind.UNKNOWN_VALUE)
         }
     }
 
-    /** the call of [id] with [arguments]: a built-in function, a function of [functions], or an error */
+    /** the call of [id] with [arguments]: a declared function, a built-in function, a function of [functions], or an error */
     private fun call(id: TerminalNode, arguments: List<KeyLangParser.ExpressionContext>): Node {
         val name = id.text.replace("`", "")
         val args = arguments.map { compile(it) }
+        declared(name, args)?.let { return it }
         builtIn(name, args)?.let { return it }
         extension(name, args)?.let { return it }
         // a function that is not there yet, found at every evaluation
         val signature = if (args.isEmpty()) "()" else args.indices.joinToString(", ", "(", ")") { "x$it" }
         val message = "unresolved function: '$name$signature'"
-        return Node { extension(name, args)?.eval() ?: error(message, id, ExpressionProblem.Kind.UNKNOWN_FUNCTION) }
+        val declared = generateSequence(scope) { it.parent }.flatMap { s -> s.functions.keys.filter { it.first == name }.map { it.second } }.toSet()
+        return Node { extension(name, args)?.eval() ?: error(message, id, ExpressionProblem.Kind.UNKNOWN_FUNCTION, declared) }
+    }
+
+    /** the call of the function [name] declared before it with [args], null when none takes as many */
+    private fun declared(name: String, args: List<Node>): Node? {
+        val f = generateSequence(scope) { it.parent }.firstNotNullOfOrNull { it.functions[name to args.size] } ?: return null
+        return when (args.size) {
+            0 -> Node { f.body.eval() }
+            1 -> { val (x) = args; Node { f.scope.values[0] = x.eval(); f.body.eval() } }
+            // all the arguments before the parameters, as an argument can call the function too
+            else -> Node {
+                val values = DoubleArray(args.size) { args[it].eval() }
+                values.copyInto(f.scope.values)
+                f.body.eval()
+            }
+        }
     }
 
     /** the call of the function [name] of [functions] with [args], null when it has none that takes as many */

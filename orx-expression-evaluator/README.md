@@ -11,10 +11,12 @@ evaluateExpression(expression, constants)
 ```
 
 An expression can also be a small program without side effects: statements, separated by semicolons or new lines,
-that declare values with `val` for the statements after them, and end in the expression that gives the result.
+that declare values with `val` and functions with `fun` for the statements after them, and end in the expression that
+gives the result. The body of a function is an expression, or a block of statements that ends in one.
 
 ```kotlin
 evaluateExpression("val a = 5; val b = 3; a + b") // 8.0
+evaluateExpression("fun f(x) { x * 5.0 }; fun g(x) = x * 6.0; val a = f(5); val b = g(a); a + b") // 175.0
 ```
 
 ## Built-in expression constants

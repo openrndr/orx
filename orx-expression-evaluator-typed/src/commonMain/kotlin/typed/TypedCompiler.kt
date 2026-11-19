@@ -32,6 +32,16 @@ private fun interface TypedNode {
     fun eval(frame: Frame): Any
 }
 
+/** a function declared with `fun` in [frame], of which the parameters are the first of the [slots] of its frames */
+private class DeclaredFunction(val frame: Frame, val body: TypedNode, val slots: Int) {
+    /** the value of the body for the arguments [x], with the errors in [errors], those of the statement that calls it */
+    fun call(x: Array<Any>, errors: MutableList<ExpressionException>): Any {
+        val values = arrayOfNulls<Any?>(slots)
+        x.copyInto(values)
+        return body.eval(Frame(frame, values, errors))
+    }
+}
+
 /**
  * A typed expression compiled from its parse tree to closures, once: evaluating it calls them, without walking the
  * tree. Values are asked of [constants] at every evaluation; [parameters] are given to [evaluate]. Lambdas in the
@@ -43,8 +53,12 @@ private fun interface TypedNode {
  * happens. Both as an [ExpressionException] with the problems and where they are.
  *
  * An expression can be a small program, of statements separated by semicolons or new lines, that declare values with
- * `val` for the statements after them: `val a = 5; val b = 3; a + b`. A value is declared once, not with the name of a
- * parameter, and comes before the constants of the same name.
+ * `val` and functions with `fun` for the statements after them:
+ * `fun f(x) { x * 5.0 }; fun g(x) = x * 6.0; val a = f(5); val b = g(a); a + b`. The body of a function is an
+ * expression or a block of statements that ends in one; it sees its parameters and the values and functions declared
+ * before it, not itself. A value is declared once in its program or body, and not with the name of a parameter of the
+ * expression, a function once with as many parameters, at most 5; they come before the constants and the functions of
+ * the same name.
  */
 internal class TypedCompiledExpression(
     root: KeyLangParser.KeyLangFileContext,
@@ -53,32 +67,23 @@ internal class TypedCompiledExpression(
     parameters: List<String> = emptyList()
 ) {
     /**
-     * the names of the parameters of the expression, followed by the values declared by the statements compiled so
-     * far, and of the parameters of the lambdas around what is being compiled, innermost last
+     * the names of the slots of the frames of what is being compiled, innermost last: of the expression, its
+     * parameters and then the values and functions declared by the statements compiled so far, of a function, its
+     * parameters and then the values and functions declared in its body, and of a lambda, its parameters
      */
-    private val scopes = ArrayList<List<String>>()
+    private val scopes = ArrayList<MutableList<String>>()
 
-    /** the parameters of the expression, then the values declared by the statements compiled so far */
+    /** the parameters of the expression, then the values and functions declared by the statements compiled so far */
     private val top = parameters.toMutableList().also { scopes.add(it) }
 
-    /** a statement: its node, the statement for the messages, and the slot of the value it declares or -1 */
-    private class Statement(val node: TypedNode, val context: ParserRuleContext, val slot: Int)
+    /**
+     * a statement: its node, the statement for the messages, the slot of the value or the function it declares or -1,
+     * and whether it declares
+     */
+    private class Statement(val node: TypedNode, val context: ParserRuleContext, val slot: Int, val declares: Boolean)
 
     /** the statements, of which the last gives the result */
-    private val statements: List<Statement> = root.line().map { line ->
-        when (val statement = line.statement()) {
-            is KeyLangParser.ValDeclarationContext -> {
-                // the value is declared after its expression, which can read a constant of the same name
-                val node = compileRoot(statement.expressionRoot())
-                val id = statement.ID()!!
-                val name = id.text.replace("`", "")
-                if (name in top) Statement(redeclared(id), statement, -1)
-                else Statement(node, statement, top.size).also { top.add(name) }
-            }
-            is KeyLangParser.ExpressionStatementContext -> Statement(compileRoot(statement.expressionRoot()), statement, -1)
-            else -> throw IllegalStateException("unknown statement '${statement?.text}'")
-        }
-    }
+    private val statements: List<Statement> = root.line().map { compileStatement(it.statement()!!) }
 
     /** the number of the parameters and the values declared by the statements */
     private val slots = top.size
@@ -112,9 +117,68 @@ internal class TypedCompiledExpression(
                 throw ExpressionException("error in evaluation of '${statement.text}': ${errors.last().message ?: ""}", problems)
             }
             if (s.slot >= 0) values[s.slot] = value
-            result = if (s.slot >= 0) null else value
+            result = if (s.declares) null else value
         }
         return result
+    }
+
+    /** the name of the slot of a function, which no value can have */
+    private fun slotName(name: String, parameters: Int) = "$name/$parameters"
+
+    /** [statement], of which a declaration is declared in the innermost scope */
+    private fun compileStatement(statement: KeyLangParser.StatementContext): Statement {
+        val scope = scopes.last()
+        return when (statement) {
+            is KeyLangParser.ValDeclarationContext -> {
+                // the value is declared after its expression, which can read a constant of the same name
+                val node = compileRoot(statement.expressionRoot())
+                val id = statement.ID()!!
+                val name = id.text.replace("`", "")
+                if (name in scope) Statement(declaredTwice(id, ExpressionProblem.Kind.DUPLICATE_VALUE), statement, -1, true)
+                else Statement(node, statement, scope.size, true).also { scope.add(name) }
+            }
+            is KeyLangParser.FunDeclarationContext -> function(statement)
+            is KeyLangParser.ExpressionStatementContext -> Statement(compileRoot(statement.expressionRoot()), statement, -1, false)
+            else -> throw IllegalStateException("unknown statement '${statement.text}'")
+        }
+    }
+
+    /**
+     * the declaration of the function of [ctx], after compiling its body, which can not call it: a statement that
+     * evaluates to the function in the frame it is declared in
+     */
+    private fun function(ctx: KeyLangParser.FunDeclarationContext): Statement {
+        val scope = scopes.last()
+        val id = ctx.ID(0)!!
+        val parameters = ctx.ID().drop(1)
+        val slot = slotName(id.text.replace("`", ""), parameters.size)
+        if (parameters.size > 5) return Statement(TypedNode { failure(ctx, "functions of more than 5 parameters are not supported") }, ctx, -1, true)
+        if (slot in scope) return Statement(declaredTwice(id, ExpressionProblem.Kind.DUPLICATE_FUNCTION), ctx, -1, true)
+        val names = ArrayList<String>()
+        for (parameter in parameters) {
+            val name = parameter.text.replace("`", "")
+            if (name in names) return Statement(declaredTwice(parameter, ExpressionProblem.Kind.DUPLICATE_VALUE), ctx, -1, true)
+            names.add(name)
+        }
+        scopes.add(names)
+        val body = ctx.block()?.let(::block) ?: compileRoot(ctx.expressionRoot()!!)
+        scopes.removeAt(scopes.lastIndex)
+        val slots = names.size
+        scope.add(slot)
+        return Statement(TypedNode { f -> DeclaredFunction(f, body, slots) }, ctx, scope.size - 1, true)
+    }
+
+    /** the statements of [ctx] and the expression that they end in, which gives the value */
+    private fun block(ctx: KeyLangParser.BlockContext): TypedNode {
+        val statements = ctx.statement().map(::compileStatement)
+        val result = compileRoot(ctx.expressionRoot()!!)
+        return TypedNode { f ->
+            for (s in statements) {
+                val v = s.node.eval(f)
+                if (s.slot >= 0) f.values[s.slot] = v
+            }
+            result.eval(f)
+        }
     }
 
     //<editor-fold desc="errors">
@@ -123,12 +187,12 @@ internal class TypedCompiledExpression(
         throw Failure(message, ExpressionProblem(ExpressionProblem.Kind.EVALUATION, range.first, range.last + 1, message))
     }
 
-    /** the declaration of [id], a value that is declared already or a parameter */
-    private fun redeclared(id: TerminalNode): TypedNode {
+    /** the declaration of [id], a value, a parameter or a function, of [kind], that is declared already */
+    private fun declaredTwice(id: TerminalNode, kind: ExpressionProblem.Kind): TypedNode {
         val name = id.text.replace("`", "")
         val range = span(id.symbol)
-        val problem = ExpressionProblem(ExpressionProblem.Kind.DUPLICATE_VALUE, range.first, range.last + 1, "$name is declared already", name)
-        return TypedNode { throw Failure("value '$name' is declared already", problem) }
+        val problem = ExpressionProblem(kind, range.first, range.last + 1, "$name is declared already", name)
+        return TypedNode { throw Failure("'$name' is declared already", problem) }
     }
 
     private fun typeName(x: Any) = x::class.simpleName ?: "value"
@@ -231,7 +295,7 @@ internal class TypedCompiledExpression(
     private fun lambda(ctx: KeyLangParser.FunctionLiteralContext): TypedNode {
         val names = ctx.ID().map { it.text.replace("`", "") }
         if (names.size > 2) return TypedNode { failure(ctx, "lambdas with ${names.size} parameters are not supported") }
-        scopes.add(names.ifEmpty { listOf("it") })
+        scopes.add(names.ifEmpty { listOf("it") }.toMutableList())
         val body = compile(ctx.expression())
         scopes.removeAt(scopes.lastIndex)
         return if (names.size == 2) {
@@ -474,6 +538,18 @@ internal class TypedCompiledExpression(
         val args = arguments.map(::compile)
         val n = args.size
         val signature = if (n == 0) "()" else (0 until n).joinToString(", ", "(", ")") { "x$it" }
+        // a function declared before the call, in the frame [depth] frames out
+        val slot = slotName(name, n)
+        for (depth in 0 until scopes.size) {
+            val index = scopes[scopes.lastIndex - depth].indexOf(slot)
+            if (index >= 0) return TypedNode { f ->
+                val x = Array(n) { args[it].eval(f) }
+                if (x.any { it === Missing }) return@TypedNode Missing
+                var frame = f
+                repeat(depth) { frame = frame.parent!! }
+                (frame.values[index] as DeclaredFunction).call(x, f.errors)
+            }
+        }
         val known = dispatch(name, n)
         return TypedNode { f ->
             val x = Array(n) { args[it].eval(f) }
