@@ -7,8 +7,8 @@ import org.openrndr.extra.mediapipe.ImageEmbedder
 
 /**
  * Classifies images into the categories of ImageNet and draws their three most likely categories, and how much the
- * images look alike by the cosine similarities of their embeddings. The models are downloaded and converted by
- * `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * images look alike by the cosine similarities of their embeddings.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {

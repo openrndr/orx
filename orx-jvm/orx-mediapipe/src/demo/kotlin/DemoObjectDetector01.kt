@@ -5,8 +5,8 @@ import org.openrndr.draw.loadImage
 import org.openrndr.extra.mediapipe.ObjectDetector
 
 /**
- * Finds the objects in an image and draws their boxes and categories. The model is downloaded and converted by
- * `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * Finds the objects in an image and draws their boxes and categories.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {

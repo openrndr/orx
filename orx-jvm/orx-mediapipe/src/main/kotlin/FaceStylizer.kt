@@ -27,9 +27,9 @@ class StylizedFace(val image: RgbaImage, val center: Vector2, val size: Double, 
  * @param noise the strength of the noise that the model adds, 1.0 as in MediaPipe; the noise is random, or of [seed]
  */
 class FaceStylizer(
-    stylizerPath: String = "orx-jvm/orx-mediapipe/models/face_stylizer_color_sketch.onnx",
-    detectorPath: String = "orx-jvm/orx-mediapipe/models/face_stylizer_face_detector.onnx",
-    landmarksPath: String = "orx-jvm/orx-mediapipe/models/face_stylizer_landmarks_detector.onnx",
+    stylizerPath: String = MediaPipeModels.model("face_stylizer_color_sketch.onnx"),
+    detectorPath: String = MediaPipeModels.model("face_stylizer_face_detector.onnx"),
+    landmarksPath: String = MediaPipeModels.model("face_stylizer_landmarks_detector.onnx"),
     var noise: Double = 1.0,
     seed: Int? = null
 ) : AutoCloseable {

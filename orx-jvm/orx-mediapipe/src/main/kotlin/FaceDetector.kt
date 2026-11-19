@@ -21,12 +21,12 @@ class FaceDetection(val bounds: Rectangle, val keypoints: List<Vector2>, val sco
 /**
  * Finds faces with MediaPipe's BlazeFace short range model, for faces within about two meters of the camera, like
  * MediaPipe's face detector
- * @param modelPath the model converted to ONNX by `tools/convert_models.py`
+ * @param modelPath the model, by default downloaded by [MediaPipeModels]
  * @param minScore the least score of a face
  * @param minSuppressionThreshold the overlap from which faces are taken to be the same face
  */
 class FaceDetector(
-    modelPath: String = "orx-jvm/orx-mediapipe/models/blaze_face_short_range.onnx",
+    modelPath: String = MediaPipeModels.model("blaze_face_short_range.onnx"),
     var minScore: Double = 0.5,
     var minSuppressionThreshold: Double = 0.3
 ) : AutoCloseable {

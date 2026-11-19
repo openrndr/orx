@@ -1,4 +1,5 @@
 import org.openrndr.application
+import org.openrndr.extra.mediapipe.MediaPipeModels
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.loadImage
@@ -9,8 +10,8 @@ import org.openrndr.extra.mediapipe.HolisticLandmarks
 import org.openrndr.extra.mediapipe.PoseLandmarks
 
 /**
- * Finds a person in an image of MediaPipe, the body, the face and the hands, and draws them. The models and the image
- * are downloaded and converted by `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * Finds a person in an image of MediaPipe, the body, the face and the hands, and draws them.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {
@@ -18,7 +19,7 @@ fun main() = application {
         height = 1000
     }
     program {
-        val image = loadImage("orx-jvm/orx-mediapipe/models/images/male_full_height_hands.jpg")
+        val image = loadImage(MediaPipeModels.image("male_full_height_hands.jpg"))
         val person = HolisticLandmarker().use { it.detect(image) }
         extend {
             drawer.image(image)

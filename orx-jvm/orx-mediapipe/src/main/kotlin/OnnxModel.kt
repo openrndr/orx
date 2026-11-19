@@ -13,7 +13,7 @@ import java.nio.FloatBuffer
 internal class OnnxModel(path: String, imageInput: Boolean = true) : AutoCloseable {
     private val environment = OrtEnvironment.getEnvironment()
     private val session = run {
-        require(File(path).exists()) { "no model at '$path', see orx-jvm/orx-mediapipe/tools/convert_models.py" }
+        require(File(path).exists()) { "no model at '$path'; MediaPipeModels.model() downloads the models of orx-models, tools/convert_models.py converts them" }
         environment.createSession(path, OrtSession.SessionOptions())
     }
     private val inputName = session.inputNames.first()

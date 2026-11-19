@@ -1,4 +1,5 @@
 import org.openrndr.application
+import org.openrndr.extra.mediapipe.MediaPipeModels
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
@@ -8,8 +9,8 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.mediapipe.ImageSegmenter
 
 /**
- * Finds the hair in an image of MediaPipe and colors it. The model and the image are downloaded and converted by
- * `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * Finds the hair in an image of MediaPipe and colors it.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {
@@ -17,8 +18,8 @@ fun main() = application {
         height = 800
     }
     program {
-        val image = loadImage("orx-jvm/orx-mediapipe/models/images/portrait.jpg")
-        val segmentation = ImageSegmenter("orx-jvm/orx-mediapipe/models/hair_segmenter.onnx").use { it.segment(image) }
+        val image = loadImage(MediaPipeModels.image("portrait.jpg"))
+        val segmentation = ImageSegmenter(MediaPipeModels.model("hair_segmenter.onnx")).use { it.segment(image) }
         val hair = colorBuffer(segmentation.width, segmentation.height, format = ColorFormat.R, type = ColorType.FLOAT32)
         segmentation.write("hair", hair)
         extend {

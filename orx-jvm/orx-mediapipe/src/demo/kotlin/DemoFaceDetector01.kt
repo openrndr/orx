@@ -1,11 +1,12 @@
 import org.openrndr.application
+import org.openrndr.extra.mediapipe.MediaPipeModels
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.mediapipe.FaceDetector
 
 /**
- * Finds the face in an image of MediaPipe and draws its box and keypoints. The models and the image are downloaded and
- * converted by `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * Finds the face in an image of MediaPipe and draws its box and keypoints.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {
@@ -13,7 +14,7 @@ fun main() = application {
         height = 800
     }
     program {
-        val image = loadImage("orx-jvm/orx-mediapipe/models/images/portrait.jpg")
+        val image = loadImage(MediaPipeModels.image("portrait.jpg"))
         val faces = FaceDetector().use { it.detect(image) }
         extend {
             drawer.scale(width / image.width.toDouble())

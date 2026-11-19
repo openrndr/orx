@@ -21,10 +21,10 @@ class HandGesture(val hand: HandLandmarks, val gesture: String, val score: Doubl
  * video like those of the [HandLandmarker], with [tracking].
  */
 class GestureRecognizer(
-    handDetectorPath: String = "orx-jvm/orx-mediapipe/models/hand_detector.onnx",
-    landmarksPath: String = "orx-jvm/orx-mediapipe/models/hand_landmarks_detector.onnx",
-    embedderPath: String = "orx-jvm/orx-mediapipe/models/gesture_embedder.onnx",
-    classifierPath: String = "orx-jvm/orx-mediapipe/models/canned_gesture_classifier.onnx",
+    handDetectorPath: String = MediaPipeModels.model("hand_detector.onnx"),
+    landmarksPath: String = MediaPipeModels.model("hand_landmarks_detector.onnx"),
+    embedderPath: String = MediaPipeModels.model("gesture_embedder.onnx"),
+    classifierPath: String = MediaPipeModels.model("canned_gesture_classifier.onnx"),
     maxHands: Int = 2,
     tracking: Boolean = false
 ) : AutoCloseable {

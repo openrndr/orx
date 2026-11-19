@@ -76,7 +76,7 @@ class Segmentation(
  * - `hair_segmenter.onnx` finds `background` and `hair`; it reads the alpha channel of the image too, as MediaPipe's
  */
 class ImageSegmenter(
-    modelPath: String = "orx-jvm/orx-mediapipe/models/selfie_multiclass_256x256.onnx"
+    modelPath: String = MediaPipeModels.model("selfie_multiclass_256x256.onnx")
 ) : AutoCloseable {
     private val model = OnnxModel(modelPath)
 

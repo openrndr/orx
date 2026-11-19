@@ -1,4 +1,5 @@
 import org.openrndr.application
+import org.openrndr.extra.mediapipe.MediaPipeModels
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
 import org.openrndr.draw.colorBuffer
@@ -15,8 +16,8 @@ import kotlin.concurrent.thread
 /**
  * Stylizes the face in front of the webcam and draws it in place of the face; 1, 2 and 3 choose a color sketch, color
  * ink or an oil painting. The stylizer takes more than a frame, it stylizes the latest frame of the webcam in a thread
- * of its own. The webcam is shown mirrored, like a mirror. The models are downloaded and converted by
- * `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * of its own. The webcam is shown mirrored, like a mirror.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {
@@ -27,7 +28,7 @@ fun main() = application {
         val webcam = loadVideoDevice(width = 1280, height = 720)
         webcam.play()
         val styles = listOf("color_sketch", "color_ink", "oil_painting").map {
-            FaceStylizer("orx-jvm/orx-mediapipe/models/face_stylizer_$it.onnx")
+            FaceStylizer(MediaPipeModels.model("face_stylizer_$it.onnx"))
         }
         var style = 0
         val busy = AtomicBoolean(false)

@@ -8,8 +8,8 @@ import org.openrndr.ffmpeg.loadVideoDevice
 
 /**
  * Follows the person in front of the webcam, the body, the face and the hands, and draws them; the left hand of the
- * person in cyan, the right hand in yellow. The webcam is shown mirrored, like a mirror. The models are downloaded and
- * converted by `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * person in cyan, the right hand in yellow. The webcam is shown mirrored, like a mirror.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {

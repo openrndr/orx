@@ -1,4 +1,5 @@
 import org.openrndr.application
+import org.openrndr.extra.mediapipe.MediaPipeModels
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.isolated
 import org.openrndr.draw.loadFont
@@ -7,8 +8,8 @@ import org.openrndr.extra.mediapipe.GestureRecognizer
 import org.openrndr.extra.mediapipe.HandLandmarks
 
 /**
- * Recognizes the gestures of the hands in images of MediaPipe and draws the hands with the names of their gestures. The
- * models and the images are downloaded and converted by `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * Recognizes the gestures of the hands in images of MediaPipe and draws the hands with the names of their gestures.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {
@@ -17,7 +18,7 @@ fun main() = application {
     }
     program {
         val images = listOf("thumb_up", "pointing_up", "victory", "fist").map {
-            loadImage("orx-jvm/orx-mediapipe/models/images/$it.jpg")
+            loadImage(MediaPipeModels.image("$it.jpg"))
         }
         val gestures = GestureRecognizer().use { recognizer -> images.map { recognizer.recognize(it) } }
         val font = loadFont("demo-data/fonts/IBMPlexMono-Regular.ttf", 32.0)

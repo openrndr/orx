@@ -12,7 +12,8 @@ import org.openrndr.math.Vector2
 
 /**
  * Selects the object under the mouse with MagicTouch: a click selects the object at the point, a drag the object along
- * the scribble. The model is downloaded and converted by `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * the scribble.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {

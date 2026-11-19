@@ -8,8 +8,8 @@ import org.openrndr.ffmpeg.loadVideoDevice
 
 /**
  * Finds the faces in front of the webcam in every frame and draws their boxes and keypoints: the eyes, the tip of the
- * nose, the mouth and the ears. The webcam is shown mirrored, like a mirror. The models are downloaded and converted by
- * `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * nose, the mouth and the ears. The webcam is shown mirrored, like a mirror.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {

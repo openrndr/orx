@@ -51,8 +51,8 @@ class PoseLandmarks(
  * @param tracking true to follow the bodies in the frames of a video
  */
 class PoseLandmarker(
-    detectorPath: String = "orx-jvm/orx-mediapipe/models/pose_detector.onnx",
-    landmarksPath: String = "orx-jvm/orx-mediapipe/models/pose_landmarks_detector_full.onnx",
+    detectorPath: String = MediaPipeModels.model("pose_detector.onnx"),
+    landmarksPath: String = MediaPipeModels.model("pose_landmarks_detector_full.onnx"),
     var maxPoses: Int = 1,
     var minDetectionScore: Double = 0.5,
     var minScore: Double = 0.5,

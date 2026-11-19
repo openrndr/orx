@@ -109,9 +109,9 @@ class FaceLandmarks(
  * @param tracking true to follow the faces in the frames of a video
  */
 class FaceLandmarker(
-    detectorPath: String = "orx-jvm/orx-mediapipe/models/blaze_face_short_range.onnx",
-    landmarksPath: String = "orx-jvm/orx-mediapipe/models/face_landmarks_detector.onnx",
-    blendshapesPath: String? = "orx-jvm/orx-mediapipe/models/face_blendshapes.onnx",
+    detectorPath: String = MediaPipeModels.model("blaze_face_short_range.onnx"),
+    landmarksPath: String = MediaPipeModels.model("face_landmarks_detector.onnx"),
+    blendshapesPath: String? = MediaPipeModels.model("face_blendshapes.onnx"),
     var maxFaces: Int = 1,
     minDetectionScore: Double = 0.5,
     var minScore: Double = 0.5,

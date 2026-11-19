@@ -9,8 +9,8 @@ import org.openrndr.ffmpeg.loadVideoDevice
 
 /**
  * Follows the hands in front of the webcam and draws them with the names of their gestures. The webcam is shown
- * mirrored, like a mirror. The models are downloaded and converted by
- * `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * mirrored, like a mirror.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {

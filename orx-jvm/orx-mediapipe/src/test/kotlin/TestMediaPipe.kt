@@ -10,6 +10,7 @@ import org.openrndr.extra.mediapipe.ImageEmbedder
 import org.openrndr.extra.mediapipe.ObjectDetector
 import org.openrndr.extra.mediapipe.ImageSegmenter
 import org.openrndr.extra.mediapipe.InteractiveSegmenter
+import org.openrndr.extra.mediapipe.MediaPipeModels
 import org.openrndr.extra.mediapipe.PoseLandmarker
 import org.openrndr.extra.mediapipe.RgbaImage
 import org.openrndr.math.Vector2
@@ -473,6 +474,31 @@ class TestMediaPipe {
             assertNear(Vector2(95.6, 549.6), right.landmarks[8].xy, 2.0, "the right index finger")
             // the wrists of the hands at those of the body in the world
             assertEquals(person.pose.worldLandmarks[15], left.worldLandmarks[0])
+        }
+    }
+
+    @Test
+    fun `models are downloaded from orx-models the first time they are used`() {
+        if (!File(models, "selfie_segmenter.onnx").exists()) return
+        val cache = MediaPipeModels.cache
+        MediaPipeModels.cache = kotlin.io.path.createTempDirectory("orx-models").toFile()
+        try {
+            val path = try {
+                MediaPipeModels.model("selfie_segmenter.onnx")
+            } catch (e: java.io.IOException) {
+                // without a network
+                return
+            }
+            // the model and its labels, as converted, and no anchors, which it does not have
+            assertTrue(File(path).readBytes().contentEquals(File(models, "selfie_segmenter.onnx").readBytes()))
+            assertEquals(File(models, "selfie_segmenter.labels.txt").readText(), File(path.removeSuffix(".onnx") + ".labels.txt").readText())
+            assertTrue(!File(path.removeSuffix(".onnx") + ".detector.txt").exists())
+            // kept, not downloaded again
+            assertEquals(path, MediaPipeModels.model("selfie_segmenter.onnx"))
+            ImageSegmenter(path).use { assertEquals(listOf("person"), it.categories) }
+        } finally {
+            MediaPipeModels.cache.deleteRecursively()
+            MediaPipeModels.cache = cache
         }
     }
 }

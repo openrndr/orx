@@ -17,7 +17,7 @@ class ObjectDetection(val bounds: Rectangle, val category: Category)
  * @param suppressionThreshold the overlap from which objects are taken to be the same object
  */
 class ObjectDetector(
-    modelPath: String = "orx-jvm/orx-mediapipe/models/efficientdet_lite0.onnx",
+    modelPath: String = MediaPipeModels.model("efficientdet_lite0.onnx"),
     var scoreThreshold: Double = 0.3,
     var maxResults: Int = -1,
     var suppressionThreshold: Double = 0.3
@@ -33,7 +33,7 @@ class ObjectDetector(
 
     init {
         val file = File(modelPath.removeSuffix(".onnx") + ".detector.txt")
-        require(file.exists()) { "no anchors at '$file', see orx-jvm/orx-mediapipe/tools/convert_models.py" }
+        require(file.exists()) { "no anchors at '$file'; MediaPipeModels.model() downloads the models of orx-models, tools/convert_models.py converts them" }
         val (head, tail) = file.readText().split("anchors\n")
         options = head.lines().filter { it.isNotBlank() }.associate { it.substringBefore(' ') to it.substringAfter(' ') }
         anchors = tail.lines().filter { it.isNotBlank() }.flatMap { line -> line.split(' ').map { it.toFloat() } }.toFloatArray()

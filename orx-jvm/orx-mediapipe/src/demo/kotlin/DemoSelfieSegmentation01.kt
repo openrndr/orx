@@ -1,4 +1,5 @@
 import org.openrndr.application
+import org.openrndr.extra.mediapipe.MediaPipeModels
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
@@ -13,8 +14,8 @@ import org.openrndr.shape.Rectangle
 
 /**
  * Cuts the people in front of the webcam out of the background, which is drawn over in pink, with the selfie model for
- * images of 16:9. The webcam is shown mirrored, like a mirror. The models are downloaded and converted by
- * `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * images of 16:9. The webcam is shown mirrored, like a mirror.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {
@@ -24,7 +25,7 @@ fun main() = application {
     program {
         val webcam = loadVideoDevice(width = 1280, height = 720)
         webcam.play()
-        val segmenter = ImageSegmenter("orx-jvm/orx-mediapipe/models/selfie_segmenter_landscape.onnx")
+        val segmenter = ImageSegmenter(MediaPipeModels.model("selfie_segmenter_landscape.onnx"))
         var segmentation: Segmentation? = null
         var millis = 0.0
         webcam.newFrame.listen {

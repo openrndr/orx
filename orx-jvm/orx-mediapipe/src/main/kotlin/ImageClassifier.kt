@@ -7,10 +7,10 @@ import kotlin.math.sqrt
 /** a category of an image, or of an object, and how likely it is */
 class Category(val label: String, val score: Double)
 
-/** the labels of a model, from the file next to it that `tools/convert_models.py` writes */
+/** the labels of a model, from the file next to it that [MediaPipeModels] downloads or `tools/convert_models.py` writes */
 internal fun labels(modelPath: String): List<String> {
     val file = File(modelPath.removeSuffix(".onnx") + ".labels.txt")
-    require(file.exists()) { "no labels at '$file', see orx-jvm/orx-mediapipe/tools/convert_models.py" }
+    require(file.exists()) { "no labels at '$file'; MediaPipeModels.model() downloads the models of orx-models, tools/convert_models.py converts them" }
     return file.readLines().filter { it.isNotBlank() }
 }
 
@@ -20,7 +20,7 @@ internal fun labels(modelPath: String): List<String> {
  * input of the model.
  */
 class ImageClassifier(
-    modelPath: String = "orx-jvm/orx-mediapipe/models/efficientnet_lite0.onnx"
+    modelPath: String = MediaPipeModels.model("efficientnet_lite0.onnx")
 ) : AutoCloseable {
     private val model = OnnxModel(modelPath)
 
@@ -46,7 +46,7 @@ class ImageClassifier(
  * 1280 numbers. The image is stretched over the input of the model.
  */
 class ImageEmbedder(
-    modelPath: String = "orx-jvm/orx-mediapipe/models/mobilenet_v3_small.onnx"
+    modelPath: String = MediaPipeModels.model("mobilenet_v3_small.onnx")
 ) : AutoCloseable {
     private val model = OnnxModel(modelPath)
 

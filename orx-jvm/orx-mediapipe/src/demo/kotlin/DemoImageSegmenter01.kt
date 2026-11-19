@@ -1,4 +1,5 @@
 import org.openrndr.application
+import org.openrndr.extra.mediapipe.MediaPipeModels
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.ColorFormat
 import org.openrndr.draw.ColorType
@@ -9,8 +10,8 @@ import org.openrndr.extra.mediapipe.ImageSegmenter
 
 /**
  * Segments an image of MediaPipe into hair, skin of the face and of the body, clothes and others, and draws each in a
- * color over the image. The models and the image are downloaded and converted by
- * `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * color over the image.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {
@@ -18,7 +19,7 @@ fun main() = application {
         height = 800
     }
     program {
-        val image = loadImage("orx-jvm/orx-mediapipe/models/images/portrait.jpg")
+        val image = loadImage(MediaPipeModels.image("portrait.jpg"))
         val colors = mapOf(
             "hair" to ColorRGBa.YELLOW, "body-skin" to ColorRGBa.CYAN, "face-skin" to ColorRGBa.PINK,
             "clothes" to ColorRGBa.GREEN, "others" to ColorRGBa.RED

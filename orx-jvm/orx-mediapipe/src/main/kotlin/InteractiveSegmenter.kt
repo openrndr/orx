@@ -14,7 +14,7 @@ import kotlin.math.roundToInt
  * model. The [Segmentation] has a single category, `object`.
  */
 class InteractiveSegmenter(
-    modelPath: String = "orx-jvm/orx-mediapipe/models/magic_touch.onnx"
+    modelPath: String = MediaPipeModels.model("magic_touch.onnx")
 ) : AutoCloseable {
     private val model = OnnxModel(modelPath)
 

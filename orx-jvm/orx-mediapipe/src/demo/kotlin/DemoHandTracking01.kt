@@ -9,8 +9,8 @@ import org.openrndr.ffmpeg.loadVideoDevice
 /**
  * Follows the hands in front of the webcam and draws their bones and landmarks, right hands in pink, left hands in
  * cyan. The webcam is shown mirrored, like a mirror; the hands are found in the frames as the webcam sees them, such
- * that left and right are those of the hands. The models are downloaded and converted by
- * `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * that left and right are those of the hands.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {

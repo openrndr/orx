@@ -1,12 +1,13 @@
 import org.openrndr.application
+import org.openrndr.extra.mediapipe.MediaPipeModels
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.loadImage
 import org.openrndr.extra.mediapipe.HandLandmarker
 import org.openrndr.extra.mediapipe.HandLandmarks
 
 /**
- * Finds the hands in an image of MediaPipe and draws their bones and landmarks. The models and the image are downloaded
- * and converted by `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * Finds the hands in an image of MediaPipe and draws their bones and landmarks.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {
@@ -14,7 +15,7 @@ fun main() = application {
         height = 382
     }
     program {
-        val image = loadImage("orx-jvm/orx-mediapipe/models/images/right_hands.jpg")
+        val image = loadImage(MediaPipeModels.image("right_hands.jpg"))
         val hands = HandLandmarker().use { it.detect(image) }
         extend {
             drawer.image(image)

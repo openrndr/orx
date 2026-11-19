@@ -25,13 +25,13 @@ class HolisticLandmarks(val pose: PoseLandmarks, val face: FaceLandmarks?, val l
  * @param minHandVisibility the least visibility of a wrist of the body to look for its hand
  */
 class HolisticLandmarker(
-    poseDetectorPath: String = "orx-jvm/orx-mediapipe/models/holistic_pose_detector.onnx",
-    poseLandmarksPath: String = "orx-jvm/orx-mediapipe/models/holistic_pose_landmarks_detector.onnx",
-    faceDetectorPath: String = "orx-jvm/orx-mediapipe/models/face_stylizer_face_detector.onnx",
-    faceLandmarksPath: String = "orx-jvm/orx-mediapipe/models/face_stylizer_landmarks_detector.onnx",
-    blendshapesPath: String? = "orx-jvm/orx-mediapipe/models/face_blendshapes.onnx",
-    handLandmarksPath: String = "orx-jvm/orx-mediapipe/models/holistic_hand_landmarks_detector.onnx",
-    handRefinementPath: String = "orx-jvm/orx-mediapipe/models/hand_roi_refinement.onnx",
+    poseDetectorPath: String = MediaPipeModels.model("holistic_pose_detector.onnx"),
+    poseLandmarksPath: String = MediaPipeModels.model("holistic_pose_landmarks_detector.onnx"),
+    faceDetectorPath: String = MediaPipeModels.model("face_stylizer_face_detector.onnx"),
+    faceLandmarksPath: String = MediaPipeModels.model("face_stylizer_landmarks_detector.onnx"),
+    blendshapesPath: String? = MediaPipeModels.model("face_blendshapes.onnx"),
+    handLandmarksPath: String = MediaPipeModels.model("holistic_hand_landmarks_detector.onnx"),
+    handRefinementPath: String = MediaPipeModels.model("hand_roi_refinement.onnx"),
     var minHandVisibility: Double = 0.1,
     tracking: Boolean = false
 ) : AutoCloseable {

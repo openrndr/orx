@@ -8,8 +8,8 @@ import org.openrndr.ffmpeg.loadVideoDevice
 
 /**
  * Follows the face in front of the webcam and draws its mesh, its contours and irises, and bars for some of its
- * blendshapes. The webcam is shown mirrored, like a mirror. The models are downloaded and converted by
- * `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * blendshapes. The webcam is shown mirrored, like a mirror.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {

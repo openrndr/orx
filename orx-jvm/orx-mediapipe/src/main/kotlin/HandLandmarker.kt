@@ -46,8 +46,8 @@ class HandLandmarks(
  * @param tracking true to follow the hands in the frames of a video
  */
 class HandLandmarker(
-    handDetectorPath: String = "orx-jvm/orx-mediapipe/models/hand_detector.onnx",
-    landmarksPath: String = "orx-jvm/orx-mediapipe/models/hand_landmarks_detector.onnx",
+    handDetectorPath: String = MediaPipeModels.model("hand_detector.onnx"),
+    landmarksPath: String = MediaPipeModels.model("hand_landmarks_detector.onnx"),
     var maxHands: Int = 2,
     var minDetectionScore: Double = 0.5,
     var minScore: Double = 0.5,

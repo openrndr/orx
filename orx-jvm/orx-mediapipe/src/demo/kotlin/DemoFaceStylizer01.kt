@@ -1,4 +1,5 @@
 import org.openrndr.application
+import org.openrndr.extra.mediapipe.MediaPipeModels
 import org.openrndr.draw.ColorBuffer
 import org.openrndr.draw.Drawer
 import org.openrndr.draw.isolated
@@ -10,8 +11,8 @@ import org.openrndr.extra.mediapipe.toRgbaImage
 
 /**
  * Stylizes the face in an image of MediaPipe as a color sketch, in color ink and as an oil painting, and draws the
- * image, the three stylized faces, and the image with the sketch in place of the face. The models and the image are
- * downloaded and converted by `uv run orx-jvm/orx-mediapipe/tools/convert_models.py`.
+ * image, the three stylized faces, and the image with the sketch in place of the face.
+ * The models and images are downloaded from [orx-models](https://github.com/openrndr/orx-models) when first used.
  */
 fun main() = application {
     configure {
@@ -20,10 +21,10 @@ fun main() = application {
         height = 320
     }
     program {
-        val image = loadImage("orx-jvm/orx-mediapipe/models/images/portrait.jpg")
+        val image = loadImage(MediaPipeModels.image("portrait.jpg"))
         val pixels = image.toRgbaImage()
         val faces = listOf("color_sketch", "color_ink", "oil_painting").map { style ->
-            FaceStylizer("orx-jvm/orx-mediapipe/models/face_stylizer_$style.onnx").use { it.stylize(pixels)!! }
+            FaceStylizer(MediaPipeModels.model("face_stylizer_$style.onnx")).use { it.stylize(pixels)!! }
         }
         val stylized = faces.map { it.image.toColorBuffer() }
         extend {

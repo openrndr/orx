@@ -6,12 +6,22 @@ post-processing of MediaPipe's tasks is done in Kotlin.
 
 ## Models
 
-The models are not part of orx. `tools/convert_models.py` downloads them, and the images of MediaPipe that the tests
-use, and converts them to ONNX, into `orx-jvm/orx-mediapipe/models`. What tf2onnx cannot read is rewritten first: the sparse
-weights of the pose detector, the custom transpose convolutions of the selfie segmenters, and the variables, the custom
-batch normalizations and the random noise of the face stylizers, whose noise becomes inputs of the models, the custom
-pools with indices of the hair segmenter, and the resizes of EfficientDet-Lite0, whose scales make outputs of the
-wrong size.
+The models are not part of orx. They are in the repository [orx-models](https://github.com/openrndr/orx-models), in
+`mediapipe/onnx`, with the test images of MediaPipe in `mediapipe/images`. `MediaPipeModels` downloads the models
+that are used, by default, from the tag `mediapipe-1` the first time, and keeps them in `~/.cache/orx-models`, or in
+the folder of the system property `orx.models.cache`.
+
+```kotlin
+val hands = HandLandmarker()                                    // downloads hand_detector.onnx, hand_landmarks_detector.onnx
+val image = loadImage(MediaPipeModels.image("thumb_up.jpg"))    // a test image of MediaPipe
+```
+
+`tools/convert_models.py` makes the models of orx-models: it downloads the models of MediaPipe and the images that the
+tests use, and converts them to ONNX, into `orx-jvm/orx-mediapipe/models`, where the tests read them. What tf2onnx
+cannot read is rewritten first: the sparse weights of the pose detector, the custom transpose convolutions of the
+selfie segmenters, and the variables, the custom batch normalizations and the random noise of the face stylizers,
+whose noise becomes inputs of the models, the custom pools with indices of the hair segmenter, and the resizes of
+EfficientDet-Lite0, whose scales make outputs of the wrong size.
 
 ```
 uv run orx-jvm/orx-mediapipe/tools/convert_models.py
