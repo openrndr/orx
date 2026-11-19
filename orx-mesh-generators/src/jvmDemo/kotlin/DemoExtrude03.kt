@@ -32,7 +32,7 @@ fun main() = application {
     configure {
         width = 720
         height = 720
-        multisample = WindowMultisample.SampleCount(8)
+        multisample = WindowMultisample.SampleCount(4)
     }
     program {
         fun spiralPath(a: Double, k: Double, cycles: Double, steps: Int, direction: Double = 1.0): Path3D {

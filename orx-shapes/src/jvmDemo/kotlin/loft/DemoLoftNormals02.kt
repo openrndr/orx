@@ -28,7 +28,7 @@ fun main() = application {
     configure {
         width = 720
         height = 720
-        multisample = WindowMultisample.SampleCount(8)
+        multisample = WindowMultisample.SampleCount(4)
     }
     program {
         extend(Orbital())

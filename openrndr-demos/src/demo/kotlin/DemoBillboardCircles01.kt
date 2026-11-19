@@ -12,7 +12,7 @@ import org.openrndr.math.Vector3
 
 fun main() = application {
     configure {
-        multisample = WindowMultisample.SampleCount(8)
+        multisample = WindowMultisample.SampleCount(4)
     }
     program {
         extend(Orbital())

@@ -21,7 +21,7 @@ import org.openrndr.extra.meshgenerators.boxMesh
  */
 fun main() = application {
     configure {
-        multisample = WindowMultisample.SampleCount(8)
+        multisample = WindowMultisample.SampleCount(4)
     }
 
     program {

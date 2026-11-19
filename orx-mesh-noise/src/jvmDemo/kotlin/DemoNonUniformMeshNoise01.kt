@@ -35,7 +35,7 @@ fun main() = application {
     configure {
         width = 720
         height = 720
-        multisample = WindowMultisample.SampleCount(8)
+        multisample = WindowMultisample.SampleCount(4)
     }
     program {
         val mesh = loadOBJMeshData(File("demo-data/obj-models/suzanne/Suzanne.obj")).toMeshData().estimateNormals()

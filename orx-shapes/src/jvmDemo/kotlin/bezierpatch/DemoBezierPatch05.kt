@@ -23,7 +23,7 @@ fun main() = application {
     configure {
         width = 800
         height = 800
-        multisample = WindowMultisample.SampleCount(8)
+        multisample = WindowMultisample.SampleCount(4)
     }
     program {
         val c0 = Segment3D(Vector3(-5.0, 0.0, -9.0), Vector3(5.0, 0.0, -9.0))
