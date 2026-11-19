@@ -78,7 +78,11 @@ by their shape. `virtualList(items, rowHeight) { item, index -> … }` scrolls l
   wired by dragging from an output to an input, moved, selected with a box and removed with delete; the wheel zooms,
   the middle button or alt pans.
 - `textArea { highlighter = Highlighters.glsl }`: multi-line text with a selection, words, indentation, the clipboard,
-  scrolling and line numbers, in the colors of a highlighter.
+  scrolling and line numbers, in the colors of a highlighter, and `marks` that underline parts of the text with their
+  messages as tooltips.
+- `expressionArea { check = { checkTypedExpression(it, setOf("t")) } }`: a text area for the expressions and programs
+  of orx-expression-evaluator and orx-expression-evaluator-typed, which colors their tokens, marks the problems that
+  `check` finds while typing, and those of an evaluation with `report(exception)`.
 - `colorEditor { }`: a wheel of the hues and chromas of OKLCH, sliders of lightness, chroma, hue and alpha, a field
   that takes any CSS color, swatches that the editors share, and `controlManager.pickColor { }`, a pipette that picks a
   color from the window.

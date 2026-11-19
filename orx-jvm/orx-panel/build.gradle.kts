@@ -18,6 +18,8 @@ dependencies {
     // SelectableList and SelectableMutableList implement Selectable
     api(project(":orx-parameters"))
     implementation(project(":orx-expression-evaluator"))
+    // for the tokens of the expressions of ExpressionArea
+    implementation(libs.antlr.kotlin.runtime)
     implementation(project(":orx-color"))
     implementation(project(":orx-text-writer"))
     api(project(":orx-style"))
@@ -35,6 +37,11 @@ dependencies {
     testRuntimeOnly(sharedLibs.kotlin.reflect)
     // a program with fonts, keys and a clipboard for tests that lay out text and type
     testImplementation(project(":testing"))
+    // the typed expressions of ExpressionArea
+    testImplementation(project(":orx-expression-evaluator"))
+    testImplementation(project(":orx-expression-evaluator-typed"))
+    demoImplementation(project(":orx-expression-evaluator"))
+    demoImplementation(project(":orx-expression-evaluator-typed"))
     testRuntimeOnly(openrndr.fontdriver.freetype)
     demoImplementation(openrndr.dialogs)
     demoImplementation(libs.gson)

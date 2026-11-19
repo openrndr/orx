@@ -20,6 +20,12 @@ import kotlin.reflect.KMutableProperty0
 /** a range of a line in [color], see [TextArea.highlighter] */
 data class Highlight(val start: Int, val end: Int, val color: ColorRGBa)
 
+/**
+ * a range of the text from [start] to [end], exclusive, in characters of [TextArea.value], underlined in [color] with
+ * [message] as the tooltip, like a problem; see [TextArea.marks]
+ */
+data class Mark(val start: Int, val end: Int, val message: String, val color: ColorRGBa)
+
 /** highlighters of code for [TextArea.highlighter] */
 object Highlighters {
     private val number = Regex("""\b\d+(\.\d+)?([eE][-+]?\d+)?[fFuU]?\b""")
@@ -32,6 +38,7 @@ object Highlighters {
     var numberColor = ColorRGBa.fromHex("#ffe08a")
     var stringColor = ColorRGBa.fromHex("#f8b779")
     var commentColor = ColorRGBa.fromHex("#7c8594")
+    var functionColor = ColorRGBa.fromHex("#82aaff")
 
     /** a highlighter of [keywords] and [types], numbers, strings and comments after [comment] */
     fun of(keywords: Set<String>, types: Set<String>, comment: String = "//"): (String) -> List<Highlight> = { line ->
@@ -61,6 +68,9 @@ object Highlighters {
             "uvec4", "bvec2", "bvec3", "bvec4", "mat2", "mat3", "mat4", "sampler2D", "sampler3D", "samplerCube", "sampler2DArray")
     )
 
+    /** the expressions of orx-expression-evaluator and orx-expression-evaluator-typed, see [ExpressionArea] */
+    val expressions: (String) -> List<Highlight> = ::expressionHighlights
+
     /** Kotlin */
     val kotlin = of(
         setOf("fun", "val", "var", "if", "else", "when", "for", "while", "do", "return", "break", "continue", "class", "object",
@@ -77,9 +87,9 @@ object Highlighters {
  * tab indents and shift-tab outdents the selected lines; mod+a, mod+c, mod+x and mod+v select all, copy, cut and
  * paste. The text scrolls with the wheel and keeps the caret in view; the edits can be undone, see
  * [org.openrndr.panel.History]. [lineNumbers] shows the numbers of the lines, [highlighter] colors the lines, see
- * [Highlighters].
+ * [Highlighters], [marks] underline parts of the text, like problems, with their messages as tooltips.
  */
-class TextArea : Element(ElementType("text-area")) {
+open class TextArea : Element(ElementType("text-area")) {
     override val handlesKeyboardFocus = true
     override val handlesDoubleClick = true
 
@@ -112,6 +122,13 @@ class TextArea : Element(ElementType("text-area")) {
     var highlighter: ((String) -> List<Highlight>)? = null
         set(v) { field = v; requestRedraw() }
 
+    /**
+     * the ranges of the text that are underlined, like problems, and colored in the numbers of their lines; the message
+     * of a mark shows as the tooltip when the pointer rests on it. Marks stay where they are when the text changes
+     */
+    var marks: List<Mark> = emptyList()
+        set(v) { field = v; requestRedraw() }
+
     /** the number of spaces of a tab */
     var tabSize = 4
 
@@ -136,6 +153,44 @@ class TextArea : Element(ElementType("text-area")) {
         }
 
     private var scroll = Vector2.ZERO
+
+    /** the position of the character [offset] of [value] */
+    fun positionOf(offset: Int): Position {
+        var rest = offset.coerceAtLeast(0)
+        for ((i, line) in lines.withIndex()) {
+            if (rest <= line.length) return Position(i, rest)
+            rest -= line.length + 1
+        }
+        return Position(lines.lastIndex, lines.last().length)
+    }
+
+    /** the offset in [value] of [position] */
+    fun offsetOf(position: Position): Int {
+        val p = clamp(position)
+        var offset = 0
+        for (i in 0 until p.line) offset += lines[i].length + 1
+        return offset + p.column
+    }
+
+    /** the marks at [offset], from their start to their end, both inclusive */
+    fun marksAt(offset: Int): List<Mark> = marks.filter { offset in it.start..it.end }
+
+    /** the marks under the screen position [p], which is on the text of a line, not below it or past its end */
+    private fun markedAt(p: Vector2): List<Mark> {
+        val local = p - Vector2(layout.screenX, layout.screenY) + scroll
+        val line = floor((local.y - 4.0) / lineHeight).toInt()
+        if (line !in lines.indices || local.x - gutter > carets(line).last() + 6.0) return emptyList()
+        return marksAt(offsetOf(positionAt(p)))
+    }
+
+    /** the messages of the marks under the pointer, or the tooltip that is set */
+    override var tooltip: String?
+        get() {
+            val pointer = (root() as? Body)?.controlManager?.mousePosition
+            val marked = pointer?.takeIf { marks.isNotEmpty() && containsScreenPoint(it) }?.let { markedAt(it) }.orEmpty()
+            return if (marked.isNotEmpty()) marked.joinToString("\n") { it.message } else super.tooltip
+        }
+        set(v) { super.tooltip = v }
 
     private fun ordered() = if (anchor <= caret) anchor to caret else caret to anchor
     private fun clamp(p: Position): Position {
@@ -403,6 +458,25 @@ class TextArea : Element(ElementType("text-area")) {
                 text.draw(drawer, this, "line $i", shaped, Vector2(g - scroll.x, y + (lh + face.ascent + face.descent) / 2.0), color, glyphColors = colors)
             }
         }
+        // the marks, underlined by zigzags; a mark of no width is as wide as a narrow character
+        val markedLines = HashMap<Int, ColorRGBa>()
+        for (mark in marks) {
+            val from = positionOf(mark.start)
+            val to = positionOf(maxOf(mark.start, mark.end))
+            for (i in from.line..to.line) {
+                markedLines.putIfAbsent(i, mark.color)
+                if (i !in first..last) continue
+                val c = carets(i)
+                val x0 = if (i == from.line) c[from.column] else 0.0
+                val x1 = maxOf(if (i == to.line) c[to.column] else c.last(), x0 + 6.0)
+                val y = i * lh + 4.0 - scroll.y + lh - 2.5
+                val zigzag = (0..((x1 - x0) / 2.0).toInt()).map { k -> Vector2(g + x0 + k * 2.0 - scroll.x, y + if (k % 2 == 0) 1.0 else -1.0) }
+                drawer.stroke = mark.color
+                drawer.strokeWeight = 1.0
+                drawer.lineStrip(zigzag)
+            }
+        }
+        drawer.stroke = null
         // the caret, and its line over the width of the text for input methods
         caretLine = null
         if (focused && caret.line in first..last) {
@@ -419,7 +493,7 @@ class TextArea : Element(ElementType("text-area")) {
             for (i in first..last) {
                 val y = i * lh + 4.0 - scroll.y
                 text.drawInBox(drawer, this, "number $i", computedStyle, "${i + 1}", Rectangle(0.0, y, g - 12.0, lh), 1.0, 0.5,
-                    color.opacify(if (i == caret.line) 0.7 else 0.35))
+                    markedLines[i] ?: color.opacify(if (i == caret.line) 0.7 else 0.35))
             }
         }
     }
