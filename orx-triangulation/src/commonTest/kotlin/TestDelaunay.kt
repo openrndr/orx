@@ -1,8 +1,10 @@
 import org.openrndr.extra.triangulation.Delaunay
+import org.openrndr.extra.triangulation.delaunayTriangulation
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class TestDelaunay {
@@ -63,6 +65,14 @@ class TestDelaunay {
         val d = Delaunay.from(c)
         for (j in c.indices) {
             assertTrue(d.neighbors(j).toList().isNotEmpty())
+        }
+    }
+
+    @Test
+    fun testRejectsPointsThatAreNotFinite() {
+        val points = listOf(Vector2(0.0, 0.0), Vector2(100.0, 0.0), Vector2(Double.NaN, Double.NaN), Vector2(0.0, 100.0))
+        assertFailsWith<IllegalArgumentException> {
+            points.delaunayTriangulation()
         }
     }
 }

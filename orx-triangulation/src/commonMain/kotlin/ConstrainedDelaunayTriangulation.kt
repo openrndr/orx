@@ -49,6 +49,15 @@ class ConstrainedDelaunayTriangulation(
             "ConstrainedDelaunayTriangulation requires at least one closed contour with 3 or more points"
         }
 
+        // a point that is not finite makes Tripack loop forever
+        require(contours.all { contour -> contour.segments.all { it.start.x.isFinite() && it.start.y.isFinite() } }) {
+            "ConstrainedDelaunayTriangulation: all contour points must be finite"
+        }
+
+        require(interiorPoints.all { it.x.isFinite() && it.y.isFinite() }) {
+            "ConstrainedDelaunayTriangulation: all interior points must be finite"
+        }
+
         require(interiorPoints.all { it in shape }) {
             "ConstrainedDelaunayTriangulation: all interior points must lie inside the shape"
         }

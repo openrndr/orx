@@ -10,6 +10,12 @@ import org.openrndr.shape.contours
  * Kotlin/OPENRNDR idiomatic interface to `Delaunay`
  */
 class DelaunayTriangulation(override val points: List<Vector2>) : AbstractDelaunayTriangulation {
+    init {
+        require(points.all { it.x.isFinite() && it.y.isFinite() }) {
+            "DelaunayTriangulation: all points must be finite"
+        }
+    }
+
     val delaunay: Delaunay = Delaunay.from(points)
 
     override fun voronoiDiagram(bounds: Rectangle): VoronoiDiagram = VoronoiDiagram(this, bounds)

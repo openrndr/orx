@@ -130,6 +130,21 @@ class TestConstrainedDelaunayTriangulation {
         }
     }
 
+    @Test
+    fun testRejectsPointsThatAreNotFinite() {
+        val square = listOf(Vector2(0.0, 0.0), Vector2(100.0, 0.0), Vector2(100.0, 100.0), Vector2(0.0, 100.0))
+        for (bad in listOf(Vector2(Double.NaN, Double.NaN), Vector2(Double.POSITIVE_INFINITY, 50.0))) {
+            // as the first point, where it made the triangulation hang; ShapeContour rejects it anywhere else
+            val contour = ShapeContour.fromPoints(listOf(bad) + square, closed = true).clockwise
+            assertFailsWith<IllegalArgumentException> {
+                Shape(listOf(contour)).constrainedDelaunayTriangulation()
+            }
+            assertFailsWith<IllegalArgumentException> {
+                Rectangle(0.0, 0.0, 100.0, 100.0).shape.constrainedDelaunayTriangulation(listOf(bad))
+            }
+        }
+    }
+
     /** Shoelace formula, used as an independent cross-check of the triangulated area. */
     private fun polygonArea(points: List<Vector2>): Double {
         var sum = 0.0
