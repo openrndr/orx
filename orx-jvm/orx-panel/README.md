@@ -238,6 +238,17 @@ rows of which only the rows in view are built.
 
 [source code](src/demo/kotlin/DemoCss03.kt)
 
+### DemoExpressionArea01
+
+Editors of expressions: one of orx-expression-evaluator, which gives the radius of the circle, and one of
+orx-expression-evaluator-typed, which gives the points that are drawn, both of `t`, the time. The tokens are
+colored, the problems are underlined, with their messages as tooltips and listed below the editors; what goes wrong
+while evaluating is marked too.
+
+![DemoExpressionArea01Kt](https://raw.githubusercontent.com/openrndr/orx/media/orx-jvm/orx-panel/images/DemoExpressionArea01Kt.webp)
+
+[source code](src/demo/kotlin/DemoExpressionArea01.kt)
+
 ### DemoFCurveEditor01
 
 Demonstrates the editor of fcurves on a long curve of 600 keys over two minutes, with jumps here and there. The
