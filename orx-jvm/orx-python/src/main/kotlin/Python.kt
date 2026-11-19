@@ -101,6 +101,11 @@ class VirtualEnvironment(val venv: File) {
     fun remove() {
         venv.deleteRecursively()
     }
+
+    fun install(packageName: String) {
+        val result = interpreter.invokePython(listOf("-m", "pip", "install", packageName))
+        require(result.errorCode == 0) { "Failed to install $packageName: ${result.errorCode}" }
+    }
 }
 
 fun PythonInterpreter.createVirtualEnv(path: String, reinstall: Boolean = false): VirtualEnvironment {
