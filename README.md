@@ -28,7 +28,7 @@ To make use of these extensions clone the [OPENRNDR template](https://github.com
 | [`orx-delegate-magic`](orx-delegate-magic/) | Magical property delegators for tracking variable change or interpolate towards the value of a variable. |
 | [`orx-easing`](orx-easing/) | Easing functions for smooth animation or non-linear interpolation. |
 | [`orx-envelopes`](orx-envelopes/) | ADSR (Attack, Decay, Sustain, Release) envelopes and tools. |
-| [`orx-expression-evaluator`](orx-expression-evaluator/) | Evaluate strings containing mathematical expressions, also *typed* ones. |
+| [`orx-expression-evaluator`](orx-expression-evaluator/) | Evaluate strings containing mathematical expressions, of numbers or, in typed expressions, of numbers, strings, vectors, colors and more. |
 | [`orx-fcurve`](orx-fcurve/) | 1-dimensional function curves constructed from 2D bezier functions. Often used to control a property over time.  `x` values don't have any units, but they often represent a duration in seconds. |
 | [`orx-fft`](orx-fft/) | Simple forward and inverse Fast Fourier transform routine. |
 | [`orx-force-2d`](orx-force-2d/) | 2D extended position-based dynamics (XPBD) for simulating physical forces. |
