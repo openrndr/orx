@@ -1,0 +1,316 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>History</title>
+<link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../../images/logo-icon.svg">
+<link href="../../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.18+c6e498a
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":orx-jvm:orx-panel/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-jvm:orx-panel/main" data-filter=":orx-jvm:orx-panel/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-panel::org.openrndr.panel/History///PointingToDeclaration//1278250025">
+  <div class="breadcrumbs"><a href="../../index.html">orx-panel</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.panel</a><span class="delimiter">/</span><span class="current">History</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>History</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">History</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-panel/src/main/kotlin/org/openrndr/panel/History.kt#L22">source</a>)</span></span></div><p class="paragraph">The edits of a control manager that can be undone and redone: changes of the values of controls by the user, of the keyframes of timelines, of the order of lists and of the layouts of docks. The commands Undo (mod+z) and Redo (mod+shift+z) go through it. A history that is not <a href="enabled.html">enabled</a> records nothing, like when the program has a history of its own.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="1806743231%2FConstructors%2F1278250025" anchor-label="History" id="1806743231%2FConstructors%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-history.html"><span><span>History</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1806743231%2FConstructors%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="74386053%2FProperties%2F1278250025" anchor-label="canRedo" id="74386053%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="can-redo.html"><span>can</span><wbr><span><span>Redo</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="74386053%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="can-redo.html">canRedo</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-138937761%2FProperties%2F1278250025" anchor-label="canUndo" id="-138937761%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="can-undo.html"><span>can</span><wbr><span><span>Undo</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-138937761%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="can-undo.html">canUndo</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="425810047%2FProperties%2F1278250025" anchor-label="changed" id="425810047%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="changed.html"><span><span>changed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="425810047%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="changed.html">changed</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.events/Event///PointingToDeclaration/">Event</span><span class="token operator">&lt;</span><a href="index.html">History</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">an edit was recorded, undone or redone</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1804400786%2FProperties%2F1278250025" anchor-label="enabled" id="1804400786%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="enabled.html"><span><span>enabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1804400786%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="enabled.html">enabled</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">false to record nothing</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-916219176%2FProperties%2F1278250025" anchor-label="limit" id="-916219176%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="limit.html"><span><span>limit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-916219176%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="limit.html">limit</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">the largest number of edits that are kept</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1803238402%2FProperties%2F1278250025" anchor-label="redoName" id="-1803238402%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="redo-name.html"><span>redo</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1803238402%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="redo-name.html">redoName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">the name of the edit that <a href="redo.html">redo</a> redoes, null when there is none</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-675399976%2FProperties%2F1278250025" anchor-label="undoName" id="-675399976%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="undo-name.html"><span>undo</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-675399976%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="undo-name.html">undoName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">the name of the edit that <a href="undo.html">undo</a> undoes, null when there is none</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-360851322%2FFunctions%2F1278250025" anchor-label="clear" id="-360851322%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear.html"><span><span>clear</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-360851322%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="clear.html"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-42852955%2FFunctions%2F1278250025" anchor-label="record" id="-42852955%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="record.html"><span><span>record</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-42852955%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="record.html"><span class="token function">record</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">edit<span class="token operator">: </span><a href="../-edit/index.html">Edit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">records <a href="record.html">edit</a></p></div><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="record.html">T</a><span class="token operator">&gt; </span><a href="record.html"><span class="token function">record</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">old<span class="token operator">: </span><a href="record.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">new<span class="token operator">: </span><a href="record.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">apply<span class="token operator">: </span><span class="token punctuation">(</span><a href="record.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Records the change of a value from <a href="record.html">old</a> to <a href="record.html">new</a> that <a href="record.html">apply</a> sets, merged with the previous edit of the same <a href="record.html">key</a> in the same gesture, or within half a second for keys</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-878079415%2FFunctions%2F1278250025" anchor-label="redo" id="-878079415%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="redo.html"><span><span>redo</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-878079415%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="redo.html"><span class="token function">redo</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">redoes the last edit that was undone, false when there is none</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1091403229%2FFunctions%2F1278250025" anchor-label="undo" id="-1091403229%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="undo.html"><span><span>undo</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1091403229%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="undo.html"><span class="token function">undo</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">undoes the last edit, false when there is none</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
