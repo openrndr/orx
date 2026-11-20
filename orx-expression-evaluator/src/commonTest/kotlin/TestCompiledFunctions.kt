@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import org.openrndr.extra.expressions.compileFunction1
 import org.openrndr.extra.expressions.compileFunction2
 import org.openrndr.extra.expressions.compileFunction3

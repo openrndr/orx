@@ -76,6 +76,11 @@ fun compileTypedExpression(
     return { compiled.evaluate() ?: error("no result") }
 }
 
+/**
+ * the name of the type of [x] for messages, the same on every platform: on JS a number that is whole is of class Int
+ */
+internal fun typeName(x: Any): String = if (x is Double) "Double" else x::class.simpleName ?: "value"
+
 /** the parse tree of [expression], or an [ExpressionException] with all its syntax problems */
 internal fun expressionRoot(expression: String): KeyLangParser.KeyLangFileContext {
     val (root, problems) = parseWithProblems(expression, lexer = false)

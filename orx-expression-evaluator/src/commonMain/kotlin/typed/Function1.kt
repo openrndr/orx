@@ -82,7 +82,7 @@ internal fun rgba(x: Any): ColorRGBa {
         is Double -> ColorRGBa(x, x, x, 1.0)
         is Vector3 -> ColorRGBa(x.x, x.y, x.z, 1.0)
         is Vector4 -> ColorRGBa(x.x, x.y, x.z, x.w)
-        else -> error("type not supported ${x::class.simpleName}")
+        else -> error("type not supported ${typeName(x)}")
     }
 }
 
@@ -92,7 +92,7 @@ internal fun cos(x: Any): Any {
         is Vector2 -> x.map { cos_(it) }
         is Vector3 -> x.map { cos_(it) }
         is Vector4 -> x.map { cos_(it) }
-        else -> error("type not supported ${x::class.simpleName}")
+        else -> error("type not supported ${typeName(x)}")
     }
 }
 
@@ -102,7 +102,7 @@ internal fun sin(x: Any): Any {
         is Vector2 -> x.map { sin_(it) }
         is Vector3 -> x.map { sin_(it) }
         is Vector4 -> x.map { sin_(it) }
-        else -> error("type not supported ${x::class.simpleName}")
+        else -> error("type not supported ${typeName(x)}")
     }
 }
 
@@ -111,21 +111,21 @@ internal fun normalize(x: Any): Any {
         is Vector2 -> x.normalized
         is Vector3 -> x.normalized
         is Vector4 -> x.normalized
-        else -> error("type not supported ${x::class.simpleName}")
+        else -> error("type not supported ${typeName(x)}")
     }
 }
 
 internal fun inverse(x: Any): Any {
     return when (x) {
         is Matrix44 -> x.inversed
-        else -> error("type not supported ${x::class.simpleName}")
+        else -> error("type not supported ${typeName(x)}")
     }
 }
 
 internal fun transpose(x: Any): Any {
     return when (x) {
         is Matrix44 -> x.transposed
-        else -> error("type not supported ${x::class.simpleName}")
+        else -> error("type not supported ${typeName(x)}")
     }
 }
 
@@ -136,7 +136,7 @@ fun abs(x: Any): Any {
         is Vector2 -> x.map { abs_(it) }
         is Vector3 -> x.map { abs_(it) }
         is Vector4 -> x.map { abs_(it) }
-        else -> error("type not supported ${x::class.simpleName}")
+        else -> error("type not supported ${typeName(x)}")
     }
 }
 
@@ -157,7 +157,7 @@ internal fun sqrt(x: Any): Any {
         is Vector2 -> x.map { sqrt_(it) }
         is Vector3 -> x.map { sqrt_(it) }
         is Vector4 -> x.map { sqrt_(it) }
-        else -> error("type not supported ${x::class.simpleName}")
+        else -> error("type not supported ${typeName(x)}")
     }
 }
 

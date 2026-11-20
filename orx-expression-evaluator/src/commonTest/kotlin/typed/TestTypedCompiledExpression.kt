@@ -52,14 +52,11 @@ class TestTypedCompiledExpression {
         }
         run {
             val c = compileFunction1OrNull<Vector2, Double>("x.x + x.y", "x")!!
-            val start = System.currentTimeMillis()
             for (i in 0 until 1000) {
                 val r0 = Double.uniform(0.0, 1.0)
                 val r1 = Double.uniform(0.0, 1.0)
                 assertEquals(r0 + r1, c(Vector2(r0, r1)))
             }
-            val end = System.currentTimeMillis()
-            println("that took ${end - start}")
         }
     }
 

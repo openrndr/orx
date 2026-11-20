@@ -1,6 +1,6 @@
 package typed
 
-import org.junit.jupiter.api.Assertions.assertEquals
+import kotlin.test.assertEquals
 import org.openrndr.extra.expressions.typed.evaluateTypedExpression
 import kotlin.test.Test
 import kotlin.test.assertTrue

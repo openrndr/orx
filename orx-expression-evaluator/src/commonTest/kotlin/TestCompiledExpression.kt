@@ -1,5 +1,5 @@
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+import kotlin.test.Test
+import kotlin.test.assertFailsWith
 import org.openrndr.extra.expressions.ExpressionException
 import org.openrndr.extra.expressions.compileExpression
 import kotlin.test.assertEquals
@@ -25,7 +25,7 @@ class TestCompiledExpression {
     @Test
     fun `an erroneous compiled expression`() {
         val expression = "1bork"
-        assertThrows<ExpressionException> {
+        assertFailsWith<ExpressionException> {
             compileExpression(expression, constants = mutableMapOf("someValue" to 5.0))
         }
     }

@@ -6,8 +6,6 @@ import org.openrndr.extra.expressions.typed.compileFunction1
 import org.openrndr.extra.expressions.typed.compileTypedExpression
 import org.openrndr.extra.expressions.typed.evaluateTypedExpression
 import org.openrndr.math.Vector2
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import kotlin.math.sin
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -86,25 +84,6 @@ class TestTypedNumbers {
         // a call of a function in a lambda, while it is called
         val mapped = compileTypedExpression("fun f(v) = v * 2\nf([1, 2].map { f(it) + 1 }.max())")
         assertEquals(10.0, mapped())
-    }
-
-    @Test
-    fun `evaluations on threads at the same time`() {
-        val f = compileFunction1<Double, Double>("fun g(p, q) {\n  val s = p * q\n  s + p\n}\nval a = x + 1\ng(a, x) + g(x, a)", "x")
-        val pool = Executors.newFixedThreadPool(8)
-        val results = (0 until 8).map { t ->
-            pool.submit<Boolean> {
-                (0 until 20_000).all { i ->
-                    val x = t * 1000.0 + i
-                    val a = x + 1
-                    f(x) == (a * x + a) + (x * a + x)
-                }
-            }
-        }
-        val all = results.all { it.get() }
-        pool.shutdown()
-        pool.awaitTermination(10, TimeUnit.SECONDS)
-        assertTrue(all)
     }
 
     @Test

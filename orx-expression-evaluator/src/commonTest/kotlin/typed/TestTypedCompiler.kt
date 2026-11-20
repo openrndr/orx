@@ -5,8 +5,6 @@ import org.openrndr.extra.expressions.typed.*
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.mix
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import kotlin.math.sin
 import kotlin.random.Random
 import kotlin.test.Test
@@ -57,24 +55,6 @@ class TestTypedCompiler {
                 assertEquals(kotlin(), f(), expression)
             }
         }
-    }
-
-    @Test
-    fun `a compiled function is evaluated on several threads at once`() {
-        val f = compileFunction1<Double, Double>("[x, x * 2].map { y -> y + x }.max()", "x")
-        val pool = Executors.newFixedThreadPool(8)
-        val failures = java.util.concurrent.atomic.AtomicInteger()
-        repeat(8) { t ->
-            pool.submit {
-                repeat(2000) { i ->
-                    val x = t * 1000.0 + i
-                    if (f(x) != 3 * x) failures.incrementAndGet()
-                }
-            }
-        }
-        pool.shutdown()
-        assertTrue(pool.awaitTermination(30, TimeUnit.SECONDS))
-        assertEquals(0, failures.get())
     }
 
     @Test

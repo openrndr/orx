@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.assertThrows
+import kotlin.test.assertFailsWith
 import org.openrndr.extra.expressions.ExpressionException
 import org.openrndr.extra.expressions.evaluateExpression
 
@@ -11,7 +11,7 @@ class TestExpressionErrors {
     @Test
     fun `an expression with non-sensible writing`() {
         val expression = ")("
-        assertThrows<ExpressionException> {
+        assertFailsWith<ExpressionException> {
             evaluateExpression(expression)
         }
     }
@@ -20,7 +20,7 @@ class TestExpressionErrors {
     @Test
     fun `an expression trying to reassign a number`() {
         val expression = "3 = 5"
-        assertThrows<ExpressionException> {
+        assertFailsWith<ExpressionException> {
             evaluateExpression(expression)
         }
     }

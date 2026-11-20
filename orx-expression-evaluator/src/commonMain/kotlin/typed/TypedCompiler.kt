@@ -404,8 +404,6 @@ internal class TypedCompiledExpression(
         return TypedNode { throw Failure("'$name' is declared already", problem) }
     }
 
-    private fun typeName(x: Any) = x::class.simpleName ?: "value"
-
     private fun operands(ctx: ParserRuleContext, operator: String, left: Any, right: Any): Nothing =
         failure(ctx, "unsupported operands for $operator: ${typeName(left)} and ${typeName(right)}")
 

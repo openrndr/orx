@@ -17,11 +17,11 @@ private fun componentwise(name: String, args: Array<Any>, f: (DoubleArray) -> Do
         is Vector2 -> 2
         is Vector3 -> 3
         is Vector4 -> 4
-        else -> error("$name(): unsupported argument ${vector::class.simpleName}")
+        else -> error("$name(): unsupported argument ${typeName(vector)}")
     }
     for (a in args) {
         require(a is Double || a::class == vector::class) {
-            "$name(): unsupported arguments ${args.joinToString { it::class.simpleName ?: "value" }}"
+            "$name(): unsupported arguments ${args.joinToString { typeName(it) }}"
         }
     }
     fun component(a: Any, i: Int): Double = when (a) {
