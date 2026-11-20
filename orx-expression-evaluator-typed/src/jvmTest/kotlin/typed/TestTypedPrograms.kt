@@ -30,6 +30,26 @@ class TestTypedPrograms {
     }
 
     @Test
+    fun `the body of a lambda spans lines, of statements that end in its value`() {
+        assertEquals(listOf(3.0, 5.0), eval("[1, 2].map {\n    val y = it * 2\n    y + 1\n}"))
+        assertEquals(listOf(3.0, 5.0), eval("[1, 2].map { val y = it * 2; y + 1 }"))
+        assertEquals(listOf(2.0, 4.0), eval("[1, 2].map {\n    it * 2\n}"))
+        assertEquals(listOf(Vector2(1.0, 0.0), Vector2(1.0, 1.0)), eval("[0, 1].map { x ->\n    fun v(a) = vec2(1, a)\n    v(x)\n}"))
+        // the values of the lambda are its own, at every call, and its body sees the values around it
+        assertEquals(listOf(11.0, 12.0), eval("val k = 10\n[1, 2].map {\n    val a = it\n    a + k\n}"))
+        assertEquals(listOf(listOf(11.0), listOf(21.0)), eval("[1, 2].map { a ->\n    val b = a * 10\n    [1].map {\n        val c = b + it\n        c\n    }\n}"))
+        val twice = assertFailsWith<ExpressionException> { eval("[1].map { val a = 1; val a = 2; a }") }
+        assertEquals(listOf(Kind.DUPLICATE_VALUE), twice.problems.map { it.kind })
+        val program = "[1].map {\n    val a = it\n    val a = 2\n    a + b\n}"
+        assertEquals(
+            listOf(Kind.DUPLICATE_VALUE to "a", Kind.UNKNOWN_VALUE to "b"),
+            checkTypedExpression(program, emptySet()).map { it.kind to program.substring(it.start, it.end) }
+        )
+        // what a lambda declares is not declared after it
+        assertEquals(setOf("a"), typedExpressionNames("[1].map { val a = it; a }; a"))
+    }
+
+    @Test
     fun `compiled programs with parameters`() {
         val f = compileFunction1<Double, Double>("val y = x * 2; y + 1", "x")
         assertEquals(5.0, f(2.0))

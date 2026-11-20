@@ -117,4 +117,18 @@ class TestPrograms {
         assertEquals(setOf("k", "z"), expressionNames("fun f(x) { val y = x * k; y }; f(z)"))
         assertEquals(setOf("k", "z"), expressionNames("fun f(x) { val y = x * k; y }; f(z) +"))
     }
+
+    @Test
+    fun `a lambda over lines is read, not evaluated`() {
+        val program = "val k = 2\n[1, 2].map {\n    val y = it * k\n    y + z\n}"
+        assertEquals(
+            listOf(
+                Kind.UNSUPPORTED to "[1, 2].map {\n    val y = it * k\n    y + z\n}", Kind.UNSUPPORTED to "[1, 2]",
+                Kind.UNKNOWN_VALUE to "z"
+            ),
+            checkExpression(program, emptySet()).map { it.kind to program.substring(it.start, it.end) }
+        )
+        // what a lambda declares is not declared after it
+        assertEquals(setOf("y"), expressionNames("[1].map { val y = it; y }; y"))
+    }
 }

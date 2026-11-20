@@ -38,25 +38,43 @@ private fun componentwise(name: String, args: Array<Any>, f: (DoubleArray) -> Do
     }
 }
 
+/** a function of numbers, called without boxing them */
+internal fun interface DoubleFunction1 {
+    fun call(x: Double): Double
+}
+
+/** a function of two numbers, called without boxing them */
+internal fun interface DoubleFunction2 {
+    fun call(x: Double, y: Double): Double
+}
+
+/** a function of three numbers, called without boxing them */
+internal fun interface DoubleFunction3 {
+    fun call(x: Double, y: Double, z: Double): Double
+}
+
+/** the math functions of one argument, of numbers */
+internal fun mathDouble1(name: String): DoubleFunction1? = when (name) {
+    "tan" -> DoubleFunction1 { x -> kotlin.math.tan(x) }
+    "atan" -> DoubleFunction1 { x -> kotlin.math.atan(x) }
+    "acos" -> DoubleFunction1 { x -> kotlin.math.acos(x) }
+    "asin" -> DoubleFunction1 { x -> kotlin.math.asin(x) }
+    "exp" -> DoubleFunction1 { x -> kotlin.math.exp(x) }
+    "log" -> DoubleFunction1 { x -> kotlin.math.ln(x) }
+    "floor" -> DoubleFunction1 { x -> kotlin.math.floor(x) }
+    "ceil" -> DoubleFunction1 { x -> kotlin.math.ceil(x) }
+    "fract" -> DoubleFunction1 { x -> x - floor(x) }
+    "sign" -> DoubleFunction1 { x -> kotlin.math.sign(x) }
+    "saturate" -> DoubleFunction1 { x -> x.coerceIn(0.0, 1.0) }
+    "radians" -> DoubleFunction1 { x -> x * kotlin.math.PI / 180.0 }
+    "degrees" -> DoubleFunction1 { x -> x * 180.0 / kotlin.math.PI }
+    else -> null
+}
+
 /** the math functions of one argument, of numbers and of the components of vectors */
 internal fun mathFunction1(name: String): ((Array<Any>) -> Any)? {
-    val f: (Double) -> Double = when (name) {
-        "tan" -> { x -> kotlin.math.tan(x) }
-        "atan" -> { x -> kotlin.math.atan(x) }
-        "acos" -> { x -> kotlin.math.acos(x) }
-        "asin" -> { x -> kotlin.math.asin(x) }
-        "exp" -> { x -> kotlin.math.exp(x) }
-        "log" -> { x -> kotlin.math.ln(x) }
-        "floor" -> { x -> kotlin.math.floor(x) }
-        "ceil" -> { x -> kotlin.math.ceil(x) }
-        "fract" -> { x -> x - floor(x) }
-        "sign" -> { x -> kotlin.math.sign(x) }
-        "saturate" -> { x -> x.coerceIn(0.0, 1.0) }
-        "radians" -> { x -> x * kotlin.math.PI / 180.0 }
-        "degrees" -> { x -> x * 180.0 / kotlin.math.PI }
-        else -> return null
-    }
-    return { x -> componentwise(name, x) { f(it[0]) } }
+    val f = mathDouble1(name) ?: return null
+    return { x -> componentwise(name, x) { f.call(it[0]) } }
 }
 
 /**
@@ -64,21 +82,52 @@ internal fun mathFunction1(name: String): ((Array<Any>) -> Any)? {
  * ranges, `x >= edge` gives what step(edge, x) would
  */
 internal fun mathFunction2(name: String): ((Array<Any>) -> Any)? {
-    val f: (Double, Double) -> Double = when (name) {
-        "pow" -> { x, y -> x.pow(y) }
-        "mod" -> { x, y -> x.mod(y) }
-        "atan2" -> { y, x -> kotlin.math.atan2(y, x) }
-        else -> return null
-    }
-    return { x -> componentwise(name, x) { f(it[0], it[1]) } }
+    val f = mathDouble2(name) ?: return null
+    return { x -> componentwise(name, x) { f.call(it[0], it[1]) } }
+}
+
+/** the math functions of two arguments, of numbers */
+internal fun mathDouble2(name: String): DoubleFunction2? = when (name) {
+    "pow" -> DoubleFunction2 { x, y -> x.pow(y) }
+    "mod" -> DoubleFunction2 { x, y -> x.mod(y) }
+    "atan2" -> DoubleFunction2 { y, x -> kotlin.math.atan2(y, x) }
+    else -> null
 }
 
 /** the math functions of three arguments: clamp(x, min, max) and smoothstep(edge0, edge1, x) */
 internal fun mathFunction3(name: String): ((Array<Any>) -> Any)? {
-    val f: (Double, Double, Double) -> Double = when (name) {
-        "clamp" -> { x, lo, hi -> x.coerceIn(lo, hi) }
-        "smoothstep" -> { e0, e1, x -> smoothstep(e0, e1, x) }
-        else -> return null
+    val f = mathDouble3(name) ?: return null
+    return { x -> componentwise(name, x) { f.call(it[0], it[1], it[2]) } }
+}
+
+/** the math functions of three arguments, of numbers */
+internal fun mathDouble3(name: String): DoubleFunction3? = when (name) {
+    "clamp" -> DoubleFunction3 { x, lo, hi -> x.coerceIn(lo, hi) }
+    "smoothstep" -> DoubleFunction3 { e0, e1, x -> smoothstep(e0, e1, x) }
+    else -> null
+}
+
+/**
+ * what the built-in function [name] of [n] numbers gives, the same as through [dispatchFunction1],
+ * [dispatchFunction2] or [dispatchFunction3] when its arguments are numbers, without boxing them
+ */
+internal fun doubleFunction(name: String, n: Int): Any? = when (n) {
+    1 -> when (name) {
+        "cos" -> DoubleFunction1 { kotlin.math.cos(it) }
+        "sin" -> DoubleFunction1 { kotlin.math.sin(it) }
+        "sqrt" -> DoubleFunction1 { kotlin.math.sqrt(it) }
+        "abs" -> DoubleFunction1 { kotlin.math.abs(it) }
+        "round" -> DoubleFunction1 { roundHalfAway(it) }
+        else -> mathDouble1(name)
     }
-    return { x -> componentwise(name, x) { f(it[0], it[1], it[2]) } }
+    2 -> when (name) {
+        "min" -> DoubleFunction2 { x, y -> kotlin.math.min(x, y) }
+        "max" -> DoubleFunction2 { x, y -> kotlin.math.max(x, y) }
+        else -> mathDouble2(name)
+    }
+    3 -> when (name) {
+        "mix" -> DoubleFunction3 { x, y, f -> org.openrndr.math.mix(x, y, f) }
+        else -> mathDouble3(name)
+    }
+    else -> null
 }

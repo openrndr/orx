@@ -206,6 +206,15 @@ private open class DeclarationWalk(
         val id = ctx.ID(0) ?: return
         if (!scopes.last().functions.add(name(id) to ctx.ID().size - 1)) declaredTwice(id, ExpressionProblem.Kind.DUPLICATE_FUNCTION)
     }
+
+    // what the body of a lambda declares is declared in it
+    override fun enterFunctionLiteral(ctx: KeyLangParser.FunctionLiteralContext) {
+        scopes.add(Scope().apply { values.addAll(ctx.ID().map(::name).ifEmpty { listOf("it") }) })
+    }
+
+    override fun exitFunctionLiteral(ctx: KeyLangParser.FunctionLiteralContext) {
+        scopes.removeAt(scopes.lastIndex)
+    }
 }
 
 /**

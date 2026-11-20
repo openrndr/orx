@@ -78,9 +78,12 @@ private class NameWalk(
         val names = ctx.ID().map { it.text.replace("`", "") }
         lambda(ctx, names.size)
         scopes.add(names.ifEmpty { listOf("it") })
+        // what the body declares is declared in it
+        declarations.add(Declarations())
     }
 
     override fun exitFunctionLiteral(ctx: KeyLangParser.FunctionLiteralContext) {
+        declarations.removeAt(declarations.lastIndex)
         scopes.removeAt(scopes.lastIndex)
     }
 

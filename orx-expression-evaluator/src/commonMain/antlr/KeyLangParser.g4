@@ -25,7 +25,8 @@ expressionRoot: rangeExpression
               | expression
               ;
 
-lambda: LCURLY (ID ( COMMA ID )* ARROW )? expression RCURLY                             # functionLiteral;
+// the body of a lambda can span lines: statements that end in the expression that gives its value
+lambda: LCURLY separator* (ID ( COMMA ID )* ARROW separator* )? (statement separator+)* expressionRoot separator* RCURLY  # functionLiteral;
 
 expression : INTLIT                                                        # intLiteral
            | DECLIT                                                        # decimalLiteral
