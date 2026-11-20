@@ -48,7 +48,7 @@ internal fun expressionHighlights(line: String): List<Highlight> {
 }
 
 /**
- * An editor of the expressions of orx-expression-evaluator and orx-expression-evaluator-typed: a [TextArea] that
+ * An editor of the expressions of orx-expression-evaluator, typed or not: a [TextArea] that
  * colors their tokens, see [Highlighters.expressions], and marks their [problems], with their messages as the tooltips
  * of the marks. [check] finds the problems of the text whenever it changes, [report] adds those of an evaluation.
  *

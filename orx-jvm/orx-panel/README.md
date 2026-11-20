@@ -81,7 +81,7 @@ by their shape. `virtualList(items, rowHeight) { item, index -> … }` scrolls l
   scrolling and line numbers, in the colors of a highlighter, and `marks` that underline parts of the text with their
   messages as tooltips.
 - `expressionArea { check = { checkTypedExpression(it, setOf("t")) } }`: a text area for the expressions and programs
-  of orx-expression-evaluator and orx-expression-evaluator-typed, which colors their tokens, marks the problems that
+  of orx-expression-evaluator, typed or not, which colors their tokens, marks the problems that
   `check` finds while typing, and those of an evaluation with `report(exception)`.
 - `colorEditor { }`: a wheel of the hues and chromas of OKLCH, sliders of lightness, chroma, hue and alpha, a field
   that takes any CSS color, swatches that the editors share, and `controlManager.pickColor { }`, a pipette that picks a

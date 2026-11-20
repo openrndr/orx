@@ -22,7 +22,8 @@ catalog {
         library("easing", "org.openrndr.extra:orx-easing:$version")
         library("envelopes", "org.openrndr.extra:orx-envelopes:$version")
         library("expression-evaluator", "org.openrndr.extra:orx-expression-evaluator:$version")
-        library("expression-evaluator-typed", "org.openrndr.extra:orx-expression-evaluator-typed:$version")
+        // the typed expression evaluator is part of orx-expression-evaluator
+        library("expression-evaluator-typed", "org.openrndr.extra:orx-expression-evaluator:$version")
         library("fcurve", "org.openrndr.extra:orx-fcurve:$version")
         library("fft", "org.openrndr.extra:orx-fft:$version")
         library("force-2d", "org.openrndr.extra:orx-force-2d:$version")

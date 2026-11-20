@@ -44,7 +44,6 @@ val publishedProjects = listOf(
     ":orx-easing",
     ":orx-envelopes",
     ":orx-expression-evaluator",
-    ":orx-expression-evaluator-typed",
     ":orx-fcurve",
     ":orx-fft",
     ":orx-force-2d",

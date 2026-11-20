@@ -39,9 +39,7 @@ dependencies {
     testImplementation(project(":testing"))
     // the typed expressions of ExpressionArea
     testImplementation(project(":orx-expression-evaluator"))
-    testImplementation(project(":orx-expression-evaluator-typed"))
     demoImplementation(project(":orx-expression-evaluator"))
-    demoImplementation(project(":orx-expression-evaluator-typed"))
     testRuntimeOnly(openrndr.fontdriver.freetype)
     demoImplementation(openrndr.dialogs)
     demoImplementation(libs.gson)

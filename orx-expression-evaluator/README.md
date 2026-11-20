@@ -1,6 +1,7 @@
 # orx-expression-evaluator
 
-Evaluate strings containing mathematical expressions.
+Evaluate strings containing mathematical expressions, of numbers or, in typed expressions, of numbers, strings,
+vectors, colors and more.
 
 # Expression evaluator
 
@@ -99,6 +100,34 @@ val xFunction by watchingExpression1(settings::xExpression, "t", constants)
 
 xFunction(1.0)
 ```
+# Typed expression evaluator
+
+`org.openrndr.extra.expressions.typed` evaluates typed expressions.
+
+Supported types:
+ * `Double`
+ * `String`
+ * `Vector2`
+ * `Vector3`
+ * `Vector4`
+ * `ColorRGBa`
+
+An expression can also be a small program without side effects: statements, separated by semicolons or new lines,
+that declare values with `val` and functions with `fun` for the statements after them, and end in the expression that
+gives the result. The body of a function is an expression, or a block of statements that ends in one, and so is the
+body of a lambda, which can span lines.
+
+```kotlin
+evaluateTypedExpression("val v = vec2(1.0, 2.0); val s = 3; v * s") // Vector2(3.0, 6.0)
+evaluateTypedExpression("fun scaled(xs, k) = xs.map { it * k }; scaled([1, 2], 3)") // [3.0, 6.0]
+evaluateTypedExpression("""
+    [1, 2].map {
+        val y = it * 2
+        y + 1
+    }
+""".trimIndent()) // [3.0, 5.0]
+```
+
 <!-- __demos__ -->
 ## Demos
 ### DemoExpressionEvaluator01

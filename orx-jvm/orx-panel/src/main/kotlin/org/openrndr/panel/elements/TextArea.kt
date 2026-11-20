@@ -68,7 +68,7 @@ object Highlighters {
             "uvec4", "bvec2", "bvec3", "bvec4", "mat2", "mat3", "mat4", "sampler2D", "sampler3D", "samplerCube", "sampler2DArray")
     )
 
-    /** the expressions of orx-expression-evaluator and orx-expression-evaluator-typed, see [ExpressionArea] */
+    /** the expressions of orx-expression-evaluator, typed or not, see [ExpressionArea] */
     val expressions: (String) -> List<Highlight> = ::expressionHighlights
 
     /** Kotlin */

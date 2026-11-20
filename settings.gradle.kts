@@ -45,7 +45,6 @@ include(
         "orx-easing",
         "orx-envelopes",
         "orx-expression-evaluator",
-        "orx-expression-evaluator-typed",
         "orx-fcurve",
         "orx-fft",
         "orx-jvm:orx-file-watcher",

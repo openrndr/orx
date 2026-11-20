@@ -11,8 +11,8 @@ import org.openrndr.panel.controlManager
 import org.openrndr.panel.elements.*
 
 /**
- * Editors of expressions: one of orx-expression-evaluator, which gives the radius of the circle, and one of
- * orx-expression-evaluator-typed, which gives the points that are drawn, both of `t`, the time. The tokens are
+ * Editors of expressions of orx-expression-evaluator: an untyped one, which gives the radius of the circle, and a
+ * typed one, which gives the points that are drawn, both of `t`, the time. The tokens are
  * colored, the problems are underlined, with their messages as tooltips and listed below the editors; what goes wrong
  * while evaluating is marked too.
  */
