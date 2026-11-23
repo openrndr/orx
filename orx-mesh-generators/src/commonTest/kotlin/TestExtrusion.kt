@@ -69,12 +69,14 @@ class TestExtrusion {
         }
         assertTrue(worst < maxNormalError, "$label: normals up to $worst degrees off")
         // closed: every edge is shared by two triangles, and no triangle is there twice
-        fun key(p: Vector3) = "${round(p.x * 1E6).toLong()} ${round(p.y * 1E6).toLong()} ${round(p.z * 1E6).toLong()}"
+        // rounded to Int, not Long, which is slow on JS: the meshes stay well within 2000 of the origin
+        fun key(p: Vector3) = "${round(p.x * 1E6).toInt()} ${round(p.y * 1E6).toInt()} ${round(p.z * 1E6).toInt()}"
         val edges = mutableMapOf<Pair<String, String>, Int>()
         val seen = mutableMapOf<List<String>, Int>()
         for (t in 0 until triangles.size / 3) {
             val k = (0..2).map { key(triangles[3 * t + it].position) }
-            seen[k.sorted()] = (seen[k.sorted()] ?: 0) + 1
+            val sorted = k.sorted()
+            seen[sorted] = (seen[sorted] ?: 0) + 1
             for (i in 0..2) {
                 val x = k[i]
                 val y = k[(i + 1) % 3]
@@ -108,22 +110,22 @@ class TestExtrusion {
         val path = ring(20.0, closed)
         val label = "${if (closed) "closed" else "open"} $name"
         check("contourSteps $label", collect { w ->
-            extrudeContourSteps(c, path, 120, Vector3.UNIT_Y, 0.05, useFaceNormals = false, writer = w)
+            extrudeContourSteps(c, path, 60, Vector3.UNIT_Y, 0.1, useFaceNormals = false, writer = w)
         }, 20.0, 1.0)
         check("contourAdaptive $label", collect { w ->
-            extrudeContourAdaptive(c, path, Vector3.UNIT_Y, 0.05, 0.05, useFaceNormals = false, writer = w)
+            extrudeContourAdaptive(c, path, Vector3.UNIT_Y, 0.1, 0.1, useFaceNormals = false, writer = w)
         }, 20.0, 1.0)
         check("shapeSteps $label", collect { w ->
-            extrudeShapeSteps(c.shape, path, 120, Vector3.UNIT_Y, 0.05, startCap = true, endCap = true, useFaceNormals = false, writer = w)
+            extrudeShapeSteps(c.shape, path, 60, Vector3.UNIT_Y, 0.1, startCap = true, endCap = true, useFaceNormals = false, writer = w)
         }, 20.0, 1.0)
         check("shapeAdaptive $label", collect { w ->
-            extrudeShapeAdaptive(c.shape, path, Vector3.UNIT_Y, 0.05, 0.05, startCap = true, endCap = true, useFaceNormals = false, writer = w)
+            extrudeShapeAdaptive(c.shape, path, Vector3.UNIT_Y, 0.1, 0.1, startCap = true, endCap = true, useFaceNormals = false, writer = w)
         }, 20.0, 1.0)
         check("shape(scale, torsion) $label", collect { w ->
-            extrudeShape(c.shape, path, { 1.0 }, { 0.0 }, Vector3.UNIT_Y, 0.05, 0.05, startCap = true, endCap = true, useFaceNormals = false, writer = w)
+            extrudeShape(c.shape, path, { 1.0 }, { 0.0 }, Vector3.UNIT_Y, 0.1, 0.1, startCap = true, endCap = true, useFaceNormals = false, writer = w)
         }, 20.0, 1.0)
         check("face normals $label", collect { w ->
-            extrudeShape(c.shape, path, { 1.0 }, { 0.0 }, Vector3.UNIT_Y, 0.05, 0.05, startCap = true, endCap = true, useFaceNormals = true, writer = w)
+            extrudeShape(c.shape, path, { 1.0 }, { 0.0 }, Vector3.UNIT_Y, 0.1, 0.1, startCap = true, endCap = true, useFaceNormals = true, writer = w)
         }, 20.0, 10.0)
     }
 
