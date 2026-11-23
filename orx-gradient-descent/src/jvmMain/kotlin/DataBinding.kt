@@ -83,7 +83,7 @@ fun <T : Any> arrayToModel(data: DoubleArray, model: T) {
             it.type == Vector4::class.java -> {
                 it.isAccessible = true
                 it.set(model, Vector4(data[index], data[index+1],data[index+2],data[index+3]))
-                index+=3
+                index+=4
             }
         }
     }

@@ -1,4 +1,5 @@
-// Adapted from the numeric.js gradient and uncmin functions
+// Ported from minimize.js of g9 (https://github.com/bijection/g9, MIT license), which is
+// adapted from the numeric.js gradient and uncmin functions
 // Numeric Javascript
 // Copyright (C) 2011 by Sébastien Loisel
 

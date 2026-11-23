@@ -18,14 +18,7 @@ kotlin {
             implementation(sharedLibs.kotlin.reflect)
         }
 
-        commonTest.dependencies {
-            implementation(sharedLibs.kotest.assertions)
-            implementation(sharedLibs.kotest.framework.engine)
-        }
-
         jvmTest.dependencies {
-            implementation(sharedLibs.kotest.assertions)
-            implementation(sharedLibs.kotest.framework.engine)
             runtimeOnly(sharedLibs.kotlin.reflect)
         }
     }

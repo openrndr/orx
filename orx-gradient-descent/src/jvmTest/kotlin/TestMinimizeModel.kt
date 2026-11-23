@@ -1,34 +1,27 @@
-import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.doubles.plusOrMinus
-import io.kotest.matchers.shouldBe
 import org.openrndr.extra.gradientdescent.minimizeModel
 import org.openrndr.math.Vector2
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-class TestMinimizeModel : DescribeSpec({
-    describe("a model") {
+class TestMinimizeModel {
+    @Test
+    fun `a model of doubles is minimized`() {
         val m = object {
             var x = 0.0
             var y = 0.0
         }
-        it("can be minimized") {
-            minimizeModel(m) { m->
-                (m.x - 4.0) * (m.x - 4.0) + (m.y - 3.0) * (m.y - 3.0)
-            }
-            m.x.shouldBe(4.0.plusOrMinus(0.01))
-            m.y.shouldBe(3.0.plusOrMinus(0.01))
-        }
+        minimizeModel(m) { (it.x - 4.0) * (it.x - 4.0) + (it.y - 3.0) * (it.y - 3.0) }
+        assertEquals(4.0, m.x, 0.01)
+        assertEquals(3.0, m.y, 0.01)
     }
 
-    describe("a model with a Vector2 property") {
+    @Test
+    fun `a model with a Vector2 property is minimized`() {
         val m = object {
             var position = Vector2.ZERO
         }
-        it("can be minimized") {
-            minimizeModel(m) { m->
-                (m.position.x - 4.0) * (m.position.x - 4.0) + (m.position.y - 3.0) * (m.position.y - 3.0)
-            }
-            m.position.x.shouldBe(4.0.plusOrMinus(0.01))
-            m.position.y.shouldBe(3.0.plusOrMinus(0.01))
-        }
+        minimizeModel(m) { (it.position.x - 4.0) * (it.position.x - 4.0) + (it.position.y - 3.0) * (it.position.y - 3.0) }
+        assertEquals(4.0, m.position.x, 0.01)
+        assertEquals(3.0, m.position.y, 0.01)
     }
-})
+}
