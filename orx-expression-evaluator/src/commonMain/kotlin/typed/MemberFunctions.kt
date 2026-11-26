@@ -7,7 +7,7 @@ internal fun String.memberFunctions(n: String): ((Array<Any>) -> Any)? {
         "take" -> { nn -> this.take((nn[0] as Number).toInt()) }
         "drop" -> { nn -> this.drop((nn[0] as Number).toInt()) }
         "takeLast" -> { nn -> this.takeLast((nn[0] as Number).toInt()) }
-        "dropLast" -> { nn -> this.takeLast((nn[0] as Number).toInt()) }
+        "dropLast" -> { nn -> this.dropLast((nn[0] as Number).toInt()) }
         else -> null
     }
 }
@@ -19,7 +19,7 @@ internal fun List<*>.memberFunctions(n: String): ((Array<Any>) -> Any)? {
         "take" -> { nn -> this.take((nn[0] as Number).toInt()) }
         "drop" -> { nn -> this.drop((nn[0] as Number).toInt()) }
         "takeLast" -> { nn -> this.takeLast((nn[0] as Number).toInt()) }
-        "dropLast" -> { nn -> this.takeLast((nn[0] as Number).toInt()) }
+        "dropLast" -> { nn -> this.dropLast((nn[0] as Number).toInt()) }
         "map" -> { nn -> @Suppress("UNCHECKED_CAST") val lambda = (nn[0] as (Any) -> Any); this.map { lambda(it!!) } }
         "filter" -> { nn ->
             @Suppress("UNCHECKED_CAST", "UNCHECKED_CAST") val lambda =
