@@ -25,6 +25,20 @@ internal fun dispatchFunction4(name: String, functions: Map<String, TypedFunctio
         "vec4" -> { x -> vec4(x[0], x[1], x[2], x[3]) }
         "mat4" -> { x -> mat4(x[0], x[1], x[2], x[3]) }
         "rgba" -> { x -> rgba(x[0], x[1], x[2], x[3]) }
+        "min" -> ::smallest
+        "max" -> ::largest
+        "sum" -> ::total
+        "length" -> ::lengthOf
         else -> functions[name]?.let { { x: Array<Any> -> it.invoke(x[0], x[1], x[2], x[3]) } }
+    }
+}
+
+internal fun dispatchFunction5(name: String, functions: Map<String, TypedFunction5>): ((Array<Any>) -> Any)? {
+    return when (name) {
+        "min" -> ::smallest
+        "max" -> ::largest
+        "sum" -> ::total
+        "map" -> ::mapRange
+        else -> functions[name]?.let { { x: Array<Any> -> it.invoke(x[0], x[1], x[2], x[3], x[4]) } }
     }
 }

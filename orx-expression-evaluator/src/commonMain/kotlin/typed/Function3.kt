@@ -44,6 +44,10 @@ internal fun dispatchFunction3(name: String, functions: Map<String, TypedFunctio
         "vec4" -> { x -> vec4(x[0], x[1], x[2]) }
         "mix" -> { x -> mix(x[0], x[1], x[2]) }
         "rgb" -> { x -> rgb(x[0], x[1], x[2]) }
+        "min" -> ::smallest
+        "max" -> ::largest
+        "sum" -> ::total
+        "length" -> ::lengthOf
         else -> mathFunction3(name) ?: functions[name]?.let {
             { x: Array<Any> ->
                 it.invoke(x[0], x[1], x[2])

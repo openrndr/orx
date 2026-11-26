@@ -17,7 +17,7 @@ private fun typedArities(name: String, functions: TypedFunctionExtensions): Set<
     if (dispatchFunction2(name, functions.functions2) != null) add(2)
     if (dispatchFunction3(name, functions.functions3) != null) add(3)
     if (dispatchFunction4(name, functions.functions4) != null) add(4)
-    if (name in functions.functions5) add(5)
+    if (dispatchFunction5(name, functions.functions5) != null) add(5)
 }
 
 /**

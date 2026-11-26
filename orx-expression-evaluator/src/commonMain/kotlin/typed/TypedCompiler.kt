@@ -757,7 +757,7 @@ internal class TypedCompiledExpression(
         2 -> dispatchFunction2(name, functions.functions2)
         3 -> dispatchFunction3(name, functions.functions3)
         4 -> dispatchFunction4(name, functions.functions4)
-        else -> functions.functions5[name]?.let { fn -> { x: Array<Any> -> fn(x[0], x[1], x[2], x[3], x[4]) } }
+        else -> dispatchFunction5(name, functions.functions5)
     }
 
     /** a function that a constant is, called with [x] */
@@ -815,8 +815,8 @@ internal class TypedCompiledExpression(
             return when (double) {
                 is DoubleFunction1 -> unary(a0, { double.call(it) }) { other(it) }
                 is DoubleFunction2 -> binary(a0, args[1], { x, y -> double.call(x, y) }) { x, y -> other(x, y) }
-                else -> object : DoubleNode() {
-                    val f3 = double as DoubleFunction3
+                is DoubleFunction3 -> object : DoubleNode() {
+                    val f3: DoubleFunction3 = double
                     val a1 = args[1]
                     val a2 = args[2]
                     override fun evalDouble(frame: Frame): Double {
@@ -828,6 +828,45 @@ internal class TypedCompiledExpression(
                         val zo = frame.take()
                         if (xo == null && yo == null && zo == null) return f3.call(x, y, z)
                         return frame.spill(other(xo ?: x, yo ?: y, zo ?: z))
+                    }
+                }
+                is DoubleFunction4 -> object : DoubleNode() {
+                    val f4: DoubleFunction4 = double
+                    val a1 = args[1]
+                    val a2 = args[2]
+                    val a3 = args[3]
+                    override fun evalDouble(frame: Frame): Double {
+                        val x = a0.evalDouble(frame)
+                        val xo = frame.take()
+                        val y = a1.evalDouble(frame)
+                        val yo = frame.take()
+                        val z = a2.evalDouble(frame)
+                        val zo = frame.take()
+                        val w = a3.evalDouble(frame)
+                        val wo = frame.take()
+                        if (xo == null && yo == null && zo == null && wo == null) return f4.call(x, y, z, w)
+                        return frame.spill(other(xo ?: x, yo ?: y, zo ?: z, wo ?: w))
+                    }
+                }
+                else -> object : DoubleNode() {
+                    val f5 = double as DoubleFunction5
+                    val a1 = args[1]
+                    val a2 = args[2]
+                    val a3 = args[3]
+                    val a4 = args[4]
+                    override fun evalDouble(frame: Frame): Double {
+                        val x = a0.evalDouble(frame)
+                        val xo = frame.take()
+                        val y = a1.evalDouble(frame)
+                        val yo = frame.take()
+                        val z = a2.evalDouble(frame)
+                        val zo = frame.take()
+                        val w = a3.evalDouble(frame)
+                        val wo = frame.take()
+                        val v = a4.evalDouble(frame)
+                        val vo = frame.take()
+                        if (xo == null && yo == null && zo == null && wo == null && vo == null) return f5.call(x, y, z, w, v)
+                        return frame.spill(other(xo ?: x, yo ?: y, zo ?: z, wo ?: w, vo ?: v))
                     }
                 }
             }

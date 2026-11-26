@@ -20,24 +20,25 @@ internal fun rotate(axis: Any, angleInDegrees:Any): Matrix44 {
     return Matrix44.rotate(axis, angleInDegrees)
 }
 
-
+/** the smaller of two numbers or of two vectors, component by component; a number with a vector is for every component */
 internal fun min(x: Any, y: Any): Any {
     return when {
         x is Double && y is Double -> min_(x, y)
         x is Vector2 && y is Vector2 -> min_(x, y)
         x is Vector3 && y is Vector3 -> min_(x, y)
         x is Vector4 && y is Vector4 -> min_(x, y)
-        else -> error("unsupported arguments")
+        else -> smallest(arrayOf(x, y))
     }
 }
 
+/** the larger of two numbers or of two vectors, component by component; a number with a vector is for every component */
 internal fun max(x: Any, y: Any): Any {
     return when {
         x is Double && y is Double -> max_(x, y)
         x is Vector2 && y is Vector2 -> max_(x, y)
         x is Vector3 && y is Vector3 -> max_(x, y)
         x is Vector4 && y is Vector4 -> max_(x, y)
-        else -> error("unsupported arguments")
+        else -> largest(arrayOf(x, y))
     }
 }
 
@@ -81,6 +82,8 @@ internal fun dispatchFunction2(name: String, functions: Map<String, TypedFunctio
             "vec2" -> { x -> vec2(x[0], x[1]) }
             "vec3" -> { x -> vec3(x[0], x[1]) }
             "rotate" -> { x -> rotate(x[0], x[1]) }
+            "random" -> ::randomBetween
+            "length" -> ::lengthOf
             else -> mathFunction2(name) ?: functions[name]?.let { { x: Array<Any> -> it.invoke(x[0], x[1]) } }
     }
 }

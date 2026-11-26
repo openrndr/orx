@@ -30,6 +30,10 @@ internal fun Vector2.property(property: String): Any? {
         "xy" -> this
         "xxx" -> Vector3(x, x, x)
         "xxy" -> Vector3(x, x, y)
+        "xy0" -> xy0
+        "xy1" -> xy1
+        "xy00" -> xy00
+        "xy01" -> xy01
         "length" -> length
         "normalized" -> normalized
         else -> null
@@ -47,8 +51,13 @@ internal fun Vector3.property(property: String): Any? {
         "xy" -> Vector2(x, y)
         "zx" -> Vector2(z, x)
         "xz" -> Vector2(x, z)
+        "yz" -> Vector2(y, z)
+        "zy" -> Vector2(z, y)
+        "xyz" -> this
         "xxx" -> Vector3(x, x, x)
         "xxy" -> Vector3(x, x, y)
+        "xyz0" -> xyz0
+        "xyz1" -> xyz1
         "length" -> length
         "normalized" -> normalized
 
@@ -61,14 +70,18 @@ internal fun Vector4.property(property: String): Any? {
         "x" -> x
         "y" -> y
         "z" -> z
+        "w" -> w
         "xx" -> Vector2(x, x)
         "yx" -> Vector2(y, x)
         "yy" -> Vector2(y, y)
         "xy" -> Vector2(x, y)
         "zx" -> Vector2(z, x)
         "xz" -> Vector2(x, z)
+        "yz" -> Vector2(y, z)
+        "zy" -> Vector2(z, y)
         "xyz" -> Vector3(x, y, z)
         "xxy" -> Vector3(x, x, y)
+        "div" -> div
         "length" -> length
         "normalized" -> normalized
         else -> null
