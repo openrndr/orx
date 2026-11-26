@@ -1,5 +1,6 @@
 package org.openrndr.extra.expressions.typed
 
+import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import org.openrndr.math.Vector4
@@ -29,11 +30,20 @@ internal fun vec4(x: Any, y: Any, z: Any): Vector4 {
     }
 }
 
+/** the opaque color of the numbers [r], [g] and [b] */
+internal fun rgb(r: Any, g: Any, b: Any): ColorRGBa {
+    require(r is Double && g is Double && b is Double) {
+        "rgb(): takes three numbers, not ${typeName(r)}, ${typeName(g)} and ${typeName(b)}"
+    }
+    return ColorRGBa(r, g, b, 1.0)
+}
+
 internal fun dispatchFunction3(name: String, functions: Map<String, TypedFunction3>): ((Array<Any>) -> Any)? {
     return when (name) {
         "vec3" -> { x -> vec3(x[0], x[1], x[2]) }
         "vec4" -> { x -> vec4(x[0], x[1], x[2]) }
         "mix" -> { x -> mix(x[0], x[1], x[2]) }
+        "rgb" -> { x -> rgb(x[0], x[1], x[2]) }
         else -> mathFunction3(name) ?: functions[name]?.let {
             { x: Array<Any> ->
                 it.invoke(x[0], x[1], x[2])
