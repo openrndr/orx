@@ -1,0 +1,391 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>PanelText</title>
+<link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../../images/logo-icon.svg">
+<link href="../../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.2.uncommitted+252b92e
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":orx-jvm:orx-panel/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-jvm:orx-panel/main" data-filter=":orx-jvm:orx-panel/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-panel::org.openrndr.panel/PanelText///PointingToDeclaration//1278250025">
+  <div class="breadcrumbs"><a href="../../index.html">orx-panel</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.panel</a><span class="delimiter">/</span><span class="current">PanelText</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Panel</span><wbr><span><span>Text</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">PanelText</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-panel/src/main/kotlin/org/openrndr/panel/PanelText.kt#L62">source</a>)</span></span></div><p class="paragraph">Text drawn from the outlines of its glyphs with the boundary drawer of the program, Windfoil by default, instead of from textures of glyphs. Text is crisp at any scale and in any transform. The work is cached at every step:</p><ul><li><p class="paragraph">faces are loaded once per font, weight and size, by <a href="../../../../orx-text-writer/org.openrndr.extra.textwriter/-font-faces/index.html">FontFaces</a>, shared with compositions; text is shaped in one face per font and weight and its glyphs are scaled to the size of the text</p></li><li><p class="paragraph">text is shaped once per face and string, kept for the most recently used <a href="max-shaped-texts.html">maxShapedTexts</a> strings; the shaped text gives both the measures that layout uses and the glyphs that are drawn, so they agree</p></li><li><p class="paragraph">the outline of every glyph is uploaded to the GPU once, for all sizes, in the glyph map of the boundary drawer that all elements, compositions and other text drawers share, see <a href="../../../../orx-text-writer/org.openrndr.extra.textwriter/-glyph-maps/index.html">GlyphMaps</a></p></li><li><p class="paragraph">the draw commands of every text an element draws are prepared once in a buffer of their own, in the coordinates of the element; drawing them again, also when the element moved because it scrolled, only draws the buffer. Buffers that were not drawn in a redraw are released after it, see <a href="release-unused.html">releaseUnused</a></p></li></ul></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="903308380%2FClasslikes%2F1278250025" anchor-label="Placed" id="903308380%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-placed/index.html"><span><span>Placed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="903308380%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-placed/index.html">Placed</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>shaped<span class="token operator">: </span><a href="../-shaped-text/index.html">ShapedText</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>position<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>color<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">a text of <a href="draw-batch.html">drawBatch</a>: <a href="-placed/shaped.html">shaped</a> at <a href="-placed/position.html">position</a>, the origin of its first baseline, in <a href="-placed/color.html">color</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-589382150%2FClasslikes%2F1278250025" anchor-label="RichShaped" id="-589382150%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-rich-shaped/index.html"><span>Rich</span><wbr><span><span>Shaped</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-589382150%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-rich-shaped/index.html">RichShaped</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>shaped<span class="token operator">: </span><a href="../-shaped-text/index.html">ShapedText</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>runOfGlyph<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int-array/index.html">IntArray</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">rich text shaped in lines: <a href="-rich-shaped/shaped.html">shaped</a>, and the run of every glyph</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1433848638%2FClasslikes%2F1278250025" anchor-label="Run" id="1433848638%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-run/index.html"><span><span>Run</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1433848638%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-run/index.html">Run</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>style<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">a run of rich text: <a href="-run/text.html">text</a> in the face and color of <a href="-run/style.html">style</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-500399195%2FProperties%2F1278250025" anchor-label="maxShapedTexts" id="-500399195%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="max-shaped-texts.html"><span>max</span><wbr><span>Shaped</span><wbr><span><span>Texts</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-500399195%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">var </span><a href="max-shaped-texts.html">maxShapedTexts</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">the most strings whose shaping is kept</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="202125358%2FFunctions%2F1278250025" anchor-label="carets" id="202125358%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="carets.html"><span><span>carets</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="202125358%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="carets.html"><span class="token function">carets</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">style<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></div><div class="brief "><p class="paragraph">The x of the caret before every character of <a href="carets.html">text</a> in a single line in the face of <a href="carets.html">style</a>, and after the last: <code class="lang-kotlin">text.length + 1</code> positions, kept like the shaping. From the glyphs of the line, which white space has none of: a glyph for every other character, or else for every character of a word, by the glyphs of each word alone; in the words whose glyphs are not one per character, as with ligatures, from the widths of the beginnings of the word</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1809716437%2FFunctions%2F1278250025" anchor-label="draw" id="-1809716437%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="draw.html"><span><span>draw</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1809716437%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="draw.html"><span class="token function">draw</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">, </span></span><span class="parameter ">owner<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span></span><span class="parameter ">slot<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">shaped<span class="token operator">: </span><a href="../-shaped-text/index.html">ShapedText</a><span class="token punctuation">, </span></span><span class="parameter ">position<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span></span><span class="parameter ">color<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token punctuation">, </span></span><span class="parameter ">decoration<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-text-decoration/index.html">TextDecoration</a><span class="token operator"> = </span>TextDecoration.NONE<span class="token punctuation">, </span></span><span class="parameter ">glyphColors<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Draws <a href="draw.html">shaped</a> at <a href="draw.html">position</a>, the origin of its first baseline, in <a href="draw.html">color</a>. The draw commands are kept for <a href="draw.html">owner</a> under <a href="draw.html">slot</a> and drawn again as long as the text, its position and its color stay the same.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1538826257%2FFunctions%2F1278250025" anchor-label="drawBatch" id="-1538826257%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="draw-batch.html"><span>draw</span><wbr><span><span>Batch</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1538826257%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="draw-batch.html"><span class="token function">drawBatch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">, </span></span><span class="parameter ">owner<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span></span><span class="parameter ">slot<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">texts<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-placed/index.html">PanelText.Placed</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Draws <a href="draw-batch.html">texts</a> with a single draw call, without decorations, for many small texts like the labels of a graph. The draw commands are kept for <a href="draw-batch.html">owner</a> under <a href="draw-batch.html">slot</a> and drawn again as long as the texts, their positions and their colors stay the same, so texts that change often are best batched apart from those that do not.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1275018663%2FFunctions%2F1278250025" anchor-label="drawInBox" id="-1275018663%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="draw-in-box.html"><span>draw</span><wbr><span>In</span><wbr><span><span>Box</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1275018663%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="draw-in-box.html"><span class="token function">drawInBox</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">, </span></span><span class="parameter ">owner<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span></span><span class="parameter ">slot<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">style<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">box<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">, </span></span><span class="parameter ">horizontalAlign<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">verticalAlign<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">color<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token punctuation">, </span></span><span class="parameter ">wrap<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Draws <a href="draw-in-box.html">text</a> in the face of <a href="draw-in-box.html">style</a> in <a href="draw-in-box.html">box</a>, at <a href="draw-in-box.html">horizontalAlign</a> and <a href="draw-in-box.html">verticalAlign</a> in it, from 0 at the left and the top to 1 at the right and the bottom; broken into lines at the width of the box when <a href="draw-in-box.html">wrap</a> is set and the white space of the style wraps, cut with an ellipsis when it is a single line that does not fit and the text overflow of the style is ellipsis, with the decoration of the style</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1054900622%2FFunctions%2F1278250025" anchor-label="drawLine" id="-1054900622%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="draw-line.html"><span>draw</span><wbr><span><span>Line</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1054900622%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="draw-line.html"><span class="token function">drawLine</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">drawer<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">, </span></span><span class="parameter ">owner<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span></span><span class="parameter ">slot<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">style<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">x<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">y<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">color<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">draws a single line of <a href="draw-line.html">text</a> in the face of <a href="draw-line.html">style</a>, with its decoration, see <a href="draw.html">draw</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="771592570%2FFunctions%2F1278250025" anchor-label="ellipsized" id="771592570%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ellipsized.html"><span><span>ellipsized</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="771592570%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="ellipsized.html"><span class="token function">ellipsized</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">style<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph"><a href="ellipsized.html">text</a> cut at its end, with an ellipsis, so that it fits in <a href="ellipsized.html">width</a>, as a single line in the face of <a href="ellipsized.html">style</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1685215018%2FFunctions%2F1278250025" anchor-label="face" id="-1685215018%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="face.html"><span><span>face</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1685215018%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="face.html"><span class="token function">face</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">style<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw.font/Face///PointingToDeclaration/">Face</span></div><div class="brief "><p class="paragraph">the face of <a href="face.html">style</a>: its font family, weight, style and size</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-336321532%2FFunctions%2F1278250025" anchor-label="line" id="-336321532%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="line.html"><span><span>line</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-336321532%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="line.html"><span class="token function">line</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">style<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-shaped-text/index.html">ShapedText</a></div><div class="brief "><p class="paragraph"><a href="line.html">text</a> shaped as a single line in the face of <a href="line.html">style</a>, with its letter spacing</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="line.html"><span class="token function">line</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">face<span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw.font/Face///PointingToDeclaration/">Face</span><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">spacing<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-shaped-text/index.html">ShapedText</a></div><div class="brief "><p class="paragraph"><a href="line.html">text</a> shaped as a single line in <a href="line.html">face</a>, with <a href="line.html">spacing</a> after every character</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-313891708%2FFunctions%2F1278250025" anchor-label="paragraph" id="-313891708%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="paragraph.html"><span><span>paragraph</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-313891708%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="paragraph.html"><span class="token function">paragraph</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">style<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">horizontalAlign<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-shaped-text/index.html">ShapedText</a></div><div class="brief "><p class="paragraph"><a href="paragraph.html">text</a> in the face of <a href="paragraph.html">style</a>, broken into lines at most <a href="paragraph.html">width</a> wide; the first baseline is at y = 0</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1913624201%2FFunctions%2F1278250025" anchor-label="placeInBox" id="1913624201%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="place-in-box.html"><span>place</span><wbr><span>In</span><wbr><span><span>Box</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1913624201%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="place-in-box.html"><span class="token function">placeInBox</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">style<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">box<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">, </span></span><span class="parameter ">horizontalAlign<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">verticalAlign<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">color<span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-placed/index.html">PanelText.Placed</a></div><div class="brief "><p class="paragraph"><a href="place-in-box.html">text</a> as a single line in the face of <a href="place-in-box.html">style</a>, at <a href="place-in-box.html">horizontalAlign</a> and <a href="place-in-box.html">verticalAlign</a> in <a href="place-in-box.html">box</a>, see <a href="draw-in-box.html">drawInBox</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="206666745%2FFunctions%2F1278250025" anchor-label="releaseUnused" id="206666745%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="release-unused.html"><span>release</span><wbr><span><span>Unused</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="206666745%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="release-unused.html"><span class="token function">releaseUnused</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">releases the buffers of the texts that were not drawn since the last call, after a redraw</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="989095286%2FFunctions%2F1278250025" anchor-label="richParagraph" id="989095286%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="rich-paragraph.html"><span>rich</span><wbr><span><span>Paragraph</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="989095286%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="rich-paragraph.html"><span class="token function">richParagraph</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">runs<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-run/index.html">PanelText.Run</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">horizontalAlign<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-rich-shaped/index.html">PanelText.RichShaped</a></div><div class="brief "><p class="paragraph"><a href="rich-paragraph.html">runs</a> of text in their own faces broken into lines at most <a href="rich-paragraph.html">width</a> wide, as one paragraph; the first baseline is at y = 0. The lines are as far apart as the line height of the largest face.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-919118894%2FFunctions%2F1278250025" anchor-label="width" id="-919118894%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="width.html"><span><span>width</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-919118894%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="width.html"><span class="token function">width</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">style<span class="token operator">: </span><a href="../../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">the width of <a href="width.html">text</a> in a single line in the face of <a href="width.html">style</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

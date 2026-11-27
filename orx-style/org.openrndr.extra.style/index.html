@@ -1,0 +1,686 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.style</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.2.uncommitted+252b92e
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-style/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-style/commonMain" data-filter=":orx-style/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-style::org.openrndr.extra.style////PointingToDeclaration//-283767918">
+  <div class="breadcrumbs"><a href="../index.html">orx-style</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.style</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-375704439%2FClasslikes%2F-283767918" anchor-label="Combinator" id="-375704439%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-combinator/index.html"><span><span>Combinator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-375704439%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">enum class </span><a href="-combinator/index.html">Combinator</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-combinator/index.html">Combinator</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">how a compound selector relates to the one before it</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2081878066%2FClasslikes%2F-283767918" anchor-label="ComplexSelector" id="-2081878066%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-complex-selector/index.html"><span>Complex</span><wbr><span><span>Selector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2081878066%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-complex-selector/index.html">ComplexSelector</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>compounds<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-compound-selector/index.html">CompoundSelector</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>combinators<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-combinator/index.html">Combinator</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A complex selector of CSS: <a href="-complex-selector/compounds.html">compounds</a> from left to right, with the <a href="-complex-selector/combinators.html">combinators</a> between them, one fewer than the compounds. The last compound selects the node.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-953746213%2FClasslikes%2F-283767918" anchor-label="CompoundSelector" id="-953746213%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-compound-selector/index.html"><span>Compound</span><wbr><span><span>Selector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-953746213%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-compound-selector/index.html">CompoundSelector</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>simples<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-simple-selector/index.html">SimpleSelector</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">a compound selector: the simple selectors that one node matches, like <code class="lang-kotlin">button.primary:hover</code></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1840284242%2FClasslikes%2F-283767918" anchor-label="CssDeclaration" id="-1840284242%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-css-declaration/index.html"><span>Css</span><wbr><span><span>Declaration</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1840284242%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-css-declaration/index.html">CssDeclaration</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>important<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">a declaration of CSS: the property <a href="-css-declaration/name.html">name</a> with <a href="-css-declaration/value.html">value</a> as text, <a href="-css-declaration/important.html">important</a> when it is marked !important</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1812629762%2FClasslikes%2F-283767918" anchor-label="CssDimension" id="1812629762%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-css-dimension/index.html"><span>Css</span><wbr><span><span>Dimension</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1812629762%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-css-dimension/index.html">CssDimension</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>unit<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">a number with a unit of CSS, like 12px, 50%, 1.5em or 2fr; <a href="-css-dimension/unit.html">unit</a> is lowercase, empty for numbers</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="315503404%2FClasslikes%2F-283767918" anchor-label="CssKeyframe" id="315503404%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-css-keyframe/index.html"><span>Css</span><wbr><span><span>Keyframe</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="315503404%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-css-keyframe/index.html">CssKeyframe</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>offset<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>declarations<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-css-declaration/index.html">CssDeclaration</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">a keyframe of an @keyframes rule: its <a href="-css-keyframe/offset.html">offset</a> from 0 to 1 and its <a href="-css-keyframe/declarations.html">declarations</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1284222049%2FClasslikes%2F-283767918" anchor-label="CssKeyword" id="-1284222049%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-css-keyword/index.html"><span>Css</span><wbr><span><span>Keyword</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1284222049%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">enum class </span><a href="-css-keyword/index.html">CssKeyword</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-css-keyword/index.html">CssKeyword</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">the keywords that every CSS property takes</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1908888533%2FClasslikes%2F-283767918" anchor-label="CssMediaEnvironment" id="-1908888533%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-css-media-environment/index.html"><span>Css</span><wbr><span>Media</span><wbr><span><span>Environment</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1908888533%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-css-media-environment/index.html">CssMediaEnvironment</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>width<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>height<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>colorScheme<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"dark"</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"screen"</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">What media queries are evaluated against: the size of the viewport in pixels, its preferred <a href="-css-media-environment/color-scheme.html">colorScheme</a>, dark or light, and the media <a href="-css-media-environment/type.html">type</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1062028743%2FClasslikes%2F-283767918" anchor-label="CssProperties" id="1062028743%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-css-properties/index.html"><span>Css</span><wbr><span><span>Properties</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1062028743%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-css-properties/index.html">CssProperties</a></div><div class="brief "><p class="paragraph">The properties of a style system by their names, and its shorthands: a shorthand is expanded into the declarations of its longhands</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1126421925%2FClasslikes%2F-283767918" anchor-label="CssProperty" id="1126421925%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-css-property/index.html"><span>Css</span><wbr><span><span>Property</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1126421925%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-css-property/index.html">CssProperty</a><span class="token operator">&lt;</span><a href="-css-property/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>inherited<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>initial<span class="token operator">: </span><a href="-css-property/index.html">T</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>parse<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-css-property/index.html">T</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A property of CSS: its <a href="-css-property/name.html">name</a>, whether it is <a href="-css-property/inherited.html">inherited</a> by default, its <a href="-css-property/initial.html">initial</a> value, and how a value is parsed from text, null when the text is not a valid value</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="896541406%2FClasslikes%2F-283767918" anchor-label="CssRule" id="896541406%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-css-rule/index.html"><span>Css</span><wbr><span><span>Rule</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="896541406%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-css-rule/index.html">CssRule</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>selectors<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>block<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>order<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>media<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A rule of CSS: its <a href="-css-rule/selectors.html">selectors</a> and the text of its <a href="-css-rule/block.html">block</a>, <a href="-css-rule/order.html">order</a> is its place in the style sheet; <a href="-css-rule/media.html">media</a> is the media query of the @media rules it is in, null when it is in none</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="522817736%2FClasslikes%2F-283767918" anchor-label="SelectorTree" id="522817736%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-selector-tree/index.html"><span>Selector</span><wbr><span><span>Tree</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="522817736%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-selector-tree/index.html">SelectorTree</a><span class="token operator">&lt;</span><a href="-selector-tree/index.html">N</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">How selectors see the nodes of a tree, like the elements of an SVG document or of a user interface: selectors match any tree through this view of it.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="574645940%2FClasslikes%2F-283767918" anchor-label="SimpleSelector" id="574645940%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-simple-selector/index.html"><span>Simple</span><wbr><span><span>Selector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="574645940%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">interface </span><a href="-simple-selector/index.html">SimpleSelector</a></div><div class="brief "><p class="paragraph">a simple selector: a type, an id, a class, an attribute or a pseudo-class</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-46116639%2FClasslikes%2F-283767918" anchor-label="Specificity" id="-46116639%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-specificity/index.html"><span><span>Specificity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-46116639%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-specificity/index.html">Specificity</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>ids<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>classes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>types<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><a href="-specificity/index.html">Specificity</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">the specificity of a selector: its ids, its classes, attributes and pseudo-classes, and its types</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1427303101%2FClasslikes%2F-283767918" anchor-label="TimingFunction" id="-1427303101%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-timing-function/index.html"><span>Timing</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1427303101%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="-timing-function/index.html">TimingFunction</a></div><div class="brief "><p class="paragraph">a timing function of CSS, like those of transitions and animations, and the key splines of SMIL</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1875590032%2FClasslikes%2F-283767918" anchor-label="Transition" id="1875590032%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-transition/index.html"><span><span>Transition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1875590032%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-transition/index.html">Transition</a><span class="token operator">&lt;</span><a href="-transition/index.html">V</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>property<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>from<span class="token operator">: </span><a href="-transition/index.html">V</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>to<span class="token operator">: </span><a href="-transition/index.html">V</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>start<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>timing<span class="token operator">: </span><a href="-transition-timing/index.html">TransitionTiming</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A transition of <a href="-transition/property.html">property</a> from <a href="-transition/from.html">from</a> to <a href="-transition/to.html">to</a> that starts at <a href="-transition/start.html">start</a>, in seconds</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2067369057%2FClasslikes%2F-283767918" anchor-label="Transitions" id="-2067369057%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-transitions/index.html"><span><span>Transitions</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2067369057%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-transitions/index.html">Transitions</a><span class="token operator">&lt;</span><a href="-transitions/index.html">V</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">interpolate<span class="token operator">: </span><span class="token punctuation">(</span>property<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span>a<span class="token operator">: </span><a href="-transitions/index.html">V</a><span class="token punctuation">, </span>b<span class="token operator">: </span><a href="-transitions/index.html">V</a><span class="token punctuation">, </span>t<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-transitions/index.html">V</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">The transitions of the properties of one element, of values of type <a href="-transitions/index.html">V</a> that <a href="../../orx-style/org.openrndr.extra.style/-transitions/--root--.html">interpolate</a> interpolates: a change of a property with a <a href="-transition-timing/index.html">TransitionTiming</a> transitions from the value that is shown, also when another transition of the property runs, to the new value. Transitions of CSS.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-76183770%2FClasslikes%2F-283767918" anchor-label="TransitionTiming" id="-76183770%2FClasslikes%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-transition-timing/index.html"><span>Transition</span><wbr><span><span>Timing</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-76183770%2FClasslikes%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-transition-timing/index.html">TransitionTiming</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>duration<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>delay<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>timingFunction<span class="token operator">: </span><a href="-timing-function/index.html">TimingFunction</a><span class="token operator"> = </span>TimingFunction.EASE</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">How a property transitions: over <a href="-transition-timing/duration.html">duration</a> seconds, after <a href="-transition-timing/delay.html">delay</a> seconds, with <a href="-transition-timing/timing-function.html">timingFunction</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-2044931208%2FFunctions%2F-283767918" anchor-label="cssBoxSides" id="-2044931208%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="css-box-sides.html"><span>css</span><wbr><span>Box</span><wbr><span><span>Sides</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2044931208%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="css-box-sides.html"><span class="token function">cssBoxSides</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">?</span></div><div class="brief "><p class="paragraph">the four sides of a box shorthand of CSS, like margin and padding: top, right, bottom and left; null when invalid</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1363873726%2FFunctions%2F-283767918" anchor-label="cssMediaMatches" id="-1363873726%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="css-media-matches.html"><span>css</span><wbr><span>Media</span><wbr><span><span>Matches</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1363873726%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="css-media-matches.html"><span class="token function">cssMediaMatches</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">query<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">environment<span class="token operator">: </span><a href="-css-media-environment/index.html">CssMediaEnvironment</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">True when the media query list <a href="css-media-matches.html">query</a> matches <a href="css-media-matches.html">environment</a>: queries separated by commas, any of which matches, with <code class="lang-kotlin">not</code>, <code class="lang-kotlin">only</code>, a media type, and features joined by <code class="lang-kotlin">and</code>: width, height, aspect-ratio with min- and max-, comparisons like <code class="lang-kotlin">(width &gt;= 600px)</code>, orientation and prefers-color-scheme. Features that are not known do not match.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1291616035%2FFunctions%2F-283767918" anchor-label="evaluateCssCalc" id="-1291616035%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="evaluate-css-calc.html"><span>evaluate</span><wbr><span>Css</span><wbr><span><span>Calc</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1291616035%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="evaluate-css-calc.html"><span class="token function">evaluateCssCalc</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">leaf<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The value of the calc() expression <a href="evaluate-css-calc.html">value</a>: sums, differences, products and quotients of values that <a href="evaluate-css-calc.html">leaf</a> evaluates, in parentheses and nested calc(); null when it is not valid or a leaf is not known</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1649767521%2FFunctions%2F-283767918" anchor-label="isCssColorName" id="-1649767521%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-css-color-name.html"><span>is</span><wbr><span>Css</span><wbr><span>Color</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1649767521%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="is-css-color-name.html"><span class="token function">isCssColorName</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">true when <a href="is-css-color-name.html">name</a> is a named color of CSS</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-324204729%2FFunctions%2F-283767918" anchor-label="parseCssAngle" id="-324204729%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-css-angle.html"><span>parse</span><wbr><span>Css</span><wbr><span><span>Angle</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-324204729%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-css-angle.html"><span class="token function">parseCssAngle</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">a CSS angle in degrees: deg, grad, rad, turn or a number of degrees; null when it is not an angle</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1206103593%2FFunctions%2F-283767918" anchor-label="parseCssColor" id="-1206103593%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-css-color.html"><span>parse</span><wbr><span>Css</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1206103593%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-css-color.html"><span class="token function">parseCssColor</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The color of the CSS color <a href="parse-css-color.html">text</a>, in sRGB; null when it is not a color. Reads named colors, <code class="lang-kotlin">transparent</code>, hexadecimal colors of 3, 4, 6 or 8 digits, rgb(), rgba(), hsl(), hsla() and the color functions of CSS Color 4 and 5: hwb(), lab(), lch(), oklab(), oklch(), color() with the predefined color spaces, color-mix() and light-dark(). Keywords that depend on where the color is used, like <code class="lang-kotlin">currentcolor</code>, are not colors here.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1680125197%2FFunctions%2F-283767918" anchor-label="parseCssDeclarations" id="-1680125197%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-css-declarations.html"><span>parse</span><wbr><span>Css</span><wbr><span><span>Declarations</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1680125197%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-css-declarations.html"><span class="token function">parseCssDeclarations</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-css-declaration/index.html">CssDeclaration</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">the declarations of a block or a style attribute, with !important removed from their values</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1428424474%2FFunctions%2F-283767918" anchor-label="parseCssDimension" id="1428424474%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-css-dimension.html"><span>parse</span><wbr><span>Css</span><wbr><span><span>Dimension</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1428424474%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-css-dimension.html"><span class="token function">parseCssDimension</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-css-dimension/index.html">CssDimension</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">the number with a unit <a href="parse-css-dimension.html">text</a> is, null when it is not one</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1884584505%2FFunctions%2F-283767918" anchor-label="parseCssKeyframes" id="1884584505%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-css-keyframes.html"><span>parse</span><wbr><span>Css</span><wbr><span><span>Keyframes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1884584505%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-css-keyframes.html"><span class="token function">parseCssKeyframes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">css<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-css-keyframe/index.html">CssKeyframe</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">the @keyframes rules of <a href="parse-css-keyframes.html">css</a>, by name, with their keyframes in the order of their offsets</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-633328985%2FFunctions%2F-283767918" anchor-label="parseCssPixels" id="-633328985%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-css-pixels.html"><span>parse</span><wbr><span>Css</span><wbr><span><span>Pixels</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-633328985%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-css-pixels.html"><span class="token function">parseCssPixels</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The value of <a href="parse-css-pixels.html">text</a> in pixels: a length in absolute units, a number, or a calc() expression of them; null when it is not one</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1255760789%2FFunctions%2F-283767918" anchor-label="parseCssRules" id="-1255760789%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-css-rules.html"><span>parse</span><wbr><span>Css</span><wbr><span><span>Rules</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1255760789%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-css-rules.html"><span class="token function">parseCssRules</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">css<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-css-rule/index.html">CssRule</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The rules of the style sheet <a href="parse-css-rules.html">css</a>, in the order they are given, with the rules in @media rules, which have their media queries; other at-rules are left out</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="542253465%2FFunctions%2F-283767918" anchor-label="parseCssSelector" id="542253465%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-css-selector.html"><span>parse</span><wbr><span>Css</span><wbr><span><span>Selector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="542253465%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-css-selector.html"><span class="token function">parseCssSelector</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-complex-selector/index.html">ComplexSelector</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The complex selector <a href="parse-css-selector.html">text</a>, like <code class="lang-kotlin">g:hover &gt; .item:not(.off)</code>; null when it is not valid or not supported, like pseudo-elements and :has()</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2005851863%2FFunctions%2F-283767918" anchor-label="parseCssSelectorList" id="2005851863%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-css-selector-list.html"><span>parse</span><wbr><span>Css</span><wbr><span>Selector</span><wbr><span><span>List</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2005851863%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-css-selector-list.html"><span class="token function">parseCssSelectorList</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-complex-selector/index.html">ComplexSelector</a><span class="token operator">&gt;</span><span class="token operator">?</span></div><div class="brief "><p class="paragraph">the selector list <a href="parse-css-selector-list.html">text</a>, like <code class="lang-kotlin">a, b &gt; c</code>; null when a selector in it is not valid or not supported</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-903274617%2FFunctions%2F-283767918" anchor-label="parseCssTime" id="-903274617%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parse-css-time.html"><span>parse</span><wbr><span>Css</span><wbr><span><span>Time</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-903274617%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="parse-css-time.html"><span class="token function">parseCssTime</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">A time of CSS or a clock value of SMIL, in seconds: 2s, 500ms, 1.5, 01:30, 00:01:30.5, 2min, 1h; null when it is not a time</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1971124074%2FFunctions%2F-283767918" anchor-label="splitCss" id="1971124074%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="split-css.html"><span>split</span><wbr><span><span>Css</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1971124074%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="split-css.html"><span class="token function">splitCss</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">separator<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token punctuation">, </span></span><span class="parameter ">limit<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>Int.MAX_VALUE</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph"><a href="split-css.html">text</a> split at <a href="split-css.html">separator</a>, except where the separator is in parentheses or quotes, in at most <a href="split-css.html">limit</a> parts</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="457872273%2FFunctions%2F-283767918" anchor-label="splitCssList" id="457872273%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="split-css-list.html"><span>split</span><wbr><span>Css</span><wbr><span><span>List</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="457872273%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="split-css-list.html"><span class="token function">splitCssList</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph"><a href="split-css-list.html">text</a> split at the commas that are not in parentheses, like the lists of CSS</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1907884860%2FFunctions%2F-283767918" anchor-label="splitCssWords" id="-1907884860%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="split-css-words.html"><span>split</span><wbr><span>Css</span><wbr><span><span>Words</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1907884860%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="split-css-words.html"><span class="token function">splitCssWords</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph"><a href="split-css-words.html">text</a> split at whitespace that is not in parentheses or quotes, like the values of shorthands</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="821788808%2FFunctions%2F-283767918" anchor-label="substituteCssVariables" id="821788808%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="substitute-css-variables.html"><span>substitute</span><wbr><span>Css</span><wbr><span><span>Variables</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="821788808%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="substitute-css-variables.html"><span class="token function">substituteCssVariables</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">variables<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph"><a href="substitute-css-variables.html">value</a> with its var() functions replaced by the values of the custom properties that <a href="substitute-css-variables.html">variables</a> gives by their names, like <code class="lang-kotlin">--accent</code>, or by their fallbacks. Null when a custom property is not defined and has no fallback, which makes a declaration invalid at computed-value time, as in CSS.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1227757093%2FFunctions%2F-283767918" anchor-label="toCssColor" id="-1227757093%2FFunctions%2F-283767918" data-filterable-set=":orx-style/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-style/commonMain" data-filterable-set=":orx-style/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="to-css-color.html"><span>to</span><wbr><span>Css</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1227757093%2FFunctions%2F-283767918"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-style/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token punctuation">.</span><a href="to-css-color.html"><span class="token function">toCssColor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph"><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">this</span> as a CSS color, rgb() of its sRGB values; <a href="parse-css-color.html">parseCssColor</a> reads it back</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

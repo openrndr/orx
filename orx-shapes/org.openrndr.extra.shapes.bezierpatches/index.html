@@ -1,0 +1,420 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.extra.shapes.bezierpatches</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../images/logo-icon.svg">
+<link href="../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.2.uncommitted+252b92e
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-shapes/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-shapes/commonMain" data-filter=":orx-shapes/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-shapes::org.openrndr.extra.shapes.bezierpatches////PointingToDeclaration//-1455291947">
+  <div class="breadcrumbs"><a href="../index.html">orx-shapes</a><span class="delimiter">/</span><span class="current">org.openrndr.extra.shapes.bezierpatches</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-1261442386%2FClasslikes%2F-1455291947" anchor-label="BezierPatch" id="-1261442386%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-bezier-patch/index.html"><span>Bezier</span><wbr><span><span>Patch</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1261442386%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-bezier-patch/index.html">BezierPatch</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">colors<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span> : <a href="-bezier-patch-base/index.html">BezierPatchBase</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.math/GeometricPrimitive2D///PointingToDeclaration/">GeometricPrimitive2D</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2057120285%2FClasslikes%2F-1455291947" anchor-label="BezierPatch3D" id="2057120285%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-bezier-patch3-d/index.html"><span>Bezier</span><wbr><span><span>Patch3D</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2057120285%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-bezier-patch3-d/index.html">BezierPatch3D</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">colors<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span> : <a href="-bezier-patch3-d-base/index.html">BezierPatch3DBase</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt; </span>, <span data-unresolved-link="org.openrndr.math/GeometricPrimitive3D///PointingToDeclaration/">GeometricPrimitive3D</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-605136308%2FClasslikes%2F-1455291947" anchor-label="BezierPatch3DBase" id="-605136308%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-bezier-patch3-d-base/index.html"><span>Bezier</span><wbr><span><span>Patch3DBase</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-605136308%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-bezier-patch3-d-base/index.html">BezierPatch3DBase</a><span class="token operator">&lt;</span><a href="-bezier-patch3-d-base/index.html">C</a><span class="token operator"> : </span><span data-unresolved-link="org.openrndr.color/AlgebraicColor///PointingToDeclaration/">AlgebraicColor</span><span class="token operator">&lt;</span><a href="-bezier-patch3-d-base/index.html">C</a><span class="token operator">&gt;</span>, <span data-unresolved-link="org.openrndr.color/ConvertibleToColorRGBa///PointingToDeclaration/">ConvertibleToColorRGBa</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>colors<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-bezier-patch3-d-base/index.html">C</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Represents a 3D Bezier patch defined by a 4x4 grid of control points and optional color data. This class provides utilities for manipulation, transformation, and evaluation of the patch.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1186753117%2FClasslikes%2F-1455291947" anchor-label="BezierPatchBase" id="1186753117%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-bezier-patch-base/index.html"><span>Bezier</span><wbr><span>Patch</span><wbr><span><span>Base</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1186753117%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-bezier-patch-base/index.html">BezierPatchBase</a><span class="token operator">&lt;</span><a href="-bezier-patch-base/index.html">C</a><span class="token operator"> : </span><span data-unresolved-link="org.openrndr.color/AlgebraicColor///PointingToDeclaration/">AlgebraicColor</span><span class="token operator">&lt;</span><a href="-bezier-patch-base/index.html">C</a><span class="token operator">&gt;</span>, <span data-unresolved-link="org.openrndr.color/ConvertibleToColorRGBa///PointingToDeclaration/">ConvertibleToColorRGBa</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>colors<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-bezier-patch-base/index.html">C</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Represents a base class for a Bezier patch, a surface defined by control points with optional color assignments.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="111679741%2FClasslikes%2F-1455291947" anchor-label="BezierPatchDrawer" id="111679741%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-bezier-patch-drawer/index.html"><span>Bezier</span><wbr><span>Patch</span><wbr><span><span>Drawer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="111679741%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-bezier-patch-drawer/index.html">BezierPatchDrawer</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="270787890%2FClasslikes%2F-1455291947" anchor-label="BezierVolume" id="270787890%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-bezier-volume/index.html"><span>Bezier</span><wbr><span><span>Volume</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="270787890%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-bezier-volume/index.html">BezierVolume</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A tricubic Bezier volume: a 4x4x4 lattice of control <a href="-bezier-volume/points.html">points</a>, indexed as <code class="lang-kotlin">points[w][v][u]</code>, that maps the unit cube of u, v and w to a deformed block of space. Moving its control points bends, twists or tapers whatever is placed in it, see <a href="../org.openrndr.extra.shapes.distort/envelope.html">org.openrndr.extra.shapes.distort.envelope</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="369607679%2FClasslikes%2F-1455291947" anchor-label="PatchClip" id="369607679%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-patch-clip/index.html"><span>Patch</span><wbr><span><span>Clip</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="369607679%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-patch-clip/index.html">PatchClip</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Shape///PointingToDeclaration/">Shape</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>basis<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>gridSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span><span class="token punctuation">, </span></span><span class="parameter ">distanceTolerance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span><span class="token punctuation">, </span></span><span class="parameter ">fillRule<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/FillRule///PointingToDeclaration/">FillRule</span><span class="token operator"> = </span>FillRule.NON_ZERO<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>clipToPatch<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">The part of a Bezier patch inside a <a href="../../orx-shapes/org.openrndr.extra.shapes.bezierpatches/-patch-clip/--root--.html">shape</a>, tessellated: the counterpart of <a href="../org.openrndr.extra.shapes.distort/envelope.html">org.openrndr.extra.shapes.distort.envelope</a> for the area of a shape instead of its outline. The x and y of the shape in the <a href="-patch-clip/basis.html">basis</a> rectangle give the u and v on the patch, as they do for the envelope, so the rim of the surface follows the enveloped outline.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1092653909%2FClasslikes%2F-1455291947" anchor-label="PatchVertex" id="-1092653909%2FClasslikes%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-patch-vertex/index.html"><span>Patch</span><wbr><span><span>Vertex</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1092653909%2FClasslikes%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-patch-vertex/index.html">PatchVertex</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>position<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>normal<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>texCoord<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">a vertex of a surface on a Bezier patch: its <a href="-patch-vertex/position.html">position</a>, its <a href="-patch-vertex/normal.html">normal</a> of unit length and its <a href="-patch-vertex/tex-coord.html">texCoord</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="93524224%2FProperties%2F-1455291947" anchor-label="bezierVolumeDeformFunctionGlsl" id="93524224%2FProperties%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bezier-volume-deform-function-glsl.html"><span>bezier</span><wbr><span>Volume</span><wbr><span>Deform</span><wbr><span>Function</span><wbr><span><span>Glsl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="93524224%2FProperties%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="bezier-volume-deform-function-glsl.html">bezierVolumeDeformFunctionGlsl</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">GLSL that deforms a vertex in a <a href="-bezier-volume/index.html">BezierVolume</a> given as arguments, so that a shader can deform by several volumes: <code class="lang-kotlin">void bezierVolumeDeform(inout vec3 position, inout vec3 normal, vec3 points[64], vec3 corner, vec3 size)</code> places position, in the coordinates of the basis box with corner and size, at the point of the volume at its u, v, w in the box, and maps normal by the inverse transpose of the Jacobian of that mapping, normalized. points are the 64 control points in the order <code class="lang-kotlin">points[w][v][u]</code>, at index <code class="lang-kotlin">w * 16 + v * 4 + u</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-34345224%2FProperties%2F-1455291947" anchor-label="bezierVolumeDeformGlsl" id="-34345224%2FProperties%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bezier-volume-deform-glsl.html"><span>bezier</span><wbr><span>Volume</span><wbr><span>Deform</span><wbr><span><span>Glsl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-34345224%2FProperties%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="bezier-volume-deform-glsl.html">bezierVolumeDeformGlsl</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">GLSL that deforms a vertex in a <a href="-bezier-volume/index.html">BezierVolume</a>, the GPU form of <a href="../org.openrndr.extra.shapes.distort/envelope.html">org.openrndr.extra.shapes.distort.envelope</a> for meshes: <a href="bezier-volume-deform-function-glsl.html">bezierVolumeDeformFunctionGlsl</a>, and <code class="lang-kotlin">void bezierVolumeDeform(inout vec3 position, inout vec3 normal)</code>, which deforms by the volume that <a href="set-bezier-volume.html">setBezierVolume</a> sets without a prefix: the uniforms <code class="lang-kotlin">p_bezierVolumePoints</code>, <code class="lang-kotlin">p_bezierVolumeCorner</code> and <code class="lang-kotlin">p_bezierVolumeSize</code>. Put it in the vertex preamble of a shade style and call it in its vertex transform, before anything that uses <code class="lang-kotlin">x_position</code> and <code class="lang-kotlin">x_normal</code>, as <a href="bezier-volume-shade-style.html">bezierVolumeShadeStyle</a> does. For several volumes in one shader, use <a href="bezier-volume-deform-function-glsl.html">bezierVolumeDeformFunctionGlsl</a> with prefixes.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-599536852%2FFunctions%2F-1455291947" anchor-label="bezierPatch" id="-599536852%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bezier-patch.html"><span>bezier</span><wbr><span><span>Patch</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-599536852%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="bezier-patch.html"><span class="token function">bezierPatch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">corners<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">alpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span>1.0 / 3.0</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-bezier-patch/index.html">BezierPatch</a></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="bezier-patch.html"><span class="token function">bezierPatch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">corners<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector3///PointingToDeclaration/">Vector3</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">alpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span>1.0 / 3.0</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-bezier-patch3-d/index.html">BezierPatch3D</a></div><div class="brief "><p class="paragraph">Create a bezier patch from 4 corners</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="bezier-patch.html"><span class="token function">bezierPatch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">path<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Path3D///PointingToDeclaration/">Path3D</span><span class="token punctuation">, </span></span><span class="parameter ">alpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span>1.0 / 3.0</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-bezier-patch3-d/index.html">BezierPatch3D</a></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="bezier-patch.html"><span class="token function">bezierPatch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shapeContour<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span><span class="token punctuation">, </span></span><span class="parameter ">alpha<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span>1.0 / 3.0</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-bezier-patch/index.html">BezierPatch</a></div><div class="brief "><p class="paragraph">Create a bezier patch from a closed shape contour (with 4 segments).</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="bezier-patch.html"><span class="token function">bezierPatch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">c0<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span><span class="token punctuation">, </span></span><span class="parameter ">c1<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span><span class="token punctuation">, </span></span><span class="parameter ">c2<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span><span class="token punctuation">, </span></span><span class="parameter ">c3<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Segment2D///PointingToDeclaration/">Segment2D</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-bezier-patch/index.html">BezierPatch</a></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="bezier-patch.html"><span class="token function">bezierPatch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">c0<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Segment3D///PointingToDeclaration/">Segment3D</span><span class="token punctuation">, </span></span><span class="parameter ">c1<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Segment3D///PointingToDeclaration/">Segment3D</span><span class="token punctuation">, </span></span><span class="parameter ">c2<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Segment3D///PointingToDeclaration/">Segment3D</span><span class="token punctuation">, </span></span><span class="parameter ">c3<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Segment3D///PointingToDeclaration/">Segment3D</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-bezier-patch3-d/index.html">BezierPatch3D</a></div><div class="brief "><p class="paragraph">Create a cubic bezier patch from 4 segments. The control points of the segments are used in row-wise fashion</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1260298764%2FFunctions%2F-1455291947" anchor-label="bezierPatch" id="1260298764%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bezier-patch.html"><span>bezier</span><wbr><span><span>Patch</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1260298764%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"bezierPatch3DRGBa"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="bezier-patch.html"><span class="token function">bezierPatch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bezierPatch<span class="token operator">: </span><a href="-bezier-patch3-d-base/index.html">BezierPatch3DBase</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">subdivisions<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"bezierPatch3DOKLAB"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="bezier-patch.html"><span class="token function">bezierPatch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bezierPatch<span class="token operator">: </span><a href="-bezier-patch3-d-base/index.html">BezierPatch3DBase</a><span class="token operator">&lt;</span><a href="../../orx-color/org.openrndr.extra.color.spaces/-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">subdivisions<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"bezierPatchRGBa"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="bezier-patch.html"><span class="token function">bezierPatch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bezierPatch<span class="token operator">: </span><a href="-bezier-patch-base/index.html">BezierPatchBase</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">subdivisions<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"bezierPatchOKLAB"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="bezier-patch.html"><span class="token function">bezierPatch</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bezierPatch<span class="token operator">: </span><a href="-bezier-patch-base/index.html">BezierPatchBase</a><span class="token operator">&lt;</span><a href="../../orx-color/org.openrndr.extra.color.spaces/-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">subdivisions<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-16072054%2FFunctions%2F-1455291947" anchor-label="bezierPatches" id="-16072054%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bezier-patches.html"><span>bezier</span><wbr><span><span>Patches</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-16072054%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"bezierPatches3DRGBa"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="bezier-patches.html"><span class="token function">bezierPatches</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bezierPatch<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-bezier-patch3-d-base/index.html">BezierPatch3DBase</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">subdivisions<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"bezierPatches3DOKLAB"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="bezier-patches.html"><span class="token function">bezierPatches</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bezierPatch<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-bezier-patch3-d-base/index.html">BezierPatch3DBase</a><span class="token operator">&lt;</span><a href="../../orx-color/org.openrndr.extra.color.spaces/-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">subdivisions<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"bezierPatchesRGBa"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="bezier-patches.html"><span class="token function">bezierPatches</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bezierPatch<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-bezier-patch-base/index.html">BezierPatchBase</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.color/ColorRGBa///PointingToDeclaration/">ColorRGBa</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">subdivisions<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">"bezierPatchesOKLAB"</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/Drawer///PointingToDeclaration/">Drawer</span><span class="token punctuation">.</span><a href="bezier-patches.html"><span class="token function">bezierPatches</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bezierPatch<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-bezier-patch-base/index.html">BezierPatchBase</a><span class="token operator">&lt;</span><a href="../../orx-color/org.openrndr.extra.color.spaces/-color-o-k-l-a-ba/index.html">ColorOKLABa</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">subdivisions<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1636933608%2FFunctions%2F-1455291947" anchor-label="bezierVolumeShadeStyle" id="-1636933608%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="bezier-volume-shade-style.html"><span>bezier</span><wbr><span>Volume</span><wbr><span>Shade</span><wbr><span><span>Style</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1636933608%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="bezier-volume-shade-style.html"><span class="token function">bezierVolumeShadeStyle</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">basis<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">, </span></span><span class="parameter ">volume<span class="token operator">: </span><a href="-bezier-volume/index.html">BezierVolume</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.draw/ShadeStyle///PointingToDeclaration/">ShadeStyle</span></div><div class="brief "><p class="paragraph">A shade style that deforms meshes in <a href="bezier-volume-shade-style.html">volume</a> by their places in the <a href="bezier-volume-shade-style.html">basis</a> box, on the GPU, positions and normals alike; see <a href="bezier-volume-deform-glsl.html">bezierVolumeDeformGlsl</a>. Instanced meshes are deformed in their own coordinates, before their instance transforms. Update it with <a href="set-bezier-volume.html">setBezierVolume</a> when the volume changes, and combine it with a shade style that colors the mesh, like with <code class="lang-kotlin">+</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-921327197%2FFunctions%2F-1455291947" anchor-label="clip" id="-921327197%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clip.html"><span><span>clip</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-921327197%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-bezier-patch3-d/index.html">BezierPatch3D</a><span class="token punctuation">.</span><a href="clip.html"><span class="token function">clip</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Shape///PointingToDeclaration/">Shape</span><span class="token punctuation">, </span></span><span class="parameter ">basis<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">, </span></span><span class="parameter ">gridSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span><span class="token punctuation">, </span></span><span class="parameter ">thickness<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span><span class="token punctuation">, </span></span><span class="parameter ">distanceTolerance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-patch-vertex/index.html">PatchVertex</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The part of this patch inside <a href="clip.html">shape</a>, tessellated, see <a href="-patch-clip/index.html">PatchClip</a>: the surface, or with a <a href="clip.html">thickness</a> a solid between the surface and its offset along the normal. For a patch that changes from frame to frame, make a <a href="-patch-clip/index.html">PatchClip</a> once and map it with <a href="-patch-clip/vertices.html">PatchClip.vertices</a> instead.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1384138133%2FFunctions%2F-1455291947" anchor-label="distort" id="-1384138133%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="distort.html"><span><span>distort</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1384138133%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-bezier-patch/index.html">BezierPatch</a><span class="token punctuation">.</span><a href="distort.html"><span class="token function">distort</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shapeContour<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span><span class="token punctuation">, </span></span><span class="parameter ">referenceRectangle<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token operator"> = </span>shapeContour.bounds<span class="token punctuation">, </span></span><span class="parameter ">distanceTolerance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/ShapeContour///PointingToDeclaration/">ShapeContour</span></div><div class="brief "><p class="paragraph">Distort a shape contour: the image of <a href="distort.html">shapeContour</a> under the patch, with the <a href="distort.html">referenceRectangle</a> mapped to the unit square of u and v. Every segment is replaced by cubic pieces through the images of its points, with the directions there turned by the patch, halved until they are within <a href="distort.html">distanceTolerance</a> of the image.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1526688418%2FFunctions%2F-1455291947" anchor-label="evenGrid" id="1526688418%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="even-grid.html"><span>even</span><wbr><span><span>Grid</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1526688418%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-bezier-patch3-d/index.html">BezierPatch3D</a><span class="token punctuation">.</span><a href="even-grid.html"><span class="token function">evenGrid</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">columns<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">rows<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Places on a grid over this patch whose lines are spaced evenly along the surface rather than in u, v, as rows of u, v: <a href="even-grid.html">rows</a> rows from v = 0 to v = 1, spaced by length along the patch where u is 0.5, and in every row <a href="even-grid.html">columns</a> places from u = 0 to u = 1, spaced by length along that row. Both counts are at least 2, so that the grid reaches the edges.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1496245050%2FFunctions%2F-1455291947" anchor-label="scatter" id="1496245050%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="scatter.html"><span><span>scatter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1496245050%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-bezier-patch3-d/index.html">BezierPatch3D</a><span class="token punctuation">.</span><a href="scatter.html"><span class="token function">scatter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">distance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">random<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="token operator"> = </span>Random.Default<span class="token punctuation">, </span></span><span class="parameter ">maxCount<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>Int.MAX_VALUE<span class="token punctuation">, </span></span><span class="parameter ">misses<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">3000</span><span class="token punctuation">, </span></span><span class="parameter ">resolution<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">64</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Places spread evenly over this patch, as u, v: places at least <a href="scatter.html">distance</a> apart on the surface, by the distance in space between their points, until no more fit (a Poisson disk sampling). Candidates are drawn in proportion to the area of the surface, so where the patch stretches it gets as many places as it has room for, and where it is squeezed it gets few, unlike places spread evenly in u, v. Use <a href="-bezier-patch3-d-base/frames.html">frames</a> to place things at them.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1345317995%2FFunctions%2F-1455291947" anchor-label="setBezierVolume" id="1345317995%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-bezier-volume.html"><span>set</span><wbr><span>Bezier</span><wbr><span><span>Volume</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1345317995%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr.draw/ShadeStyle///PointingToDeclaration/">ShadeStyle</span><span class="token punctuation">.</span><a href="set-bezier-volume.html"><span class="token function">setBezierVolume</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">basis<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Box///PointingToDeclaration/">Box</span><span class="token punctuation">, </span></span><span class="parameter ">volume<span class="token operator">: </span><a href="-bezier-volume/index.html">BezierVolume</a><span class="token punctuation">, </span></span><span class="parameter ">prefix<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"bezierVolume"</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Sets the uniforms of a volume on this shade style: the control points of <a href="set-bezier-volume.html">volume</a> and the corner and size of the <a href="set-bezier-volume.html">basis</a> box, as <code class="lang-kotlin">p_${prefix}Points</code> (64 vec3, <code class="lang-kotlin">points[w][v][u]</code> at index <code class="lang-kotlin">w * 16 + v * 4 + u</code>), <code class="lang-kotlin">p_${prefix}Corner</code> and <code class="lang-kotlin">p_${prefix}Size</code>. The default <a href="set-bezier-volume.html">prefix</a> gives the uniforms that the two-argument <code class="lang-kotlin">bezierVolumeDeform</code> of <a href="bezier-volume-deform-glsl.html">bezierVolumeDeformGlsl</a> reads; other prefixes are for <a href="bezier-volume-deform-function-glsl.html">bezierVolumeDeformFunctionGlsl</a>, one per volume. Call it again when the volume changes.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

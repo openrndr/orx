@@ -1,0 +1,435 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.openrndr.panel</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.2.uncommitted+252b92e
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":orx-jvm:orx-panel/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-jvm:orx-panel/main" data-filter=":orx-jvm:orx-panel/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="orx-panel::org.openrndr.panel////PointingToDeclaration//1278250025">
+  <div class="breadcrumbs"><a href="../index.html">orx-panel</a><span class="delimiter">/</span><span class="current">org.openrndr.panel</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-537288927%2FClasslikes%2F1278250025" anchor-label="Command" id="-537288927%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-command/index.html"><span><span>Command</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-537288927%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-command/index.html">Command</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>shortcut<span class="token operator">: </span><a href="-shortcut/index.html">Shortcut</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>group<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>action<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">a command: what it is called, its <a href="-command/shortcut.html">shortcut</a>, the <a href="-command/group.html">group</a> it is in, like a menu, and what it does</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="442794542%2FClasslikes%2F1278250025" anchor-label="Commands" id="442794542%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-commands/index.html"><span><span>Commands</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="442794542%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-commands/index.html">Commands</a></div><div class="brief "><p class="paragraph">The commands of a control manager: actions with names and keyboard shortcuts, which the command palette finds by their names, see <a href="command-palette.html">ControlManager.commandPalette</a>. Menus of a menu bar add their items as commands.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2040275354%2FClasslikes%2F1278250025" anchor-label="ControlManager" id="-2040275354%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-control-manager/index.html"><span>Control</span><wbr><span><span>Manager</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2040275354%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-control-manager/index.html">ControlManager</a> : <span data-unresolved-link="org.openrndr/Extension///PointingToDeclaration/">Extension</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1786093247%2FClasslikes%2F1278250025" anchor-label="ControlManagerBuilder" id="-1786093247%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-control-manager-builder/index.html"><span>Control</span><wbr><span>Manager</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1786093247%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-control-manager-builder/index.html">ControlManagerBuilder</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>controlManager<span class="token operator">: </span><a href="-control-manager/index.html">ControlManager</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="37511885%2FClasslikes%2F1278250025" anchor-label="CssFile" id="37511885%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-css-file/index.html"><span>Css</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="37511885%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-css-file/index.html">CssFile</a></div><div class="brief "><p class="paragraph">A CSS file whose style sheets are in a document, see <a href="-control-manager/css-file.html">ControlManager.cssFile</a>. When it is <a href="-css-file/watched.html">watched</a>, the style sheets are read again when the file changes, in the place of the style sheets that were read before, so that they keep their place in the cascade.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1754414956%2FClasslikes%2F1278250025" anchor-label="Edit" id="1754414956%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-edit/index.html"><span><span>Edit</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1754414956%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-edit/index.html">Edit</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>key<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">undo<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">redo<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">An edit in a <a href="-history/index.html">History</a>: <a href="-edit/name.html">name</a> is what was done, <a href="../../../orx-jvm/orx-panel/org.openrndr.panel/-edit/undo.html">undo</a> and <a href="../../../orx-jvm/orx-panel/org.openrndr.panel/-edit/redo.html">redo</a> do it backward and forward again; edits of the same <a href="-edit/key.html">key</a> that follow each other closely are merged, like the values of a drag</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1655115794%2FClasslikes%2F1278250025" anchor-label="FontManager" id="-1655115794%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-font-manager/index.html"><span>Font</span><wbr><span><span>Manager</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1655115794%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-font-manager/index.html">FontManager</a></div><div class="brief "><p class="paragraph">The fonts of a control manager: the families registered here, then those of <a href="../../../orx-text-writer/org.openrndr.extra.textwriter/-fonts/index.html">Fonts</a>, the fonts of all programs, which compositions and SVG documents use too. Families are resolved by weight and style, as in CSS.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1748495864%2FClasslikes%2F1278250025" anchor-label="History" id="1748495864%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-history/index.html"><span><span>History</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1748495864%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-history/index.html">History</a></div><div class="brief "><p class="paragraph">The edits of a control manager that can be undone and redone: changes of the values of controls by the user, of the keyframes of timelines, of the order of lists and of the layouts of docks. The commands Undo (mod+z) and Redo (mod+shift+z) go through it. A history that is not <a href="-history/enabled.html">enabled</a> records nothing, like when the program has a history of its own.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-263228875%2FClasslikes%2F1278250025" anchor-label="Inspector" id="-263228875%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-inspector/index.html"><span><span>Inspector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-263228875%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-inspector/index.html">Inspector</a></div><div class="brief "><p class="paragraph">The inspector of a control manager, like the inspector of the developer tools of browsers: it shows the element under the pointer with its margin, border, padding and content, and a panel with its path, its box, the style sheets that select it in the order of the cascade, with the declarations that other declarations override, and its computed style. The panel is shown in a window of its own, see <a href="-inspector/in-window.html">inWindow</a>. F12 turns it on and off, shift-F12 pins the element, so that the pointer can move away from it.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="765363483%2FClasslikes%2F1278250025" anchor-label="PanelText" id="765363483%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-panel-text/index.html"><span>Panel</span><wbr><span><span>Text</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="765363483%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-panel-text/index.html">PanelText</a></div><div class="brief "><p class="paragraph">Text drawn from the outlines of its glyphs with the boundary drawer of the program, Windfoil by default, instead of from textures of glyphs. Text is crisp at any scale and in any transform. The work is cached at every step:</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1717811258%2FClasslikes%2F1278250025" anchor-label="ShapedText" id="-1717811258%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-shaped-text/index.html"><span>Shaped</span><wbr><span><span>Text</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1717811258%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-shaped-text/index.html">ShapedText</a></div><div class="brief "><p class="paragraph">Text that is shaped in a face, with its glyphs placed from the origin on the baseline of the first line</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-202538448%2FClasslikes%2F1278250025" anchor-label="Shortcut" id="-202538448%2FClasslikes%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-shortcut/index.html"><span><span>Shortcut</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-202538448%2FClasslikes%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-shortcut/index.html">Shortcut</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>key<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>modifiers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr/KeyModifier///PointingToDeclaration/">KeyModifier</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A keyboard shortcut: <a href="-shortcut/key.html">key</a> is the name of a key, like <code class="lang-kotlin">k</code>, <code class="lang-kotlin">f5</code> or <code class="lang-kotlin">escape</code>, held with <a href="-shortcut/modifiers.html">modifiers</a>. Written as <code class="lang-kotlin">mod+shift+k</code>, where <code class="lang-kotlin">mod</code> is command on macOS and control elsewhere, <code class="lang-kotlin">cmd</code>, <code class="lang-kotlin">ctrl</code>, <code class="lang-kotlin">alt</code> and <code class="lang-kotlin">shift</code> the others.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1029347444%2FProperties%2F1278250025" anchor-label="editHistory" id="1029347444%2FProperties%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="edit-history.html"><span>edit</span><wbr><span><span>History</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1029347444%2FProperties%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../org.openrndr.panel.elements/-element/index.html">Element</a><span class="token punctuation">.</span><a href="edit-history.html">editHistory</a><span class="token operator">: </span><a href="-history/index.html">History</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">the history of the control manager of this element, null when it is not in one</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-922858781%2FFunctions%2F1278250025" anchor-label="animateMoveFrom" id="-922858781%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="animate-move-from.html"><span>animate</span><wbr><span>Move</span><wbr><span><span>From</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-922858781%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../org.openrndr.panel.elements/-element/index.html">Element</a><span class="token punctuation">.</span><a href="animate-move-from.html"><span class="token function">animateMoveFrom</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Moves the element from <a href="animate-move-from.html">from</a>, a point of the window where its top-left corner was, to where it is laid out in the next frame, like when it moved to another place in a list</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-742937683%2FFunctions%2F1278250025" anchor-label="commandPalette" id="-742937683%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="command-palette.html"><span>command</span><wbr><span><span>Palette</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-742937683%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-control-manager/index.html">ControlManager</a><span class="token punctuation">.</span><a href="command-palette.html"><span class="token function">commandPalette</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.openrndr.panel.elements/-dialog/index.html">Dialog</a></div><div class="brief "><p class="paragraph">Opens the command palette: a dialog with a field that searches the commands by their names, see <a href="-commands/search.html">Commands.search</a>; up and down choose a command, enter runs it, escape closes the palette. Opened by mod+k.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1015349239%2FFunctions%2F1278250025" anchor-label="controlManager" id="-1015349239%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="control-manager.html"><span>control</span><wbr><span><span>Manager</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1015349239%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.openrndr/Program///PointingToDeclaration/">Program</span><span class="token punctuation">.</span><a href="control-manager.html"><span class="token function">controlManager</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">defaultStyles<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token operator">&gt;</span><span class="token operator"> = </span>defaultStyles()<span class="token punctuation">, </span></span><span class="parameter ">builder<span class="token operator">: </span><a href="-control-manager-builder/index.html">ControlManagerBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-control-manager/index.html">ControlManager</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="609041777%2FFunctions%2F1278250025" anchor-label="fadeIn" id="609041777%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="fade-in.html"><span>fade</span><wbr><span><span>In</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="609041777%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../org.openrndr.panel.elements/-element/index.html">Element</a><span class="token punctuation">.</span><a href="fade-in.html"><span class="token function">fadeIn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">duration<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.15</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">fades the element in over <a href="fade-in.html">duration</a> seconds</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-121081059%2FFunctions%2F1278250025" anchor-label="layout" id="-121081059%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="layout.html"><span><span>layout</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-121081059%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-control-manager/index.html">ControlManager</a><span class="token punctuation">.</span><a href="layout.html"><span class="token function">layout</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">init<span class="token operator">: </span><a href="../org.openrndr.panel.elements/-body/index.html">Body</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1054930089%2FFunctions%2F1278250025" anchor-label="styleSheet" id="-1054930089%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="style-sheet.html"><span>style</span><wbr><span><span>Sheet</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1054930089%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-control-manager/index.html">ControlManager</a><span class="token punctuation">.</span><a href="style-sheet.html"><span class="token function">styleSheet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">selector<span class="token operator">: </span><a href="../org.openrndr.panel.style/-compound-selector/index.html">CompoundSelector</a><span class="token punctuation">, </span></span><span class="parameter ">init<span class="token operator">: </span><a href="../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="451688459%2FFunctions%2F1278250025" anchor-label="styleSheets" id="451688459%2FFunctions%2F1278250025" data-filterable-set=":orx-jvm:orx-panel/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-jvm:orx-panel/main" data-filterable-set=":orx-jvm:orx-panel/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="style-sheets.html"><span>style</span><wbr><span><span>Sheets</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="451688459%2FFunctions%2F1278250025"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-jvm:orx-panel/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-control-manager/index.html">ControlManager</a><span class="token punctuation">.</span><a href="style-sheets.html"><span class="token function">styleSheets</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">styleSheets<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../org.openrndr.panel.style/-style-sheet/index.html">StyleSheet</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

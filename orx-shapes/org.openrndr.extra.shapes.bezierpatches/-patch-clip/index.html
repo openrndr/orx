@@ -1,0 +1,271 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>PatchClip</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<link href="../../../images/logo-icon.svg">
+<link href="../../../styles/extra.css" rel="Stylesheet"></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    orx
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.5.1-dev.2.uncommitted+252b92e
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":orx-shapes/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":orx-shapes/commonMain" data-filter=":orx-shapes/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    orx
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="orx-shapes::org.openrndr.extra.shapes.bezierpatches/PatchClip///PointingToDeclaration//-1455291947">
+  <div class="breadcrumbs"><a href="../../index.html">orx-shapes</a><span class="delimiter">/</span><a href="../index.html">org.openrndr.extra.shapes.bezierpatches</a><span class="delimiter">/</span><span class="current">PatchClip</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Patch</span><wbr><span><span>Clip</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">PatchClip</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Shape///PointingToDeclaration/">Shape</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>basis<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>gridSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span><span class="token punctuation">, </span></span><span class="parameter ">distanceTolerance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span><span class="token punctuation">, </span></span><span class="parameter ">fillRule<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/FillRule///PointingToDeclaration/">FillRule</span><span class="token operator"> = </span>FillRule.NON_ZERO<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>clipToPatch<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/openrndr/orx/blob/master/orx-shapes/src/commonMain/kotlin/bezierpatches/PatchClip.kt#L38">source</a>)</span></span></div><p class="paragraph">The part of a Bezier patch inside a <a href="../../../orx-shapes/org.openrndr.extra.shapes.bezierpatches/-patch-clip/--root--.html">shape</a>, tessellated: the counterpart of <a href="../../org.openrndr.extra.shapes.distort/envelope.html">org.openrndr.extra.shapes.distort.envelope</a> for the area of a shape instead of its outline. The x and y of the shape in the <a href="basis.html">basis</a> rectangle give the u and v on the patch, as they do for the envelope, so the rim of the surface follows the enveloped outline.</p><p class="paragraph">The tessellation is made in the u, v square, once: the shape is triangulated and its triangles are clipped to a grid of <a href="../../../orx-shapes/org.openrndr.extra.shapes.bezierpatches/-patch-clip/--root--.html">gridSize</a> by <a href="../../../orx-shapes/org.openrndr.extra.shapes.bezierpatches/-patch-clip/--root--.html">gridSize</a> cells, so that no triangle spans more than a cell and the surface bends with the patch inside the shape too. Neighbouring triangles share their corners, and the edges of the shape are split where they cross the grid, so the surface has no cracks. Since the tessellation does not depend on the control points of the patch, <a href="vertices.html">vertices</a> can map it onto a patch that changes, frame by frame.</p><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>shape</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the shape, in the coordinates of <a href="basis.html">basis</a>; holes, like that of an O, are cut out by <a href="../../../orx-shapes/org.openrndr.extra.shapes.bezierpatches/-patch-clip/--root--.html">fillRule</a>, and contours that overlap or cross themselves fill the shape once</p></div></div></div></div><div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>basis</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the rectangle of the shape that maps to the whole patch</p></div></div></div></div><div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>grid</span><wbr><span><span>Size</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the number of grid cells along u and along v</p></div></div></div></div><div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>distance</span><wbr><span><span>Tolerance</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the tolerance of the outline of the shape as it is sampled, in the coordinates of <a href="basis.html">basis</a></p></div></div></div></div><div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>fill</span><wbr><span><span>Rule</span></span></u></div></span></div><div><div class="title"><p class="paragraph">how the contours of the shape fill it</p></div></div></div></div><div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>clip</span><wbr><span>To</span><wbr><span><span>Patch</span></span></u></div></span></div><div><div class="title"><p class="paragraph">true to keep only the part of the shape on the patch, where u and v are from 0 to 1; false to keep all of it, where the patch is extrapolated beyond its edges</p></div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-1775922678%2FConstructors%2F-1455291947" anchor-label="PatchClip" id="-1775922678%2FConstructors%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-patch-clip.html"><span>Patch</span><wbr><span><span>Clip</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1775922678%2FConstructors%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">shape<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Shape///PointingToDeclaration/">Shape</span><span class="token punctuation">, </span></span><span class="parameter ">basis<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span><span class="token punctuation">, </span></span><span class="parameter ">gridSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">32</span><span class="token punctuation">, </span></span><span class="parameter ">distanceTolerance<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.5</span><span class="token punctuation">, </span></span><span class="parameter ">fillRule<span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/FillRule///PointingToDeclaration/">FillRule</span><span class="token operator"> = </span>FillRule.NON_ZERO<span class="token punctuation">, </span></span><span class="parameter ">clipToPatch<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-644509572%2FProperties%2F-1455291947" anchor-label="basis" id="-644509572%2FProperties%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="basis.html"><span><span>basis</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-644509572%2FProperties%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="basis.html">basis</a><span class="token operator">: </span><span data-unresolved-link="org.openrndr.shape/Rectangle///PointingToDeclaration/">Rectangle</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1178297738%2FProperties%2F-1455291947" anchor-label="boundary" id="-1178297738%2FProperties%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="boundary.html"><span><span>boundary</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1178297738%2FProperties%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="boundary.html">boundary</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token punctuation">, </span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">the edges of the rim of the surface in the u, v square, split where they cross the grid: every edge runs with the inside of the surface on its left</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1965005501%2FProperties%2F-1455291947" anchor-label="clipToPatch" id="1965005501%2FProperties%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clip-to-patch.html"><span>clip</span><wbr><span>To</span><wbr><span><span>Patch</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1965005501%2FProperties%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="clip-to-patch.html">clipToPatch</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="866911449%2FProperties%2F-1455291947" anchor-label="gridSize" id="866911449%2FProperties%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="grid-size.html"><span>grid</span><wbr><span><span>Size</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="866911449%2FProperties%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="grid-size.html">gridSize</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="90093043%2FProperties%2F-1455291947" anchor-label="indices" id="90093043%2FProperties%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="indices.html"><span><span>indices</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="90093043%2FProperties%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="indices.html">indices</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int-array/index.html">IntArray</a></div><div class="brief "><p class="paragraph">the <a href="triangles.html">triangles</a> as indices into <a href="uvs.html">uvs</a>, three for every triangle</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="255476591%2FProperties%2F-1455291947" anchor-label="triangles" id="255476591%2FProperties%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="triangles.html"><span><span>triangles</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="255476591%2FProperties%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="triangles.html">triangles</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">the triangles in the u, v square, three corners each, counterclockwise</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-536945528%2FProperties%2F-1455291947" anchor-label="uvs" id="-536945528%2FProperties%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="uvs.html"><span><span>uvs</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-536945528%2FProperties%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="uvs.html">uvs</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.openrndr.math/Vector2///PointingToDeclaration/">Vector2</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">the distinct corners of the <a href="triangles.html">triangles</a>, in the u, v square</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-1912814997%2FFunctions%2F-1455291947" anchor-label="vertices" id="-1912814997%2FFunctions%2F-1455291947" data-filterable-set=":orx-shapes/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":orx-shapes/commonMain" data-filterable-set=":orx-shapes/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="vertices.html"><span><span>vertices</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1912814997%2FFunctions%2F-1455291947"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":orx-shapes/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="vertices.html"><span class="token function">vertices</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">patch<span class="token operator">: </span><a href="../-bezier-patch3-d/index.html">BezierPatch3D</a><span class="token punctuation">, </span></span><span class="parameter ">thickness<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator"> = </span><span class="token constant">0.0</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-patch-vertex/index.html">PatchVertex</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The triangles of the surface on <a href="vertices.html">patch</a>, three vertices each. With a <a href="vertices.html">thickness</a> of 0 it is the surface itself, facing along the normal of the patch. Otherwise it is a solid between the surface and its offset by <a href="vertices.html">thickness</a> along the normal (against it when negative): a face at either side, facing away from the solid, and walls along the rim, facing out. Triangles are wound counterclockwise seen from where their normals point. Texture coordinates are the u and v of the patch.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
