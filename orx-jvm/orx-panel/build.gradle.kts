@@ -42,7 +42,6 @@ dependencies {
     demoImplementation(project(":orx-expression-evaluator"))
     testRuntimeOnly(openrndr.fontdriver.freetype)
     demoImplementation(openrndr.dialogs)
-    demoImplementation(libs.gson)
     demoImplementation(project(":orx-jvm:orx-panel"))
     demoImplementation(project(":orx-shapes"))
     demoImplementation(project(":orx-camera"))

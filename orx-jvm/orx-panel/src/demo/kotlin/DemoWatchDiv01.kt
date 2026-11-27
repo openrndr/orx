@@ -1,4 +1,5 @@
-import com.google.gson.Gson
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import org.openrndr.application
 import org.openrndr.dialogs.openFileDialog
 import org.openrndr.dialogs.saveFileDialog
@@ -7,11 +8,13 @@ import org.openrndr.panel.elements.*
 import org.openrndr.panel.style.*
 import java.io.File
 
-// -- these have to be top-level classes or Gson will silently fail.
+// -- These serializable classes must be top-level
+@Serializable
 private class ConfigItem {
     var value: Double = 0.0
 }
 
+@Serializable
 private class ProgramState {
     var rows = 1
     var columns = 1
@@ -25,11 +28,11 @@ private class ProgramState {
     }
 
     fun save(file: File) {
-        file.writeText(Gson().toJson(this))
+        file.writeText(Json.encodeToString(this))
     }
 
     fun load(file: File) {
-        Gson().fromJson(file.readText(), ProgramState::class.java).copyTo(this)
+        Json.decodeFromString<ProgramState>(file.readText()).copyTo(this)
     }
 }
 
