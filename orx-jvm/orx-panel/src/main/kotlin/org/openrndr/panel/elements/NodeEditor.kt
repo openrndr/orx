@@ -438,7 +438,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
         val areas = badgeAreas(node)
         val area = areas.withIndex().firstOrNull { (i, a) -> (a.first.key ?: i) == key }?.value?.second ?: return null
         if (!area.intersects(Rectangle(0.0, 0.0, layout.screenWidth, layout.screenHeight))) return null
-        return area.moved(Vector2(layout.screenX, layout.screenY))
+        return area.movedBy(Vector2(layout.screenX, layout.screenY))
     }
 
     /** the badge at [p], a point of the window, with its node and its index; the badges are over the nodes */
@@ -777,7 +777,7 @@ class NodeEditor : Element(ElementType("node-editor")) {
             // a click on a badge is a release on the badge it was pressed on
             (gesture as? Gesture.Badge)?.let { b ->
                 badgeAt(it.position)?.takeIf { (n, i, badge) -> n === b.node && (badge.key ?: i) == b.key }?.let { (n, i, badge) ->
-                    val area = badgeAreas(n)[i].second.moved(Vector2(layout.screenX, layout.screenY))
+                    val area = badgeAreas(n)[i].second.movedBy(Vector2(layout.screenX, layout.screenY))
                     events.badgeClicked.trigger(BadgeClicked(n, badge, area))
                 }
             }
